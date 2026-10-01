@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 import styles from "./Docs.module.css";
 import { DocsCommand } from "./DocsCommand";
 import { DocsLogo } from "./DocsLogo";
+import { DocsSidebar } from "./DocsSidebar";
 import { FooterReveal } from "./FooterReveal";
 import { GITHUB_URL, TOP_NAV, neighbours, normaliseCurrent, sidebarSections } from "./nav";
 import { ModeToggle, PresetSwitch } from "./PresetSwitch";
@@ -47,20 +48,22 @@ export function DocsShell({
       <DocsTopBar current={path} />
       <div className={cx(styles.columns, !toc?.length && styles.noToc, !sidebar && styles.noSidebar, wide && styles.wide)}>
         {sidebar ? (
-          <nav aria-label="Docs" className={styles.nav}>
-            {sidebarSections().map((section) => (
-              <div key={section.title} className={styles.navGroup}>
-                <p className={styles.navHeading}>{section.title}</p>
-                <div className={styles.navList}>
-                  {section.items.map((item) => (
-                    <NavLink key={item.href} href={item.href} active={path === item.href}>
-                      {item.label}
-                    </NavLink>
-                  ))}
+          <DocsSidebar>
+            <nav aria-label="Docs" className={styles.nav}>
+              {sidebarSections().map((section) => (
+                <div key={section.title} className={styles.navGroup}>
+                  <p className={styles.navHeading}>{section.title}</p>
+                  <div className={styles.navList}>
+                    {section.items.map((item) => (
+                      <NavLink key={item.href} href={item.href} active={path === item.href}>
+                        {item.label}
+                      </NavLink>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </nav>
+              ))}
+            </nav>
+          </DocsSidebar>
         ) : null}
         <main id="main" className={styles.main}>
           {children}

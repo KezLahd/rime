@@ -1,49 +1,139 @@
 "use client";
 
 import { Search } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { CommandDialog, useToast, type CommandGroup } from "@/components/ui";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useToast } from "@/components/ui";
 import { entriesByCategory, PATTERNS } from "@/components/ui/_registry";
 import { installCommand } from "@/lib/site";
 import styles from "./Docs.module.css";
 import { DOCS_SECTIONS, TOP_NAV } from "./nav";
 
-// The docs' command palette, dogfooding Rime's own Command: Cmd or Ctrl K,
-// or "/", opens it. Groups: Pages, Components, Patterns. Enter goes to the
-// page; Cmd or Ctrl C on a highlighted component copies its install command.
+// The docs' inline search: an input in the top bar with a dropdown of
+// matches directly beneath it. Cmd or Ctrl K (or "/") focuses the input;
+// Escape clears and blurs. Keyboard: arrow keys move the selection, Enter
+// opens the page. Cmd or Ctrl C on a component result copies the install
+// command.
 
-const COPY_PREFIX = "component:";
+type Row = {
+  id: string;
+  label: string;
+  heading: string;
+  keywords: string;
+  href: string;
+  isComponent?: boolean;
+  slug?: string;
+};
+
+function buildIndex(): Row[] {
+  const seenPages = new Set<string>();
+  const pages: Row[] = [];
+
+  pages.push({ id: "page:/", label: "Home", heading: "Pages", keywords: "", href: "/" });
+  seenPages.add("/");
+
+  for (const p of TOP_NAV) {
+    pages.push({ id: `page:${p.href}`, label: p.label, heading: "Pages", keywords: p.description ?? "", href: p.href });
+    seenPages.add(p.href);
+  }
+  for (const section of DOCS_SECTIONS) {
+    for (const i of section.items) {
+      if (seenPages.has(i.href)) continue;
+      pages.push({ id: `page:${i.href}`, label: i.label, heading: "Pages", keywords: `docs ${section.title}`, href: i.href });
+      seenPages.add(i.href);
+    }
+  }
+
+  const components: Row[] = entriesByCategory().flatMap(([category, list]) =>
+    list.map((e) => ({
+      id: `component:${e.slug}`,
+      label: e.name,
+      heading: "Components",
+      keywords: `${category} ${e.slug} ${e.summary}`,
+      href: `/components/${e.slug}`,
+      isComponent: true,
+      slug: e.slug,
+    })),
+  );
+
+  const patterns: Row[] = PATTERNS.map((p) => ({
+    id: `pattern:${p.slug}`,
+    label: p.name,
+    heading: "Patterns",
+    keywords: p.summary,
+    href: `/patterns#${p.slug}`,
+  }));
+
+  return [...pages, ...components, ...patterns];
+}
 
 export function DocsCommand() {
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const toast = useToast();
+  const listboxId = useId();
 
-  // "/" opens it too, outside fields.
+  const rows = useMemo(() => buildIndex(), []);
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [] as Row[];
+    const tokens = q.split(/\s+/).filter(Boolean);
+    const scored: Array<{ row: Row; score: number }> = [];
+    for (const row of rows) {
+      const hay = `${row.label} ${row.keywords}`.toLowerCase();
+      let ok = true;
+      let score = 0;
+      for (const t of tokens) {
+        if (!hay.includes(t)) {
+          ok = false;
+          break;
+        }
+        // Label hits rank higher than keyword hits; prefix hits highest.
+        const labelLower = row.label.toLowerCase();
+        if (labelLower.startsWith(t)) score += 3;
+        else if (labelLower.includes(t)) score += 2;
+        else score += 1;
+      }
+      if (ok) scored.push({ row, score });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 30).map((s) => s.row);
+  }, [rows, query]);
+
+  // Focus input on Cmd/Ctrl K or "/" (outside fields).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      const metaK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+      const slash = e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey;
+      if (!metaK && !slash) return;
+      if (slash) {
+        const t = e.target as HTMLElement | null;
+        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      }
       e.preventDefault();
-      setOpen(true);
+      inputRef.current?.focus();
+      inputRef.current?.select();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Cmd or Ctrl C copies the highlighted component's install command.
+  // Cmd/Ctrl C on a highlighted component copies its install command.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "c") return;
       if (window.getSelection()?.toString()) return;
-      const row = document.querySelector<HTMLElement>('[role="option"][aria-selected="true"][data-cmd-id]');
-      const id = row?.dataset.cmdId ?? "";
-      if (!id.startsWith(COPY_PREFIX)) return;
+      const current = results[index];
+      if (!current?.isComponent || !current.slug) return;
       e.preventDefault();
-      const cmd = installCommand(id.slice(COPY_PREFIX.length));
+      const cmd = installCommand(current.slug);
       void navigator.clipboard?.writeText(cmd).then(
         () => toast.success("Install command copied", { description: cmd }),
         () => toast.error("Couldn't copy"),
@@ -51,55 +141,144 @@ export function DocsCommand() {
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [open, toast]);
+  }, [open, results, index, toast]);
 
-  const groups = useMemo<CommandGroup[]>(() => {
-    const go = (href: string) => () => router.push(href);
-    return [
-      {
-        heading: "Pages",
-        items: [
-          { id: "page:/", label: "Home", onSelect: go("/") },
-          ...TOP_NAV.map((p) => ({ id: `page:${p.href}`, label: p.label, keywords: [p.description ?? ""], onSelect: go(p.href) })),
-          ...DOCS_SECTIONS.flatMap((s) => s.items)
-            .filter((i) => !TOP_NAV.some((t) => t.href === i.href))
-            .map((i) => ({ id: `page:${i.href}`, label: i.label, keywords: ["docs"], onSelect: go(i.href) })),
-        ],
-      },
-      {
-        heading: "Components",
-        items: entriesByCategory().flatMap(([category, list]) =>
-          list.map((e) => ({
-            id: `${COPY_PREFIX}${e.slug}`,
-            label: e.name,
-            keywords: [category, e.slug, e.summary],
-            onSelect: go(`/components/${e.slug}`),
-          })),
-        ),
-      },
-      {
-        heading: "Patterns",
-        items: PATTERNS.map((p) => ({ id: `pattern:${p.slug}`, label: p.name, keywords: [p.summary], onSelect: go(`/patterns#${p.slug}`) })),
-      },
-    ];
-  }, [router]);
+  // Close the dropdown on click outside the search.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      const wrap = wrapRef.current;
+      if (wrap && !wrap.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener("mousedown", onDown);
+    return () => window.removeEventListener("mousedown", onDown);
+  }, [open]);
+
+  // Reset the highlighted row whenever the result set changes.
+  useEffect(() => {
+    setIndex(0);
+  }, [results.length]);
+
+  const commit = (row?: Row) => {
+    const chosen = row ?? results[index];
+    if (!chosen) return;
+    setOpen(false);
+    setQuery("");
+    inputRef.current?.blur();
+    router.push(chosen.href);
+  };
+
+  const showDropdown = open && query.trim().length > 0;
+
+  // Group the flat results back under their heading for a scannable list.
+  const grouped = useMemo(() => {
+    const byHeading = new Map<string, Row[]>();
+    results.forEach((r) => {
+      const list = byHeading.get(r.heading) ?? [];
+      list.push(r);
+      byHeading.set(r.heading, list);
+    });
+    const order = ["Pages", "Components", "Patterns"];
+    return order
+      .map((heading) => ({ heading, items: byHeading.get(heading) ?? [] }))
+      .filter((g) => g.items.length > 0);
+  }, [results]);
+
+  // Index-to-row lookup for keyboard selection and ARIA.
+  const flatIds = useMemo(() => results.map((r) => r.id), [results]);
+  const activeId = flatIds[index] ? `${listboxId}-${flatIds[index]}` : undefined;
 
   return (
-    <>
-      <button type="button" className={styles.searchTrigger} onClick={() => setOpen(true)} aria-label="Search the docs" aria-keyshortcuts="Control+K Meta+K /">
-        <Search size={14} aria-hidden="true" />
-        <span className={styles.searchLabel}>Search docs...</span>
-        <kbd className={styles.searchKbd}>Ctrl K</kbd>
-      </button>
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-        groups={groups}
-        label="Search the docs"
-        placeholder="Search documentation..."
-        emptyText="No results. Try a component name, such as select or table."
-        onSelect={() => setOpen(false)}
+    <div ref={wrapRef} className={styles.searchWrap} data-open={showDropdown ? "" : undefined}>
+      <Search size={14} aria-hidden="true" className={styles.searchIcon} />
+      <input
+        ref={inputRef}
+        type="text"
+        role="combobox"
+        aria-expanded={showDropdown}
+        aria-controls={listboxId}
+        aria-autocomplete="list"
+        aria-activedescendant={activeId}
+        className={styles.searchInput}
+        placeholder="Search docs..."
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => {
+          if (query.trim()) setOpen(true);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setIndex((i) => Math.min(i + 1, Math.max(results.length - 1, 0)));
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setIndex((i) => Math.max(i - 1, 0));
+          } else if (e.key === "Enter") {
+            if (results.length === 0) return;
+            e.preventDefault();
+            commit();
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            if (query) {
+              setQuery("");
+              setOpen(false);
+            } else {
+              setOpen(false);
+              inputRef.current?.blur();
+            }
+          }
+        }}
       />
-    </>
+      {!query && (
+        <kbd className={styles.searchKbd} aria-hidden="true">
+          Ctrl K
+        </kbd>
+      )}
+
+      {showDropdown && (
+        <div className={styles.searchDropdown} role="listbox" id={listboxId} aria-label="Search results">
+          {results.length === 0 ? (
+            <p className={styles.searchEmpty}>No results. Try a component name, such as select or table.</p>
+          ) : (
+            grouped.map((group) => (
+              <div key={group.heading} className={styles.searchGroup}>
+                <p className={styles.searchGroupHeading}>{group.heading}</p>
+                <ul className={styles.searchList}>
+                  {group.items.map((row) => {
+                    const i = flatIds.indexOf(row.id);
+                    const selected = i === index;
+                    return (
+                      <li key={row.id}>
+                        <Link
+                          id={`${listboxId}-${row.id}`}
+                          href={row.href}
+                          role="option"
+                          aria-selected={selected}
+                          data-selected={selected ? "" : undefined}
+                          className={styles.searchItem}
+                          onMouseEnter={() => setIndex(i)}
+                          onClick={() => {
+                            setOpen(false);
+                            setQuery("");
+                          }}
+                        >
+                          <span className={styles.searchItemLabel}>{row.label}</span>
+                          {row.isComponent ? (
+                            <span className={styles.searchItemHint}>Ctrl C to copy install</span>
+                          ) : null}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
   );
 }
