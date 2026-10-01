@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Button, Field, TextInput } from "@/components/ui";
+import { ChevronDown } from "lucide-react";
+import { Button, Field, Popover, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
@@ -162,71 +163,80 @@ export function TypePanel({ api }: { api: StudioApi }) {
     api.set({ [token]: `${font.family}, ${tail}` }, { [idKey]: id, [nameKey]: font.name });
   };
 
-  const Picker = ({ slot, label, help, previewText }: { slot: "body" | "display"; label: string; help: string; previewText: string }) => {
+  const faceOf = (f: { family: string; kind: "sans" | "serif" | "display" }) =>
+    `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}`;
+
+  const Picker = ({ slot, label }: { slot: "body" | "display"; label: string }) => {
     const value = current(slot);
     const token = slot === "body" ? "--font-body" : "--font-display";
+    const selectedFont = value === "preset" ? null : api.fonts.find((f) => f.id === value);
     return (
       <div className={styles.fontPicker}>
         <div className={styles.fontPickerHead}>
-          <span className={styles.fontPickerLabel}>
-            {label} <span className={styles.fontPickerHelp}>{help}</span>
-          </span>
+          <span className={styles.fontPickerLabel}>{label}</span>
           {api.changed(token) ? (
             <button type="button" className={styles.fontPickerReset} onClick={() => choose(slot, "preset")}>
               Reset
             </button>
           ) : null}
         </div>
-        <ul className={styles.fontList} role="radiogroup" aria-label={`${label} font`}>
-          <li>
+        <Popover
+          label={`${label} picker`}
+          width={320}
+          trigger={
+            <button type="button" className={styles.fontDropdown} aria-label={`Pick ${label}`}>
+              <span
+                className={styles.fontDropdownName}
+                style={selectedFont ? { fontFamily: faceOf(selectedFont) } : undefined}
+              >
+                {selectedFont ? selectedFont.name : "The preset's font"}
+              </span>
+              {selectedFont ? (
+                <span className={styles.fontDropdownKind}>{selectedFont.kind}</span>
+              ) : null}
+              <ChevronDown size={14} aria-hidden="true" className={styles.fontDropdownIcon} />
+            </button>
+          }
+        >
+          <div className={styles.fontMenu} role="listbox" aria-label={`${label} options`}>
             <button
               type="button"
-              role="radio"
-              aria-checked={value === "preset"}
-              className={cx(styles.fontOption, value === "preset" && styles.fontOptionActive)}
+              role="option"
+              aria-selected={value === "preset"}
+              className={cx(styles.fontMenuItem, value === "preset" && styles.fontMenuItemActive)}
               onClick={() => choose(slot, "preset")}
             >
-              <span className={styles.fontOptionName}>The preset&apos;s font</span>
-              <span className={styles.fontOptionKind}>default</span>
+              <span className={styles.fontMenuItemName}>The preset&apos;s font</span>
+              <span className={styles.fontMenuItemKind}>default</span>
             </button>
-          </li>
-          {api.fonts.map((f) => (
-            <li key={f.id}>
+            {api.fonts.map((f) => (
               <button
+                key={f.id}
                 type="button"
-                role="radio"
-                aria-checked={value === f.id}
-                className={cx(styles.fontOption, value === f.id && styles.fontOptionActive)}
+                role="option"
+                aria-selected={value === f.id}
+                className={cx(styles.fontMenuItem, value === f.id && styles.fontMenuItemActive)}
                 onClick={() => choose(slot, f.id)}
               >
-                <span
-                  className={styles.fontOptionName}
-                  style={{ fontFamily: `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}` }}
-                >
+                <span className={styles.fontMenuItemName} style={{ fontFamily: faceOf(f) }}>
                   {f.name}
                 </span>
-                <span className={styles.fontOptionKind}>{f.kind}</span>
-                <span
-                  className={styles.fontOptionSample}
-                  style={{ fontFamily: `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}` }}
-                >
-                  {previewText}
-                </span>
+                <span className={styles.fontMenuItemKind}>{f.kind}</span>
               </button>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        </Popover>
       </div>
     );
   };
 
   return (
     <>
-      <Group title="Headings" note="Page titles, card titles and the big hero number. Shown here in each font's own face.">
-        <Picker slot="display" label="Heading font" help="Page titles" previewText="Good morning, Jane" />
+      <Group title="Headings" note="Page titles, card titles and the big hero number.">
+        <Picker slot="display" label="Heading font" />
       </Group>
       <Group title="Body" note="Paragraphs, labels, controls and table cells.">
-        <Picker slot="body" label="Body font" help="Everything else" previewText="Three invoices are overdue, two awaiting approval." />
+        <Picker slot="body" label="Body font" />
       </Group>
       <Advanced
         api={api}
