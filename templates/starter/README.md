@@ -13,16 +13,15 @@ Themed, authed and running in about five minutes.
 
    ```bash
    npm install
-   npx shadcn@latest add <owner>/rime/kit <owner>/rime/agents
+   npx shadcn@latest add KezLahd/rime/kit KezLahd/rime/agents
    ```
 
    The second command installs Rime (see "Installed by the CLI"). Run it
-   again later as `npm run rime:sync` to take updates. Until the Rime repo is
-   public on GitHub, copy those folders from your local Rime checkout instead.
+   again later as `npm run rime:sync` to take updates.
 3. **Add the dashboard block** (the starter's /dashboard uses it):
 
    ```bash
-   npx shadcn@latest add <owner>/rime/dashboard
+   npx shadcn@latest add KezLahd/rime/dashboard
    ```
 
 4. **Supabase:** copy `.env.example` to `.env.local` and fill in your
@@ -58,7 +57,3 @@ gets the current version:
 
 Add them to version control in your own project as you would any source.
 
-## Fill in
-
-- `<owner>`: the GitHub owner of the Rime repo, in `package.json`
-  (`rime:sync`), this README and the dashboard page comment.

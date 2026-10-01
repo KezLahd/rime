@@ -98,19 +98,18 @@ Everything about where Rime lives is in **`rime.config.json`**:
 - `siteUrl` (`https://rime.mjsons.net`): the hosted docs. Used by the
   registry mirror (`/r`), absolute links in llms.txt, the `@rime` MCP
   namespace, Open in Claude and the page metadata.
-- `owner` (`<owner>`): the GitHub owner. **Replace `<owner>`** once the repo
-  exists on github.com, then run `npm run registry:shadcn && npm run docs:export`.
-  Install addresses become `npx shadcn@latest add <owner>/rime/<item>`.
+- `owner` (`KezLahd`): the GitHub owner. Install addresses are
+  `npx shadcn@latest add KezLahd/rime/<item>`.
 - `namespace` (`@rime`) and `package` (`@kezlahd/rime`).
 
 ## Use it in another project
 
-With the shadcn CLI (once the repo is on GitHub, or through the hosted mirror):
+With the shadcn CLI (via the GitHub source or the hosted mirror at `rime.mjsons.net/r`):
 
 ```bash
-npx shadcn@latest add <owner>/rime/kit      # everything
-npx shadcn@latest add <owner>/rime/select   # one component and what it needs
-npx shadcn@latest add <owner>/rime/agents   # docs/ui, AGENTS.rime.md, the Claude skill
+npx shadcn@latest add KezLahd/rime/kit      # everything
+npx shadcn@latest add KezLahd/rime/select   # one component and what it needs
+npx shadcn@latest add KezLahd/rime/agents   # docs/ui, AGENTS.rime.md, the Claude skill
 ```
 
 Then import the styles first in `app/globals.css`:
@@ -169,10 +168,10 @@ Rime's own look (separate from the themes it ships):
 
 ## Move it to another laptop
 
-Clone it from GitHub (once Kieran has pushed it), then:
+Clone it from GitHub:
 
 ```bash
-git clone https://github.com/<owner>/rime.git
+git clone https://github.com/KezLahd/rime.git
 cd rime
 npm install
 npm run dev        # http://localhost:3100

@@ -9,7 +9,7 @@
     "start": "next start -p 3000",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "rime:sync": "npx shadcn@latest add <owner>/rime/kit <owner>/rime/agents --overwrite"
+    "rime:sync": "npx shadcn@latest add KezLahd/rime/kit KezLahd/rime/agents --overwrite"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

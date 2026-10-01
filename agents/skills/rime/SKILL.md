@@ -13,7 +13,7 @@ markdown at https://rime.mjsons.net/llms.txt. In the project: docs/ui/llms.txt.
 
 1. Read docs/ui/llms.txt (the rules, the shadcn name map, every component).
 2. Check components/ui for the component. Missing? Install it:
-   `npx shadcn@latest add <owner>/rime/<item>`. Item names follow shadcn.
+   `npx shadcn@latest add KezLahd/rime/<item>`. Item names follow shadcn.
 3. Build with Rime components; style layout with CSS Modules and tokens.
 
 ## Name map (shadcn → Rime)

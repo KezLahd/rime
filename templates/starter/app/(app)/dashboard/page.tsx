@@ -4,7 +4,7 @@ import { requireAal2 } from "@/lib/auth/gate";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-// The Rime dashboard block (npx shadcn@latest add <owner>/rime/dashboard),
+// The Rime dashboard block (npx shadcn@latest add KezLahd/rime/dashboard),
 // behind the MFA gate. Replace its sample data with your own queries.
 export default async function DashboardPage() {
   await requireAal2();
