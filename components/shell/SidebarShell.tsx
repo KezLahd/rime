@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
@@ -20,6 +20,20 @@ export type SidebarNavItem = {
 };
 
 export type SidebarShellLayout = "sidebar" | "rail" | "header";
+
+/**
+ * Two-bar hamburger that animates into an X when the drawer is open. Pure
+ * CSS: the two bars crossfade their top and rotate 45 degrees in opposite
+ * directions.
+ */
+function MenuToggleIcon({ open }: { open: boolean }) {
+  return (
+    <span className={styles.menuToggle} data-open={open ? "" : undefined} aria-hidden="true">
+      <span className={styles.menuBar} />
+      <span className={styles.menuBar} />
+    </span>
+  );
+}
 
 export type SidebarShellProps = {
   children: ReactNode;
@@ -53,17 +67,23 @@ export type SidebarShellProps = {
   storageKey?: string;
   onCollapsedChange?: (collapsed: boolean) => void;
   /**
-   * Below 900px (the frame's own width) the sidebar becomes an off-canvas
-   * drawer opened from a menu button in the top bar. On by default; false
-   * keeps the icon rail on narrow screens instead.
+   * Below the mobile breakpoint, the sidebar becomes an off-canvas drawer
+   * opened from a menu button in the top bar. On by default; false keeps the
+   * icon rail on narrow screens instead.
    */
   mobileDrawer?: boolean;
   /**
-   * The frame width (px) below which the narrow layout (drawer, or rail with
-   * mobileDrawer false) applies. Defaults to 900, or 600 when contained, so a
-   * preview in a docs column keeps its desktop layout.
+   * The frame width (px) below which the drawer (or rail if mobileDrawer is
+   * false) applies. Defaults to 600, or 420 when contained.
    */
   mobileBelow?: number;
+  /**
+   * The frame width (px) below which the sidebar auto-collapses to the icon
+   * rail (tablet mode). A chevron at the bottom of the rail toggles back to
+   * the full width. Defaults to 1024, or 760 when contained. Set below
+   * mobileBelow to disable tablet mode.
+   */
+  tabletBelow?: number;
   /** Treat the frame as narrow whatever its width: the docs use it to show the drawer at desktop width. */
   forceMobile?: boolean;
   /** Open the drawer on first render, without moving focus (a static docs preview). */
@@ -120,6 +140,7 @@ export function SidebarShell({
   onCollapsedChange,
   mobileDrawer = true,
   mobileBelow,
+  tabletBelow,
   forceMobile,
   defaultDrawerOpen,
   logo,
@@ -169,24 +190,36 @@ export function SidebarShell({
   };
 
   // ── Narrow frames: measured on the frame itself, so a contained preview
-  // behaves like the viewport it stands in for.
+  // behaves like the viewport it stands in for. Two breakpoints: tablet
+  // (auto-collapse to the rail, chevron to expand) and mobile (drawer or
+  // forced rail).
   const frameRef = useRef<HTMLDivElement>(null);
-  const [narrow, setNarrow] = useState(false);
-  const below = mobileBelow ?? (contained ? 600 : 900);
+  const [frameWidth, setFrameWidth] = useState(0);
+  const mobileBreak = mobileBelow ?? (contained ? 420 : 600);
+  const tabletBreak = tabletBelow ?? (contained ? 760 : 1024);
   useLayoutEffect(() => {
     const el = frameRef.current;
     if (!el) return;
-    const check = () => setNarrow(el.clientWidth > 0 && el.clientWidth < below);
+    const check = () => setFrameWidth(el.clientWidth);
     check();
     const ro = new ResizeObserver(check);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [below]);
-  const mobile = Boolean(forceMobile) || narrow;
+  }, []);
+  const mobile = Boolean(forceMobile) || (frameWidth > 0 && frameWidth < mobileBreak);
+  const tablet = !mobile && frameWidth > 0 && frameWidth < tabletBreak;
+
+  // In tablet mode the sidebar is a rail by default; the chevron at its
+  // bottom lets the user expand it to full for the current session. Resets
+  // when the frame grows out of the tablet band.
+  const [tabletExpanded, setTabletExpanded] = useState(false);
+  useEffect(() => {
+    if (!tablet) setTabletExpanded(false);
+  }, [tablet]);
 
   const header = layout === "header";
   const drawer = !header && mobile && mobileDrawer;
-  const rail = !header && !drawer && (collapsed || mobile);
+  const rail = !header && !drawer && (collapsed || (tablet && !tabletExpanded) || (mobile && !mobileDrawer));
 
   // ── Drawer: open state, focus in on open, back to the button on close.
   const [drawerOpen, setDrawerOpen] = useState(Boolean(defaultDrawerOpen));
@@ -293,7 +326,7 @@ export function SidebarShell({
     <IconButton
       ref={menuButtonRef}
       label={open ? "Close navigation" : "Open navigation"}
-      icon={<Menu size={18} />}
+      icon={<MenuToggleIcon open={open} />}
       variant="ghost"
       aria-expanded={open}
       aria-controls={drawerId}
@@ -306,6 +339,20 @@ export function SidebarShell({
       }}
       className={styles.toggle}
     />
+  ) : null;
+
+  // The tablet rail's bottom handle: a chevron the user clicks to expand
+  // the rail to full width (and back). Only in tablet mode.
+  const tabletHandle = tablet && !drawer ? (
+    <button
+      type="button"
+      className={styles.railHandle}
+      onClick={() => setTabletExpanded((v) => !v)}
+      aria-label={tabletExpanded ? "Collapse sidebar" : "Expand sidebar"}
+      aria-expanded={tabletExpanded}
+    >
+      {tabletExpanded ? <ChevronLeft size={14} aria-hidden="true" /> : <ChevronRight size={14} aria-hidden="true" />}
+    </button>
   ) : null;
 
   const mainArea = contained ? (
@@ -369,6 +416,7 @@ export function SidebarShell({
               <ul className={styles.list}>{nav.map(renderItem)}</ul>
               {bottomNav?.length ? <ul className={cx(styles.list, styles.bottom)}>{bottomNav.map(renderItem)}</ul> : null}
             </nav>
+            {tabletHandle}
           </aside>
           {drawer ? <div className={styles.scrim} aria-hidden="true" onClick={closeDrawer} /> : null}
 

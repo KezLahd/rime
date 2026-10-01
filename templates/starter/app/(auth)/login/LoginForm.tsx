@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
+import { IconShield } from "@/components/ui/Icon/Icon";
 import { TextInput } from "@/components/ui/TextInput/TextInput";
 import { signIn, type FormState } from "@/lib/auth/actions";
 import styles from "../Auth.module.css";
@@ -23,9 +24,24 @@ export function LoginForm() {
       <Field label="Password">
         <TextInput name="password" type="password" revealable autoComplete="current-password" required />
       </Field>
+      <p className={styles.mfaBadge}>
+        <IconShield size={13} />
+        <span>Protected by multi-factor authentication</span>
+      </p>
       <Button type="submit" size="lg" fullWidth loading={pending} loadingLabel="Signing in…">
         Continue
       </Button>
+      <p className={styles.legal}>
+        By continuing, you agree to Acme&apos;s{" "}
+        <a href="/terms" className={styles.legalLink}>
+          Terms
+        </a>{" "}
+        and{" "}
+        <a href="/privacy" className={styles.legalLink}>
+          Privacy Policy
+        </a>
+        .
+      </p>
     </form>
   );
 }

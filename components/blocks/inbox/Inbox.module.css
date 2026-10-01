@@ -1,9 +1,11 @@
-/* Inbox block layout. The panes are one frosted group on the page field. */
+/* Inbox block layout. Three distinct surfaces side by side: a muted folder
+   rail, a solid-white list pane, and a solid-white open thread. Each is
+   separated by a hairline so the three never read as one flat sheet. */
 
 .root {
   height: 100dvh;
-  padding: 16px;
-  background: var(--page-background);
+  padding: 0;
+  background: var(--page-base);
 }
 
 .contained {
@@ -28,6 +30,21 @@
 .folders {
   gap: 14px;
   padding: 16px 10px;
+  background: var(--chrome-sidebar, var(--surface-solid));
+  border-right: 1px solid var(--line);
+}
+
+.listPane {
+  background: color-mix(in oklab, var(--surface-solid) 94%, var(--brand) 6%);
+  border-right: 1px solid var(--line);
+}
+
+.detail {
+  background: var(--surface-solid);
+}
+
+.detailEmpty {
+  background: var(--surface-solid);
 }
 
 .brand {
@@ -118,39 +135,46 @@
 .messages {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px;
+  gap: 0;
+  padding: 0;
   overflow-y: auto;
   scrollbar-width: thin;
 }
 
+/* Thread rows: flush, square, no inter-row gap. A single hairline between
+   rows reads as the mailbox list, not a stack of cards. */
 .message {
   display: flex;
   flex-direction: column;
   gap: 4px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 16px;
   border: 0;
-  border-radius: var(--r-md);
+  border-radius: 0;
   background: transparent;
-  box-shadow: inset 0 0 0 1px var(--line-glass);
+  box-shadow: none;
+  border-bottom: 1px solid var(--line);
   text-align: left;
   color: var(--ink-body);
   transition: background-color var(--dur) var(--ease);
 }
 
 .message:hover {
-  background: var(--wash-hover);
+  background: var(--wash-subtle);
 }
 
 .message[aria-current="true"] {
   background: var(--wash-active);
-  box-shadow: inset 0 0 0 1px var(--line-brand);
 }
 
 .message:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.messages > :last-child .message {
+  border-bottom: 0;
 }
 
 .messageTop {

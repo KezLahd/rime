@@ -39,10 +39,13 @@ export default async function MfaSetupPage() {
           {/* eslint-disable-next-line @next/next/no-img-element -- Supabase returns the QR code as an SVG data URL */}
           <img src={data.totp.qr_code} alt="QR code for your authenticator app" className={styles.qr} />
           <div className={styles.steps}>
-            <p>1. Install an authenticator app on your phone.</p>
-            <p>2. Scan the QR code, or enter this key:</p>
-            <code className={styles.secret}>{data.totp.secret}</code>
-            <p>3. Enter the code from the app.</p>
+            <p>Install an authenticator app on your phone.</p>
+            <p>
+              Scan the QR code, or enter this key:
+              <br />
+              <code className={styles.secret}>{data.totp.secret}</code>
+            </p>
+            <p>Enter the 6-digit code from the app below.</p>
           </div>
         </div>
         <CodeForm action={confirmMfaSetup} label="Code from your authenticator app" submit="Turn on two-step sign-in" factorId={data.id} />

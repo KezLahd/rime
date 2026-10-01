@@ -452,6 +452,78 @@
   display: none;
 }
 
+/* The chevron handle pinned to the bottom of the rail: visible only in
+   tablet mode (SidebarShell sets it up conditionally). Clicking expands or
+   collapses the rail. */
+.railHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 10px auto 0;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--sidebar-hover-bg, rgba(var(--rgb-white), 0.65));
+  box-shadow: inset 0 0 0 1px var(--sidebar-rule, rgba(var(--rgb-brand-deep), 0.08));
+  color: var(--sidebar-ink, var(--ink-muted));
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.railHandle:hover {
+  background: var(--sidebar-active-bg, var(--brand-gradient));
+  color: var(--sidebar-active-ink, var(--ink-inverse));
+  transform: translateX(1px);
+}
+
+.railHandle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Animated hamburger: two bars that rotate into an X ────────────────── */
+.menuToggle {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+
+.menuBar {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transform-origin: center;
+  transition:
+    top var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.menuBar:nth-of-type(1) {
+  top: 6px;
+}
+
+.menuBar:nth-of-type(2) {
+  top: 11px;
+}
+
+.menuToggle[data-open] .menuBar:nth-of-type(1) {
+  top: 8px;
+  transform: rotate(45deg);
+}
+
+.menuToggle[data-open] .menuBar:nth-of-type(2) {
+  top: 8px;
+  transform: rotate(-45deg);
+}
+
 /* ── Drawer: the sidebar off canvas on narrow frames ──────────────────────
    Positioned inside the frame (not the viewport), so a contained preview
    works the same as the page. A scrim covers the column while it is open. */
@@ -509,6 +581,42 @@
 
 .drawerMode .strip {
   padding-left: 16px;
+}
+
+/* On mobile (drawer mode): the dashboard reads as a card floating on a
+   distinct outer surface. The frame carries the ground colour; the main
+   area gets its own fill, a hairline edge, and rounded corners so it
+   doesn't merge into the page. */
+.drawerMode {
+  background: var(--page-base);
+  padding: 10px;
+}
+
+.drawerMode .body {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--surface-solid);
+  box-shadow: 0 1px 3px rgba(var(--rgb-contact), 0.08), 0 8px 24px rgba(var(--rgb-contact), 0.06);
+}
+
+.drawerMode .topbar {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.drawerMode .topbar::after {
+  display: none;
+}
+
+.drawerMode .main {
+  background: var(--surface-solid);
+}
+
+.drawerMode::before {
+  display: none;
 }
 
 /* ── Header only: no sidebar, one frosted top bar with the nav in it ───── */
