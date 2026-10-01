@@ -1,23 +1,26 @@
 import type { Metadata } from "next";
 import styles from "../_docs/Docs.module.css";
 import { DocsShell } from "../_docs/DocsShell";
-import { COLOUR_GROUPS } from "../foundations/colour-groups";
-import { Colours } from "../foundations/Foundations";
+import { FAMILIES } from "./tailwind-palette";
+import { TailwindColors } from "./TailwindColors";
 
 export const metadata: Metadata = {
   title: "Colors",
-  description: "Rime's palette and every colour token, read live from the page in the current preset and mode.",
+  description: "The full Tailwind palette in HEX, HSL, RGB and OKLCH. 22 families, 11 shades each. Click any tile to copy the value.",
 };
 
 export default function ColorsPage() {
   return (
-    <DocsShell current="/colors" toc={COLOUR_GROUPS.map((g) => ({ id: `c-${g.title.toLowerCase()}`, label: g.title }))}>
-      <h1 className={styles.title}>Colors</h1>
+    <DocsShell
+      current="/colors"
+      toc={FAMILIES.map((f) => ({ id: `c-${f.slug}`, label: f.name }))}
+    >
+      <h1 className={styles.title}>Tailwind Colors</h1>
       <p className={styles.lede}>
-        Every colour token, read live from this page: switch the preset or press D for dark mode and the values follow. Click a
-        swatch to copy its var(). Change them in app/styles/tokens.css or a theme.css from Rime Studio, never in a component.
+        The complete Tailwind palette (22 families, 11 shades each) in HEX, HSL, RGB and OKLCH. Pick a format on each row, then
+        click a tile to copy its value.
       </p>
-      <Colours />
+      <TailwindColors />
     </DocsShell>
   );
 }
