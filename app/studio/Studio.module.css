@@ -12,31 +12,164 @@
   overflow: hidden;
 }
 
+/* Two columns, Atlas doc-crafter style: an inspector unit on the left
+   (section rail + controls, treated as one draggable column) and the live
+   preview on the right. A 10px resize handle sits between them with a
+   grip glyph; the inspector width persists in localStorage. Collapse
+   button zeros the inspector so the preview fills the screen. */
 .workspace {
   display: grid;
-  grid-template-columns: 196px 420px minmax(0, 1fr);
+  grid-template-columns: var(--inspector-w, 616px) 10px minmax(0, 1fr);
   flex: 1;
   min-height: 0;
+  transition: grid-template-columns var(--dur-slow) var(--ease);
 }
 
-@media (max-width: 1360px) {
-  .workspace {
-    grid-template-columns: 176px 380px minmax(0, 1fr);
-  }
+.workspaceCollapsed {
+  grid-template-columns: 0 10px minmax(0, 1fr);
 }
 
-@media (max-width: 1100px) {
+.workspaceCollapsed .inspector {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* The inspector = rail + controls. Internally a 196 / 1fr grid, so the
+   section rail hugs the inspector's left edge and the controls fill the
+   rest, matching the old 3-column look while being resizable as one unit. */
+.inspector {
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* When the inspector is dragged narrow (or at narrow viewports), collapse
+   the rail labels down to icons only, keeping the two-column shape. */
+.workspace[data-rail-only] .inspector {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.workspace[data-rail-only] .navHeading,
+.workspace[data-rail-only] .navLink span {
+  display: none;
+}
+
+.workspace[data-rail-only] .navLink {
+  justify-content: center;
+}
+
+/* ── Resize handle: a 10 px strip with a vertical grip glyph. Hover
+   thickens the divider and tints it brand. Also hosts the collapse
+   chevron pinned to the top of the strip. */
+.handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  cursor: col-resize;
+  background: var(--wash-subtle);
+  touch-action: none;
+  user-select: none;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.handle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--line);
+  transform: translateX(-50%);
+  transition: background-color var(--dur) var(--ease), width var(--dur) var(--ease);
+}
+
+.handle:hover {
+  background: var(--wash-active);
+}
+
+.handle:hover::before {
+  width: 2px;
+  background: var(--brand);
+}
+
+.handleGrip {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 10px;
+  height: 44px;
+  border-radius: var(--r-full);
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
+.handle:hover .handleGrip {
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 1px var(--brand);
+  color: var(--brand);
+}
+
+/* Chevron: sits above the grip, pinned to the top of the strip. Click
+   collapses the inspector. */
+.handleCollapse {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 3;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink-muted);
+  transform: translateX(-50%);
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.handleCollapse:hover {
+  background: var(--brand);
+  color: var(--ink-inverse);
+  box-shadow: var(--glow-sm);
+}
+
+.handleCollapse:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Below 720px viewport width, stack the inspector above the preview. */
+@media (max-width: 720px) {
   .workspace {
-    grid-template-columns: 64px 360px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 50% 10px minmax(0, 1fr);
   }
 
-  .navHeading,
-  .navLink span {
-    display: none;
+  .handle {
+    width: auto;
+    height: 10px;
+    cursor: row-resize;
   }
 
-  .navLink {
-    justify-content: center;
+  .handleGrip {
+    width: 44px;
+    height: 10px;
   }
 }
 

@@ -2,10 +2,13 @@
 
 import {
   Blend,
+  ChevronLeft,
+  ChevronRight,
   Code,
   Component,
   Contrast,
   Droplets,
+  GripVertical,
   Image as ImageIcon,
   LayoutDashboard,
   ListTree,
@@ -160,6 +163,70 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   const probeRef = useRef<HTMLSpanElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+
+  // ── Inspector width ────────────────────────────────────────────────────
+  // The inspector (section rail + controls) is one draggable unit; the
+  // preview takes the rest. Width persists across reloads. Rail labels
+  // collapse to icons only when the inspector is narrow (< INSPECTOR_RAIL_PX).
+  const INSPECTOR_MIN_PX = 420;
+  const INSPECTOR_DEFAULT_PX = 616;
+  const INSPECTOR_RAIL_PX = 540; // below this, hide rail labels
+  const INSPECTOR_STORAGE_KEY = "rime-studio-inspector-w";
+  const [inspectorWidth, setInspectorWidth] = useState<number>(INSPECTOR_DEFAULT_PX);
+  const [collapsed, setCollapsed] = useState(false);
+  const resizeStartRef = useRef<{ x: number; w: number } | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(INSPECTOR_STORAGE_KEY);
+      if (saved) {
+        const n = Number.parseInt(saved, 10);
+        if (Number.isFinite(n) && n >= INSPECTOR_MIN_PX) setInspectorWidth(n);
+      }
+    } catch {
+      // Storage blocked; the default stands.
+    }
+  }, []);
+
+  const commitInspectorWidth = useCallback((w: number) => {
+    setInspectorWidth(w);
+    try {
+      window.localStorage.setItem(INSPECTOR_STORAGE_KEY, String(w));
+    } catch {
+      // Storage blocked; width only lasts for the session.
+    }
+  }, []);
+
+  const onResizeMove = useCallback((e: PointerEvent) => {
+    const start = resizeStartRef.current;
+    if (!start) return;
+    const max = Math.max(INSPECTOR_MIN_PX, Math.floor(window.innerWidth * 0.72));
+    const next = Math.max(INSPECTOR_MIN_PX, Math.min(max, start.w + (e.clientX - start.x)));
+    setInspectorWidth(next);
+  }, []);
+
+  const onResizeEnd = useCallback(() => {
+    const start = resizeStartRef.current;
+    resizeStartRef.current = null;
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+    window.removeEventListener("pointermove", onResizeMove);
+    window.removeEventListener("pointerup", onResizeEnd);
+    if (start) commitInspectorWidth(inspectorWidth);
+  }, [onResizeMove, inspectorWidth, commitInspectorWidth]);
+
+  const startResize = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (collapsed) return;
+    resizeStartRef.current = { x: e.clientX, w: inspectorWidth };
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+    window.addEventListener("pointermove", onResizeMove);
+    window.addEventListener("pointerup", onResizeEnd);
+  }, [collapsed, inspectorWidth, onResizeMove, onResizeEnd]);
+
+  const toggleCollapsed = useCallback(() => {
+    setCollapsed((v) => !v);
+  }, []);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -444,7 +511,12 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
 
       <DocsTopBar key={barKey} current="studio" />
 
-      <div className={styles.workspace}>
+      <div
+        className={cx(styles.workspace, collapsed && styles.workspaceCollapsed)}
+        style={{ ["--inspector-w" as string]: `${inspectorWidth}px` }}
+        data-rail-only={inspectorWidth < INSPECTOR_RAIL_PX ? "" : undefined}
+      >
+        <div className={styles.inspector}>
         <nav className={styles.sectionNav} aria-label="Studio sections" data-studio-panel="">
           {NAV.map((g) => (
             <div key={g.heading} className={styles.navGroup}>
@@ -592,6 +664,33 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             )}
           </div>
         </aside>
+
+        </div>
+        {/* Resize handle between the inspector and the preview, with a
+            grip glyph in the middle. Drag to resize. The chevron collapses
+            the inspector to zero so the preview fills the screen; a click
+            again brings it back. */}
+        <div
+          className={styles.handle}
+          onPointerDown={startResize}
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize inspector"
+        >
+          <button
+            type="button"
+            className={styles.handleCollapse}
+            onClick={toggleCollapsed}
+            aria-label={collapsed ? "Expand inspector" : "Collapse inspector"}
+            aria-expanded={!collapsed}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {collapsed ? <ChevronRight size={13} aria-hidden="true" /> : <ChevronLeft size={13} aria-hidden="true" />}
+          </button>
+          <span className={styles.handleGrip} aria-hidden="true">
+            <GripVertical size={14} />
+          </span>
+        </div>
 
         <section className={styles.preview} aria-label="Live preview">
           <div className={styles.previewScroll} data-theme-studio="">
