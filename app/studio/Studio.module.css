@@ -766,6 +766,28 @@
 
 /* ── The colour swatch and its popover ───────────────────────────────── */
 
+/* The swatch is a wrap containing the display button and an off-screen
+   native <input type="color">. Clicking the button triggers inputRef.click()
+   which opens the native picker directly — one click, no popover. */
+.swatchWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.swatchNative {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .swatchButton {
   display: inline-flex;
   align-items: center;
@@ -777,6 +799,7 @@
   background: var(--surface-solid);
   box-shadow: inset 0 0 0 1px var(--line);
   color: var(--ink-heading);
+  cursor: pointer;
   transition:
     background-color var(--dur) var(--ease),
     box-shadow var(--dur) var(--ease);

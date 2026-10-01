@@ -21,12 +21,12 @@ export type PaletteSwatch = {
  * seventh series folds into "Other" (foldSeries).
  */
 export const CATEGORICAL: ReadonlyArray<PaletteSwatch> = [
-  { token: "--chart-1", name: "Frost", hex: "#468cfb", source: "--brand, the Rime accent" },
-  { token: "--chart-2", name: "Amber", hex: "#b7770f", source: "The accent's complement, for CVD separation" },
-  { token: "--chart-3", name: "Teal", hex: "#0f8a84", source: "Cool second hue, clear of the accent" },
-  { token: "--chart-4", name: "Rose", hex: "#c2416b", source: "Warm third hue" },
-  { token: "--chart-5", name: "Violet", hex: "#7656e0", source: "Far from Frost in hue" },
-  { token: "--chart-6", name: "Slate", hex: "#5b6475", source: "Neutral last slot" },
+  { token: "--chart-1", name: "Blue", hex: "#4a8ef0", source: "Primary series, the brand hue" },
+  { token: "--chart-2", name: "Red", hex: "#e85c6d", source: "Second series, warm complement" },
+  { token: "--chart-3", name: "Green", hex: "#4fbb6e", source: "Third series, clear of the blue" },
+  { token: "--chart-4", name: "Yellow", hex: "#f5c04c", source: "Fourth series, warm amber (no mustard)" },
+  { token: "--chart-5", name: "Lavender", hex: "#a67cf2", source: "Fifth series, soft purple" },
+  { token: "--chart-6", name: "Teal", hex: "#5fb4c8", source: "Sixth series, a cool close-out" },
 ];
 
 /** Ordered categories (funnel stages, size bands, severity): one hue, light to dark. */

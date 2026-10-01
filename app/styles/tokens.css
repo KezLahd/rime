@@ -344,12 +344,12 @@
      sequence, never re-rank. Every slot clears 3:1 on white. The ordinal
      ramp is Frost, light to dark. Status hues carry meaning only, always
      with an icon and a label. Mirrored in components/charts/palette.ts. */
-  --chart-1: #468cfb;
-  --chart-2: #b7770f;
-  --chart-3: #0f8a84;
-  --chart-4: #c2416b;
-  --chart-5: #7656e0;
-  --chart-6: #5b6475;
+  --chart-1: #4a8ef0;
+  --chart-2: #e85c6d;
+  --chart-3: #4fbb6e;
+  --chart-4: #f5c04c;
+  --chart-5: #a67cf2;
+  --chart-6: #5fb4c8;
   --chart-other: #a3a8b3;
   --chart-seq-1: #9fc6fb;
   --chart-seq-2: #6fa9fb;
@@ -579,11 +579,11 @@
   --modal-scrim: radial-gradient(120% 120% at 50% 45%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.62) 100%);
 
   --chart-1: #6ba6fc;
-  --chart-2: #e0a640;
-  --chart-3: #3fbfb6;
-  --chart-4: #ec7aa0;
-  --chart-5: #a28cf5;
-  --chart-6: #9aa3b5;
+  --chart-2: #f08290;
+  --chart-3: #70d294;
+  --chart-4: #f5d478;
+  --chart-5: #c0a3f7;
+  --chart-6: #8fc9d8;
   --chart-other: #5e636e;
   --chart-seq-1: #1d52b5;
   --chart-seq-2: #2b6cdb;

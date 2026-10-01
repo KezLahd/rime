@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import {
   Alert,
   IconButton,
@@ -121,12 +121,17 @@ function useDraft(value: string) {
   return { value: draft, set: setDraft };
 }
 
-/** The swatch button and its popover: a full picker, the hex and (optionally) opacity. */
+/**
+ * The swatch button: one click opens the native colour picker directly
+ * (no popover-then-click-again). The hex code shows next to the chip and
+ * stays editable through the Hex input in the row (ColourRow). Alpha is
+ * passed through unchanged; a dedicated opacity slider lives in the
+ * advanced popover on the Advanced panel, not here.
+ */
 export function ColourSwatch({
   label,
   colour,
   onChange,
-  alpha,
   fill,
 }: {
   label: string;
@@ -138,63 +143,33 @@ export function ColourSwatch({
 }) {
   const c = colour ?? { r: 0, g: 0, b: 0, a: 1 };
   const hex = toHex(c);
-  const draft = useDraft(hex);
-  const valid = Boolean(parseHex(draft.value));
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <Popover
-      label={`${label} colour`}
-      width={248}
-      trigger={
-        <button type="button" className={styles.swatchButton} aria-label={`${label}: ${hex}. Change colour`}>
-          <span className={styles.swatchChecker}>
-            <span className={styles.swatchPaint} style={{ background: fill ?? toCss(c) }} />
-          </span>
-          <span className={styles.swatchHex}>{hex}</span>
-        </button>
-      }
-    >
-      <div className={styles.picker}>
-        <input
-          type="color"
-          className={styles.pickerNative}
-          value={hex}
-          aria-label={`${label} colour picker`}
-          onChange={(e) => {
-            const p = parseHex(e.target.value);
-            if (p) onChange({ ...p, a: c.a });
-          }}
-        />
-        <TextInput
-          size="sm"
-          mono
-          aria-label={`${label} hex`}
-          value={draft.value}
-          invalid={!valid}
-          spellCheck={false}
-          onChange={(e) => {
-            draft.set(e.target.value);
-            if (/^#([0-9a-f]{6})$/i.test(e.target.value.trim())) onChange({ ...(parseHex(e.target.value.trim()) as Rgb), a: c.a });
-          }}
-          onBlur={() => {
-            const p = parseHex(draft.value);
-            if (p) onChange({ ...p, a: c.a });
-            else draft.set(hex);
-          }}
-        />
-        {alpha ? (
-          <Slider
-            label="Opacity"
-            showValue
-            min={0}
-            max={1}
-            step={0.01}
-            value={c.a}
-            formatValue={(v) => `${Math.round(v * 100)}%`}
-            onValueChange={(a: number) => onChange({ ...c, a })}
-          />
-        ) : null}
-      </div>
-    </Popover>
+    <span className={styles.swatchWrap}>
+      <button
+        type="button"
+        className={styles.swatchButton}
+        aria-label={`${label}: ${hex}. Open colour picker`}
+        onClick={() => inputRef.current?.click()}
+      >
+        <span className={styles.swatchChecker}>
+          <span className={styles.swatchPaint} style={{ background: fill ?? toCss(c) }} />
+        </span>
+        <span className={styles.swatchHex}>{hex}</span>
+      </button>
+      <input
+        ref={inputRef}
+        type="color"
+        className={styles.swatchNative}
+        value={hex}
+        tabIndex={-1}
+        aria-hidden="true"
+        onChange={(e) => {
+          const p = parseHex(e.target.value);
+          if (p) onChange({ ...p, a: c.a });
+        }}
+      />
+    </span>
   );
 }
 
