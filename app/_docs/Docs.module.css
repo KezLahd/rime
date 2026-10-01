@@ -1135,9 +1135,7 @@
   overscroll-behavior: contain;
   padding: 8px;
   border-radius: var(--r-md);
-  background: var(--popover-surface);
-  -webkit-backdrop-filter: var(--blur-chrome) saturate(160%);
-  backdrop-filter: var(--blur-chrome) saturate(160%);
+  background: var(--surface-solid);
   box-shadow: var(--popover-shadow);
   z-index: var(--z-popover);
 }
