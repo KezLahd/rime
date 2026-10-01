@@ -1,7 +1,19 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useId, useState, type ReactNode } from "react";
 import { ColorPicker } from "./ColorPicker";
+
+/**
+ * Studio-wide context: hovering a ColourRow broadcasts the row's token here;
+ * ThemePreview reads it and rings matching elements in the Colours showcase
+ * so users see where each token is being used.
+ */
+const PeekContext = createContext<(token: string | null) => void>(() => {});
+
+export function PeekProvider({ onPeek, children }: { onPeek: (token: string | null) => void; children: ReactNode }) {
+  const stable = useCallback(onPeek, [onPeek]);
+  return <PeekContext.Provider value={stable}>{children}</PeekContext.Provider>;
+}
 import {
   Alert,
   IconButton,
@@ -75,6 +87,7 @@ function ResetButton({ label, changed, onReset }: { label: string; changed?: boo
 /** A labelled row: label (with a changed dot and optional help), the control, a reset. */
 export function Row({
   label,
+  token,
   help,
   changed,
   onReset,
@@ -93,8 +106,17 @@ export function Row({
   /** Label above the control instead of beside it. */
   stacked?: boolean;
 }) {
+  const peek = useContext(PeekContext);
+  const start = () => token && peek(token);
+  const stop = () => peek(null);
   return (
-    <div className={cx(styles.row, stacked && styles.rowStacked, changed && styles.rowChanged)}>
+    <div
+      className={cx(styles.row, stacked && styles.rowStacked, changed && styles.rowChanged)}
+      onMouseEnter={start}
+      onMouseLeave={stop}
+      onFocus={start}
+      onBlur={stop}
+    >
       <span className={styles.rowLabel}>
         <label className={styles.rowName} htmlFor={htmlFor}>
           {label}

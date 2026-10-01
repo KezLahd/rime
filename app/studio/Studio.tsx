@@ -33,7 +33,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { Notice } from "./controls";
+import { Notice, PeekProvider } from "./controls";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
 import { parseGradient } from "./engine/gradient";
@@ -245,6 +245,11 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   const toggleCollapsed = useCallback(() => {
     setCollapsed((v) => !v);
   }, []);
+
+  /** Which token is being hovered in the controls panel — the Colours
+   *  showcase rings matching elements so the user can see where each
+   *  token is used. */
+  const [peekToken, setPeekToken] = useState<string | null>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -671,6 +676,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <p className={styles.sectionLede}>{current.lede}</p>
             </header>
             {storageWarning ? <Notice tone="warn">{storageWarning}</Notice> : null}
+            <PeekProvider onPeek={setPeekToken}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
@@ -705,6 +711,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             ) : (
               <ExportPanel api={api} sources={sources} />
             )}
+            </PeekProvider>
           </div>
 
           {/* Walkthrough footer: previous / next buttons for the ordered
@@ -776,7 +783,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         <section className={styles.preview} aria-label="Live preview">
           <div className={styles.previewScroll} data-theme-studio="">
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} />
+            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} />
           </div>
         </section>
       </div>

@@ -369,6 +369,54 @@
   min-width: 220px;
 }
 
+/* ── Spot: a wrapper that rings when the hovered ColourRow's token
+   matches one of the tokens listed on data-tokens. The ring is a brand
+   outline with a soft wash so the user sees where each colour is used
+   as they peek at it in the controls panel. */
+
+.colourSpot {
+  position: relative;
+  display: inline-flex;
+  isolation: isolate;
+  transition: box-shadow 160ms var(--ease);
+  border-radius: var(--r-sm);
+}
+
+/* Inherit the block/inline rhythm of the wrapped element without laying
+   out ::after on its own line. */
+.colourSpot > :only-child {
+  display: contents;
+}
+
+.colourSpotHit {
+  box-shadow:
+    0 0 0 2px var(--brand),
+    0 0 0 5px color-mix(in oklab, var(--brand) 22%, transparent);
+  animation: colourSpotPop 180ms var(--ease);
+}
+
+@keyframes colourSpotPop {
+  from {
+    box-shadow: 0 0 0 0 var(--brand), 0 0 0 0 transparent;
+  }
+}
+
+/* Chart ramp: five contiguous blocks showing --chart-seq-1 to -5. */
+.colourRamp {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  height: 24px;
+  margin-top: 8px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.colourRampStep {
+  display: block;
+  height: 100%;
+}
+
 @media (max-width: 820px) {
   .colourHero,
   .colourStatusRow,

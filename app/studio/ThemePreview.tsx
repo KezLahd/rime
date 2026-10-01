@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowRight, CheckCircle2, Download, Filter, MoreHorizontal, Plus, Search } from "lucide-react";
-import { memo } from "react";
+import { memo, type ReactNode } from "react";
+import { cx } from "@/components/ui/_internal/cx";
 import { SidebarShell } from "@/components/shell/SidebarShell";
 import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { Badge } from "@/components/ui/Badge/Badge";
@@ -66,12 +67,17 @@ export const ThemePreview = memo(function ThemePreview({
   logoCorner,
   layout,
   focus,
+  peekToken,
 }: {
   logoSrc?: string;
   logoAlt?: string;
   logoCorner: "glass" | "fill";
   layout: "sidebar" | "rail" | "header";
   focus?: PreviewFocus;
+  /** When a token is being hovered in the controls panel, this is set to
+   *  its name. The Colours showcase rings matching elements so the user
+   *  sees where the token is used. */
+  peekToken?: string | null;
 }) {
   // Logo step: just the logo on a backdrop with the five brand chips
   // underneath, so the user watches it come to life as they drop a file.
@@ -85,7 +91,7 @@ export const ThemePreview = memo(function ThemePreview({
   // status) grouped as a single demo page, like shadcn's landing. No
   // sidebar, no dashboard, no uncomposed grid of category cards.
   if (focus === "colour") {
-    return <ColourShowcase />;
+    return <ColourShowcase peekToken={peekToken ?? null} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -136,59 +142,122 @@ export const ThemePreview = memo(function ThemePreview({
  * cards.
  */
 const CHART_DATA = [
-  { month: "Jan", a: 42, b: 38, c: 30 },
-  { month: "Feb", a: 48, b: 36, c: 34 },
-  { month: "Mar", a: 55, b: 44, c: 32 },
-  { month: "Apr", a: 51, b: 52, c: 38 },
-  { month: "May", a: 62, b: 48, c: 45 },
-  { month: "Jun", a: 68, b: 54, c: 50 },
+  { month: "Jan", a: 42, b: 38, c: 30, d: 24, e: 18, f: 12 },
+  { month: "Feb", a: 48, b: 36, c: 34, d: 26, e: 21, f: 14 },
+  { month: "Mar", a: 55, b: 44, c: 32, d: 30, e: 23, f: 16 },
+  { month: "Apr", a: 51, b: 52, c: 38, d: 34, e: 26, f: 19 },
+  { month: "May", a: 62, b: 48, c: 45, d: 38, e: 29, f: 22 },
+  { month: "Jun", a: 68, b: 54, c: 50, d: 42, e: 32, f: 25 },
 ];
 
-function ColourShowcase() {
+/**
+ * Wraps a block of specimen elements, ringing them when the active peek
+ * token is one of the tokens they use. The ring is a brand outline that
+ * fades in with a short animation so the user sees the location pop as
+ * they hover a ColourRow.
+ */
+function Spot({
+  tokens,
+  peek,
+  children,
+  className,
+  as: Tag = "div",
+}: {
+  tokens: string;
+  peek: string | null;
+  children: ReactNode;
+  className?: string;
+  as?: "div" | "span" | "section";
+}) {
+  const hit = peek ? tokens.split(/\s+/).includes(peek) : false;
+  // Spread the tagged element with its data attributes; the className
+  // controls the ring via CSS.
+  return (
+    <Tag className={cx(styles.colourSpot, className, hit && styles.colourSpotHit)} data-tokens={tokens}>
+      {children}
+    </Tag>
+  );
+}
+
+function ColourShowcase({ peekToken }: { peekToken: string | null }) {
+  const peek = peekToken;
   return (
     <div className={styles.colourShowcase}>
       {/* Hero: brand ink + action + secondary + ghost */}
       <GlassPanel padding="lg" className={styles.colourHero}>
         <div className={styles.colourHeroText}>
-          <p className={styles.colourEyebrow}>This month</p>
-          <h2 className={styles.colourTitle}>Good morning, Jane</h2>
-          <p className={styles.colourLede}>
-            Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
-          </p>
-          <p className={styles.colourMuted}>Last synced 2 minutes ago.</p>
+          <Spot as="span" tokens="--ink-brand" peek={peek}>
+            <p className={styles.colourEyebrow}>This month</p>
+          </Spot>
+          <Spot as="span" tokens="--ink-heading" peek={peek}>
+            <h2 className={styles.colourTitle}>Good morning, Jane</h2>
+          </Spot>
+          <Spot as="span" tokens="--ink-secondary --ink-body" peek={peek}>
+            <p className={styles.colourLede}>
+              Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
+            </p>
+          </Spot>
+          <Spot as="span" tokens="--ink-muted" peek={peek}>
+            <p className={styles.colourMuted}>Last synced 2 minutes ago.</p>
+          </Spot>
           <div className={styles.colourActions}>
-            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
-            <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export CSV</Button>
-            <Button variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>
-              Skip for now
-            </Button>
+            <Spot as="span" tokens="--brand --brand-action --brand-strong" peek={peek}>
+              <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+            </Spot>
+            <Spot as="span" tokens="--brand --brand-soft" peek={peek}>
+              <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export CSV</Button>
+            </Spot>
+            <Spot as="span" tokens="--ink-brand" peek={peek}>
+              <Button variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>
+                Skip for now
+              </Button>
+            </Spot>
+            <Spot as="span" tokens="--ink-disabled" peek={peek}>
+              <Button disabled>Disabled</Button>
+            </Spot>
           </div>
         </div>
-        <div className={styles.colourAvatarStack} aria-hidden="true">
+        <Spot className={styles.colourAvatarStack} tokens="--brand --ink-inverse" peek={peek}>
           <Avatar name="Jane Cooper" size="md" tone="brand" />
           <Avatar name="Marco Silva" size="md" />
           <Avatar name="Priya Shah" size="md" />
-        </div>
+        </Spot>
       </GlassPanel>
 
       {/* Status badges + progress */}
       <section className={styles.colourStatusRow}>
         <GlassPanel padding="md" className={styles.colourBadges}>
-          <Badge tone="brand">Draft</Badge>
-          <Badge tone="success" variant="solid">Paid</Badge>
-          <Badge tone="warning">Pending</Badge>
-          <Badge tone="danger" variant="solid">Overdue</Badge>
-          <Badge tone="info">In review</Badge>
-          <Badge tone="neutral">Archived</Badge>
+          <Spot as="span" tokens="--brand --brand-soft" peek={peek}>
+            <Badge tone="brand">Draft</Badge>
+          </Spot>
+          <Spot as="span" tokens="--success-fill --success-ink" peek={peek}>
+            <Badge tone="success" variant="solid">Paid</Badge>
+          </Spot>
+          <Spot as="span" tokens="--warning-fill --warning-ink" peek={peek}>
+            <Badge tone="warning">Pending</Badge>
+          </Spot>
+          <Spot as="span" tokens="--danger-base --danger-base-solid --danger-ink" peek={peek}>
+            <Badge tone="danger" variant="solid">Overdue</Badge>
+          </Spot>
+          <Spot as="span" tokens="--info-ink --info-fill" peek={peek}>
+            <Badge tone="info">In review</Badge>
+          </Spot>
+          <Spot as="span" tokens="--support --ink-muted" peek={peek}>
+            <Badge tone="neutral">Archived</Badge>
+          </Spot>
         </GlassPanel>
         <GlassPanel padding="md" className={styles.colourProgressCard}>
           <div className={styles.colourProgressTop}>
             <span className={styles.colourProgressLabel}>Collected this quarter</span>
-            <span className={styles.colourProgressValue}>72%</span>
+            <Spot as="span" tokens="--ink-brand" peek={peek}>
+              <span className={styles.colourProgressValue}>72%</span>
+            </Spot>
           </div>
-          <div className={styles.colourProgressTrack} role="progressbar" aria-valuenow={72} aria-valuemin={0} aria-valuemax={100} aria-label="Collected this quarter">
-            <div className={styles.colourProgressFill} style={{ width: "72%" }} />
-          </div>
+          <Spot tokens="--brand --brand-action --brand-strong" peek={peek}>
+            <div className={styles.colourProgressTrack} role="progressbar" aria-valuenow={72} aria-valuemin={0} aria-valuemax={100} aria-label="Collected this quarter">
+              <div className={styles.colourProgressFill} style={{ width: "72%" }} />
+            </div>
+          </Spot>
         </GlassPanel>
       </section>
 
@@ -199,11 +268,11 @@ function ColourShowcase() {
             <h3 className={styles.colourCardTitle}>Revenue by product</h3>
             <IconButton size="sm" variant="ghost" label="More" icon={<MoreHorizontal size={14} aria-hidden="true" />} />
           </header>
-          <p className={styles.colourMuted}>Blue, red, green: three product lines over the last six months.</p>
-          <div className={styles.colourChart}>
+          <p className={styles.colourMuted}>Six product lines over the last six months, one per chart slot.</p>
+          <Spot className={styles.colourChart} tokens="--chart-1 --chart-2 --chart-3 --chart-4 --chart-5 --chart-6" peek={peek}>
             <BarChart
               title="Revenue by product"
-              summary="Six-month totals across three product lines."
+              summary="Six-month totals across six product lines."
               hideTitle
               data={CHART_DATA}
               category="month"
@@ -211,29 +280,51 @@ function ColourShowcase() {
                 { key: "a", label: "Hardware" },
                 { key: "b", label: "Software" },
                 { key: "c", label: "Services" },
+                { key: "d", label: "Support" },
+                { key: "e", label: "Training" },
+                { key: "f", label: "Licensing" },
               ]}
               height={200}
             />
-          </div>
+          </Spot>
+          <Spot tokens="--chart-seq-1 --chart-seq-2 --chart-seq-3 --chart-seq-4 --chart-seq-5" peek={peek}>
+            <div className={styles.colourRamp} aria-label="Chart ramp">
+              {["--chart-seq-1", "--chart-seq-2", "--chart-seq-3", "--chart-seq-4", "--chart-seq-5"].map((t) => (
+                <span key={t} className={styles.colourRampStep} style={{ background: `var(${t})` }} />
+              ))}
+            </div>
+          </Spot>
         </GlassPanel>
 
         <GlassPanel padding="lg" className={styles.colourFormCard}>
           <header className={styles.colourCardHead}>
             <h3 className={styles.colourCardTitle}>New project</h3>
-            <Badge tone="brand" variant="soft">Draft</Badge>
+            <Spot as="span" tokens="--brand --brand-soft" peek={peek}>
+              <Badge tone="brand" variant="soft">Draft</Badge>
+            </Spot>
           </header>
-          <Field label="Project name">
-            <TextInput defaultValue="Atlas redesign" />
-          </Field>
-          <Field label="Note for the customer">
-            <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
-          </Field>
+          <Spot tokens="--ink-heading --ink-placeholder --line-input" peek={peek}>
+            <Field label="Project name">
+              <TextInput defaultValue="Atlas redesign" />
+            </Field>
+          </Spot>
+          <Spot tokens="--ink-body --ink-placeholder --line-input" peek={peek}>
+            <Field label="Note for the customer">
+              <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
+            </Field>
+          </Spot>
           <div className={styles.colourFormFoot}>
             <div className={styles.colourFormChecks}>
-              <Checkbox defaultChecked label="Send a copy to me" />
-              <Checkbox defaultChecked label="Notify the team" />
+              <Spot as="span" tokens="--brand --brand-action" peek={peek}>
+                <Checkbox defaultChecked label="Send a copy to me" />
+              </Spot>
+              <Spot as="span" tokens="--brand --brand-action" peek={peek}>
+                <Checkbox defaultChecked label="Notify the team" />
+              </Spot>
             </div>
-            <Button iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Save project</Button>
+            <Spot as="span" tokens="--brand-action --brand-strong" peek={peek}>
+              <Button iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Save project</Button>
+            </Spot>
           </div>
         </GlassPanel>
       </section>
@@ -241,19 +332,29 @@ function ColourShowcase() {
       {/* Filter chips + search */}
       <GlassPanel padding="md" className={styles.colourFilterBar}>
         <div className={styles.colourChips}>
-          <button type="button" className={styles.colourChipActive}>
-            <Filter size={12} aria-hidden="true" /> All invoices · 24
-          </button>
-          <button type="button" className={styles.colourChip}>Overdue · 3</button>
-          <button type="button" className={styles.colourChip}>Pending · 7</button>
-          <button type="button" className={styles.colourChip}>Paid · 14</button>
+          <Spot as="span" tokens="--brand --ink-brand --wash-active" peek={peek}>
+            <button type="button" className={styles.colourChipActive}>
+              <Filter size={12} aria-hidden="true" /> All invoices · 24
+            </button>
+          </Spot>
+          <Spot as="span" tokens="--ink-secondary --ink-muted" peek={peek}>
+            <button type="button" className={styles.colourChip}>Overdue · 3</button>
+          </Spot>
+          <Spot as="span" tokens="--ink-secondary --ink-muted" peek={peek}>
+            <button type="button" className={styles.colourChip}>Pending · 7</button>
+          </Spot>
+          <Spot as="span" tokens="--ink-secondary --ink-muted" peek={peek}>
+            <button type="button" className={styles.colourChip}>Paid · 14</button>
+          </Spot>
         </div>
-        <TextInput
-          size="sm"
-          leadingIcon={<Search size={14} aria-hidden="true" />}
-          placeholder="Search invoices"
-          className={styles.colourSearch}
-        />
+        <Spot as="span" tokens="--ink-placeholder --line-input --focus-color" peek={peek}>
+          <TextInput
+            size="sm"
+            leadingIcon={<Search size={14} aria-hidden="true" />}
+            placeholder="Search invoices"
+            className={styles.colourSearch}
+          />
+        </Spot>
       </GlassPanel>
     </div>
   );

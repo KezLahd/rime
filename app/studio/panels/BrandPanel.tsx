@@ -76,6 +76,7 @@ function useColourRow(api: StudioApi) {
     <ColourRow
       key={name}
       label={label}
+      token={name}
       help={help}
       colour={colourOf(api.resolved(name)) ?? colourOf(api.value(name))}
       changed={api.changed(name) || (CHANNELS[name] ? api.changed(CHANNELS[name]) : false)}
