@@ -371,21 +371,22 @@
 
 /* ── Spot: a wrapper that rings when the hovered ColourRow's token
    matches one of the tokens listed on data-tokens. The ring is a brand
-   outline with a soft wash so the user sees where each colour is used
-   as they peek at it in the controls panel. */
+   outline with a soft wash so the user sees where each colour is used.
+   Defaults to display: contents so it doesn't disturb the flow of its
+   child — the ring is painted by an absolutely-positioned ::after on a
+   child wrapper when hit. */
 
 .colourSpot {
   position: relative;
-  display: inline-flex;
-  isolation: isolate;
   transition: box-shadow 160ms var(--ease);
   border-radius: var(--r-sm);
 }
 
-/* Inherit the block/inline rhythm of the wrapped element without laying
-   out ::after on its own line. */
-.colourSpot > :only-child {
-  display: contents;
+/* Inline spot for text, badges, buttons — doesn't disturb the row's
+   flex gap or wrap. */
+.colourSpotInline {
+  display: inline-flex;
+  align-items: center;
 }
 
 .colourSpotHit {

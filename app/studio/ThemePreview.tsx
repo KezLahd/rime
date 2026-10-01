@@ -151,17 +151,20 @@ const CHART_DATA = [
 ];
 
 /**
- * Wraps a block of specimen elements, ringing them when the active peek
- * token is one of the tokens they use. The ring is a brand outline that
- * fades in with a short animation so the user sees the location pop as
- * they hover a ColourRow.
+ * Wraps a specimen element, ringing it when the active peek token is one
+ * of the tokens listed in `tokens`. The ring is a brand outline + wash
+ * so the user sees where a token is used.
+ *
+ * `as="span"` is the default and wraps inline things (badges, buttons);
+ * for block elements like a <p> or <h2> pass `as="div"` so the wrapper
+ * doesn't collapse the block flow.
  */
 function Spot({
   tokens,
   peek,
   children,
   className,
-  as: Tag = "div",
+  as: Tag = "span",
 }: {
   tokens: string;
   peek: string | null;
@@ -170,10 +173,12 @@ function Spot({
   as?: "div" | "span" | "section";
 }) {
   const hit = peek ? tokens.split(/\s+/).includes(peek) : false;
-  // Spread the tagged element with its data attributes; the className
-  // controls the ring via CSS.
+  const inline = Tag === "span";
   return (
-    <Tag className={cx(styles.colourSpot, className, hit && styles.colourSpotHit)} data-tokens={tokens}>
+    <Tag
+      className={cx(styles.colourSpot, inline && styles.colourSpotInline, className, hit && styles.colourSpotHit)}
+      data-tokens={tokens}
+    >
       {children}
     </Tag>
   );
@@ -186,38 +191,38 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
       {/* Hero: brand ink + action + secondary + ghost */}
       <GlassPanel padding="lg" className={styles.colourHero}>
         <div className={styles.colourHeroText}>
-          <Spot as="span" tokens="--ink-brand" peek={peek}>
+          <Spot as="div" tokens="--ink-brand" peek={peek}>
             <p className={styles.colourEyebrow}>This month</p>
           </Spot>
-          <Spot as="span" tokens="--ink-heading" peek={peek}>
+          <Spot as="div" tokens="--ink-heading" peek={peek}>
             <h2 className={styles.colourTitle}>Good morning, Jane</h2>
           </Spot>
-          <Spot as="span" tokens="--ink-secondary --ink-body" peek={peek}>
+          <Spot as="div" tokens="--ink-secondary --ink-body" peek={peek}>
             <p className={styles.colourLede}>
               Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
             </p>
           </Spot>
-          <Spot as="span" tokens="--ink-muted" peek={peek}>
+          <Spot as="div" tokens="--ink-muted" peek={peek}>
             <p className={styles.colourMuted}>Last synced 2 minutes ago.</p>
           </Spot>
           <div className={styles.colourActions}>
-            <Spot as="span" tokens="--brand --brand-action --brand-strong" peek={peek}>
+            <Spot tokens="--brand --brand-action --brand-strong" peek={peek}>
               <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
             </Spot>
-            <Spot as="span" tokens="--brand --brand-soft" peek={peek}>
+            <Spot tokens="--brand --brand-soft" peek={peek}>
               <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export CSV</Button>
             </Spot>
-            <Spot as="span" tokens="--ink-brand" peek={peek}>
+            <Spot tokens="--ink-brand" peek={peek}>
               <Button variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>
                 Skip for now
               </Button>
             </Spot>
-            <Spot as="span" tokens="--ink-disabled" peek={peek}>
+            <Spot tokens="--ink-disabled" peek={peek}>
               <Button disabled>Disabled</Button>
             </Spot>
           </div>
         </div>
-        <Spot className={styles.colourAvatarStack} tokens="--brand --ink-inverse" peek={peek}>
+        <Spot as="div" className={styles.colourAvatarStack} tokens="--brand --ink-inverse" peek={peek}>
           <Avatar name="Jane Cooper" size="md" tone="brand" />
           <Avatar name="Marco Silva" size="md" />
           <Avatar name="Priya Shah" size="md" />
@@ -253,7 +258,7 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               <span className={styles.colourProgressValue}>72%</span>
             </Spot>
           </div>
-          <Spot tokens="--brand --brand-action --brand-strong" peek={peek}>
+          <Spot as="div" tokens="--brand --brand-action --brand-strong" peek={peek}>
             <div className={styles.colourProgressTrack} role="progressbar" aria-valuenow={72} aria-valuemin={0} aria-valuemax={100} aria-label="Collected this quarter">
               <div className={styles.colourProgressFill} style={{ width: "72%" }} />
             </div>
@@ -269,7 +274,7 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
             <IconButton size="sm" variant="ghost" label="More" icon={<MoreHorizontal size={14} aria-hidden="true" />} />
           </header>
           <p className={styles.colourMuted}>Six product lines over the last six months, one per chart slot.</p>
-          <Spot className={styles.colourChart} tokens="--chart-1 --chart-2 --chart-3 --chart-4 --chart-5 --chart-6" peek={peek}>
+          <Spot as="div" className={styles.colourChart} tokens="--chart-1 --chart-2 --chart-3 --chart-4 --chart-5 --chart-6" peek={peek}>
             <BarChart
               title="Revenue by product"
               summary="Six-month totals across six product lines."
@@ -287,7 +292,7 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               height={200}
             />
           </Spot>
-          <Spot tokens="--chart-seq-1 --chart-seq-2 --chart-seq-3 --chart-seq-4 --chart-seq-5" peek={peek}>
+          <Spot as="div" tokens="--chart-seq-1 --chart-seq-2 --chart-seq-3 --chart-seq-4 --chart-seq-5" peek={peek}>
             <div className={styles.colourRamp} aria-label="Chart ramp">
               {["--chart-seq-1", "--chart-seq-2", "--chart-seq-3", "--chart-seq-4", "--chart-seq-5"].map((t) => (
                 <span key={t} className={styles.colourRampStep} style={{ background: `var(${t})` }} />
@@ -303,12 +308,12 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               <Badge tone="brand" variant="soft">Draft</Badge>
             </Spot>
           </header>
-          <Spot tokens="--ink-heading --ink-placeholder --line-input" peek={peek}>
+          <Spot as="div" tokens="--ink-heading --ink-placeholder --line-input" peek={peek}>
             <Field label="Project name">
               <TextInput defaultValue="Atlas redesign" />
             </Field>
           </Spot>
-          <Spot tokens="--ink-body --ink-placeholder --line-input" peek={peek}>
+          <Spot as="div" tokens="--ink-body --ink-placeholder --line-input" peek={peek}>
             <Field label="Note for the customer">
               <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
             </Field>

@@ -169,7 +169,7 @@ export function ColourSwatch({
   return (
     <Popover
       label={`${label} colour`}
-      width={232}
+      width={320}
       trigger={
         <button type="button" className={styles.swatchButton} aria-label={`${label}: ${hex}. Open colour picker`}>
           <span className={styles.swatchChecker}>
