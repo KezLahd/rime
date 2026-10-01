@@ -72,11 +72,20 @@ export function DocsCommand() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
+  // Mac shows "⌘" for the Cmd key; everything else shows "Ctrl". Default to
+  // "⌘" so the first paint doesn't flash, then correct on hydration.
+  const [modSymbol, setModSymbol] = useState("⌘");
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const toast = useToast();
   const listboxId = useId();
+
+  useEffect(() => {
+    const nav = typeof navigator === "undefined" ? "" : (navigator.platform || navigator.userAgent || "");
+    const isMac = /Mac|iPhone|iPod|iPad/.test(nav);
+    setModSymbol(isMac ? "⌘" : "Ctrl");
+  }, []);
 
   const rows = useMemo(() => buildIndex(), []);
 
@@ -267,7 +276,10 @@ export function DocsCommand() {
                         >
                           <span className={styles.searchItemLabel}>{row.label}</span>
                           {row.isComponent ? (
-                            <span className={styles.searchItemHint}>Ctrl C to copy install</span>
+                            <span className={styles.searchItemHint}>
+                              <kbd className={styles.searchItemKey}>{modSymbol}</kbd>
+                              <kbd className={styles.searchItemKey}>C</kbd>
+                            </span>
                           ) : null}
                         </Link>
                       </li>
