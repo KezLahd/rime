@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
+import { ColorPicker } from "./ColorPicker";
 import {
   Alert,
   IconButton,
@@ -122,11 +123,11 @@ function useDraft(value: string) {
 }
 
 /**
- * The swatch button: one click opens the native colour picker directly
- * (no popover-then-click-again). The hex code shows next to the chip and
- * stays editable through the Hex input in the row (ColourRow). Alpha is
- * passed through unchanged; a dedicated opacity slider lives in the
- * advanced popover on the Advanced panel, not here.
+ * The swatch button opens a Rime-built colour picker (SV square + hue
+ * strip + hex input) in a popover. The old flow used the OS-native
+ * <input type="color"> which looks ancient on every platform. The hex
+ * stays an input inside the picker — click a swatch to change the
+ * colour, type the hex to be exact.
  */
 export function ColourSwatch({
   label,
@@ -143,33 +144,21 @@ export function ColourSwatch({
 }) {
   const c = colour ?? { r: 0, g: 0, b: 0, a: 1 };
   const hex = toHex(c);
-  const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <span className={styles.swatchWrap}>
-      <button
-        type="button"
-        className={styles.swatchButton}
-        aria-label={`${label}: ${hex}. Open colour picker`}
-        onClick={() => inputRef.current?.click()}
-      >
-        <span className={styles.swatchChecker}>
-          <span className={styles.swatchPaint} style={{ background: fill ?? toCss(c) }} />
-        </span>
-        <span className={styles.swatchHex}>{hex}</span>
-      </button>
-      <input
-        ref={inputRef}
-        type="color"
-        className={styles.swatchNative}
-        value={hex}
-        tabIndex={-1}
-        aria-hidden="true"
-        onChange={(e) => {
-          const p = parseHex(e.target.value);
-          if (p) onChange({ ...p, a: c.a });
-        }}
-      />
-    </span>
+    <Popover
+      label={`${label} colour`}
+      width={232}
+      trigger={
+        <button type="button" className={styles.swatchButton} aria-label={`${label}: ${hex}. Open colour picker`}>
+          <span className={styles.swatchChecker}>
+            <span className={styles.swatchPaint} style={{ background: fill ?? toCss(c) }} />
+          </span>
+          <span className={styles.swatchHex}>{hex}</span>
+        </button>
+      }
+    >
+      <ColorPicker colour={c} onChange={(next) => onChange({ ...next, a: c.a })} />
+    </Popover>
   );
 }
 

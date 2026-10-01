@@ -18,21 +18,25 @@
   box-shadow: var(--focus-ring);
 }
 
+/* Match Button sizes exactly so an IconButton (chevron) sits flush
+   against a Button in a split-button ButtonGroup. Previously the sizes
+   were hard-coded (28/36/44) while Button used --control-h-* (32/40/48),
+   leaving a 4 px height mismatch in the "Send invoice" split button. */
 .sm {
-  width: 28px;
-  height: 28px;
+  width: var(--button-height-sm, var(--control-h-sm));
+  height: var(--button-height-sm, var(--control-h-sm));
   border-radius: var(--icon-button-radius, var(--r-xs));
 }
 
 .md {
-  width: 36px;
-  height: 36px;
+  width: var(--button-height-md, var(--control-h-md));
+  height: var(--button-height-md, var(--control-h-md));
   border-radius: var(--icon-button-radius, var(--r-sm));
 }
 
 .lg {
-  width: 44px;
-  height: 44px;
+  width: var(--button-height-lg, var(--control-h-lg));
+  height: var(--button-height-lg, var(--control-h-lg));
   border-radius: var(--icon-button-radius, var(--r-md));
 }
 

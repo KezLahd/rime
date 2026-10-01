@@ -1,0 +1,108 @@
+/* The Studio's custom colour picker: sharp corners, no 2004 native UI,
+   just the SV square, hue strip and hex input. */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 232px;
+  padding: 0;
+  user-select: none;
+}
+
+/* ── Saturation + value square ───────────────────────────────────────── */
+
+.square {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  cursor: crosshair;
+  touch-action: none;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.squareWhite {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #ffffff, transparent);
+  pointer-events: none;
+}
+
+.squareBlack {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, #000000);
+  pointer-events: none;
+}
+
+.cursor {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 2px #ffffff,
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ── Hue strip ───────────────────────────────────────────────────────── */
+
+.hue {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  cursor: ew-resize;
+  touch-action: none;
+  border-radius: 0;
+  background: linear-gradient(
+    to right,
+    #ff0000 0%,
+    #ffff00 17%,
+    #00ff00 33%,
+    #00ffff 50%,
+    #0000ff 67%,
+    #ff00ff 83%,
+    #ff0000 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.hueCursor {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 6px;
+  margin-left: -3px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ── Hex input ───────────────────────────────────────────────────────── */
+
+.hex {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-heading);
+  outline: none;
+  text-transform: uppercase;
+}
+
+.hex:focus {
+  box-shadow: inset 0 0 0 1px var(--brand);
+}

@@ -1,0 +1,182 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { parseHex, toHex, type Rgb } from "./engine/colour";
+import styles from "./ColorPicker.module.css";
+
+// ── RGB <-> HSV ──────────────────────────────────────────────────────────
+
+function rgbToHsv(c: Rgb) {
+  const r = c.r / 255;
+  const g = c.g / 255;
+  const b = c.b / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const v = max;
+  const d = max - min;
+  const s = max === 0 ? 0 : d / max;
+  let h = 0;
+  if (d) {
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s: s * 100, v: v * 100 };
+}
+
+function hsvToRgb(h: number, s: number, v: number): Rgb {
+  const S = s / 100;
+  const V = v / 100;
+  const i = Math.floor(h / 60);
+  const f = h / 60 - i;
+  const p = V * (1 - S);
+  const q = V * (1 - f * S);
+  const t = V * (1 - (1 - f) * S);
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  switch (i % 6) {
+    case 0: r = V; g = t; b = p; break;
+    case 1: r = q; g = V; b = p; break;
+    case 2: r = p; g = V; b = t; break;
+    case 3: r = p; g = q; b = V; break;
+    case 4: r = t; g = p; b = V; break;
+    case 5: r = V; g = p; b = q; break;
+  }
+  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255), a: 1 };
+}
+
+/**
+ * The Studio's own colour picker: a saturation/value square with a hue
+ * strip underneath and a hex input at the bottom. Replaces the native
+ * <input type="color"> picker (which looks like 2004). Pointer drag on
+ * the square sets saturation + value, pointer drag on the hue strip sets
+ * hue, hex input is editable and syncs both ways. All sharp corners,
+ * matches the kit's chrome.
+ */
+export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: Rgb) => void }) {
+  const initial = rgbToHsv(colour);
+  const [h, setH] = useState(initial.h);
+  const [s, setS] = useState(initial.s);
+  const [v, setV] = useState(initial.v);
+  const [hexDraft, setHexDraft] = useState(toHex(colour));
+  const squareRef = useRef<HTMLDivElement>(null);
+  const hueRef = useRef<HTMLDivElement>(null);
+  const colourRef = useRef(colour);
+  colourRef.current = colour;
+
+  // When the external colour changes (hex typed, Reset clicked, step
+  // switched), sync the HSV sliders back. Preserve hue when saturation
+  // happens to be zero (grey) so the hue slider doesn't snap to 0.
+  useEffect(() => {
+    const next = rgbToHsv(colour);
+    setHexDraft(toHex(colour));
+    setV(next.v);
+    setS(next.s);
+    if (next.s > 0) setH(next.h);
+  }, [colour.r, colour.g, colour.b]);
+
+  const commit = (hh: number, ss: number, vv: number) => {
+    const rgb = hsvToRgb(hh, ss, vv);
+    onChange({ ...rgb, a: colourRef.current.a });
+  };
+
+  const dragSquare = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = squareRef.current;
+    if (!el) return;
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    const apply = (clientX: number, clientY: number) => {
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+      const nextS = x * 100;
+      const nextV = (1 - y) * 100;
+      setS(nextS);
+      setV(nextV);
+      commit(h, nextS, nextV);
+    };
+    apply(e.clientX, e.clientY);
+    const onMove = (ev: PointerEvent) => apply(ev.clientX, ev.clientY);
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
+
+  const dragHue = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = hueRef.current;
+    if (!el) return;
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    const apply = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const nextH = x * 360;
+      setH(nextH);
+      commit(nextH, s, v);
+    };
+    apply(e.clientX);
+    const onMove = (ev: PointerEvent) => apply(ev.clientX);
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
+
+  return (
+    <div className={styles.picker}>
+      <div
+        ref={squareRef}
+        className={styles.square}
+        onPointerDown={dragSquare}
+        style={{ background: `hsl(${h}, 100%, 50%)` }}
+        role="slider"
+        aria-label="Saturation and value"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(s)}
+      >
+        <div className={styles.squareWhite} />
+        <div className={styles.squareBlack} />
+        <div className={styles.cursor} style={{ left: `${s}%`, top: `${100 - v}%` }} />
+      </div>
+
+      <div
+        ref={hueRef}
+        className={styles.hue}
+        onPointerDown={dragHue}
+        role="slider"
+        aria-label="Hue"
+        aria-valuemin={0}
+        aria-valuemax={360}
+        aria-valuenow={Math.round(h)}
+      >
+        <div className={styles.hueCursor} style={{ left: `${(h / 360) * 100}%` }} />
+      </div>
+
+      <input
+        type="text"
+        className={styles.hex}
+        value={hexDraft}
+        onChange={(e) => {
+          const value = e.target.value;
+          setHexDraft(value);
+          const parsed = parseHex(value.trim());
+          if (parsed) onChange({ ...parsed, a: colourRef.current.a });
+        }}
+        onBlur={() => setHexDraft(toHex(colourRef.current))}
+        spellCheck={false}
+        maxLength={7}
+        aria-label="Hex colour"
+      />
+    </div>
+  );
+}
