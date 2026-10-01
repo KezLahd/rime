@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cx } from "@/components/ui/_internal/cx";
+import { SITE } from "@/lib/site";
 import styles from "./Docs.module.css";
 import { DocsCommand } from "./DocsCommand";
 import { DocsLogo } from "./DocsLogo";
@@ -42,52 +43,51 @@ export function DocsShell({
   const { prev, next } = pager ? neighbours(path) : {};
   return (
     <div className={styles.frame}>
-      <DocsTopBar current={path} />
-      <div className={cx(styles.columns, !toc?.length && styles.noToc, !sidebar && styles.noSidebar, wide && styles.wide)}>
-        {sidebar ? (
-          <nav aria-label="Docs" className={styles.nav}>
-            {sidebarSections().map((section) => (
-              <div key={section.title} className={styles.navGroup}>
-                <p className={styles.navHeading}>{section.title}</p>
-                <div className={styles.navList}>
-                  {section.items.map((item) => (
-                    <NavLink key={item.href} href={item.href} active={path === item.href}>
-                      {item.label}
-                    </NavLink>
-                  ))}
+      {/* The sticky region bounds the top bar: when its bottom edge scrolls
+          past the top of the viewport (i.e. just before the footer appears),
+          the sticky top bar leaves with it. */}
+      <div className={styles.stickyRegion}>
+        <DocsTopBar current={path} />
+        <div className={cx(styles.columns, !toc?.length && styles.noToc, !sidebar && styles.noSidebar, wide && styles.wide)}>
+          {sidebar ? (
+            <nav aria-label="Docs" className={styles.nav}>
+              {sidebarSections().map((section) => (
+                <div key={section.title} className={styles.navGroup}>
+                  <p className={styles.navHeading}>{section.title}</p>
+                  <div className={styles.navList}>
+                    {section.items.map((item) => (
+                      <NavLink key={item.href} href={item.href} active={path === item.href}>
+                        {item.label}
+                      </NavLink>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </nav>
-        ) : null}
-        <main id="main" className={styles.main}>
-          {children}
-          {prev || next ? (
-            <nav aria-label="Previous and next" className={styles.pager}>
-              {prev ? (
-                <Link href={prev.href} className={styles.pagerLink}>
-                  <ArrowLeft size={15} aria-hidden="true" />
-                  <span>
-                    <span className={styles.pagerHint}>Previous</span>
-                    {prev.label}
-                  </span>
-                </Link>
-              ) : (
-                <span />
-              )}
-              {next ? (
-                <Link href={next.href} className={cx(styles.pagerLink, styles.pagerNext)}>
-                  <span>
-                    <span className={styles.pagerHint}>Next</span>
-                    {next.label}
-                  </span>
-                  <ArrowRight size={15} aria-hidden="true" />
-                </Link>
-              ) : null}
+              ))}
             </nav>
           ) : null}
-        </main>
-        {toc?.length ? <Toc items={toc} /> : null}
+          <main id="main" className={styles.main}>
+            {children}
+            {prev || next ? (
+              <nav aria-label="Previous and next" className={styles.pager}>
+                {prev ? (
+                  <Link href={prev.href} className={styles.pagerLink}>
+                    <ArrowLeft size={15} aria-hidden="true" />
+                    <span>{prev.label}</span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
+                {next ? (
+                  <Link href={next.href} className={cx(styles.pagerLink, styles.pagerNext)}>
+                    <span>{next.label}</span>
+                    <ArrowRight size={15} aria-hidden="true" />
+                  </Link>
+                ) : null}
+              </nav>
+            ) : null}
+          </main>
+          {toc?.length ? <Toc items={toc} /> : null}
+        </div>
       </div>
       <DocsFooter />
     </div>
@@ -95,25 +95,76 @@ export function DocsShell({
 }
 
 /**
- * The site footer: a single hairline line that reads "another kez curation",
- * with "kez" linking to the Instagram profile. Sits inside the frame so every
- * page (including the home and gallery pages that drop the sidebar) gets it.
+ * Site footer: Rime brand on the left, three link columns in the middle,
+ * "another kez curation" on the right, and a thin bottom row with the
+ * current year. Lives outside the sticky region so the top bar scrolls off
+ * exactly when the footer enters the viewport.
  */
 function DocsFooter() {
+  const year = new Date().getFullYear();
   return (
     <footer className={styles.footer}>
-      <p className={styles.footerText}>
-        another{" "}
-        <a
-          href="https://instagram.com/kezlahd"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.footerLink}
-        >
-          kez
-        </a>{" "}
-        curation
-      </p>
+      <div className={styles.footerInner}>
+        <div className={styles.footerTop}>
+          <div className={styles.footerBrand}>
+            <Link href="/" className={styles.footerMark} aria-label="Rime, home">
+              <DocsLogo />
+            </Link>
+            <p className={styles.footerTagline}>
+              Frosted-glass React components you own. Installed with the shadcn CLI, themed with one CSS file.
+            </p>
+          </div>
+          <nav aria-label="Footer" className={styles.footerNav}>
+            <div className={styles.footerCol}>
+              <p className={styles.footerColHeading}>Explore</p>
+              <ul className={styles.footerLinks}>
+                <li><Link href="/docs" className={styles.footerLink}>Docs</Link></li>
+                <li><Link href="/components" className={styles.footerLink}>Components</Link></li>
+                <li><Link href="/blocks" className={styles.footerLink}>Blocks</Link></li>
+                <li><Link href="/charts" className={styles.footerLink}>Charts</Link></li>
+                <li><Link href="/themes" className={styles.footerLink}>Rime Studio</Link></li>
+              </ul>
+            </div>
+            <div className={styles.footerCol}>
+              <p className={styles.footerColHeading}>Foundations</p>
+              <ul className={styles.footerLinks}>
+                <li><Link href="/foundations" className={styles.footerLink}>Foundations</Link></li>
+                <li><Link href="/colors" className={styles.footerLink}>Colors</Link></li>
+                <li><Link href="/patterns" className={styles.footerLink}>Patterns</Link></li>
+                <li><Link href="/docs/theming" className={styles.footerLink}>Theming</Link></li>
+                <li><Link href="/docs/dark-mode" className={styles.footerLink}>Dark mode</Link></li>
+              </ul>
+            </div>
+            <div className={styles.footerCol}>
+              <p className={styles.footerColHeading}>Resources</p>
+              <ul className={styles.footerLinks}>
+                <li><Link href="/docs/installation" className={styles.footerLink}>Installation</Link></li>
+                <li><Link href="/docs/shadcn" className={styles.footerLink}>Coming from shadcn</Link></li>
+                <li><Link href="/docs/ai" className={styles.footerLink}>AI agents</Link></li>
+                <li><a href="/llms.txt" className={styles.footerLink}>llms.txt</a></li>
+                <li><a href={GITHUB_URL} className={styles.footerLink} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div className={styles.footerBottom}>
+          <p className={styles.footerMeta}>
+            © {year} {SITE.owner}
+          </p>
+          <p className={styles.footerMeta}>
+            another{" "}
+            <a
+              href="https://instagram.com/kezlahd"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.footerCurationLink}
+            >
+              kez
+            </a>{" "}
+            curation
+          </p>
+        </div>
+      </div>
     </footer>
   );
 }
