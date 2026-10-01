@@ -54,8 +54,14 @@ export function radiusScale(roundness: number, pill: boolean): Overrides {
     out["--r-flat"] = "initial";
     out["--r-circle"] = "initial";
   }
-  if (pill) {
-    for (const n of ["--button-radius", "--input-radius", "--chip-radius", "--icon-button-radius", "--segmented-radius"]) out[n] = "999px";
+  // Always write the per-component pill tokens so toggling pill off
+  // actually removes the full rounding. "initial" un-declares the token
+  // so the component falls back to its own default (which is derived
+  // from the radius scale above). Previously, pill=false simply omitted
+  // these keys from the overrides map, which meant whatever 999px value
+  // was set in a prior pill=true commit stayed in theme.overrides.
+  for (const n of ["--button-radius", "--input-radius", "--chip-radius", "--icon-button-radius", "--segmented-radius"]) {
+    out[n] = pill ? "999px" : "initial";
   }
   return out;
 }
