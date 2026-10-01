@@ -857,6 +857,28 @@
 .fontDropdownIcon {
   flex-shrink: 0;
   color: var(--ink-muted);
+  transition: transform 160ms var(--ease);
+}
+
+.fontDropdownIconOpen {
+  transform: rotate(180deg);
+}
+
+/* The portal popup for the custom font dropdown. Lives on document.body
+   so no accordion / popover / modal can clip it. */
+.fontMenuPopup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface-solid);
+  border-radius: var(--r-md);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 12px 32px rgba(var(--rgb-contact), 0.14),
+    0 2px 8px rgba(var(--rgb-contact), 0.08);
 }
 
 /* The menu inside the popover: scrollable list of font options. Each
