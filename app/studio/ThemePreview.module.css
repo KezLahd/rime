@@ -580,33 +580,20 @@
   border-top: 0;
 }
 
-.shapeDialogRow {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.shapeDialog {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-width: 100%;
-  padding: 16px;
-  background: var(--surface-solid);
-  border-radius: var(--r-md);
+.shapeToken {
+  padding: 1px 6px;
+  border-radius: var(--r-2xs);
+  background: var(--surface-sunken);
   box-shadow: inset 0 0 0 1px var(--line);
-}
-
-.shapeDialogTitle {
-  font-size: 14px;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 12px;
   color: var(--ink-heading);
 }
 
-.shapeDialogBody {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
+.shapeDialogBodyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* ── Step 3: Type showcase ───────────────────────────────────────────── */

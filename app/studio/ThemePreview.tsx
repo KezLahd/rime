@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, CheckCircle2, Download, Filter, MoreHorizontal, Plus, Search } from "lucide-react";
-import { memo, type ReactNode } from "react";
+import { memo, useState, type ReactNode } from "react";
 import { cx } from "@/components/ui/_internal/cx";
 import { SidebarShell } from "@/components/shell/SidebarShell";
 import { Avatar } from "@/components/ui/Avatar/Avatar";
@@ -12,6 +12,7 @@ import { Field } from "@/components/ui/Field/Field";
 import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers } from "@/components/ui";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
+import { Modal } from "@/components/ui/Modal/Modal";
 import { ProgressBar } from "@/components/ui/Meter/Meter";
 import { TextInput } from "@/components/ui/TextInput/TextInput";
 // Switch intentionally omitted here; it's a controlled component and we want
@@ -567,26 +568,58 @@ function ShapeShowcase() {
         </Field>
       </GlassPanel>
 
-      {/* Dialog widths: three visual rectangles sized to match the small /
-          medium / large dialog widths, labelled with their current px. */}
+      {/* Dialog widths: click any button to pop a real Modal at that
+          size. The sliders on the left adjust --modal-width-* live, so
+          the open dialog resizes under the cursor as the slider drags. */}
       <GlassPanel padding="lg" className={styles.shapeCard}>
-        <ShapeHead title="Dialog widths" help="Max widths used by Modal / AlertDialog at the small, medium and large sizes. Below 640 px the dialog becomes a bottom sheet." />
-        <div className={styles.shapeDialogRow}>
-          {([
-            ["sm", "Small", "--modal-width-sm"],
-            ["md", "Medium", "--modal-width-md"],
-            ["lg", "Large", "--modal-width-lg"],
-          ] as const).map(([key, label, token]) => (
-            <div key={key} className={styles.shapeDialog} style={{ width: `var(${token})` }}>
-              <div className={styles.shapeDialogTitle}>{label} dialog</div>
-              <div className={styles.shapeDialogBody}>
-                <span className={styles.shapeMuted}>{token}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ShapeHead title="Dialog widths" help="Max widths used by Modal / AlertDialog at the small, medium and large sizes. Click a button to pop a real dialog — adjust the slider on the left while it's open and watch it resize live." />
+        <ShapeDialogButtons />
       </GlassPanel>
     </div>
+  );
+}
+
+function ShapeDialogButtons() {
+  const [size, setSize] = useState<"sm" | "md" | "lg" | null>(null);
+  const label = size === "sm" ? "Small" : size === "md" ? "Medium" : "Large";
+  return (
+    <>
+      <div className={styles.shapeButtonsLine}>
+        <Button onClick={() => setSize("sm")}>Open small dialog</Button>
+        <Button onClick={() => setSize("md")}>Open medium dialog</Button>
+        <Button onClick={() => setSize("lg")}>Open large dialog</Button>
+      </div>
+      <p className={styles.shapeMuted}>
+        Sized by <code className={styles.shapeToken}>--modal-width-sm</code>,{" "}
+        <code className={styles.shapeToken}>--modal-width-md</code> and{" "}
+        <code className={styles.shapeToken}>--modal-width-lg</code>. Below 640 px every size becomes a bottom sheet.
+      </p>
+      <Modal
+        open={size !== null}
+        onClose={() => setSize(null)}
+        title={`${label} dialog preview`}
+        description="Drag the matching slider on the left while this is open — the dialog resizes live."
+        size={size ?? "md"}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setSize(null)}>Cancel</Button>
+            <Button onClick={() => setSize(null)}>Save changes</Button>
+          </>
+        }
+      >
+        <div className={styles.shapeDialogBodyContent}>
+          <Field label="Project name">
+            <TextInput defaultValue="Atlas redesign" />
+          </Field>
+          <Field label="Note">
+            <Textarea rows={3} defaultValue="Clean, calm, carries the brand." />
+          </Field>
+          <p className={styles.shapeMuted}>
+            Max width in use: <code className={styles.shapeToken}>--modal-width-{size ?? "md"}</code>.
+          </p>
+        </div>
+      </Modal>
+    </>
   );
 }
 

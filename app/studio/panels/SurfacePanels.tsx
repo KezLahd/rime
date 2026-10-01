@@ -95,11 +95,11 @@ export function ShapePanel({ api }: { api: StudioApi }) {
         <SliderRow
           label="Hairline weight"
           token="--border-w"
-          help="Width of the thin rules that appear between rows, under card headers and around panels. 1 px is default; drop to 0 for a completely flush look."
+          help="Width of the thin rules that appear between rows, under card headers and around panels. 1 px is default; drop to 0 for a completely flush look. Whole pixels only."
           value={num(api.value("--border-w"), 1)}
           min={0}
-          max={3}
-          step={0.5}
+          max={4}
+          step={1}
           unit="px"
           changed={api.changed("--border-w")}
           onChange={(v) => api.set({ "--border-w": `${v}px` })}
@@ -108,11 +108,11 @@ export function ShapePanel({ api }: { api: StudioApi }) {
         <SliderRow
           label="Field border weight"
           token="--border-w-field"
-          help="Width of the box around inputs, selects and textareas. 1.5 px is default and reads as a tangible edge; thinner reads cleaner, thicker reads bolder."
+          help="Width of the box around inputs, selects and textareas. 1 - 2 px reads as a tangible edge; thicker reads bolder. Whole pixels only."
           value={num(api.value("--border-w-field"), 1.5)}
           min={0}
-          max={3}
-          step={0.5}
+          max={4}
+          step={1}
           unit="px"
           changed={api.changed("--border-w-field")}
           onChange={(v) => api.set({ "--border-w-field": `${v}px` })}
