@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 440" role="img" aria-label="Rime: frosted-glass React components">
+  <title>Rime: frosted-glass React components</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1F5BC4"/>
+      <stop offset="0.5" stop-color="#2B6CDB"/>
+      <stop offset="1" stop-color="#468CFB"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.72" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#C8DDF9" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#C8DDF9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="glass2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="440" fill="url(#bg)"/>
+  <rect width="1600" height="440" fill="url(#grid)"/>
+  <rect width="1600" height="440" fill="url(#glow)"/>
+
+  <!-- Floating frosted panels -->
+  <g>
+    <rect x="80" y="70" width="200" height="300" rx="18" fill="url(#glass)" stroke="url(#edge)" stroke-width="1"/>
+    <rect x="92" y="82" width="100" height="10" rx="4" fill="#ffffff" fill-opacity="0.5"/>
+    <rect x="92" y="100" width="160" height="6" rx="3" fill="#ffffff" fill-opacity="0.25"/>
+    <rect x="92" y="110" width="140" height="6" rx="3" fill="#ffffff" fill-opacity="0.2"/>
+    <rect x="92" y="140" width="176" height="80" rx="10" fill="#ffffff" fill-opacity="0.14"/>
+    <rect x="92" y="230" width="176" height="12" rx="3" fill="#ffffff" fill-opacity="0.22"/>
+    <rect x="92" y="248" width="140" height="12" rx="3" fill="#ffffff" fill-opacity="0.14"/>
+    <rect x="92" y="275" width="88" height="36" rx="18" fill="#94C4FB" fill-opacity="0.6"/>
+    <rect x="190" y="275" width="78" height="36" rx="18" fill="#ffffff" fill-opacity="0.1" stroke="#ffffff" stroke-opacity="0.3"/>
+  </g>
+
+  <g>
+    <rect x="1320" y="100" width="200" height="260" rx="18" fill="url(#glass2)" stroke="url(#edge)" stroke-width="1"/>
+    <rect x="1332" y="112" width="80" height="10" rx="4" fill="#ffffff" fill-opacity="0.45"/>
+    <circle cx="1500" cy="117" r="7" fill="#94C4FB"/>
+    <rect x="1332" y="140" width="176" height="56" rx="10" fill="#ffffff" fill-opacity="0.1"/>
+    <path d="M 1340 180 L 1364 170 L 1388 174 L 1412 160 L 1436 164 L 1460 150 L 1484 156 L 1500 148"
+          fill="none" stroke="#C8DDF9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="1332" y="212" width="100" height="10" rx="3" fill="#ffffff" fill-opacity="0.3"/>
+    <rect x="1332" y="228" width="160" height="6" rx="3" fill="#ffffff" fill-opacity="0.18"/>
+    <rect x="1332" y="238" width="130" height="6" rx="3" fill="#ffffff" fill-opacity="0.14"/>
+    <g transform="translate(1332, 260)">
+      <rect x="0" y="0" width="40" height="40" rx="8" fill="#ffffff" fill-opacity="0.14"/>
+      <rect x="48" y="0" width="40" height="40" rx="8" fill="#ffffff" fill-opacity="0.14"/>
+      <rect x="96" y="0" width="40" height="40" rx="8" fill="#ffffff" fill-opacity="0.14"/>
+      <rect x="144" y="0" width="40" height="40" rx="8" fill="#ffffff" fill-opacity="0.14"/>
+    </g>
+    <rect x="1332" y="316" width="176" height="30" rx="8" fill="#ffffff" fill-opacity="0.1"/>
+  </g>
+
+  <!-- Center title block -->
+  <g transform="translate(800, 220)">
+    <text x="0" y="-14" text-anchor="middle"
+          font-family="ui-sans-serif,-apple-system,system-ui,Segoe UI,Inter,sans-serif"
+          font-size="22" font-weight="700" letter-spacing="6"
+          fill="#C8DDF9" fill-opacity="0.95">COMPONENT KIT · NEXT.JS 16 · CSS MODULES</text>
+    <text x="0" y="48" text-anchor="middle"
+          font-family="ui-serif,Georgia,'Instrument Serif',serif"
+          font-size="124" font-weight="400" letter-spacing="-2"
+          fill="#ffffff">Rime</text>
+    <text x="0" y="92" text-anchor="middle"
+          font-family="ui-sans-serif,-apple-system,system-ui,Segoe UI,Inter,sans-serif"
+          font-size="22" font-weight="500"
+          fill="#ffffff" fill-opacity="0.9">frosted-glass React components you own</text>
+  </g>
+
+  <!-- Install line pill -->
+  <g transform="translate(800, 360)">
+    <rect x="-280" y="0" width="560" height="46" rx="23" fill="#0F1620" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.2"/>
+    <circle cx="-258" cy="23" r="4" fill="#FF5F57"/>
+    <circle cx="-244" cy="23" r="4" fill="#FEBC2E"/>
+    <circle cx="-230" cy="23" r="4" fill="#28C840"/>
+    <text x="-205" y="29" font-family="ui-monospace,SFMono-Regular,'JetBrains Mono',monospace"
+          font-size="15" fill="#C8DDF9">npx shadcn@latest add KezLahd/rime/kit</text>
+  </g>
+</svg>

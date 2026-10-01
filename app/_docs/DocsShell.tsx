@@ -152,10 +152,10 @@ function DocsFooter() {
         </div>
         <div className={styles.footerBottom}>
           <p className={styles.footerMeta}>
-            © {year} {SITE.name}
+            © {year} {SITE.name}. All rights reserved.
           </p>
           <a
-            href="https://instagram.com/kezlahd"
+            href="https://instagram.com/kieranjxn"
             target="_blank"
             rel="noopener noreferrer"
             className={cx(styles.footerMeta, styles.footerCuration)}
