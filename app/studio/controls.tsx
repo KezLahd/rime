@@ -14,6 +14,24 @@ export function PeekProvider({ onPeek, children }: { onPeek: (token: string | nu
   const stable = useCallback(onPeek, [onPeek]);
   return <PeekContext.Provider value={stable}>{children}</PeekContext.Provider>;
 }
+
+/**
+ * Font-hover preview: hovering a font in the Fonts step dropdown broadcasts
+ * { slot, family } here; Studio applies it as an inline style on the
+ * preview wrapper so the type specimen on the right swaps to the hovered
+ * font without the user having to click to select. Clear on mouse-leave.
+ */
+export type FontHoverState = { slot: "body" | "display"; family: string } | null;
+const FontHoverContext = createContext<(state: FontHoverState) => void>(() => {});
+
+export function FontHoverProvider({ onHover, children }: { onHover: (state: FontHoverState) => void; children: ReactNode }) {
+  const stable = useCallback(onHover, [onHover]);
+  return <FontHoverContext.Provider value={stable}>{children}</FontHoverContext.Provider>;
+}
+
+export function useFontHover() {
+  return useContext(FontHoverContext);
+}
 import {
   Alert,
   IconButton,

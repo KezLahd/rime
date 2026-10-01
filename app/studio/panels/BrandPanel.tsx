@@ -6,7 +6,7 @@ import { Button, Field, Popover, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { ColourRow, Group, Notice } from "../controls";
+import { ColourRow, Group, Notice, useFontHover } from "../controls";
 import { colourOf, setColour } from "../engine/macros";
 import styles from "../Studio.module.css";
 
@@ -166,6 +166,8 @@ export function TypePanel({ api }: { api: StudioApi }) {
   const faceOf = (f: { family: string; kind: "sans" | "serif" | "display" }) =>
     `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}`;
 
+  const hoverFont = useFontHover();
+
   const Picker = ({ slot, label }: { slot: "body" | "display"; label: string }) => {
     const value = current(slot);
     const token = slot === "body" ? "--font-body" : "--font-display";
@@ -198,13 +200,20 @@ export function TypePanel({ api }: { api: StudioApi }) {
             </button>
           }
         >
-          <div className={styles.fontMenu} role="listbox" aria-label={`${label} options`}>
+          <div
+            className={styles.fontMenu}
+            role="listbox"
+            aria-label={`${label} options`}
+            onMouseLeave={() => hoverFont(null)}
+          >
             <button
               type="button"
               role="option"
               aria-selected={value === "preset"}
               className={cx(styles.fontMenuItem, value === "preset" && styles.fontMenuItemActive)}
               onClick={() => choose(slot, "preset")}
+              onMouseEnter={() => hoverFont(null)}
+              onFocus={() => hoverFont(null)}
             >
               <span className={styles.fontMenuItemName}>The preset&apos;s font</span>
               <span className={styles.fontMenuItemKind}>default</span>
@@ -217,6 +226,9 @@ export function TypePanel({ api }: { api: StudioApi }) {
                 aria-selected={value === f.id}
                 className={cx(styles.fontMenuItem, value === f.id && styles.fontMenuItemActive)}
                 onClick={() => choose(slot, f.id)}
+                onMouseEnter={() => hoverFont({ slot, family: faceOf(f) })}
+                onFocus={() => hoverFont({ slot, family: faceOf(f) })}
+                onBlur={() => hoverFont(null)}
               >
                 <span className={styles.fontMenuItemName} style={{ fontFamily: faceOf(f) }}>
                   {f.name}

@@ -33,7 +33,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { Notice, PeekProvider } from "./controls";
+import { FontHoverProvider, Notice, PeekProvider, type FontHoverState } from "./controls";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
 import { parseGradient } from "./engine/gradient";
@@ -250,6 +250,11 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
    *  showcase rings matching elements so the user can see where each
    *  token is used. */
   const [peekToken, setPeekToken] = useState<string | null>(null);
+
+  /** Which font is being hovered in the Fonts dropdown — the preview
+   *  temporarily swaps to that font so the user sees it live before
+   *  clicking to select. Cleared on mouse-leave or blur. */
+  const [fontHover, setFontHover] = useState<FontHoverState>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -677,6 +682,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             </header>
             {storageWarning ? <Notice tone="warn">{storageWarning}</Notice> : null}
             <PeekProvider onPeek={setPeekToken}>
+            <FontHoverProvider onHover={setFontHover}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
@@ -711,6 +717,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             ) : (
               <ExportPanel api={api} sources={sources} />
             )}
+            </FontHoverProvider>
             </PeekProvider>
           </div>
 
@@ -781,7 +788,22 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         </div>
 
         <section className={styles.preview} aria-label="Live preview">
-          <div className={styles.previewScroll} data-theme-studio="">
+          <div
+            className={styles.previewScroll}
+            data-theme-studio=""
+            // Font-hover live preview: hovering a font in the picker sets
+            // --font-body or --font-display inline so the type specimen on
+            // the right swaps immediately. Inline style wins over the
+            // theme CSS <style> tag so no !important needed.
+            style={
+              fontHover
+                ? {
+                    [fontHover.slot === "body" ? "--font-body" : "--font-display"]:
+                      fontHover.family,
+                  } as React.CSSProperties
+                : undefined
+            }
+          >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
             <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} />
           </div>
