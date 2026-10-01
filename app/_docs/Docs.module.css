@@ -9,12 +9,9 @@
   min-height: 100dvh;
 }
 
-/* The sticky region bounds the top bar's sticky range. The bar sticks within
-   this wrapper, so once the wrapper's bottom edge scrolls past the viewport
-   top (just before the footer enters), the bar scrolls off with it. */
-.stickyRegion {
-  display: flex;
-  flex-direction: column;
+/* The columns row grows to fill the frame so the footer sits at the bottom
+   of the viewport on short pages. */
+.frame > .columns {
   flex: 1 0 auto;
 }
 
@@ -32,6 +29,15 @@
   backdrop-filter: var(--blur-chrome) saturate(160%);
   border-bottom: var(--border-w) solid rgba(var(--rgb-white), 0.4);
   box-shadow: var(--chrome-shadow), var(--shadow-specular);
+  will-change: transform;
+  transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When the footer enters the viewport, FooterReveal sets data-footer-visible
+   on <html>; the top bar slides up and out of view. Reverts smoothly when
+   the footer leaves. */
+:global(html[data-footer-visible]) .topbar {
+  transform: translateY(-100%);
 }
 
 .bar {
@@ -173,6 +179,10 @@
 
 /* ── Contents ────────────────────────────────────────────────────────── */
 
+/* The docs sidebar: a transparent column of links, no frosted panel. The
+   frosted / chromed sidebar styling lives on SidebarShell (used by the
+   interactive dashboard blocks), not here. This is "docs" styling: it reads
+   as part of the page, not as a separate surface. */
 .nav {
   position: sticky;
   top: 60px;
@@ -180,12 +190,10 @@
   height: calc(100dvh - 60px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 24px 14px 40px;
-  background: var(--chrome-sidebar);
-  -webkit-backdrop-filter: var(--blur-chrome) saturate(160%);
-  backdrop-filter: var(--blur-chrome) saturate(160%);
-  border-right: var(--border-w) solid rgba(var(--rgb-white), 0.55);
-  box-shadow: var(--shadow-chrome);
+  padding: 36px 8px 48px;
+  background: transparent;
+  border-right: 0;
+  box-shadow: none;
   /* The rail's scrollbar stays out of sight until the rail is in use. */
   scrollbar-width: var(--scrollbar-width);
   scrollbar-color: transparent transparent;
@@ -198,23 +206,23 @@
 }
 
 .navGroup + .navGroup {
-  margin-top: 18px;
+  margin-top: 24px;
 }
 
 .navHeading {
-  margin: 0 0 6px;
-  padding: 0 10px;
-  font-size: var(--text-micro);
+  margin: 0 0 8px;
+  padding: 0 12px;
+  font-size: var(--text-small);
   font-weight: 700;
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--ink-muted);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-heading);
 }
 
 .navList {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .navLink {
@@ -222,23 +230,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 7px 12px;
   border-radius: var(--r-xs);
   font-size: var(--text-small);
-  color: var(--ink-secondary);
+  color: var(--ink-muted);
   text-decoration: none;
   transition:
-    background-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
 }
 
 .navLink:hover {
   color: var(--ink-heading);
-  background: rgba(var(--rgb-white), 0.55);
-}
-
-.navLink:active {
-  background: var(--wash-active);
 }
 
 .navLink:focus-visible {
@@ -248,9 +250,7 @@
 
 .navLink[aria-current="page"] {
   font-weight: 700;
-  color: var(--ink-inverse);
-  background: var(--brand-gradient);
-  box-shadow: var(--glow-sm);
+  color: var(--ink-heading);
 }
 
 .navNote {
@@ -1328,20 +1328,20 @@
   color: var(--ink-muted);
 }
 
-.footerCurationLink {
-  color: var(--ink-muted);
+/* The whole "another kez curation" phrase is one link, fully underlined. */
+.footerCuration {
   text-decoration: underline;
   text-decoration-color: color-mix(in oklab, var(--ink-muted) 40%, transparent);
   text-underline-offset: 3px;
   transition: color 160ms, text-decoration-color 160ms;
 }
 
-.footerCurationLink:hover {
+.footerCuration:hover {
   color: var(--ink-brand);
   text-decoration-color: var(--ink-brand);
 }
 
-.footerCurationLink:focus-visible {
+.footerCuration:focus-visible {
   outline: none;
   border-radius: var(--r-xs);
   box-shadow: var(--focus-ring);

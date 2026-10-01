@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 import styles from "./Docs.module.css";
 import { DocsCommand } from "./DocsCommand";
 import { DocsLogo } from "./DocsLogo";
+import { FooterReveal } from "./FooterReveal";
 import { GITHUB_URL, TOP_NAV, neighbours, normaliseCurrent, sidebarSections } from "./nav";
 import { ModeToggle, PresetSwitch } from "./PresetSwitch";
 import { Toc, type TocItem } from "./Toc";
@@ -43,53 +44,52 @@ export function DocsShell({
   const { prev, next } = pager ? neighbours(path) : {};
   return (
     <div className={styles.frame}>
-      {/* The sticky region bounds the top bar: when its bottom edge scrolls
-          past the top of the viewport (i.e. just before the footer appears),
-          the sticky top bar leaves with it. */}
-      <div className={styles.stickyRegion}>
-        <DocsTopBar current={path} />
-        <div className={cx(styles.columns, !toc?.length && styles.noToc, !sidebar && styles.noSidebar, wide && styles.wide)}>
-          {sidebar ? (
-            <nav aria-label="Docs" className={styles.nav}>
-              {sidebarSections().map((section) => (
-                <div key={section.title} className={styles.navGroup}>
-                  <p className={styles.navHeading}>{section.title}</p>
-                  <div className={styles.navList}>
-                    {section.items.map((item) => (
-                      <NavLink key={item.href} href={item.href} active={path === item.href}>
-                        {item.label}
-                      </NavLink>
-                    ))}
-                  </div>
+      <DocsTopBar current={path} />
+      <div className={cx(styles.columns, !toc?.length && styles.noToc, !sidebar && styles.noSidebar, wide && styles.wide)}>
+        {sidebar ? (
+          <nav aria-label="Docs" className={styles.nav}>
+            {sidebarSections().map((section) => (
+              <div key={section.title} className={styles.navGroup}>
+                <p className={styles.navHeading}>{section.title}</p>
+                <div className={styles.navList}>
+                  {section.items.map((item) => (
+                    <NavLink key={item.href} href={item.href} active={path === item.href}>
+                      {item.label}
+                    </NavLink>
+                  ))}
                 </div>
-              ))}
+              </div>
+            ))}
+          </nav>
+        ) : null}
+        <main id="main" className={styles.main}>
+          {children}
+          {prev || next ? (
+            <nav aria-label="Previous and next" className={styles.pager}>
+              {prev ? (
+                <Link href={prev.href} className={styles.pagerLink}>
+                  <ArrowLeft size={15} aria-hidden="true" />
+                  <span>{prev.label}</span>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {next ? (
+                <Link href={next.href} className={cx(styles.pagerLink, styles.pagerNext)}>
+                  <span>{next.label}</span>
+                  <ArrowRight size={15} aria-hidden="true" />
+                </Link>
+              ) : null}
             </nav>
           ) : null}
-          <main id="main" className={styles.main}>
-            {children}
-            {prev || next ? (
-              <nav aria-label="Previous and next" className={styles.pager}>
-                {prev ? (
-                  <Link href={prev.href} className={styles.pagerLink}>
-                    <ArrowLeft size={15} aria-hidden="true" />
-                    <span>{prev.label}</span>
-                  </Link>
-                ) : (
-                  <span />
-                )}
-                {next ? (
-                  <Link href={next.href} className={cx(styles.pagerLink, styles.pagerNext)}>
-                    <span>{next.label}</span>
-                    <ArrowRight size={15} aria-hidden="true" />
-                  </Link>
-                ) : null}
-              </nav>
-            ) : null}
-          </main>
-          {toc?.length ? <Toc items={toc} /> : null}
-        </div>
+        </main>
+        {toc?.length ? <Toc items={toc} /> : null}
       </div>
       <DocsFooter />
+      {/* Watches the footer: when it enters the viewport, sets
+          data-footer-visible on <html> so the sticky top bar slides out of
+          view. Works on every page length, short or long. */}
+      <FooterReveal />
     </div>
   );
 }
@@ -149,20 +149,16 @@ function DocsFooter() {
         </div>
         <div className={styles.footerBottom}>
           <p className={styles.footerMeta}>
-            © {year} {SITE.owner}
+            © {year} {SITE.name}
           </p>
-          <p className={styles.footerMeta}>
-            another{" "}
-            <a
-              href="https://instagram.com/kezlahd"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.footerCurationLink}
-            >
-              kez
-            </a>{" "}
-            curation
-          </p>
+          <a
+            href="https://instagram.com/kezlahd"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cx(styles.footerMeta, styles.footerCuration)}
+          >
+            another kez curation
+          </a>
         </div>
       </div>
     </footer>
