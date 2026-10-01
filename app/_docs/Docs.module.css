@@ -564,6 +564,13 @@
   margin-top: 8px;
 }
 
+/* The Installation section: CLI | Manual tabs under the section heading.
+   Needs breathing room above the tabs so they don't sit flush against
+   the heading. */
+.installation {
+  margin-top: 20px;
+}
+
 /* Preview | Code, shadcn style: underline tabs along the frame's top edge. */
 .exampleTabs {
   display: flex;
@@ -614,9 +621,9 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   min-height: 220px;
-  padding: 0;
+  padding: 32px 24px;
 }
 
 /* Full-width specimens (tables, shells) take the stage edge to edge. */

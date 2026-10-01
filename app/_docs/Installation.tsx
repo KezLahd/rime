@@ -11,7 +11,7 @@ export function Installation({ info }: { info: InstallInfo }) {
   const [tab, setTab] = useState<"cli" | "manual">("cli");
   const uid = useId();
   return (
-    <div>
+    <div className={styles.installation}>
       <div className={styles.exampleTabs} role="tablist" aria-label="Installation method">
         {(
           [
