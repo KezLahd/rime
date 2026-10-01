@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BLOCKS, BLOCK_COMPONENTS } from "@/components/blocks";
+import { PreviewClickGuard } from "./PreviewClickGuard";
 import { ThemeSync } from "./ThemeSync";
 
 // One block, full page, no docs chrome: what the /blocks viewer shows in its
@@ -25,6 +26,7 @@ export default async function BlockView({ params }: Props) {
   return (
     <>
       <ThemeSync />
+      <PreviewClickGuard />
       <Block />
     </>
   );
