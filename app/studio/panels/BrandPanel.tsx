@@ -5,7 +5,7 @@ import { Button, Field, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { ColourRow, Group, Notice, SelectRow } from "../controls";
+import { ColourRow, Group, Notice } from "../controls";
 import { colourOf, setColour } from "../engine/macros";
 import styles from "../Studio.module.css";
 
@@ -148,7 +148,6 @@ export function ColourPanel({ api }: { api: StudioApi }) {
 
 export function TypePanel({ api }: { api: StudioApi }) {
   const current = (slot: "body" | "display") => String(api.theme.controls[slot === "body" ? "fontBody" : "fontDisplay"] ?? "preset");
-  const options = [{ value: "preset", label: "The preset's font" }, ...api.fonts.map((f) => ({ value: f.id, label: `${f.name} (${f.kind})` }))];
   const choose = (slot: "body" | "display", id: string) => {
     const token = slot === "body" ? "--font-body" : "--font-display";
     const idKey = slot === "body" ? "fontBody" : "fontDisplay";
@@ -162,15 +161,72 @@ export function TypePanel({ api }: { api: StudioApi }) {
     const tail = font.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif";
     api.set({ [token]: `${font.family}, ${tail}` }, { [idKey]: id, [nameKey]: font.name });
   };
+
+  const Picker = ({ slot, label, help, previewText }: { slot: "body" | "display"; label: string; help: string; previewText: string }) => {
+    const value = current(slot);
+    const token = slot === "body" ? "--font-body" : "--font-display";
+    return (
+      <div className={styles.fontPicker}>
+        <div className={styles.fontPickerHead}>
+          <span className={styles.fontPickerLabel}>
+            {label} <span className={styles.fontPickerHelp}>{help}</span>
+          </span>
+          {api.changed(token) ? (
+            <button type="button" className={styles.fontPickerReset} onClick={() => choose(slot, "preset")}>
+              Reset
+            </button>
+          ) : null}
+        </div>
+        <ul className={styles.fontList} role="radiogroup" aria-label={`${label} font`}>
+          <li>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={value === "preset"}
+              className={cx(styles.fontOption, value === "preset" && styles.fontOptionActive)}
+              onClick={() => choose(slot, "preset")}
+            >
+              <span className={styles.fontOptionName}>The preset&apos;s font</span>
+              <span className={styles.fontOptionKind}>default</span>
+            </button>
+          </li>
+          {api.fonts.map((f) => (
+            <li key={f.id}>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={value === f.id}
+                className={cx(styles.fontOption, value === f.id && styles.fontOptionActive)}
+                onClick={() => choose(slot, f.id)}
+              >
+                <span
+                  className={styles.fontOptionName}
+                  style={{ fontFamily: `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}` }}
+                >
+                  {f.name}
+                </span>
+                <span className={styles.fontOptionKind}>{f.kind}</span>
+                <span
+                  className={styles.fontOptionSample}
+                  style={{ fontFamily: `${f.family}, ${f.kind === "serif" ? "Georgia, serif" : "system-ui, sans-serif"}` }}
+                >
+                  {previewText}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
   return (
     <>
-      <Group title="Families" note="Every font is self-hosted in app/fonts, so a theme works offline.">
-        <SelectRow label="Body" help="Paragraphs, labels, controls and table cells." value={current("body")} options={options} changed={api.changed("--font-body")} onChange={(v) => choose("body", v)} onReset={() => choose("body", "preset")} />
-        <SelectRow label="Headings" help="Page titles and section headings." value={current("display")} options={options} changed={api.changed("--font-display")} onChange={(v) => choose("display", v)} onReset={() => choose("display", "preset")} />
-        <div className={styles.typeSample}>
-          <p className={styles.typeSampleTitle}>Quarterly report</p>
-          <p className={styles.typeSampleBody}>Invoices are sent as soon as a project closes. Jane Cooper approved 14 this week.</p>
-        </div>
+      <Group title="Headings" note="Page titles, card titles and the big hero number. Shown here in each font's own face.">
+        <Picker slot="display" label="Heading font" help="Page titles" previewText="Good morning, Jane" />
+      </Group>
+      <Group title="Body" note="Paragraphs, labels, controls and table cells.">
+        <Picker slot="body" label="Body font" help="Everything else" previewText="Three invoices are overdue, two awaiting approval." />
       </Group>
       <Advanced
         api={api}

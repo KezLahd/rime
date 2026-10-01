@@ -96,6 +96,13 @@ export const ThemePreview = memo(function ThemePreview({
     return <ColourShowcase peekToken={peekToken ?? null} />;
   }
 
+  // Fonts step: a type specimen with every scale (display, section, card,
+  // body, small, caption, button, mono) so the user watches the whole
+  // typographic hierarchy change as they pick a family.
+  if (focus === "type") {
+    return <TypeShowcase />;
+  }
+
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
   const groups = entriesByCategory().filter(([category]) => !whitelist || whitelist.includes(category));
   const unshelled = focus ? UNSHELLED.includes(focus) : false;
@@ -427,6 +434,76 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
             className={styles.colourSearch}
           />
         </Spot>
+      </GlassPanel>
+    </div>
+  );
+}
+
+/**
+ * Step 3's preview: a type specimen running every scale (display, section,
+ * card, body, small, caption, button, mono) so swapping the display or
+ * body font is immediately visible across the whole typographic
+ * hierarchy. Headings use the display font, everything else uses body.
+ */
+function TypeShowcase() {
+  return (
+    <div className={styles.typeShowcase}>
+      <GlassPanel padding="lg" className={styles.typeCard}>
+        <p className={styles.typeMeta}>Display</p>
+        <p className={styles.typeDisplay}>Carry the weight of your brand.</p>
+      </GlassPanel>
+
+      <GlassPanel padding="lg" className={styles.typeCard}>
+        <p className={styles.typeMeta}>Section heading</p>
+        <h2 className={styles.typeSection}>Good morning, Jane</h2>
+        <p className={styles.typeMeta}>Card title</p>
+        <h3 className={styles.typeCardTitle}>Revenue by product</h3>
+        <p className={styles.typeMeta}>Hero number</p>
+        <p className={styles.typeHero}>$48,210</p>
+      </GlassPanel>
+
+      <GlassPanel padding="lg" className={styles.typeCard}>
+        <p className={styles.typeMeta}>Body paragraph</p>
+        <p className={styles.typeBody}>
+          Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
+          The pangram goes: the quick brown fox jumps over the lazy dog.
+        </p>
+        <p className={styles.typeMeta}>Small text</p>
+        <p className={styles.typeSmall}>
+          Last synced 2 minutes ago. 24 invoices across 8 clients, 3 overdue, 7 pending, 14 paid.
+        </p>
+        <p className={styles.typeMeta}>Caption</p>
+        <p className={styles.typeCaption}>
+          Figures include GST. Rounded to the nearest dollar.
+        </p>
+      </GlassPanel>
+
+      <div className={styles.typeGrid}>
+        <GlassPanel padding="lg" className={styles.typeCard}>
+          <p className={styles.typeMeta}>Button labels</p>
+          <div className={styles.typeButtons}>
+            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+            <Button variant="secondary">Export CSV</Button>
+            <Button variant="ghost">Skip for now</Button>
+          </div>
+        </GlassPanel>
+        <GlassPanel padding="lg" className={styles.typeCard}>
+          <p className={styles.typeMeta}>Mono · code block</p>
+          <pre className={styles.typeMono}>
+            <code>{`npx shadcn@latest add KezLahd/rime/kit\nconst theme = loadWorking() ?? presetTheme();\nreturn <Button onClick={save}>Save</Button>;`}</code>
+          </pre>
+        </GlassPanel>
+      </div>
+
+      <GlassPanel padding="lg" className={styles.typeCard}>
+        <p className={styles.typeMeta}>Specimen</p>
+        <p className={styles.typeAlphabet}>
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ
+          <br />
+          abcdefghijklmnopqrstuvwxyz
+          <br />
+          0123456789 &amp; ! ? @ # $ % &lt; = &gt;
+        </p>
       </GlassPanel>
     </div>
   );
