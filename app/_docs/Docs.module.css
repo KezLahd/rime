@@ -316,7 +316,8 @@
   padding: 7px 12px;
   border-radius: var(--r-xs);
   font-size: var(--text-small);
-  color: var(--ink-secondary);
+  font-weight: 600;
+  color: var(--ink-heading);
   text-decoration: none;
   transition:
     color var(--dur-fast) var(--ease),
@@ -1116,6 +1117,14 @@
   font-family: inherit;
   font-size: var(--text-small);
   outline: none;
+}
+
+/* The outer .searchWrap owns the focus ring; the input must not stack its
+   own on top (base.css gives every :focus-visible element an outline). */
+.searchInput:focus,
+.searchInput:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .searchInput::placeholder {
