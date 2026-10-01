@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/text-input
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/text-input
+npx shadcn@latest add KezLahd/rime/text-input
 ```
 
 TextInput is the one box every text-like field wears: Textarea, Select's field trigger, DateField, SearchField and PrefixedInput all share its --input-* tokens, so one theme change moves them together.

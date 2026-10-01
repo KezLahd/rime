@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/menubar
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/menubar
+npx shadcn@latest add KezLahd/rime/menubar
 ```
 
 Menubar is the WAI-ARIA menubar pattern on the recessed control fill. It is one tab stop: Left and Right move across the titles, Down, Enter or Space open a menu at its first item and Up at its last. While a menu is open, Left and Right move to the neighbouring menu and hovering another title switches to it.

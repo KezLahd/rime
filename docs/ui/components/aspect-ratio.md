@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/asp
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/aspect-ratio
+npx shadcn@latest add KezLahd/rime/aspect-ratio
 ```
 
 AspectRatio sizes itself from its width and a ratio (16 / 9 by default) with the CSS aspect-ratio property. A direct <img>, <video>, <iframe> or <picture> child fills it with object-fit: cover. framed (on by default) clips it to the inner radius on a sunken fill with a hairline, so an empty or loading box still reads as a frame.

@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/toggle
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/toggle
+npx shadcn@latest add KezLahd/rime/toggle
 ```
 
 Toggle is a real <button> with aria-pressed: quiet at rest, washed in the accent with a hairline when pressed. ghost (the default) has no edge at rest, for toolbars; outline keeps a hairline box, for a lone option such as "Show archived".

@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/prefixed-input
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/prefixed-input
+npx shadcn@latest add KezLahd/rime/prefixed-input
 ```
 
 PrefixedInput is the TextInput box with a fixed prefix segment set into its left end ("INV", "ACC-") and a counter at the right. The prefix is part of the box, never typed. charset is digits (the default) or alphanumeric, upper-cased as typed.

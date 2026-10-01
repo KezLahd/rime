@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/scr
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/scroll-area
+npx shadcn@latest add KezLahd/rime/scroll-area
 ```
 
 ScrollArea wraps any scrolling region (a long list in a panel, long terms, a wide table with axis="x") and gives it the modal's scroll: thin native scrollbars in a brand tint (--scrollbar-thumb, --scrollbar-track, --scrollbar-width), overscroll-behavior: contain, and edge shadows that appear only when content has scrolled under the start edge or continues past the end (--scroll-edge-top, --scroll-edge-bottom, and -left/-right for x).

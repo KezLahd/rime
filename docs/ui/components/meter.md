@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/meter
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/meter
+npx shadcn@latest add KezLahd/rime/meter
 ```
 
 Meter draws one segment per unit up to max (default 5). ProgressBar is a continuous bar for larger totals. Both announce value text.

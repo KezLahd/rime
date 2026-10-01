@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/hover-card
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/hover-card
+npx shadcn@latest add KezLahd/rime/hover-card
 ```
 
 HoverCard opens after a short delay (openDelay, 500ms) when the pointer rests on its trigger or the trigger takes keyboard focus, and closes a little after the pointer leaves (closeDelay, 200ms), so the pointer can travel onto the card. Touch never opens it: the trigger must work on its own.

@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/impact-preview
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/impact-preview
+npx shadcn@latest add KezLahd/rime/impact-preview
 ```
 
 ImpactPreview lists the consequences of an action (projects reassigned, sign-ins revoked) with severities, named affected records, and loading, error and nothing-affected states. TypeToConfirmModal embeds it.

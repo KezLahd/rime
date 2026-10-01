@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/nav-search
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/nav-search
+npx shadcn@latest add KezLahd/rime/nav-search
 ```
 
 NavSearch filters a fixed list of destinations with a keyboard shortcut (Ctrl or Cmd K). SmartSearch takes an async search function with abort signals and renders grouped record results with highlighting.

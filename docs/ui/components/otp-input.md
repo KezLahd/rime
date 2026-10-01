@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/otp-input
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/otp-input
+npx shadcn@latest add KezLahd/rime/otp-input
 ```
 
 OtpInput is one real input per cell with roving focus. Pasting a full code fills every cell and fires onComplete.

@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/car
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/carousel
+npx shadcn@latest add KezLahd/rime/carousel
 ```
 
 Carousel lays its children out as slides on a scroll-snap track, so swipe, trackpad and the keyboard all scroll the same native element with no dependency. perView shows several at once on wide screens (one on phones); the buttons fade out at the ends unless loop is on.

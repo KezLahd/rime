@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/input-group
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/input-group
+npx shadcn@latest add KezLahd/rime/input-group
 ```
 
 InputGroup wears the TextInput box and its --input-* tokens, with addons set into either end. A string addon ("https://", "$", "kg") is drawn as a sunken text segment divided by a hairline; an element addon (an icon or an IconButton) sits inline.

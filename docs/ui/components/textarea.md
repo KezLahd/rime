@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/textarea
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/textarea
+npx shadcn@latest add KezLahd/rime/textarea
 ```
 
 Textarea wears the TextInput box and tokens. showCount with maxLength shows a live count that turns to warning ink near the limit.

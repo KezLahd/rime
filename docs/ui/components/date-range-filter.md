@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/date-range-filter
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/date-range-filter
+npx shadcn@latest add KezLahd/rime/date-range-filter
 ```
 
 DateRangeFilter is the date filter in a FilterBar. It reads as a chip like Select's, with presets (last 7 days, this month) and a range calendar.

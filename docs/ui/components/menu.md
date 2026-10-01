@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/menu
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/menu
+npx shadcn@latest add KezLahd/rime/menu
 ```
 
 Menu lists actions (not choices; that is Select). Items can be links (rendered as Next Links) or callbacks, carry an icon and a description, and be marked danger or disabled. It shares Select's popover family.

@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/navigation-m
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/navigation-menu
+npx shadcn@latest add KezLahd/rime/navigation-menu
 ```
 
 NavigationMenu is the marketing-site or docs header: a row of top-level items, each either a plain link or a button that opens a panel of links with a title, a description and an optional icon. A panel can lead with a feature block (a highlighted card) and lays its links in one to three columns.

@@ -9,7 +9,7 @@ Category: Shell. Docs page: https://rime.mjsons.net/components/page-header
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/page-header
+npx shadcn@latest add KezLahd/rime/page-header
 ```
 
 PageHeader opens every signed-in page: the h1, an optional back link above it, meta beside the title (a status pill, a reference) and actions on the right. Nothing is stacked over the title, and the description uses the full width of its column.

@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/checkbox
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/checkbox
+npx shadcn@latest add KezLahd/rime/checkbox
 ```
 
 Checkbox keeps the real <input type="checkbox"> (visually hidden, focusable, form-posting) and draws the box beside it. variant="card" turns the whole option into a bordered target for statements a user agrees to (terms, declarations).

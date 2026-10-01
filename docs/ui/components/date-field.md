@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/date-field
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/date-field
+npx shadcn@latest add KezLahd/rime/date-field
 ```
 
 DateField accepts typing (DD/MM/YYYY, day first) or picking from Calendar. preset="dob" opens on a sensible year with a year dropdown, for dates decades back.

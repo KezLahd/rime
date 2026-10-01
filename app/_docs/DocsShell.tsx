@@ -89,7 +89,32 @@ export function DocsShell({
         </main>
         {toc?.length ? <Toc items={toc} /> : null}
       </div>
+      <DocsFooter />
     </div>
+  );
+}
+
+/**
+ * The site footer: a single hairline line that reads "another kez curation",
+ * with "kez" linking to the Instagram profile. Sits inside the frame so every
+ * page (including the home and gallery pages that drop the sidebar) gets it.
+ */
+function DocsFooter() {
+  return (
+    <footer className={styles.footer}>
+      <p className={styles.footerText}>
+        another{" "}
+        <a
+          href="https://instagram.com/kezlahd"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.footerLink}
+        >
+          kez
+        </a>{" "}
+        curation
+      </p>
+    </footer>
   );
 }
 

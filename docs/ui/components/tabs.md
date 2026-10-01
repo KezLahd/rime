@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/tabs
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/tabs
+npx shadcn@latest add KezLahd/rime/tabs
 ```
 
 FolderTabs switch between queues of the same list (Open, In review, Cancelled). Each tab shows its count so the workload reads without opening each; the panel's top-left corner squares off so the tabs sit on it.

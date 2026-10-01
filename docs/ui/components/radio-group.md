@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/radio-group
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/radio-group
+npx shadcn@latest add KezLahd/rime/radio-group
 ```
 
 RadioGroup renders real radio inputs in a fieldset. The cards variant suits two to four choices that need a sentence each (a billing period, a plan).

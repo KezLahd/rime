@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/col
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/collapsible
+npx shadcn@latest add KezLahd/rime/collapsible
 ```
 
 Collapsible shows the first part of something and keeps the rest a click away: the first of several items, advanced options, a long note. The summary stays visible whether open or closed; children open beneath it.

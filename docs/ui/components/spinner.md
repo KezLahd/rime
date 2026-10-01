@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/spinner
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/spinner
+npx shadcn@latest add KezLahd/rime/spinner
 ```
 
 Spinner is decorative unless given a label. Buttons and IconButtons show it themselves when loading.

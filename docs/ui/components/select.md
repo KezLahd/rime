@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/select
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/select
+npx shadcn@latest add KezLahd/rime/select
 ```
 
 Select replaces the native <select> with a combobox and a listbox popover that keeps the design system's look while matching native keyboard behaviour. It has two appearances: field (a grey frosted recess, so a choice reads as something you press rather than type in) and chip (the compact filter dropdown used in a FilterBar).

@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/field
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/field
+npx shadcn@latest add KezLahd/rime/field
 ```
 
 Field renders the label and messages and hands ids to the control inside it (useField). group=true renders a fieldset and legend for RadioGroup and Checkbox lists.

@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/combobox
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/combobox
+npx shadcn@latest add KezLahd/rime/combobox
 ```
 
 Combobox is the editable combobox: typing opens a frosted list and narrows it by label, description and keywords. It suits long lists people know the name of (a project, a country, a customer). For a short fixed list a person compares, use Select; Select's searchable mode is the same idea with a button trigger.

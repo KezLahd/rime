@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/error-summary
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/error-summary
+npx shadcn@latest add KezLahd/rime/error-summary
 ```
 
 ErrorSummary follows the GOV.UK pattern: after a failed submit it takes focus, lists every error as a link, and each link moves focus to the field.

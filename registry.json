@@ -81,8 +81,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Accordion } from \"@/components/ui/Accordion/Accordion\";",
@@ -112,8 +112,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Alert } from \"@/components/ui/Alert/Alert\";",
@@ -148,10 +148,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/scroll-area"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/scroll-area"
       ],
       "meta": {
         "import": "import { AlertDialog } from \"@/components/ui/AlertDialog/AlertDialog\";",
@@ -181,7 +181,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { AspectRatio } from \"@/components/ui/AspectRatio/AspectRatio\";",
@@ -211,7 +211,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Avatar } from \"@/components/ui/Avatar/Avatar\";",
@@ -241,7 +241,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Badge } from \"@/components/ui/Badge/Badge\";",
@@ -271,9 +271,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/menu"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/menu"
       ],
       "meta": {
         "import": "import { Breadcrumb } from \"@/components/ui/Breadcrumb/Breadcrumb\";",
@@ -303,8 +303,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { Button } from \"@/components/ui/Button/Button\";",
@@ -334,7 +334,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { ButtonGroup } from \"@/components/ui/ButtonGroup/ButtonGroup\";",
@@ -364,7 +364,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Card } from \"@/components/ui/Card/Card\";",
@@ -394,8 +394,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Carousel } from \"@/components/ui/Carousel/Carousel\";",
@@ -425,9 +425,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Checkbox } from \"@/components/ui/Checkbox/Checkbox\";",
@@ -457,8 +457,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Collapsible } from \"@/components/ui/Collapsible/Collapsible\";",
@@ -488,10 +488,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { Combobox } from \"@/components/ui/Combobox/Combobox\";",
@@ -521,10 +521,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/alert-dialog",
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/scroll-area"
+        "KezLahd/rime/alert-dialog",
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/scroll-area"
       ],
       "meta": {
         "import": "import { Command } from \"@/components/ui/Command/Command\";",
@@ -564,7 +564,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { ContextMenu } from \"@/components/ui/ContextMenu/ContextMenu\";",
@@ -594,9 +594,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/type-to-confirm"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/type-to-confirm"
       ],
       "meta": {
         "import": "import { DangerZone } from \"@/components/ui/DangerZone/DangerZone\";",
@@ -641,10 +641,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { DateField } from \"@/components/ui/DateField/DateField\";",
@@ -679,11 +679,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/date-field",
-        "<owner>/rime/field",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/date-field",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { DateRangeFilter } from \"@/components/ui/DateRangeFilter/DateRangeFilter\";",
@@ -713,7 +713,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Divider } from \"@/components/ui/Divider/Divider\";",
@@ -743,8 +743,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { EmptyState } from \"@/components/ui/EmptyState/EmptyState\";",
@@ -774,8 +774,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { ErrorSummary } from \"@/components/ui/ErrorSummary/ErrorSummary\";",
@@ -805,8 +805,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Field } from \"@/components/ui/Field/Field\";",
@@ -836,11 +836,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { FileDrop } from \"@/components/ui/FileDrop/FileDrop\";",
@@ -870,8 +870,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button"
       ],
       "meta": {
         "import": "import { FilterBar } from \"@/components/ui/FilterBar/FilterBar\";",
@@ -901,8 +901,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { FilterChip } from \"@/components/ui/FilterChip/FilterChip\";",
@@ -932,7 +932,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { GlassPanel } from \"@/components/ui/GlassPanel/GlassPanel\";",
@@ -962,8 +962,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/popover"
+        "KezLahd/rime/base",
+        "KezLahd/rime/popover"
       ],
       "meta": {
         "import": "import { HoverCard } from \"@/components/ui/HoverCard/HoverCard\";",
@@ -987,7 +987,7 @@
         "lucide-react@^1.48.0"
       ],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Icon } from \"@/components/ui/Icon/Icon\";"
@@ -1015,8 +1015,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { IconButton } from \"@/components/ui/IconButton/IconButton\";",
@@ -1046,11 +1046,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/skeleton",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/skeleton",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { ImpactPreview } from \"@/components/ui/ImpactPreview/ImpactPreview\";",
@@ -1080,9 +1080,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { InputGroup } from \"@/components/ui/InputGroup/InputGroup\";",
@@ -1112,7 +1112,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Kbd } from \"@/components/ui/Kbd/Kbd\";",
@@ -1142,7 +1142,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Label } from \"@/components/ui/Label/Label\";",
@@ -1172,8 +1172,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Menu } from \"@/components/ui/Menu/Menu\";",
@@ -1203,9 +1203,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/context-menu",
-        "<owner>/rime/popover"
+        "KezLahd/rime/base",
+        "KezLahd/rime/context-menu",
+        "KezLahd/rime/popover"
       ],
       "meta": {
         "import": "import { Menubar } from \"@/components/ui/Menubar/Menubar\";",
@@ -1235,7 +1235,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Meter } from \"@/components/ui/Meter/Meter\";",
@@ -1265,11 +1265,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/icon-button",
-        "<owner>/rime/scroll-area"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/icon-button",
+        "KezLahd/rime/scroll-area"
       ],
       "meta": {
         "import": "import { Modal } from \"@/components/ui/Modal/Modal\";",
@@ -1299,8 +1299,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { NavigationMenu } from \"@/components/ui/NavigationMenu/NavigationMenu\";",
@@ -1330,9 +1330,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/search-field"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/search-field"
       ],
       "meta": {
         "import": "import { NavSearch } from \"@/components/ui/NavSearch/NavSearch\";",
@@ -1362,8 +1362,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field"
       ],
       "meta": {
         "import": "import { OtpInput } from \"@/components/ui/OtpInput/OtpInput\";",
@@ -1398,7 +1398,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Popover } from \"@/components/ui/Popover/Popover\";",
@@ -1433,10 +1433,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { PrefixedInput } from \"@/components/ui/PrefixedInput/PrefixedInput\";",
@@ -1466,7 +1466,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { ProgressSteps } from \"@/components/ui/ProgressSteps/ProgressSteps\";",
@@ -1496,8 +1496,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field"
       ],
       "meta": {
         "import": "import { RadioGroup } from \"@/components/ui/RadioGroup/RadioGroup\";",
@@ -1527,7 +1527,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Resizable } from \"@/components/ui/Resizable/Resizable\";",
@@ -1567,7 +1567,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Scroll } from \"@/components/ui/Scroll/Scroll\";",
@@ -1607,10 +1607,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { SearchField } from \"@/components/ui/SearchField/SearchField\";",
@@ -1640,11 +1640,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/search-field",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/search-field",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { Select } from \"@/components/ui/Select/Select\";",
@@ -1674,11 +1674,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/alert-dialog",
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/icon-button",
-        "<owner>/rime/scroll-area"
+        "KezLahd/rime/alert-dialog",
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/icon-button",
+        "KezLahd/rime/scroll-area"
       ],
       "meta": {
         "import": "import { Sheet } from \"@/components/ui/Sheet/Sheet\";",
@@ -1708,7 +1708,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Skeleton } from \"@/components/ui/Skeleton/Skeleton\";",
@@ -1738,8 +1738,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field"
       ],
       "meta": {
         "import": "import { Slider } from \"@/components/ui/Slider/Slider\";",
@@ -1774,10 +1774,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/search-field",
-        "<owner>/rime/skeleton"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/search-field",
+        "KezLahd/rime/skeleton"
       ],
       "meta": {
         "import": "import { SmartSearch } from \"@/components/ui/SmartSearch/SmartSearch\";",
@@ -1807,7 +1807,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Spinner } from \"@/components/ui/Spinner/Spinner\";",
@@ -1837,8 +1837,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Stepper } from \"@/components/ui/Stepper/Stepper\";",
@@ -1868,8 +1868,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { Switch } from \"@/components/ui/Switch/Switch\";",
@@ -1899,9 +1899,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/skeleton"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/skeleton"
       ],
       "meta": {
         "import": "import { Table } from \"@/components/ui/Table/Table\";",
@@ -1931,8 +1931,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/glass-panel"
+        "KezLahd/rime/base",
+        "KezLahd/rime/glass-panel"
       ],
       "meta": {
         "import": "import { Tabs } from \"@/components/ui/Tabs/Tabs\";",
@@ -1962,9 +1962,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "import": "import { Textarea } from \"@/components/ui/Textarea/Textarea\";",
@@ -1994,9 +1994,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/field",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { TextInput } from \"@/components/ui/TextInput/TextInput\";",
@@ -2026,9 +2026,9 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon",
-        "<owner>/rime/spinner"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/spinner"
       ],
       "meta": {
         "import": "import { Toast } from \"@/components/ui/Toast/Toast\";",
@@ -2058,7 +2058,7 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { Toggle } from \"@/components/ui/Toggle/Toggle\";",
@@ -2088,8 +2088,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { Tooltip } from \"@/components/ui/Tooltip/Tooltip\";",
@@ -2121,15 +2121,15 @@
         "lucide-react@^1.48.0"
       ],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/icon-button",
-        "<owner>/rime/impact-preview",
-        "<owner>/rime/modal",
-        "<owner>/rime/text-input",
-        "<owner>/rime/toast",
-        "<owner>/rime/tooltip"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/icon-button",
+        "KezLahd/rime/impact-preview",
+        "KezLahd/rime/modal",
+        "KezLahd/rime/text-input",
+        "KezLahd/rime/toast",
+        "KezLahd/rime/tooltip"
       ],
       "meta": {
         "import": "import { TypeToConfirm } from \"@/components/ui/TypeToConfirm/TypeToConfirm\";",
@@ -2161,8 +2161,8 @@
         "lucide-react@^1.48.0"
       ],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon-button"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon-button"
       ],
       "meta": {
         "import": "import { SidebarShell } from \"@/components/shell/SidebarShell\";",
@@ -2192,8 +2192,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { PageHeader } from \"@/components/shell/PageHeader\";",
@@ -2223,8 +2223,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/icon"
+        "KezLahd/rime/base",
+        "KezLahd/rime/icon"
       ],
       "meta": {
         "import": "import { AuthCard } from \"@/components/shell/AuthCard\";",
@@ -2327,11 +2327,11 @@
         "recharts@^3.10.1"
       ],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/skeleton",
-        "<owner>/rime/tabs"
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/skeleton",
+        "KezLahd/rime/tabs"
       ],
       "meta": {
         "import": "import { LineChart, AreaChart, BarChart, DonutChart } from \"@/components/charts\";",
@@ -2353,8 +2353,8 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/badge",
-        "<owner>/rime/base"
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base"
       ],
       "meta": {
         "import": "import { mple-data } from \"@/components/lib/sample-data\";"
@@ -2393,20 +2393,20 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/charts",
-        "<owner>/rime/filter-bar",
-        "<owner>/rime/filter-chip",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/select",
-        "<owner>/rime/sidebar-shell",
-        "<owner>/rime/table",
-        "<owner>/rime/tabs"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/charts",
+        "KezLahd/rime/filter-bar",
+        "KezLahd/rime/filter-chip",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/select",
+        "KezLahd/rime/sidebar-shell",
+        "KezLahd/rime/table",
+        "KezLahd/rime/tabs"
       ],
       "docs": "Open /dashboard to see it. The page is app/dashboard/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2449,18 +2449,18 @@
         "lucide-react@^1.48.0"
       ],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/empty-state",
-        "<owner>/rime/icon-button",
-        "<owner>/rime/resizable",
-        "<owner>/rime/search-field",
-        "<owner>/rime/switch",
-        "<owner>/rime/tabs",
-        "<owner>/rime/textarea",
-        "<owner>/rime/toast"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/empty-state",
+        "KezLahd/rime/icon-button",
+        "KezLahd/rime/resizable",
+        "KezLahd/rime/search-field",
+        "KezLahd/rime/switch",
+        "KezLahd/rime/tabs",
+        "KezLahd/rime/textarea",
+        "KezLahd/rime/toast"
       ],
       "docs": "Open /inbox to see it. The page is app/inbox/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2501,20 +2501,20 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/checkbox",
-        "<owner>/rime/empty-state",
-        "<owner>/rime/filter-bar",
-        "<owner>/rime/filter-chip",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/select",
-        "<owner>/rime/sidebar-shell",
-        "<owner>/rime/table"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/checkbox",
+        "KezLahd/rime/empty-state",
+        "KezLahd/rime/filter-bar",
+        "KezLahd/rime/filter-chip",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/select",
+        "KezLahd/rime/sidebar-shell",
+        "KezLahd/rime/table"
       ],
       "docs": "Open /tasks to see it. The page is app/tasks/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2550,20 +2550,20 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/danger-zone",
-        "<owner>/rime/field",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/select",
-        "<owner>/rime/sidebar-shell",
-        "<owner>/rime/switch",
-        "<owner>/rime/text-input",
-        "<owner>/rime/textarea",
-        "<owner>/rime/toast"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/danger-zone",
+        "KezLahd/rime/field",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/select",
+        "KezLahd/rime/sidebar-shell",
+        "KezLahd/rime/switch",
+        "KezLahd/rime/text-input",
+        "KezLahd/rime/textarea",
+        "KezLahd/rime/toast"
       ],
       "docs": "Open /settings to see it. The page is app/settings/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2599,14 +2599,14 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/sidebar-shell"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/sidebar-shell"
       ],
       "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2642,14 +2642,14 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/sidebar-shell",
-        "<owner>/rime/tabs"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/sidebar-shell",
+        "KezLahd/rime/tabs"
       ],
       "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2685,14 +2685,14 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/icon",
-        "<owner>/rime/page-header",
-        "<owner>/rime/sidebar-shell"
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/sidebar-shell"
       ],
       "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2728,14 +2728,14 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/checkbox",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/otp-input",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/checkbox",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/otp-input",
+        "KezLahd/rime/text-input"
       ],
       "docs": "Open /login to see it. The page is app/login/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2771,13 +2771,13 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/checkbox",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/checkbox",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
       ],
       "docs": "Open /signup to see it. The page is app/signup/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2813,11 +2813,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/otp-input"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/otp-input"
       ],
       "docs": "Open /verify to see it. The page is app/verify/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2853,11 +2853,11 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon",
-        "<owner>/rime/otp-input"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/otp-input"
       ],
       "docs": "Open /security/mfa to see it. The page is app/security/mfa/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2893,12 +2893,12 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/field",
-        "<owner>/rime/icon",
-        "<owner>/rime/text-input"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
       ],
       "docs": "Open /reset-password to see it. The page is app/reset-password/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2934,10 +2934,10 @@
       ],
       "dependencies": [],
       "registryDependencies": [
-        "<owner>/rime/auth-card",
-        "<owner>/rime/base",
-        "<owner>/rime/button",
-        "<owner>/rime/icon"
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/base",
+        "KezLahd/rime/button",
+        "KezLahd/rime/icon"
       ],
       "docs": "Open /check-email to see it. The page is app/check-email/page.tsx; gate access inside it if the screen needs a signed-in user.",
       "meta": {
@@ -2952,7 +2952,7 @@
       "description": "The shadcn name \"dialog\": installs Rime's modal.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/modal"
+        "KezLahd/rime/modal"
       ],
       "meta": {
         "aliasOf": "modal"
@@ -2965,7 +2965,7 @@
       "description": "The shadcn name \"dropdown-menu\": installs Rime's menu.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/menu"
+        "KezLahd/rime/menu"
       ],
       "meta": {
         "aliasOf": "menu"
@@ -2978,7 +2978,7 @@
       "description": "The shadcn name \"input\": installs Rime's text-input.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/text-input"
+        "KezLahd/rime/text-input"
       ],
       "meta": {
         "aliasOf": "text-input"
@@ -2991,7 +2991,7 @@
       "description": "The shadcn name \"input-otp\": installs Rime's otp-input.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/otp-input"
+        "KezLahd/rime/otp-input"
       ],
       "meta": {
         "aliasOf": "otp-input"
@@ -3004,7 +3004,7 @@
       "description": "The shadcn name \"sonner\": installs Rime's toast.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/toast"
+        "KezLahd/rime/toast"
       ],
       "meta": {
         "aliasOf": "toast"
@@ -3017,7 +3017,7 @@
       "description": "The shadcn name \"separator\": installs Rime's divider.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/divider"
+        "KezLahd/rime/divider"
       ],
       "meta": {
         "aliasOf": "divider"
@@ -3030,7 +3030,7 @@
       "description": "The shadcn name \"progress\": installs Rime's meter.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/meter"
+        "KezLahd/rime/meter"
       ],
       "meta": {
         "aliasOf": "meter"
@@ -3043,7 +3043,7 @@
       "description": "The shadcn name \"sidebar\": installs Rime's sidebar-shell.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/sidebar-shell"
+        "KezLahd/rime/sidebar-shell"
       ],
       "meta": {
         "aliasOf": "sidebar-shell"
@@ -3056,7 +3056,7 @@
       "description": "The shadcn name \"empty\": installs Rime's empty-state.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/empty-state"
+        "KezLahd/rime/empty-state"
       ],
       "meta": {
         "aliasOf": "empty-state"
@@ -3069,7 +3069,7 @@
       "description": "The shadcn name \"calendar\": installs Rime's date-field.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/date-field"
+        "KezLahd/rime/date-field"
       ],
       "meta": {
         "aliasOf": "date-field"
@@ -3082,7 +3082,7 @@
       "description": "The shadcn name \"date-picker\": installs Rime's date-field.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/date-field"
+        "KezLahd/rime/date-field"
       ],
       "meta": {
         "aliasOf": "date-field"
@@ -3095,7 +3095,7 @@
       "description": "The shadcn name \"chart\": installs Rime's charts.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/charts"
+        "KezLahd/rime/charts"
       ],
       "meta": {
         "aliasOf": "charts"
@@ -3108,7 +3108,7 @@
       "description": "The shadcn name \"drawer\": installs Rime's sheet.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/sheet"
+        "KezLahd/rime/sheet"
       ],
       "meta": {
         "aliasOf": "sheet"
@@ -3121,7 +3121,7 @@
       "description": "The shadcn name \"toggle-group\": installs Rime's toggle.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/toggle"
+        "KezLahd/rime/toggle"
       ],
       "meta": {
         "aliasOf": "toggle"
@@ -3134,7 +3134,7 @@
       "description": "The shadcn name \"pagination\": installs Rime's table.",
       "files": [],
       "registryDependencies": [
-        "<owner>/rime/table"
+        "KezLahd/rime/table"
       ],
       "meta": {
         "aliasOf": "table"
@@ -3153,7 +3153,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/button"
+        "KezLahd/rime/button"
       ]
     },
     {
@@ -3169,7 +3169,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/icon-button"
+        "KezLahd/rime/icon-button"
       ]
     },
     {
@@ -3185,7 +3185,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/field"
+        "KezLahd/rime/field"
       ]
     },
     {
@@ -3201,7 +3201,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/textarea"
+        "KezLahd/rime/textarea"
       ]
     },
     {
@@ -3217,7 +3217,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/select"
+        "KezLahd/rime/select"
       ]
     },
     {
@@ -3233,7 +3233,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/search-field"
+        "KezLahd/rime/search-field"
       ]
     },
     {
@@ -3249,7 +3249,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/checkbox"
+        "KezLahd/rime/checkbox"
       ]
     },
     {
@@ -3265,7 +3265,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/radio-group"
+        "KezLahd/rime/radio-group"
       ]
     },
     {
@@ -3281,7 +3281,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/switch"
+        "KezLahd/rime/switch"
       ]
     },
     {
@@ -3297,7 +3297,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/otp-input"
+        "KezLahd/rime/otp-input"
       ]
     },
     {
@@ -3313,7 +3313,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/date-field"
+        "KezLahd/rime/date-field"
       ]
     },
     {
@@ -3329,7 +3329,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/date-range-filter"
+        "KezLahd/rime/date-range-filter"
       ]
     },
     {
@@ -3345,7 +3345,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/file-drop"
+        "KezLahd/rime/file-drop"
       ]
     },
     {
@@ -3361,7 +3361,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/error-summary"
+        "KezLahd/rime/error-summary"
       ]
     },
     {
@@ -3377,7 +3377,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/prefixed-input"
+        "KezLahd/rime/prefixed-input"
       ]
     },
     {
@@ -3393,7 +3393,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/table"
+        "KezLahd/rime/table"
       ]
     },
     {
@@ -3409,7 +3409,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/badge"
+        "KezLahd/rime/badge"
       ]
     },
     {
@@ -3425,7 +3425,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/avatar"
+        "KezLahd/rime/avatar"
       ]
     },
     {
@@ -3441,7 +3441,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/meter"
+        "KezLahd/rime/meter"
       ]
     },
     {
@@ -3457,7 +3457,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/progress-steps"
+        "KezLahd/rime/progress-steps"
       ]
     },
     {
@@ -3473,7 +3473,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/stepper"
+        "KezLahd/rime/stepper"
       ]
     },
     {
@@ -3489,7 +3489,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/skeleton"
+        "KezLahd/rime/skeleton"
       ]
     },
     {
@@ -3505,7 +3505,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/filter-bar"
+        "KezLahd/rime/filter-bar"
       ]
     },
     {
@@ -3521,7 +3521,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/tabs"
+        "KezLahd/rime/tabs"
       ]
     },
     {
@@ -3537,7 +3537,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/menu"
+        "KezLahd/rime/menu"
       ]
     },
     {
@@ -3553,7 +3553,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/nav-search"
+        "KezLahd/rime/nav-search"
       ]
     },
     {
@@ -3569,7 +3569,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/alert"
+        "KezLahd/rime/alert"
       ]
     },
     {
@@ -3585,7 +3585,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/toast"
+        "KezLahd/rime/toast"
       ]
     },
     {
@@ -3601,7 +3601,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/spinner"
+        "KezLahd/rime/spinner"
       ]
     },
     {
@@ -3617,7 +3617,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/empty-state"
+        "KezLahd/rime/empty-state"
       ]
     },
     {
@@ -3633,7 +3633,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/tooltip"
+        "KezLahd/rime/tooltip"
       ]
     },
     {
@@ -3649,7 +3649,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/impact-preview"
+        "KezLahd/rime/impact-preview"
       ]
     },
     {
@@ -3665,7 +3665,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/modal"
+        "KezLahd/rime/modal"
       ]
     },
     {
@@ -3681,7 +3681,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/danger-zone"
+        "KezLahd/rime/danger-zone"
       ]
     },
     {
@@ -3697,7 +3697,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/glass-panel"
+        "KezLahd/rime/glass-panel"
       ]
     },
     {
@@ -3713,7 +3713,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/card"
+        "KezLahd/rime/card"
       ]
     },
     {
@@ -3729,7 +3729,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/divider"
+        "KezLahd/rime/divider"
       ]
     },
     {
@@ -3745,7 +3745,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/sidebar-shell"
+        "KezLahd/rime/sidebar-shell"
       ]
     },
     {
@@ -3761,7 +3761,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/page-header"
+        "KezLahd/rime/page-header"
       ]
     },
     {
@@ -3777,7 +3777,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/auth-card"
+        "KezLahd/rime/auth-card"
       ]
     },
     {
@@ -3793,7 +3793,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/button-group"
+        "KezLahd/rime/button-group"
       ]
     },
     {
@@ -3809,7 +3809,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/label"
+        "KezLahd/rime/label"
       ]
     },
     {
@@ -3825,7 +3825,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/input-group"
+        "KezLahd/rime/input-group"
       ]
     },
     {
@@ -3841,7 +3841,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/combobox"
+        "KezLahd/rime/combobox"
       ]
     },
     {
@@ -3857,7 +3857,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/slider"
+        "KezLahd/rime/slider"
       ]
     },
     {
@@ -3873,7 +3873,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/toggle"
+        "KezLahd/rime/toggle"
       ]
     },
     {
@@ -3889,7 +3889,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/kbd"
+        "KezLahd/rime/kbd"
       ]
     },
     {
@@ -3905,7 +3905,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/popover"
+        "KezLahd/rime/popover"
       ]
     },
     {
@@ -3921,7 +3921,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/hover-card"
+        "KezLahd/rime/hover-card"
       ]
     },
     {
@@ -3937,7 +3937,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/context-menu"
+        "KezLahd/rime/context-menu"
       ]
     },
     {
@@ -3953,7 +3953,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/sheet"
+        "KezLahd/rime/sheet"
       ]
     },
     {
@@ -3969,7 +3969,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/alert-dialog"
+        "KezLahd/rime/alert-dialog"
       ]
     },
     {
@@ -3985,7 +3985,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/command"
+        "KezLahd/rime/command"
       ]
     },
     {
@@ -4001,7 +4001,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/menubar"
+        "KezLahd/rime/menubar"
       ]
     },
     {
@@ -4017,7 +4017,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/accordion"
+        "KezLahd/rime/accordion"
       ]
     },
     {
@@ -4033,7 +4033,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/collapsible"
+        "KezLahd/rime/collapsible"
       ]
     },
     {
@@ -4049,7 +4049,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/breadcrumb"
+        "KezLahd/rime/breadcrumb"
       ]
     },
     {
@@ -4065,7 +4065,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/navigation-menu"
+        "KezLahd/rime/navigation-menu"
       ]
     },
     {
@@ -4081,7 +4081,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/carousel"
+        "KezLahd/rime/carousel"
       ]
     },
     {
@@ -4097,7 +4097,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/aspect-ratio"
+        "KezLahd/rime/aspect-ratio"
       ]
     },
     {
@@ -4113,7 +4113,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/resizable"
+        "KezLahd/rime/resizable"
       ]
     },
     {
@@ -4129,7 +4129,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/charts"
+        "KezLahd/rime/charts"
       ]
     },
     {
@@ -4160,76 +4160,76 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/accordion",
-        "<owner>/rime/alert",
-        "<owner>/rime/alert-dialog",
-        "<owner>/rime/aspect-ratio",
-        "<owner>/rime/auth-card",
-        "<owner>/rime/avatar",
-        "<owner>/rime/badge",
-        "<owner>/rime/base",
-        "<owner>/rime/breadcrumb",
-        "<owner>/rime/button",
-        "<owner>/rime/button-group",
-        "<owner>/rime/card",
-        "<owner>/rime/carousel",
-        "<owner>/rime/charts",
-        "<owner>/rime/checkbox",
-        "<owner>/rime/collapsible",
-        "<owner>/rime/combobox",
-        "<owner>/rime/command",
-        "<owner>/rime/context-menu",
-        "<owner>/rime/danger-zone",
-        "<owner>/rime/date-field",
-        "<owner>/rime/date-range-filter",
-        "<owner>/rime/divider",
-        "<owner>/rime/empty-state",
-        "<owner>/rime/error-summary",
-        "<owner>/rime/field",
-        "<owner>/rime/file-drop",
-        "<owner>/rime/filter-bar",
-        "<owner>/rime/filter-chip",
-        "<owner>/rime/glass-panel",
-        "<owner>/rime/hover-card",
-        "<owner>/rime/icon",
-        "<owner>/rime/icon-button",
-        "<owner>/rime/impact-preview",
-        "<owner>/rime/input-group",
-        "<owner>/rime/kbd",
-        "<owner>/rime/label",
-        "<owner>/rime/menu",
-        "<owner>/rime/menubar",
-        "<owner>/rime/meter",
-        "<owner>/rime/modal",
-        "<owner>/rime/nav-search",
-        "<owner>/rime/navigation-menu",
-        "<owner>/rime/otp-input",
-        "<owner>/rime/page-header",
-        "<owner>/rime/popover",
-        "<owner>/rime/prefixed-input",
-        "<owner>/rime/progress-steps",
-        "<owner>/rime/radio-group",
-        "<owner>/rime/resizable",
-        "<owner>/rime/sample-data",
-        "<owner>/rime/scroll-area",
-        "<owner>/rime/search-field",
-        "<owner>/rime/select",
-        "<owner>/rime/sheet",
-        "<owner>/rime/sidebar-shell",
-        "<owner>/rime/skeleton",
-        "<owner>/rime/slider",
-        "<owner>/rime/smart-search",
-        "<owner>/rime/spinner",
-        "<owner>/rime/stepper",
-        "<owner>/rime/switch",
-        "<owner>/rime/table",
-        "<owner>/rime/tabs",
-        "<owner>/rime/text-input",
-        "<owner>/rime/textarea",
-        "<owner>/rime/toast",
-        "<owner>/rime/toggle",
-        "<owner>/rime/tooltip",
-        "<owner>/rime/type-to-confirm"
+        "KezLahd/rime/accordion",
+        "KezLahd/rime/alert",
+        "KezLahd/rime/alert-dialog",
+        "KezLahd/rime/aspect-ratio",
+        "KezLahd/rime/auth-card",
+        "KezLahd/rime/avatar",
+        "KezLahd/rime/badge",
+        "KezLahd/rime/base",
+        "KezLahd/rime/breadcrumb",
+        "KezLahd/rime/button",
+        "KezLahd/rime/button-group",
+        "KezLahd/rime/card",
+        "KezLahd/rime/carousel",
+        "KezLahd/rime/charts",
+        "KezLahd/rime/checkbox",
+        "KezLahd/rime/collapsible",
+        "KezLahd/rime/combobox",
+        "KezLahd/rime/command",
+        "KezLahd/rime/context-menu",
+        "KezLahd/rime/danger-zone",
+        "KezLahd/rime/date-field",
+        "KezLahd/rime/date-range-filter",
+        "KezLahd/rime/divider",
+        "KezLahd/rime/empty-state",
+        "KezLahd/rime/error-summary",
+        "KezLahd/rime/field",
+        "KezLahd/rime/file-drop",
+        "KezLahd/rime/filter-bar",
+        "KezLahd/rime/filter-chip",
+        "KezLahd/rime/glass-panel",
+        "KezLahd/rime/hover-card",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/icon-button",
+        "KezLahd/rime/impact-preview",
+        "KezLahd/rime/input-group",
+        "KezLahd/rime/kbd",
+        "KezLahd/rime/label",
+        "KezLahd/rime/menu",
+        "KezLahd/rime/menubar",
+        "KezLahd/rime/meter",
+        "KezLahd/rime/modal",
+        "KezLahd/rime/nav-search",
+        "KezLahd/rime/navigation-menu",
+        "KezLahd/rime/otp-input",
+        "KezLahd/rime/page-header",
+        "KezLahd/rime/popover",
+        "KezLahd/rime/prefixed-input",
+        "KezLahd/rime/progress-steps",
+        "KezLahd/rime/radio-group",
+        "KezLahd/rime/resizable",
+        "KezLahd/rime/sample-data",
+        "KezLahd/rime/scroll-area",
+        "KezLahd/rime/search-field",
+        "KezLahd/rime/select",
+        "KezLahd/rime/sheet",
+        "KezLahd/rime/sidebar-shell",
+        "KezLahd/rime/skeleton",
+        "KezLahd/rime/slider",
+        "KezLahd/rime/smart-search",
+        "KezLahd/rime/spinner",
+        "KezLahd/rime/stepper",
+        "KezLahd/rime/switch",
+        "KezLahd/rime/table",
+        "KezLahd/rime/tabs",
+        "KezLahd/rime/text-input",
+        "KezLahd/rime/textarea",
+        "KezLahd/rime/toast",
+        "KezLahd/rime/toggle",
+        "KezLahd/rime/tooltip",
+        "KezLahd/rime/type-to-confirm"
       ],
       "docs": "Then add your theme: export theme.css from Rime Studio into app/styles/theme.css and import it after the base styles."
     },
@@ -4266,8 +4266,8 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/base",
-        "<owner>/rime/toast"
+        "KezLahd/rime/base",
+        "KezLahd/rime/toast"
       ],
       "docs": "Put Inter at app/fonts/inter-latin-100-900-normal.woff2 (from the Rime repo, or use next/font/google in app/fonts.ts). Then make your theme in Rime Studio (https://rime.mjsons.net/themes) and paste it into app/styles/theme.css."
     },
@@ -4284,7 +4284,7 @@
         }
       ],
       "registryDependencies": [
-        "<owner>/rime/base"
+        "KezLahd/rime/base"
       ],
       "docs": "Import it in your Tailwind CSS entry, after the Rime base styles: @import \"./styles/tailwind-bridge.css\";"
     },

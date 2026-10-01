@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/slider
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/slider
+npx shadcn@latest add KezLahd/rime/slider
 ```
 
 Slider takes one value or a [low, high] range (two thumbs that never cross). The chosen span is drawn in the accent gradient over a recessed track. step snaps every value, marks draw labelled ticks, and showValue prints the formatted value beside the label.

@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/kbd
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/kbd
+npx shadcn@latest add KezLahd/rime/kbd
 ```
 
 Kbd renders one key as a real <kbd>: a light fill, a hairline edge and a darker bottom lip so it reads as a key, not a badge. KbdGroup renders a chord (Ctrl + K) as a <kbd> wrapping one <kbd> per key, which is how HTML marks up a combination.

@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/context-menu
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/context-menu
+npx shadcn@latest add KezLahd/rime/context-menu
 ```
 
 ContextMenu wraps a region (a row, a card, a file) and opens the shared menu list where the pointer is. The region is focusable, so keyboard users open it with Shift+F10 or the Menu key; on touch a long press (longPressMs, 500ms) opens it.

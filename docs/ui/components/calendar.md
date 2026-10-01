@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/calendar
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/date-field
+npx shadcn@latest add KezLahd/rime/date-field
 ```
 
 Calendar is the grid DateField and DateRangeFilter open in their popovers, usable on its own when a date picker should stay on the page (a booking panel, a report range). It takes a single value with onChange, or a range with onRangeChange, where the first pick starts the range, the second ends it and hovering previews it.

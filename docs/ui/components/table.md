@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/table
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/table
+npx shadcn@latest add KezLahd/rime/table
 ```
 
 Table is presentational: you own the rows, the sort state and the page, and it draws them. Columns declare a header, a cell renderer, alignment, width, a monospace flag for references, a skeleton width for loading, and hideBelow to drop a column on narrow screens.

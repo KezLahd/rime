@@ -9,7 +9,7 @@ Category: Actions. Docs page: https://rime.mjsons.net/components/icon-button
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/icon-button
+npx shadcn@latest add KezLahd/rime/icon-button
 ```
 
 IconButton is for compact, well-known actions (close, more, print, remove) where a label would crowd the layout. It takes the same variants as Button, minus the danger secondary, and a pressed state for toggles.

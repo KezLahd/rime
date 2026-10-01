@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/toast
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/toast
+npx shadcn@latest add KezLahd/rime/toast
 ```
 
 Mount ToastProvider once in the root layout and call useToast(). success and info leave after 5 seconds with a timer rule; error and loading stay until dismissed or settled. toast.promise shows loading, then success or error when the promise settles.

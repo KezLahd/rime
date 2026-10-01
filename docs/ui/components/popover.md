@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/popover
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/popover
+npx shadcn@latest add KezLahd/rime/popover
 ```
 
 Popover opens a panel against its trigger, in the same frosted glass as Select and Menu. The trigger is any button you pass; Popover adds aria-expanded, aria-controls and the click handler. It flips above when there is no room below and follows scroll and resize.

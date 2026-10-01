@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/car
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/card
+npx shadcn@latest add KezLahd/rime/card
 ```
 
 Card is a solid surface for content that should not show the field through it: summaries, forms, record details. default is a solid card with a washed header; highlight lifts the one block that needs action (white, a crisp brand hairline, a soft lift and a faint top rule); muted is a sunken box for secondary information.

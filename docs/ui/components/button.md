@@ -9,7 +9,7 @@ Category: Actions. Docs page: https://rime.mjsons.net/components/button
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/button
+npx shadcn@latest add KezLahd/rime/button
 ```
 
 Button is every pressable action that is not an icon on its own. Primary carries the brand gesture (the brand gradient with a soft glow) and appears at most once per view. Secondary is glass on the page and a white tile with a brand ring inside solid surfaces (a Card, a Modal, an auth card), switched automatically by the nearest data-surface="solid" ancestor. Ghost is for low-emphasis actions in rows and toolbars.

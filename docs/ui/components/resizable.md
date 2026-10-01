@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/res
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/resizable
+npx shadcn@latest add KezLahd/rime/resizable
 ```
 
 ResizablePanelGroup holds ResizablePanel and ResizableHandle children, alternating. Sizes are percentages applied as flex-grow proportions, so handles keep their pixel width and nothing overflows. Each panel can set defaultSize and minSize; onLayout reports every size after a change, for saving the split.

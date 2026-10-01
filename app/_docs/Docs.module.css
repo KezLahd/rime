@@ -1197,3 +1197,42 @@
 .tocSub {
   padding-left: 24px;
 }
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+
+/* A quiet hairline strip at the bottom of every page: an eyebrow-tracked
+   micro-caps line, "kez" is the only link, same muted ink as the rest of
+   the chrome. */
+.footer {
+  padding: 28px 32px calc(28px + env(safe-area-inset-bottom));
+  border-top: var(--border-w) solid var(--line);
+  text-align: center;
+}
+
+.footerText {
+  margin: 0;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.footerLink {
+  color: var(--ink-muted);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--ink-muted) 40%, transparent);
+  text-underline-offset: 3px;
+  transition: color 180ms, text-decoration-color 180ms;
+}
+
+.footerLink:hover {
+  color: var(--ink-brand);
+  text-decoration-color: var(--ink-brand);
+}
+
+.footerLink:focus-visible {
+  outline: none;
+  border-radius: var(--r-xs);
+  box-shadow: var(--focus-ring);
+}

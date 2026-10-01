@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/gla
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/glass-panel
+npx shadcn@latest add KezLahd/rime/glass-panel
 ```
 
 GlassPanel is the signature surface: a translucent white fill, a lit edge, a specular top line and a two-layer shadow over the coloured page field. page holds a screen's main content (one or two per screen), light is for screens that are mostly panel, nested is a glass block inside a panel.

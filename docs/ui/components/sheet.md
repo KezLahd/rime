@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/sheet
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/sheet
+npx shadcn@latest add KezLahd/rime/sheet
 ```
 
 Sheet is a dialog flush to one edge (side: right, left, top or bottom) for secondary tasks that keep the page in view: a record's details, filters, settings. It traps focus, locks page scroll, closes on Esc, the scrim and the close button, and returns focus to whatever opened it.

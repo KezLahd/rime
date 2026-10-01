@@ -9,7 +9,7 @@ Category: Actions. Docs page: https://rime.mjsons.net/components/button-group
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/button-group
+npx shadcn@latest add KezLahd/rime/button-group
 ```
 
 ButtonGroup shapes related actions into one control: the outer corners keep the buttons' radius, the joins between them are square, and neighbouring edges share a single hairline. It only shapes; each button keeps its own variant, size, loading and disabled state.

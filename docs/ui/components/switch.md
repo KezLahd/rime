@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/switch
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/switch
+npx shadcn@latest add KezLahd/rime/switch
 ```
 
 Switch is role="switch" on a button. Use it for settings that apply at once; use Checkbox inside forms that are submitted.

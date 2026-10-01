@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/empty-state
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/empty-state
+npx shadcn@latest add KezLahd/rime/empty-state
 ```
 
 EmptyState never says just "No data". It names why the space is empty and offers the next step as an action. compact fits inside a Table.

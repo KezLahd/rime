@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/div
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/divider
+npx shadcn@latest add KezLahd/rime/divider
 ```
 
 Divider separates groups inside a panel. label puts a short word in the rule ("or").

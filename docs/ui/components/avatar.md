@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/avatar
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/avatar
+npx shadcn@latest add KezLahd/rime/avatar
 ```
 
 Avatar shows initials, from name or given, on the brand gradient (the signed-in person) or a neutral disc (a record).

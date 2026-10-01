@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/alert-dialog
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/alert-dialog
+npx shadcn@latest add KezLahd/rime/alert-dialog
 ```
 
 AlertDialog asks one question with two answers. It is role="alertdialog": focus starts on Cancel, so a stray Enter never confirms; Esc cancels; Tab is trapped; a click on the scrim does nothing, because the choice must be made.

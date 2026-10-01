@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/stepper
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/stepper
+npx shadcn@latest add KezLahd/rime/stepper
 ```
 
 Stepper heads a multi-step form. Steps are complete, current, upcoming or error; onStepClick lets people return to a finished step.

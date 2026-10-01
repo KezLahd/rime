@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/pagination
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/table
+npx shadcn@latest add KezLahd/rime/table
 ```
 
 Pagination is the pager that sits under every Table, documented on its own because it works under any list: cards, search results, an activity feed. The page buttons stay on the centre line whatever the summary's length (a 1fr auto 1fr grid), and long ranges collapse into gaps around the current page.

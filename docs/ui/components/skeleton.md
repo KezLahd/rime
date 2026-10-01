@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/skeleton
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/skeleton
+npx shadcn@latest add KezLahd/rime/skeleton
 ```
 
 Skeleton draws a block, a text line or a circle. Size each one to the real content (the Table does this per column) so nothing jumps when data arrives.

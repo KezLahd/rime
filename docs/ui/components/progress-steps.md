@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/progress-s
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/progress-steps
+npx shadcn@latest add KezLahd/rime/progress-steps
 ```
 
 ProgressSteps shows where something is in a fixed sequence (a shipment: packed, shipped, delivered). compact fits a table cell.

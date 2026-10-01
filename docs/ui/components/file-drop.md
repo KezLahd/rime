@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/file-drop
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/file-drop
+npx shadcn@latest add KezLahd/rime/file-drop
 ```
 
 FileDrop validates type and size client-side, lists files as FileChips with uploading, done and error states, and keeps a real file input for keyboard users.

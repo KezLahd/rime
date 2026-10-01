@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/label
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/label
+npx shadcn@latest add KezLahd/rime/label
 ```
 
 Field renders its own label and wires it to the control, so most forms never need Label. Use Label when a control sits outside a Field: a custom group, a Slider row, a label beside a Switch in a dense settings list.

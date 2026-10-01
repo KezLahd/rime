@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/breadcrumb
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/breadcrumb
+npx shadcn@latest add KezLahd/rime/breadcrumb
 ```
 
 Breadcrumb is a nav landmark holding an ordered list of links. The last item is the current page: not a link, marked aria-current="page", in heading ink. Items may carry an icon (a home glyph on the first).

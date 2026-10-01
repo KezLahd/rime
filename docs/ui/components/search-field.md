@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/search-field
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/search-field
+npx shadcn@latest add KezLahd/rime/search-field
 ```
 
 SearchField is the search box on a page (not in a filter row, where FilterSearch lives). It lifts toward white while focused, shows a clear button once there is a query, and can show a shortcut hint ("/") that focuses it from anywhere.

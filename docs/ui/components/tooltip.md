@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/tooltip
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/tooltip
+npx shadcn@latest add KezLahd/rime/tooltip
 ```
 
 Tooltip labels a control on hover and focus after a short delay; it can show a keyboard shortcut and only appear when text is truncated. Toggletip is an info button that opens a small panel on click, for help text people need to read.

@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/modal
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/modal
+npx shadcn@latest add KezLahd/rime/modal
 ```
 
 Modal portals a dialog over a deep scrim: focus moves in (to initialFocus, the first field, or the first button), Tab is trapped, Esc and a scrim click close it unless dismissible is false or busy is set, the page behind goes inert, and focus returns to whatever opened it.

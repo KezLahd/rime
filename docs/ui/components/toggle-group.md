@@ -9,7 +9,7 @@ Category: Forms. Docs page: https://rime.mjsons.net/components/toggle-group
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/toggle
+npx shadcn@latest add KezLahd/rime/toggle
 ```
 
 ToggleGroup sits its items on one recessed track and lifts the pressed ones out as solid keys. type="single" allows at most one pressed item, and pressing it again clears the value; type="multiple" allows any number.

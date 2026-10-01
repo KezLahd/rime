@@ -9,7 +9,7 @@ Category: Navigation. Docs page: https://rime.mjsons.net/components/filter-bar
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/filter-bar
+npx shadcn@latest add KezLahd/rime/filter-bar
 ```
 
 FilterBar lays out a list's filters in a fixed order: a FilterSearch that grows to fill the row, then Select chips (and a DateRangeFilter), then a ghost "Clear filters" while anything is applied, then the list's own action after a hairline ("New invoice").

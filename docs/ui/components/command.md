@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/command
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/command
+npx shadcn@latest add KezLahd/rime/command
 ```
 
 Command is a combobox over a grouped listbox. Typing filters every group (every word must appear in the label or the item's keywords), Up and Down move the highlight, Enter runs it, and an empty state says when nothing matches. Focus stays in the input throughout; the highlighted option is announced through aria-activedescendant.

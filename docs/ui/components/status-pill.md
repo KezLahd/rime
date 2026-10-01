@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/status-pil
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/badge
+npx shadcn@latest add KezLahd/rime/badge
 ```
 
 StatusPill names a record's state in a list or header. Badge is a small uppercase tag (soft or solid) for categories and flags. CountBadge is a number of things waiting, capped at max (99+).

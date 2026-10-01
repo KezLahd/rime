@@ -9,7 +9,7 @@ Category: Data display. Docs page: https://rime.mjsons.net/components/chart
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/charts
+npx shadcn@latest add KezLahd/rime/charts
 ```
 
 The chart layer lives in components/charts. Every chart mounts in ChartFrame: a caption, a legend, the plot and a Chart or Table toggle whose table is the same data for anyone who cannot read the picture. Loading, refreshing, empty and error states are built in (status).

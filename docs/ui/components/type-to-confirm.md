@@ -9,7 +9,7 @@ Category: Overlays. Docs page: https://rime.mjsons.net/components/type-to-confir
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/type-to-confirm
+npx shadcn@latest add KezLahd/rime/type-to-confirm
 ```
 
 TypeToConfirmModal shows what will change (ImpactPreview), asks for a typed phrase (copyable, case-insensitive by default) and runs an async onConfirm, showing an error in place if it fails.

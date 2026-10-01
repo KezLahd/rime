@@ -9,7 +9,7 @@ Category: Shell. Docs page: https://rime.mjsons.net/components/auth-card
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/auth-card
+npx shadcn@latest add KezLahd/rime/auth-card
 ```
 
 AuthLayout paints the auth field (--auth-background, --auth-floor, --auth-sky), centres its child, and takes an optional header (your brand mark, a help link) and footer (a security note). AuthCard frames sign-in, sign-up, MFA, reset and onboarding steps: a logo slot, an optional icon tile, the title (the page's h1) with an optional inline badge, the form, an optional back link and a footer strip.

@@ -9,7 +9,7 @@ Category: Layout and surfaces. Docs page: https://rime.mjsons.net/components/acc
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/accordion
+npx shadcn@latest add KezLahd/rime/accordion
 ```
 
 Accordion holds a list of questions, settings groups or details where people read one section at a time. type="single" keeps one section open (collapsible lets the open one close again); type="multiple" lets any number stay open.

@@ -20,9 +20,9 @@ Read the rules before writing UI code with these components:
 
 ## Install
 
-- Everything: `npx shadcn@latest add <owner>/rime/kit`
-- One component: `npx shadcn@latest add <owner>/rime/<item>` (item names follow shadcn: button, dialog, dropdown-menu, select, sheet, sonner...)
-- The agent docs and Claude skill for a project: `npx shadcn@latest add <owner>/rime/agents`
+- Everything: `npx shadcn@latest add KezLahd/rime/kit`
+- One component: `npx shadcn@latest add KezLahd/rime/<item>` (item names follow shadcn: button, dialog, dropdown-menu, select, sheet, sonner...)
+- The agent docs and Claude skill for a project: `npx shadcn@latest add KezLahd/rime/agents`
 - Registry: https://rime.mjsons.net/r/registry.json. Namespace @rime for components.json: "@rime": "https://rime.mjsons.net/r/{name}.json". The shadcn MCP server (npx shadcn@latest mcp) then lists, searches and installs Rime items.
 - Styles, imported first in app/globals.css: app/styles/tokens.css, app/styles/base.css, app/styles/shadcn-bridge.css, then the project's theme.css.
 
@@ -113,94 +113,94 @@ Dark mode is the .dark class or data-mode="dark" on <html>; Rime Flat is data-th
 
 ## Actions
 
-- [Button](https://rime.mjsons.net/md/button.md): The action control: primary gradient, glass secondary, ghost, and two danger forms, in three sizes. Install: `npx shadcn@latest add <owner>/rime/button`
-- [IconButton](https://rime.mjsons.net/md/icon-button.md): A square action with only an icon, a required accessible label and a tooltip-friendly hit area. Install: `npx shadcn@latest add <owner>/rime/icon-button`
-- [ButtonGroup](https://rime.mjsons.net/md/button-group.md): Joins Buttons and IconButtons into one segmented row or column with shared outer corners. Install: `npx shadcn@latest add <owner>/rime/button-group`
+- [Button](https://rime.mjsons.net/md/button.md): The action control: primary gradient, glass secondary, ghost, and two danger forms, in three sizes. Install: `npx shadcn@latest add KezLahd/rime/button`
+- [IconButton](https://rime.mjsons.net/md/icon-button.md): A square action with only an icon, a required accessible label and a tooltip-friendly hit area. Install: `npx shadcn@latest add KezLahd/rime/icon-button`
+- [ButtonGroup](https://rime.mjsons.net/md/button-group.md): Joins Buttons and IconButtons into one segmented row or column with shared outer corners. Install: `npx shadcn@latest add KezLahd/rime/button-group`
 
 ## Forms
 
-- [TextInput](https://rime.mjsons.net/md/text-input.md): The text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal. Install: `npx shadcn@latest add <owner>/rime/text-input`
-- [Textarea](https://rime.mjsons.net/md/textarea.md): Multi-line text in the TextInput box, resizable vertically, with an optional character count. Install: `npx shadcn@latest add <owner>/rime/textarea`
-- [Select](https://rime.mjsons.net/md/select.md): A custom listbox: a recessed field or filter chip that opens a frosted popover, optionally searchable. Install: `npx shadcn@latest add <owner>/rime/select`
-- [SearchField](https://rime.mjsons.net/md/search-field.md): Field-size search on the grey frosted recess: clear button, loading state and an optional key hint. Install: `npx shadcn@latest add <owner>/rime/search-field`
-- [Checkbox](https://rime.mjsons.net/md/checkbox.md): A native checkbox drawn as a gradient tick, plain or as a selectable card, with indeterminate. Install: `npx shadcn@latest add <owner>/rime/checkbox`
-- [RadioGroup](https://rime.mjsons.net/md/radio-group.md): One choice from a few: a list, inline, or cards in 1 to 3 columns. Install: `npx shadcn@latest add <owner>/rime/radio-group`
-- [Switch](https://rime.mjsons.net/md/switch.md): An on/off setting that takes effect immediately, with a loading state while it saves. Install: `npx shadcn@latest add <owner>/rime/switch`
-- [OtpInput](https://rime.mjsons.net/md/otp-input.md): A six-cell one-time code entry with paste, auto-advance and onComplete. Install: `npx shadcn@latest add <owner>/rime/otp-input`
-- [DateField](https://rime.mjsons.net/md/date-field.md): A typed DD/MM/YYYY field with a calendar popover, min/max and a date-of-birth preset. Install: `npx shadcn@latest add <owner>/rime/date-field`
-- [DateRangeFilter](https://rime.mjsons.net/md/date-range-filter.md): A date-range chip for filter rows: presets plus a two-month range calendar. Install: `npx shadcn@latest add <owner>/rime/date-range-filter`
-- [FileDrop](https://rime.mjsons.net/md/file-drop.md): A drop zone and file picker with type and size checks and per-file status chips. Install: `npx shadcn@latest add <owner>/rime/file-drop`
-- [Field](https://rime.mjsons.net/md/field.md): Label, hint, error and required marker for any control, wired through context. Install: `npx shadcn@latest add <owner>/rime/field`
-- [ErrorSummary](https://rime.mjsons.net/md/error-summary.md): The list of form errors at the top of a form, focused on submit, each linking to its field. Install: `npx shadcn@latest add <owner>/rime/error-summary`
-- [PrefixedInput](https://rime.mjsons.net/md/prefixed-input.md): A fixed-format code with a set prefix: an invoice number, an account code, a membership number. Install: `npx shadcn@latest add <owner>/rime/prefixed-input`
-- [Label](https://rime.mjsons.net/md/label.md): A standalone form label with required and optional markers, for controls outside a Field. Install: `npx shadcn@latest add <owner>/rime/label`
-- [InputGroup](https://rime.mjsons.net/md/input-group.md): A text field with addons joined to it: a fixed text segment, an icon, or a button such as Copy. Install: `npx shadcn@latest add <owner>/rime/input-group`
-- [Combobox](https://rime.mjsons.net/md/combobox.md): A text field that filters a list of options as you type and picks one, with optional create. Install: `npx shadcn@latest add <owner>/rime/combobox`
-- [Slider](https://rime.mjsons.net/md/slider.md): Picks a number or a range by dragging along a track, with steps, marks and a value readout. Install: `npx shadcn@latest add <owner>/rime/slider`
-- [Toggle](https://rime.mjsons.net/md/toggle.md): A two-state button, pressed or not, for toolbar formatting and view options. Install: `npx shadcn@latest add <owner>/rime/toggle`
-- [ToggleGroup](https://rime.mjsons.net/md/toggle-group.md): A set of toggles sharing one value: single (a clearable radio set) or multiple. Install: `npx shadcn@latest add <owner>/rime/toggle`
-- [Calendar](https://rime.mjsons.net/md/calendar.md): The month grid on its own: a single date or a range, one or two months, with month and year pickers. Install: `npx shadcn@latest add <owner>/rime/date-field`
+- [TextInput](https://rime.mjsons.net/md/text-input.md): The text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal. Install: `npx shadcn@latest add KezLahd/rime/text-input`
+- [Textarea](https://rime.mjsons.net/md/textarea.md): Multi-line text in the TextInput box, resizable vertically, with an optional character count. Install: `npx shadcn@latest add KezLahd/rime/textarea`
+- [Select](https://rime.mjsons.net/md/select.md): A custom listbox: a recessed field or filter chip that opens a frosted popover, optionally searchable. Install: `npx shadcn@latest add KezLahd/rime/select`
+- [SearchField](https://rime.mjsons.net/md/search-field.md): Field-size search on the grey frosted recess: clear button, loading state and an optional key hint. Install: `npx shadcn@latest add KezLahd/rime/search-field`
+- [Checkbox](https://rime.mjsons.net/md/checkbox.md): A native checkbox drawn as a gradient tick, plain or as a selectable card, with indeterminate. Install: `npx shadcn@latest add KezLahd/rime/checkbox`
+- [RadioGroup](https://rime.mjsons.net/md/radio-group.md): One choice from a few: a list, inline, or cards in 1 to 3 columns. Install: `npx shadcn@latest add KezLahd/rime/radio-group`
+- [Switch](https://rime.mjsons.net/md/switch.md): An on/off setting that takes effect immediately, with a loading state while it saves. Install: `npx shadcn@latest add KezLahd/rime/switch`
+- [OtpInput](https://rime.mjsons.net/md/otp-input.md): A six-cell one-time code entry with paste, auto-advance and onComplete. Install: `npx shadcn@latest add KezLahd/rime/otp-input`
+- [DateField](https://rime.mjsons.net/md/date-field.md): A typed DD/MM/YYYY field with a calendar popover, min/max and a date-of-birth preset. Install: `npx shadcn@latest add KezLahd/rime/date-field`
+- [DateRangeFilter](https://rime.mjsons.net/md/date-range-filter.md): A date-range chip for filter rows: presets plus a two-month range calendar. Install: `npx shadcn@latest add KezLahd/rime/date-range-filter`
+- [FileDrop](https://rime.mjsons.net/md/file-drop.md): A drop zone and file picker with type and size checks and per-file status chips. Install: `npx shadcn@latest add KezLahd/rime/file-drop`
+- [Field](https://rime.mjsons.net/md/field.md): Label, hint, error and required marker for any control, wired through context. Install: `npx shadcn@latest add KezLahd/rime/field`
+- [ErrorSummary](https://rime.mjsons.net/md/error-summary.md): The list of form errors at the top of a form, focused on submit, each linking to its field. Install: `npx shadcn@latest add KezLahd/rime/error-summary`
+- [PrefixedInput](https://rime.mjsons.net/md/prefixed-input.md): A fixed-format code with a set prefix: an invoice number, an account code, a membership number. Install: `npx shadcn@latest add KezLahd/rime/prefixed-input`
+- [Label](https://rime.mjsons.net/md/label.md): A standalone form label with required and optional markers, for controls outside a Field. Install: `npx shadcn@latest add KezLahd/rime/label`
+- [InputGroup](https://rime.mjsons.net/md/input-group.md): A text field with addons joined to it: a fixed text segment, an icon, or a button such as Copy. Install: `npx shadcn@latest add KezLahd/rime/input-group`
+- [Combobox](https://rime.mjsons.net/md/combobox.md): A text field that filters a list of options as you type and picks one, with optional create. Install: `npx shadcn@latest add KezLahd/rime/combobox`
+- [Slider](https://rime.mjsons.net/md/slider.md): Picks a number or a range by dragging along a track, with steps, marks and a value readout. Install: `npx shadcn@latest add KezLahd/rime/slider`
+- [Toggle](https://rime.mjsons.net/md/toggle.md): A two-state button, pressed or not, for toolbar formatting and view options. Install: `npx shadcn@latest add KezLahd/rime/toggle`
+- [ToggleGroup](https://rime.mjsons.net/md/toggle-group.md): A set of toggles sharing one value: single (a clearable radio set) or multiple. Install: `npx shadcn@latest add KezLahd/rime/toggle`
+- [Calendar](https://rime.mjsons.net/md/calendar.md): The month grid on its own: a single date or a range, one or two months, with month and year pickers. Install: `npx shadcn@latest add KezLahd/rime/date-field`
 
 ## Data display
 
-- [Table](https://rime.mjsons.net/md/table.md): The one table look: neutral header row, whole-cell sortable headers, skeleton, empty and error states, and Pagination. Install: `npx shadcn@latest add <owner>/rime/table`
-- [StatusPill, Badge and CountBadge](https://rime.mjsons.net/md/status-pill.md): Status pills (tinted fill, tinted edge, deep ink), small uppercase tags, and count badges. Install: `npx shadcn@latest add <owner>/rime/badge`
-- [Avatar](https://rime.mjsons.net/md/avatar.md): Initials on the brand gradient or a neutral disc, in three sizes. Install: `npx shadcn@latest add <owner>/rime/avatar`
-- [Meter and ProgressBar](https://rime.mjsons.net/md/meter.md): A segmented meter for small counts (seats used) and a bar for progress through a total. Install: `npx shadcn@latest add <owner>/rime/meter`
-- [ProgressSteps](https://rime.mjsons.net/md/progress-steps.md): A horizontal track of steps with detail and meta lines, or a compact dot track for table cells. Install: `npx shadcn@latest add <owner>/rime/progress-steps`
-- [Kbd and KbdGroup](https://rime.mjsons.net/md/kbd.md): Keyboard keys as small raised key caps, alone or as a combination. Install: `npx shadcn@latest add <owner>/rime/kbd`
-- [Chart](https://rime.mjsons.net/md/chart.md): Themed charts on Recharts: line, area, bar and donut in one frame with a table view, plus sparklines and a stat strip. Install: `npx shadcn@latest add <owner>/rime/charts`
+- [Table](https://rime.mjsons.net/md/table.md): The one table look: neutral header row, whole-cell sortable headers, skeleton, empty and error states, and Pagination. Install: `npx shadcn@latest add KezLahd/rime/table`
+- [StatusPill, Badge and CountBadge](https://rime.mjsons.net/md/status-pill.md): Status pills (tinted fill, tinted edge, deep ink), small uppercase tags, and count badges. Install: `npx shadcn@latest add KezLahd/rime/badge`
+- [Avatar](https://rime.mjsons.net/md/avatar.md): Initials on the brand gradient or a neutral disc, in three sizes. Install: `npx shadcn@latest add KezLahd/rime/avatar`
+- [Meter and ProgressBar](https://rime.mjsons.net/md/meter.md): A segmented meter for small counts (seats used) and a bar for progress through a total. Install: `npx shadcn@latest add KezLahd/rime/meter`
+- [ProgressSteps](https://rime.mjsons.net/md/progress-steps.md): A horizontal track of steps with detail and meta lines, or a compact dot track for table cells. Install: `npx shadcn@latest add KezLahd/rime/progress-steps`
+- [Kbd and KbdGroup](https://rime.mjsons.net/md/kbd.md): Keyboard keys as small raised key caps, alone or as a combination. Install: `npx shadcn@latest add KezLahd/rime/kbd`
+- [Chart](https://rime.mjsons.net/md/chart.md): Themed charts on Recharts: line, area, bar and donut in one frame with a table view, plus sparklines and a stat strip. Install: `npx shadcn@latest add KezLahd/rime/charts`
 
 ## Navigation
 
-- [Stepper](https://rime.mjsons.net/md/stepper.md): The wizard's step list: lettered markers, states, and optional navigation back to finished steps. Install: `npx shadcn@latest add <owner>/rime/stepper`
-- [FilterBar](https://rime.mjsons.net/md/filter-bar.md): The one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action. Install: `npx shadcn@latest add <owner>/rime/filter-bar`
-- [FolderTabs and SegmentedControl](https://rime.mjsons.net/md/tabs.md): Folder tabs that sit on a glass panel with always-visible counts, and a segmented control for views. Install: `npx shadcn@latest add <owner>/rime/tabs`
-- [NavSearch and SmartSearch](https://rime.mjsons.net/md/nav-search.md): Top-bar search: NavSearch jumps to pages and actions; SmartSearch queries records with grouped results. Install: `npx shadcn@latest add <owner>/rime/nav-search`
-- [Breadcrumb](https://rime.mjsons.net/md/breadcrumb.md): Where this page sits: a trail of links ending on the current page, folding its middle into a menu when long. Install: `npx shadcn@latest add <owner>/rime/breadcrumb`
-- [NavigationMenu](https://rime.mjsons.net/md/navigation-menu.md): Top-level site navigation with frosted dropdown panels of described links, built as disclosure navigation. Install: `npx shadcn@latest add <owner>/rime/navigation-menu`
-- [Pagination](https://rime.mjsons.net/md/pagination.md): Centred page buttons with previous and next, gaps for long ranges, and a summary line at the left. Install: `npx shadcn@latest add <owner>/rime/table`
+- [Stepper](https://rime.mjsons.net/md/stepper.md): The wizard's step list: lettered markers, states, and optional navigation back to finished steps. Install: `npx shadcn@latest add KezLahd/rime/stepper`
+- [FilterBar](https://rime.mjsons.net/md/filter-bar.md): The one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action. Install: `npx shadcn@latest add KezLahd/rime/filter-bar`
+- [FolderTabs and SegmentedControl](https://rime.mjsons.net/md/tabs.md): Folder tabs that sit on a glass panel with always-visible counts, and a segmented control for views. Install: `npx shadcn@latest add KezLahd/rime/tabs`
+- [NavSearch and SmartSearch](https://rime.mjsons.net/md/nav-search.md): Top-bar search: NavSearch jumps to pages and actions; SmartSearch queries records with grouped results. Install: `npx shadcn@latest add KezLahd/rime/nav-search`
+- [Breadcrumb](https://rime.mjsons.net/md/breadcrumb.md): Where this page sits: a trail of links ending on the current page, folding its middle into a menu when long. Install: `npx shadcn@latest add KezLahd/rime/breadcrumb`
+- [NavigationMenu](https://rime.mjsons.net/md/navigation-menu.md): Top-level site navigation with frosted dropdown panels of described links, built as disclosure navigation. Install: `npx shadcn@latest add KezLahd/rime/navigation-menu`
+- [Pagination](https://rime.mjsons.net/md/pagination.md): Centred page buttons with previous and next, gaps for long ranges, and a summary line at the left. Install: `npx shadcn@latest add KezLahd/rime/table`
 
 ## Feedback
 
-- [Skeleton](https://rime.mjsons.net/md/skeleton.md): Loading placeholders shaped like the content they stand in for, with a soft shimmer. Install: `npx shadcn@latest add <owner>/rime/skeleton`
-- [Alert](https://rime.mjsons.net/md/alert.md): An inline message in a tone (info, success, warning, danger) or a quiet legal box for fixed wording, with an action and dismiss. Install: `npx shadcn@latest add <owner>/rime/alert`
-- [Toast](https://rime.mjsons.net/md/toast.md): Frosted toasts for success, error, info and in-flight work, stacked as a deck that fans out on hover. Install: `npx shadcn@latest add <owner>/rime/toast`
-- [Spinner](https://rime.mjsons.net/md/spinner.md): A small brand-tinted spinner for in-flight work inside buttons, fields and panels. Install: `npx shadcn@latest add <owner>/rime/spinner`
-- [EmptyState](https://rime.mjsons.net/md/empty-state.md): What an empty list means and what to do next: default, positive (all done) and filtered tones. Install: `npx shadcn@latest add <owner>/rime/empty-state`
-- [ImpactPreview](https://rime.mjsons.net/md/impact-preview.md): What a destructive action will change, row by row, before it is confirmed. Install: `npx shadcn@latest add <owner>/rime/impact-preview`
+- [Skeleton](https://rime.mjsons.net/md/skeleton.md): Loading placeholders shaped like the content they stand in for, with a soft shimmer. Install: `npx shadcn@latest add KezLahd/rime/skeleton`
+- [Alert](https://rime.mjsons.net/md/alert.md): An inline message in a tone (info, success, warning, danger) or a quiet legal box for fixed wording, with an action and dismiss. Install: `npx shadcn@latest add KezLahd/rime/alert`
+- [Toast](https://rime.mjsons.net/md/toast.md): Frosted toasts for success, error, info and in-flight work, stacked as a deck that fans out on hover. Install: `npx shadcn@latest add KezLahd/rime/toast`
+- [Spinner](https://rime.mjsons.net/md/spinner.md): A small brand-tinted spinner for in-flight work inside buttons, fields and panels. Install: `npx shadcn@latest add KezLahd/rime/spinner`
+- [EmptyState](https://rime.mjsons.net/md/empty-state.md): What an empty list means and what to do next: default, positive (all done) and filtered tones. Install: `npx shadcn@latest add KezLahd/rime/empty-state`
+- [ImpactPreview](https://rime.mjsons.net/md/impact-preview.md): What a destructive action will change, row by row, before it is confirmed. Install: `npx shadcn@latest add KezLahd/rime/impact-preview`
 
 ## Overlays
 
-- [Menu](https://rime.mjsons.net/md/menu.md): An action menu from a button: groups, headings, separators, icons, links and danger items, in a frosted popover. Install: `npx shadcn@latest add <owner>/rime/menu`
-- [Tooltip and Toggletip](https://rime.mjsons.net/md/tooltip.md): Hover and focus tooltips (dark one-liners or light rich cards) and click-to-open toggletips for help. Install: `npx shadcn@latest add <owner>/rime/tooltip`
-- [Modal](https://rime.mjsons.net/md/modal.md): A frosted dialog with a focus trap, scroll lock, inert page, scroll-aware edges and a bottom sheet on phones. Install: `npx shadcn@latest add <owner>/rime/modal`
-- [TypeToConfirmModal and DangerZone](https://rime.mjsons.net/md/type-to-confirm.md): The heaviest confirm: an impact preview and a typed phrase; and the Danger zone section that leads to it. Install: `npx shadcn@latest add <owner>/rime/type-to-confirm`
-- [Popover](https://rime.mjsons.net/md/popover.md): An anchored frosted panel for arbitrary content: a short form, a set of options, a details block. Install: `npx shadcn@latest add <owner>/rime/popover`
-- [HoverCard](https://rime.mjsons.net/md/hover-card.md): A rich preview on hover or keyboard focus of a link: a person, a project, a record. Install: `npx shadcn@latest add <owner>/rime/hover-card`
-- [ContextMenu](https://rime.mjsons.net/md/context-menu.md): A menu of actions for a region, opened at the pointer with a right-click, Shift+F10 or a long press. Install: `npx shadcn@latest add <owner>/rime/context-menu`
-- [Sheet and Drawer](https://rime.mjsons.net/md/sheet.md): A panel that slides in from an edge over a scrim, and a bottom Drawer with a drag handle. Install: `npx shadcn@latest add <owner>/rime/sheet`
-- [AlertDialog](https://rime.mjsons.net/md/alert-dialog.md): A short interrupting confirm with Cancel and one action; focus starts on Cancel and the scrim never dismisses it. Install: `npx shadcn@latest add <owner>/rime/alert-dialog`
-- [Command](https://rime.mjsons.net/md/command.md): A command palette: a search box over grouped actions with shortcuts, keyboard-first, inline or as a Ctrl+K dialog. Install: `npx shadcn@latest add <owner>/rime/command`
-- [Menubar](https://rime.mjsons.net/md/menubar.md): A desktop application menu bar (File, Edit, View) with keyboard navigation across and within its menus. Install: `npx shadcn@latest add <owner>/rime/menubar`
+- [Menu](https://rime.mjsons.net/md/menu.md): An action menu from a button: groups, headings, separators, icons, links and danger items, in a frosted popover. Install: `npx shadcn@latest add KezLahd/rime/menu`
+- [Tooltip and Toggletip](https://rime.mjsons.net/md/tooltip.md): Hover and focus tooltips (dark one-liners or light rich cards) and click-to-open toggletips for help. Install: `npx shadcn@latest add KezLahd/rime/tooltip`
+- [Modal](https://rime.mjsons.net/md/modal.md): A frosted dialog with a focus trap, scroll lock, inert page, scroll-aware edges and a bottom sheet on phones. Install: `npx shadcn@latest add KezLahd/rime/modal`
+- [TypeToConfirmModal and DangerZone](https://rime.mjsons.net/md/type-to-confirm.md): The heaviest confirm: an impact preview and a typed phrase; and the Danger zone section that leads to it. Install: `npx shadcn@latest add KezLahd/rime/type-to-confirm`
+- [Popover](https://rime.mjsons.net/md/popover.md): An anchored frosted panel for arbitrary content: a short form, a set of options, a details block. Install: `npx shadcn@latest add KezLahd/rime/popover`
+- [HoverCard](https://rime.mjsons.net/md/hover-card.md): A rich preview on hover or keyboard focus of a link: a person, a project, a record. Install: `npx shadcn@latest add KezLahd/rime/hover-card`
+- [ContextMenu](https://rime.mjsons.net/md/context-menu.md): A menu of actions for a region, opened at the pointer with a right-click, Shift+F10 or a long press. Install: `npx shadcn@latest add KezLahd/rime/context-menu`
+- [Sheet and Drawer](https://rime.mjsons.net/md/sheet.md): A panel that slides in from an edge over a scrim, and a bottom Drawer with a drag handle. Install: `npx shadcn@latest add KezLahd/rime/sheet`
+- [AlertDialog](https://rime.mjsons.net/md/alert-dialog.md): A short interrupting confirm with Cancel and one action; focus starts on Cancel and the scrim never dismisses it. Install: `npx shadcn@latest add KezLahd/rime/alert-dialog`
+- [Command](https://rime.mjsons.net/md/command.md): A command palette: a search box over grouped actions with shortcuts, keyboard-first, inline or as a Ctrl+K dialog. Install: `npx shadcn@latest add KezLahd/rime/command`
+- [Menubar](https://rime.mjsons.net/md/menubar.md): A desktop application menu bar (File, Edit, View) with keyboard navigation across and within its menus. Install: `npx shadcn@latest add KezLahd/rime/menubar`
 
 ## Layout and surfaces
 
-- [GlassPanel](https://rime.mjsons.net/md/glass-panel.md): Frosted glass over the page field: page, light and nested variants, padding steps and an optional bloom. Install: `npx shadcn@latest add <owner>/rime/glass-panel`
-- [Card](https://rime.mjsons.net/md/card.md): A solid card with a washed header, a lifted highlight tone, and a sunken muted tone. Install: `npx shadcn@latest add <owner>/rime/card`
-- [ScrollArea, useScrollEdges and useScrollLock](https://rime.mjsons.net/md/scroll-area.md): The modal's scroll, made portable: thin tinted scrollbars, contained overscroll, edge shadows and a shared scroll lock. Install: `npx shadcn@latest add <owner>/rime/scroll-area`
-- [Divider](https://rime.mjsons.net/md/divider.md): A hairline rule, horizontal or vertical, optionally labelled, with spacing steps. Install: `npx shadcn@latest add <owner>/rime/divider`
-- [Accordion](https://rime.mjsons.net/md/accordion.md): Stacked sections that open and close in place: one at a time or several, on glass or plain hairlines. Install: `npx shadcn@latest add <owner>/rime/accordion`
-- [Collapsible](https://rime.mjsons.net/md/collapsible.md): One disclosure: a title row with a toggle, an always-visible summary and a region that opens beneath it. Install: `npx shadcn@latest add <owner>/rime/collapsible`
-- [Carousel](https://rime.mjsons.net/md/carousel.md): A row of slides on a native scroll-snap track, with frosted prev and next buttons, dots and arrow keys. Install: `npx shadcn@latest add <owner>/rime/carousel`
-- [AspectRatio](https://rime.mjsons.net/md/aspect-ratio.md): A box held to a width-to-height ratio, so media keeps its shape and never shifts the layout while loading. Install: `npx shadcn@latest add <owner>/rime/aspect-ratio`
-- [Resizable](https://rime.mjsons.net/md/resizable.md): Panels split by draggable hairline handles, side by side or stacked, with keyboard resizing and minimum sizes. Install: `npx shadcn@latest add <owner>/rime/resizable`
+- [GlassPanel](https://rime.mjsons.net/md/glass-panel.md): Frosted glass over the page field: page, light and nested variants, padding steps and an optional bloom. Install: `npx shadcn@latest add KezLahd/rime/glass-panel`
+- [Card](https://rime.mjsons.net/md/card.md): A solid card with a washed header, a lifted highlight tone, and a sunken muted tone. Install: `npx shadcn@latest add KezLahd/rime/card`
+- [ScrollArea, useScrollEdges and useScrollLock](https://rime.mjsons.net/md/scroll-area.md): The modal's scroll, made portable: thin tinted scrollbars, contained overscroll, edge shadows and a shared scroll lock. Install: `npx shadcn@latest add KezLahd/rime/scroll-area`
+- [Divider](https://rime.mjsons.net/md/divider.md): A hairline rule, horizontal or vertical, optionally labelled, with spacing steps. Install: `npx shadcn@latest add KezLahd/rime/divider`
+- [Accordion](https://rime.mjsons.net/md/accordion.md): Stacked sections that open and close in place: one at a time or several, on glass or plain hairlines. Install: `npx shadcn@latest add KezLahd/rime/accordion`
+- [Collapsible](https://rime.mjsons.net/md/collapsible.md): One disclosure: a title row with a toggle, an always-visible summary and a region that opens beneath it. Install: `npx shadcn@latest add KezLahd/rime/collapsible`
+- [Carousel](https://rime.mjsons.net/md/carousel.md): A row of slides on a native scroll-snap track, with frosted prev and next buttons, dots and arrow keys. Install: `npx shadcn@latest add KezLahd/rime/carousel`
+- [AspectRatio](https://rime.mjsons.net/md/aspect-ratio.md): A box held to a width-to-height ratio, so media keeps its shape and never shifts the layout while loading. Install: `npx shadcn@latest add KezLahd/rime/aspect-ratio`
+- [Resizable](https://rime.mjsons.net/md/resizable.md): Panels split by draggable hairline handles, side by side or stacked, with keyboard resizing and minimum sizes. Install: `npx shadcn@latest add KezLahd/rime/resizable`
 
 ## Shell
 
-- [SidebarShell](https://rime.mjsons.net/md/sidebar-shell.md): The signed-in frame in four layouts: an expanded frosted sidebar, a collapsible icon rail, a header-only top nav, and a drawer on narrow screens. Install: `npx shadcn@latest add <owner>/rime/sidebar-shell`
-- [PageHeader](https://rime.mjsons.net/md/page-header.md): A page's h1 with a back link, a meta line, a description and actions. Install: `npx shadcn@latest add <owner>/rime/page-header`
-- [AuthCard and AuthLayout](https://rime.mjsons.net/md/auth-card.md): The sign-in card: a solid card on a deep field, with a logo slot, icon tile, title, footer strip and back link. Install: `npx shadcn@latest add <owner>/rime/auth-card`
+- [SidebarShell](https://rime.mjsons.net/md/sidebar-shell.md): The signed-in frame in four layouts: an expanded frosted sidebar, a collapsible icon rail, a header-only top nav, and a drawer on narrow screens. Install: `npx shadcn@latest add KezLahd/rime/sidebar-shell`
+- [PageHeader](https://rime.mjsons.net/md/page-header.md): A page's h1 with a back link, a meta line, a description and actions. Install: `npx shadcn@latest add KezLahd/rime/page-header`
+- [AuthCard and AuthLayout](https://rime.mjsons.net/md/auth-card.md): The sign-in card: a solid card on a deep field, with a logo slot, icon tile, title, footer strip and back link. Install: `npx shadcn@latest add KezLahd/rime/auth-card`
 
 ## Patterns
 

@@ -9,7 +9,7 @@ Category: Feedback. Docs page: https://rime.mjsons.net/components/alert
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/alert
+npx shadcn@latest add KezLahd/rime/alert
 ```
 
 Alert sits in the flow of a page or form. It carries a title, body, an action (a retry), a badge and an optional reference code for approved wording. live makes it announce when it appears.

@@ -9,7 +9,7 @@ Category: Shell. Docs page: https://rime.mjsons.net/components/sidebar-shell
 ## Installation
 
 ```bash
-npx shadcn@latest add <owner>/rime/sidebar-shell
+npx shadcn@latest add KezLahd/rime/sidebar-shell
 ```
 
 SidebarShell is the dashboard frame. The page field is painted once on the whole frame; the sidebar and top bar are frosted glass over it, so the chrome carries a whitened version of the field and the screen reads as one surface. Only <main> scrolls, so the chrome never moves and its blur always has content passing beneath it.
