@@ -113,12 +113,22 @@ export function LogoPanel({ api }: { api: StudioApi }) {
       >
         <div
           className={cx(styles.logoDrop, over && styles.logoDropActive, !!logo && styles.logoDropFilled)}
+          role="button"
+          tabIndex={0}
+          aria-label="Drop a logo here or click to choose a file"
           onDragOver={(e) => {
             e.preventDefault();
             setOver(true);
           }}
           onDragLeave={() => setOver(false)}
           onDrop={onDrop}
+          onClick={() => fileRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fileRef.current?.click();
+            }
+          }}
         >
           {logo ? (
             // eslint-disable-next-line @next/next/no-img-element -- user's data URL, preview only
