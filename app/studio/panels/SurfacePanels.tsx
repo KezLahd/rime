@@ -50,6 +50,7 @@ export function ShapePanel({ api }: { api: StudioApi }) {
       >
         <SliderRow
           label="Corner roundness"
+          help="One multiplier for every corner in the kit. 0 is square, 1 is the Rime Default (modest radii), 2 is softly rounded. Rime Flat sits at 0.6. Changes all --r-* steps together."
           value={roundness}
           min={0}
           max={2}
@@ -58,13 +59,30 @@ export function ShapePanel({ api }: { api: StudioApi }) {
           onChange={(r) => setRadius(r, pill)}
           onReset={() => api.reset(radiusNames, ["roundness", "pill"])}
         />
-        <CheckRow label="Pill-shaped controls" note="Buttons, fields and chips fully rounded." checked={pill} onChange={(p) => setRadius(roundness, p)} />
+        <CheckRow
+          label="Pill-shaped controls"
+          note="Rounds buttons, fields and chips fully on top of the roundness scale. Great for playful or ad-tech-y brands."
+          checked={pill}
+          onChange={(p) => setRadius(roundness, p)}
+        />
       </Group>
 
       <Group title="Space and size" help="Density multiplies every component's padding: under 1 is compact, over 1 is roomy. Control height moves buttons, chips and fields together.">
-        <SliderRow label="Density" token="--density" value={num(api.value("--density"), 1)} min={0.7} max={1.4} step={0.05} changed={api.changed("--density")} onChange={(v) => api.set({ "--density": String(v) })} onReset={() => api.reset(["--density"])} />
+        <SliderRow
+          label="Density"
+          token="--density"
+          help="Multiplies the internal padding of every component. 1 is the preset default, below 1 reads as compact, above 1 as roomy. Nothing else moves."
+          value={num(api.value("--density"), 1)}
+          min={0.7}
+          max={1.4}
+          step={0.05}
+          changed={api.changed("--density")}
+          onChange={(v) => api.set({ "--density": String(v) })}
+          onReset={() => api.reset(["--density"])}
+        />
         <SliderRow
           label="Control height"
+          help="Scales the small / medium / large heights for buttons, icon buttons, chips and fields together. 100% is the preset default. Scales the three field heights too."
           format={(v) => `${Math.round(v * 100)}%`}
           value={controlScale}
           min={0.8}
@@ -74,19 +92,56 @@ export function ShapePanel({ api }: { api: StudioApi }) {
           onChange={(k) => api.set(controlHeights(k), { controlScale: k })}
           onReset={() => api.reset(heightNames, ["controlScale"])}
         />
-        <SliderRow label="Hairline weight" token="--border-w" value={num(api.value("--border-w"), 1)} min={0} max={3} step={0.5} unit="px" changed={api.changed("--border-w")} onChange={(v) => api.set({ "--border-w": `${v}px` })} onReset={() => api.reset(["--border-w"])} />
-        <SliderRow label="Field border weight" token="--border-w-field" value={num(api.value("--border-w-field"), 1.5)} min={0} max={3} step={0.5} unit="px" changed={api.changed("--border-w-field")} onChange={(v) => api.set({ "--border-w-field": `${v}px` })} onReset={() => api.reset(["--border-w-field"])} />
+        <SliderRow
+          label="Hairline weight"
+          token="--border-w"
+          help="Width of the thin rules that appear between rows, under card headers and around panels. 1 px is default; drop to 0 for a completely flush look."
+          value={num(api.value("--border-w"), 1)}
+          min={0}
+          max={3}
+          step={0.5}
+          unit="px"
+          changed={api.changed("--border-w")}
+          onChange={(v) => api.set({ "--border-w": `${v}px` })}
+          onReset={() => api.reset(["--border-w"])}
+        />
+        <SliderRow
+          label="Field border weight"
+          token="--border-w-field"
+          help="Width of the box around inputs, selects and textareas. 1.5 px is default and reads as a tangible edge; thinner reads cleaner, thicker reads bolder."
+          value={num(api.value("--border-w-field"), 1.5)}
+          min={0}
+          max={3}
+          step={0.5}
+          unit="px"
+          changed={api.changed("--border-w-field")}
+          onChange={(v) => api.set({ "--border-w-field": `${v}px` })}
+          onReset={() => api.reset(["--border-w-field"])}
+        />
       </Group>
 
       <Group title="Dialog widths" note="Under 640px every size becomes a bottom sheet.">
         {(
           [
-            ["--modal-width-sm", "Small", 480],
-            ["--modal-width-md", "Medium", 640],
-            ["--modal-width-lg", "Large", 880],
+            ["--modal-width-sm", "Small", 480, "Narrow confirmations and short forms. Common sizes: 400 - 520 px."],
+            ["--modal-width-md", "Medium", 640, "The default dialog for forms and settings panes. Common sizes: 600 - 720 px."],
+            ["--modal-width-lg", "Large", 880, "Wide dialogs with tables, side-by-side panels or long content. Common sizes: 800 - 960 px."],
           ] as const
-        ).map(([n, label, d]) => (
-          <SliderRow key={n} label={label} token={n} value={num(api.value(n), d)} min={360} max={1100} step={10} unit="px" changed={api.changed(n)} onChange={(v) => api.set({ [n]: `${v}px` })} onReset={() => api.reset([n])} />
+        ).map(([n, label, d, help]) => (
+          <SliderRow
+            key={n}
+            label={label}
+            token={n}
+            help={help}
+            value={num(api.value(n), d)}
+            min={360}
+            max={1100}
+            step={10}
+            unit="px"
+            changed={api.changed(n)}
+            onChange={(v) => api.set({ [n]: `${v}px` })}
+            onReset={() => api.reset([n])}
+          />
         ))}
       </Group>
       <Advanced api={api} tokens={[...RADIUS_STEPS, "--r-full", ...PILL_TOKENS, "--density", ...heightNames, "--border-w", "--border-w-field", "--modal-width-sm", "--modal-width-md", "--modal-width-lg"]} />

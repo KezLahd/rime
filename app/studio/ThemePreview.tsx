@@ -103,6 +103,13 @@ export const ThemePreview = memo(function ThemePreview({
     return <TypeShowcase />;
   }
 
+  // Shape step: a dedicated showcase of radius, density, control height,
+  // hairline weight and dialog widths — every shape token has a specimen
+  // demonstrating what it does.
+  if (focus === "shape") {
+    return <ShapeShowcase />;
+  }
+
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
   const groups = entriesByCategory().filter(([category]) => !whitelist || whitelist.includes(category));
   const unshelled = focus ? UNSHELLED.includes(focus) : false;
@@ -436,6 +443,160 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
         </Spot>
       </GlassPanel>
     </div>
+  );
+}
+
+/**
+ * Step 4's preview: a specimen page for Shape. Every control the user can
+ * change — roundness, density, control height, hairline weight, dialog
+ * widths — has a dedicated row with a mini caption so the effect is
+ * labelled, not just visible.
+ */
+function ShapeShowcase() {
+  return (
+    <div className={styles.shapeShowcase}>
+      {/* Roundness: every size of card, chip, badge, button at once */}
+      <GlassPanel padding="lg" className={styles.shapeCard}>
+        <ShapeHead title="Corner roundness" help="One slider scales every --r-* step. Watch the cards' corners, the chips, the buttons and the input corners move together." />
+        <div className={styles.shapeRadiiRow}>
+          {["xs", "sm", "md", "lg", "xl", "2xl"].map((step) => (
+            <div key={step} className={styles.shapeRadiusTile} style={{ borderRadius: `var(--r-${step})` }}>
+              <span className={styles.shapeRadiusLabel}>--r-{step}</span>
+            </div>
+          ))}
+        </div>
+        <div className={styles.shapeChipsRow}>
+          <Badge tone="brand">Draft</Badge>
+          <Badge tone="success" variant="solid">Paid</Badge>
+          <Badge tone="warning">Pending</Badge>
+          <Badge tone="danger" variant="solid">Overdue</Badge>
+          <Badge tone="neutral">Archived</Badge>
+        </div>
+      </GlassPanel>
+
+      {/* Density + control height: shows side-by-side button sizes and
+          form fields so the user sees how the kit's density + scale
+          change together. */}
+      <section className={styles.shapeRow}>
+        <GlassPanel padding="lg" className={styles.shapeCard}>
+          <ShapeHead title="Control height" help="Scales the sm / md / lg heights for buttons, icon buttons and chips together as a percentage. 100% is the preset default." />
+          <div className={styles.shapeButtonsCol}>
+            <div className={styles.shapeButtonsLine}>
+              <Button size="sm">Small</Button>
+              <Button size="sm" variant="secondary">Secondary</Button>
+              <Button size="sm" variant="ghost">Ghost</Button>
+            </div>
+            <div className={styles.shapeButtonsLine}>
+              <Button>Medium</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="ghost">Ghost</Button>
+            </div>
+            <div className={styles.shapeButtonsLine}>
+              <Button size="lg">Large</Button>
+              <Button size="lg" variant="secondary">Secondary</Button>
+              <Button size="lg" variant="ghost">Ghost</Button>
+            </div>
+          </div>
+        </GlassPanel>
+
+        <GlassPanel padding="lg" className={styles.shapeCard}>
+          <ShapeHead title="Density" help="Multiplies the internal padding of every component. Below 1 is compact; above 1 is roomy. Only padding moves — radius, type and borders stay the same." />
+          <Field label="Full name">
+            <TextInput defaultValue="Jane Cooper" />
+          </Field>
+          <Field label="Email">
+            <TextInput defaultValue="jane@acme.co" />
+          </Field>
+          <div className={styles.shapeButtonsLine}>
+            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Add teammate</Button>
+            <Button variant="secondary">Cancel</Button>
+          </div>
+        </GlassPanel>
+      </section>
+
+      {/* Hairline weight + field border weight: a row with a hairline
+          divider stack and a labelled input field so the two different
+          border widths are visible at once. */}
+      <section className={styles.shapeRow}>
+        <GlassPanel padding="lg" className={styles.shapeCard}>
+          <ShapeHead title="Hairline weight" help="Width of the thin dividers between rows, under card headers and around panels. 1 px by default; 0 removes them, 3 reads as a drawn separator." />
+          <div className={styles.shapeHairlineStack}>
+            <div className={styles.shapeHairlineRow}>
+              <span>Jane Cooper</span>
+              <span className={styles.shapeMuted}>Admin</span>
+            </div>
+            <div className={styles.shapeHairlineRow}>
+              <span>Marco Silva</span>
+              <span className={styles.shapeMuted}>Editor</span>
+            </div>
+            <div className={styles.shapeHairlineRow}>
+              <span>Priya Shah</span>
+              <span className={styles.shapeMuted}>Viewer</span>
+            </div>
+            <div className={styles.shapeHairlineRow}>
+              <span>Noah Kim</span>
+              <span className={styles.shapeMuted}>Viewer</span>
+            </div>
+          </div>
+        </GlassPanel>
+
+        <GlassPanel padding="lg" className={styles.shapeCard}>
+          <ShapeHead title="Field border weight" help="Width of the box around inputs. 1.5 px by default — a tangible edge. Thinner reads cleaner, thicker reads bolder." />
+          <Field label="Invoice number">
+            <TextInput defaultValue="INV-10428" />
+          </Field>
+          <Field label="Project note">
+            <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
+          </Field>
+        </GlassPanel>
+      </section>
+
+      {/* Pill-shaped controls: shows the same buttons / fields with pill
+          rounding so the user sees the effect. */}
+      <GlassPanel padding="lg" className={styles.shapeCard}>
+        <ShapeHead title="Pill controls" help="Toggles full rounding on top of the roundness scale: buttons, chips and fields become fully pill-shaped." />
+        <p className={styles.shapeMuted}>Watch the buttons, chips and the input below round fully when the pill checkbox is on.</p>
+        <div className={styles.shapeButtonsLine}>
+          <Button>Save project</Button>
+          <Button variant="secondary">Preview</Button>
+          <Badge tone="brand">Draft</Badge>
+          <Badge tone="success" variant="solid">Live</Badge>
+        </div>
+        <Field label="Search invoices">
+          <TextInput leadingIcon={<Search size={14} aria-hidden="true" />} placeholder="e.g. Acme" />
+        </Field>
+      </GlassPanel>
+
+      {/* Dialog widths: three visual rectangles sized to match the small /
+          medium / large dialog widths, labelled with their current px. */}
+      <GlassPanel padding="lg" className={styles.shapeCard}>
+        <ShapeHead title="Dialog widths" help="Max widths used by Modal / AlertDialog at the small, medium and large sizes. Below 640 px the dialog becomes a bottom sheet." />
+        <div className={styles.shapeDialogRow}>
+          {([
+            ["sm", "Small", "--modal-width-sm"],
+            ["md", "Medium", "--modal-width-md"],
+            ["lg", "Large", "--modal-width-lg"],
+          ] as const).map(([key, label, token]) => (
+            <div key={key} className={styles.shapeDialog} style={{ width: `var(${token})` }}>
+              <div className={styles.shapeDialogTitle}>{label} dialog</div>
+              <div className={styles.shapeDialogBody}>
+                <span className={styles.shapeMuted}>{token}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassPanel>
+    </div>
+  );
+}
+
+/** Small heading + info toggletip pair used in each ShapeShowcase card. */
+function ShapeHead({ title, help }: { title: string; help: string }) {
+  return (
+    <header className={styles.shapeCardHead}>
+      <h3 className={styles.shapeCardTitle}>{title}</h3>
+      <p className={styles.shapeCardHelp}>{help}</p>
+    </header>
   );
 }
 
