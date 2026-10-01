@@ -155,7 +155,12 @@ export function Foundations() {
   );
 }
 
-/** The colour reference (/colors): every colour token, live; a click copies var(--token). */
+/**
+ * The colour reference (/colors) in shadcn's /colors style: every group is a
+ * horizontal grid of full-colour swatches, the token name and value overlaid
+ * with mix-blend-mode so the text stays legible on any swatch background.
+ * A click copies var(--token).
+ */
 export function Colours() {
   const v = useTokens(COLOUR_GROUPS.flatMap((g) => g.tokens));
   const toast = useToast();
@@ -165,20 +170,24 @@ export function Colours() {
   return (
     <>
       {COLOUR_GROUPS.map((g) => (
-        <section key={g.title} className={styles.section} aria-labelledby={`c-${g.title.toLowerCase()}`}>
-            <h2 id={`c-${g.title.toLowerCase()}`} className={styles.h2}>{g.title}</h2>
-            <p className={styles.note}>{g.note}</p>
-            <div className={styles.swatches}>
-              {g.tokens.map((t) => (
-                <button key={t} type="button" className={styles.swatch} onClick={() => copy(t)} title={`Copy var(${t})`}>
-                  <span className={styles.chip} style={{ background: `var(${t})` }} />
-                  <span className={styles.meta}>
-                    <span className={styles.name}>{t}</span>
-                    <span className={styles.value}>{v[t] || "…"}</span>
-                  </span>
-                </button>
-              ))}
-            </div>
+        <section key={g.title} className={styles.colorSection} aria-labelledby={`c-${g.title.toLowerCase()}`}>
+          <h2 id={`c-${g.title.toLowerCase()}`} className={styles.colorGroupTitle}>{g.title}</h2>
+          <p className={styles.colorGroupNote}>{g.note}</p>
+          <div className={styles.colorGrid}>
+            {g.tokens.map((t) => (
+              <button
+                key={t}
+                type="button"
+                className={styles.colorSwatch}
+                onClick={() => copy(t)}
+                title={`Copy var(${t})`}
+                style={{ background: `var(${t})` }}
+              >
+                <span className={styles.colorLabel}>{t.replace(/^--/, "")}</span>
+                <span className={styles.colorValue}>{v[t] || "…"}</span>
+              </button>
+            ))}
+          </div>
         </section>
       ))}
     </>

@@ -211,3 +211,111 @@ button.swatch:focus-visible {
 button.swatch .meta {
   display: flex;
 }
+
+/* ── /colors shadcn-style grid ───────────────────────────────────────────
+   A section-per-group with a horizontal row of full-colour swatches. The
+   token name and value sit inside each swatch; mix-blend-mode: difference
+   keeps them legible against any swatch colour (light, dark, gradient,
+   or theme). */
+
+.colorSection {
+  margin-top: 48px;
+  scroll-margin-top: 80px;
+}
+
+.colorSection:first-of-type {
+  margin-top: 32px;
+}
+
+.colorGroupTitle {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink-heading);
+}
+
+.colorGroupNote {
+  margin: 0 0 20px;
+  max-width: 64ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.colorGroupNote code {
+  padding: 1px 5px;
+  border-radius: var(--r-2xs);
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-heading);
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.colorSwatch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 150px;
+  padding: 16px;
+  border: 0;
+  border-radius: var(--r-md);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.colorSwatch:hover {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.14), 0 0 0 2px var(--brand);
+}
+
+.colorSwatch:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* The two text lines: mix-blend-mode: difference inverts against the
+   swatch background, giving a readable contrasting colour on light, dark
+   or tinted swatches without needing a per-token check. */
+.colorLabel,
+.colorValue {
+  color: #ffffff;
+  mix-blend-mode: difference;
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+.colorLabel {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.colorValue {
+  font-size: 11.5px;
+  opacity: 0.85;
+}
+
+@media (max-width: 540px) {
+  .colorGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .colorSwatch {
+    min-height: 120px;
+    padding: 12px;
+  }
+}
