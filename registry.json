@@ -1,0 +1,4322 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "rime",
+  "homepage": "https://rime.mjsons.net",
+  "items": [
+    {
+      "name": "base",
+      "type": "registry:item",
+      "title": "Rime base: tokens and base styles",
+      "description": "Design tokens (Default and Flat presets, light and dark modes), base element rules, the shadcn variable bridge and the shared internals. Install first.",
+      "files": [
+        {
+          "path": "app/styles/tokens.css",
+          "type": "registry:file",
+          "target": "~/app/styles/tokens.css"
+        },
+        {
+          "path": "app/styles/base.css",
+          "type": "registry:file",
+          "target": "~/app/styles/base.css"
+        },
+        {
+          "path": "app/styles/shadcn-bridge.css",
+          "type": "registry:file",
+          "target": "~/app/styles/shadcn-bridge.css"
+        },
+        {
+          "path": "components/ui/_internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_internal/cx.ts"
+        },
+        {
+          "path": "components/ui/_internal/merge-refs.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_internal/merge-refs.ts"
+        },
+        {
+          "path": "components/ui/_internal/portal.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/_internal/portal.tsx"
+        },
+        {
+          "path": "components/ui/_internal/position.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_internal/position.ts"
+        },
+        {
+          "path": "components/ui/_internal/slot.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/_internal/slot.tsx"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0"
+      ],
+      "registryDependencies": [],
+      "docs": "Import the styles in app/globals.css, before anything else: @import \"./styles/tokens.css\"; @import \"./styles/base.css\"; @import \"./styles/shadcn-bridge.css\"; Add your theme.css (from Rime Studio) after them. Requires the \"@/*\": [\"./*\"] path alias and no src/ directory.",
+      "meta": {
+        "docs": "https://rime.mjsons.net/md/theme.md"
+      }
+    },
+    {
+      "name": "accordion",
+      "type": "registry:item",
+      "title": "Accordion",
+      "description": "Stacked sections that open and close in place: one at a time or several, on glass or plain hairlines.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Accordion/Accordion.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Accordion/Accordion.module.css"
+        },
+        {
+          "path": "components/ui/Accordion/Accordion.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Accordion/Accordion.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Accordion } from \"@/components/ui/Accordion/Accordion\";",
+        "docs": "https://rime.mjsons.net/md/accordion.md",
+        "page": "https://rime.mjsons.net/components/accordion"
+      }
+    },
+    {
+      "name": "alert",
+      "type": "registry:item",
+      "title": "Alert",
+      "description": "An inline message in a tone (info, success, warning, danger) or a quiet legal box for fixed wording, with an action and dismiss.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Alert/Alert.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Alert/Alert.module.css"
+        },
+        {
+          "path": "components/ui/Alert/Alert.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Alert/Alert.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Alert } from \"@/components/ui/Alert/Alert\";",
+        "docs": "https://rime.mjsons.net/md/alert.md",
+        "page": "https://rime.mjsons.net/components/alert"
+      }
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:item",
+      "title": "AlertDialog",
+      "description": "A short interrupting confirm with Cancel and one action; focus starts on Cancel and the scrim never dismisses it.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/AlertDialog/AlertDialog.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/AlertDialog/AlertDialog.module.css"
+        },
+        {
+          "path": "components/ui/AlertDialog/AlertDialog.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/AlertDialog/AlertDialog.tsx"
+        },
+        {
+          "path": "components/ui/AlertDialog/dialog-core.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/AlertDialog/dialog-core.ts"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/scroll-area"
+      ],
+      "meta": {
+        "import": "import { AlertDialog } from \"@/components/ui/AlertDialog/AlertDialog\";",
+        "docs": "https://rime.mjsons.net/md/alert-dialog.md",
+        "page": "https://rime.mjsons.net/components/alert-dialog"
+      }
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:item",
+      "title": "AspectRatio",
+      "description": "A box held to a width-to-height ratio, so media keeps its shape and never shifts the layout while loading.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/AspectRatio/AspectRatio.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/AspectRatio/AspectRatio.module.css"
+        },
+        {
+          "path": "components/ui/AspectRatio/AspectRatio.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/AspectRatio/AspectRatio.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { AspectRatio } from \"@/components/ui/AspectRatio/AspectRatio\";",
+        "docs": "https://rime.mjsons.net/md/aspect-ratio.md",
+        "page": "https://rime.mjsons.net/components/aspect-ratio"
+      }
+    },
+    {
+      "name": "avatar",
+      "type": "registry:item",
+      "title": "Avatar",
+      "description": "Initials on the brand gradient or a neutral disc, in three sizes.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Avatar/Avatar.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Avatar/Avatar.module.css"
+        },
+        {
+          "path": "components/ui/Avatar/Avatar.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Avatar/Avatar.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Avatar } from \"@/components/ui/Avatar/Avatar\";",
+        "docs": "https://rime.mjsons.net/md/avatar.md",
+        "page": "https://rime.mjsons.net/components/avatar"
+      }
+    },
+    {
+      "name": "badge",
+      "type": "registry:item",
+      "title": "StatusPill, Badge and CountBadge",
+      "description": "Status pills (tinted fill, tinted edge, deep ink), small uppercase tags, and count badges.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Badge/Badge.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Badge/Badge.module.css"
+        },
+        {
+          "path": "components/ui/Badge/Badge.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Badge/Badge.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Badge } from \"@/components/ui/Badge/Badge\";",
+        "docs": "https://rime.mjsons.net/md/status-pill.md",
+        "page": "https://rime.mjsons.net/components/status-pill"
+      }
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:item",
+      "title": "Breadcrumb",
+      "description": "Where this page sits: a trail of links ending on the current page, folding its middle into a menu when long.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Breadcrumb/Breadcrumb.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Breadcrumb/Breadcrumb.module.css"
+        },
+        {
+          "path": "components/ui/Breadcrumb/Breadcrumb.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Breadcrumb/Breadcrumb.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/menu"
+      ],
+      "meta": {
+        "import": "import { Breadcrumb } from \"@/components/ui/Breadcrumb/Breadcrumb\";",
+        "docs": "https://rime.mjsons.net/md/breadcrumb.md",
+        "page": "https://rime.mjsons.net/components/breadcrumb"
+      }
+    },
+    {
+      "name": "button",
+      "type": "registry:item",
+      "title": "Button",
+      "description": "The action control: primary gradient, glass secondary, ghost, and two danger forms, in three sizes.",
+      "categories": [
+        "actions"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Button/Button.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Button/Button.module.css"
+        },
+        {
+          "path": "components/ui/Button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Button/Button.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { Button } from \"@/components/ui/Button/Button\";",
+        "docs": "https://rime.mjsons.net/md/button.md",
+        "page": "https://rime.mjsons.net/components/button"
+      }
+    },
+    {
+      "name": "button-group",
+      "type": "registry:item",
+      "title": "ButtonGroup",
+      "description": "Joins Buttons and IconButtons into one segmented row or column with shared outer corners.",
+      "categories": [
+        "actions"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ButtonGroup/ButtonGroup.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ButtonGroup/ButtonGroup.module.css"
+        },
+        {
+          "path": "components/ui/ButtonGroup/ButtonGroup.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ButtonGroup/ButtonGroup.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { ButtonGroup } from \"@/components/ui/ButtonGroup/ButtonGroup\";",
+        "docs": "https://rime.mjsons.net/md/button-group.md",
+        "page": "https://rime.mjsons.net/components/button-group"
+      }
+    },
+    {
+      "name": "card",
+      "type": "registry:item",
+      "title": "Card",
+      "description": "A solid card with a washed header, a lifted highlight tone, and a sunken muted tone.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Card/Card.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Card/Card.module.css"
+        },
+        {
+          "path": "components/ui/Card/Card.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Card/Card.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Card } from \"@/components/ui/Card/Card\";",
+        "docs": "https://rime.mjsons.net/md/card.md",
+        "page": "https://rime.mjsons.net/components/card"
+      }
+    },
+    {
+      "name": "carousel",
+      "type": "registry:item",
+      "title": "Carousel",
+      "description": "A row of slides on a native scroll-snap track, with frosted prev and next buttons, dots and arrow keys.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Carousel/Carousel.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Carousel/Carousel.module.css"
+        },
+        {
+          "path": "components/ui/Carousel/Carousel.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Carousel/Carousel.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Carousel } from \"@/components/ui/Carousel/Carousel\";",
+        "docs": "https://rime.mjsons.net/md/carousel.md",
+        "page": "https://rime.mjsons.net/components/carousel"
+      }
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:item",
+      "title": "Checkbox",
+      "description": "A native checkbox drawn as a gradient tick, plain or as a selectable card, with indeterminate.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Checkbox/Checkbox.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Checkbox/Checkbox.module.css"
+        },
+        {
+          "path": "components/ui/Checkbox/Checkbox.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Checkbox/Checkbox.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Checkbox } from \"@/components/ui/Checkbox/Checkbox\";",
+        "docs": "https://rime.mjsons.net/md/checkbox.md",
+        "page": "https://rime.mjsons.net/components/checkbox"
+      }
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:item",
+      "title": "Collapsible",
+      "description": "One disclosure: a title row with a toggle, an always-visible summary and a region that opens beneath it.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Collapsible/Collapsible.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Collapsible/Collapsible.module.css"
+        },
+        {
+          "path": "components/ui/Collapsible/Collapsible.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Collapsible/Collapsible.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Collapsible } from \"@/components/ui/Collapsible/Collapsible\";",
+        "docs": "https://rime.mjsons.net/md/collapsible.md",
+        "page": "https://rime.mjsons.net/components/collapsible"
+      }
+    },
+    {
+      "name": "combobox",
+      "type": "registry:item",
+      "title": "Combobox",
+      "description": "A text field that filters a list of options as you type and picks one, with optional create.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Combobox/Combobox.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Combobox/Combobox.module.css"
+        },
+        {
+          "path": "components/ui/Combobox/Combobox.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Combobox/Combobox.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { Combobox } from \"@/components/ui/Combobox/Combobox\";",
+        "docs": "https://rime.mjsons.net/md/combobox.md",
+        "page": "https://rime.mjsons.net/components/combobox"
+      }
+    },
+    {
+      "name": "command",
+      "type": "registry:item",
+      "title": "Command",
+      "description": "A command palette: a search box over grouped actions with shortcuts, keyboard-first, inline or as a Ctrl+K dialog.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Command/Command.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Command/Command.module.css"
+        },
+        {
+          "path": "components/ui/Command/Command.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Command/Command.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/alert-dialog",
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/scroll-area"
+      ],
+      "meta": {
+        "import": "import { Command } from \"@/components/ui/Command/Command\";",
+        "docs": "https://rime.mjsons.net/md/command.md",
+        "page": "https://rime.mjsons.net/components/command"
+      }
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:item",
+      "title": "ContextMenu",
+      "description": "A menu of actions for a region, opened at the pointer with a right-click, Shift+F10 or a long press.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ContextMenu/ContextMenu.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ContextMenu/ContextMenu.module.css"
+        },
+        {
+          "path": "components/ui/ContextMenu/ContextMenu.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ContextMenu/ContextMenu.tsx"
+        },
+        {
+          "path": "components/ui/ContextMenu/menu-list.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ContextMenu/menu-list.tsx"
+        },
+        {
+          "path": "components/ui/ContextMenu/MenuList.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ContextMenu/MenuList.module.css"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { ContextMenu } from \"@/components/ui/ContextMenu/ContextMenu\";",
+        "docs": "https://rime.mjsons.net/md/context-menu.md",
+        "page": "https://rime.mjsons.net/components/context-menu"
+      }
+    },
+    {
+      "name": "danger-zone",
+      "type": "registry:item",
+      "title": "TypeToConfirmModal and DangerZone",
+      "description": "The heaviest confirm: an impact preview and a typed phrase; and the Danger zone section that leads to it.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/DangerZone/DangerZone.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/DangerZone/DangerZone.module.css"
+        },
+        {
+          "path": "components/ui/DangerZone/DangerZone.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/DangerZone/DangerZone.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/type-to-confirm"
+      ],
+      "meta": {
+        "import": "import { DangerZone } from \"@/components/ui/DangerZone/DangerZone\";",
+        "docs": "https://rime.mjsons.net/md/type-to-confirm.md",
+        "page": "https://rime.mjsons.net/components/type-to-confirm"
+      }
+    },
+    {
+      "name": "date-field",
+      "type": "registry:item",
+      "title": "DateField",
+      "description": "A typed DD/MM/YYYY field with a calendar popover, min/max and a date-of-birth preset.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/DateField/Calendar.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/DateField/Calendar.module.css"
+        },
+        {
+          "path": "components/ui/DateField/Calendar.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/DateField/Calendar.tsx"
+        },
+        {
+          "path": "components/ui/DateField/date-utils.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/DateField/date-utils.ts"
+        },
+        {
+          "path": "components/ui/DateField/DateField.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/DateField/DateField.module.css"
+        },
+        {
+          "path": "components/ui/DateField/DateField.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/DateField/DateField.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { DateField } from \"@/components/ui/DateField/DateField\";",
+        "docs": "https://rime.mjsons.net/md/date-field.md",
+        "page": "https://rime.mjsons.net/components/date-field"
+      }
+    },
+    {
+      "name": "date-range-filter",
+      "type": "registry:item",
+      "title": "DateRangeFilter",
+      "description": "A date-range chip for filter rows: presets plus a two-month range calendar.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/DateRangeFilter/DateRangeFilter.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/DateRangeFilter/DateRangeFilter.module.css"
+        },
+        {
+          "path": "components/ui/DateRangeFilter/DateRangeFilter.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/DateRangeFilter/DateRangeFilter.tsx"
+        },
+        {
+          "path": "components/ui/DateRangeFilter/range-utils.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/DateRangeFilter/range-utils.ts"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/date-field",
+        "<owner>/rime/field",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { DateRangeFilter } from \"@/components/ui/DateRangeFilter/DateRangeFilter\";",
+        "docs": "https://rime.mjsons.net/md/date-range-filter.md",
+        "page": "https://rime.mjsons.net/components/date-range-filter"
+      }
+    },
+    {
+      "name": "divider",
+      "type": "registry:item",
+      "title": "Divider",
+      "description": "A hairline rule, horizontal or vertical, optionally labelled, with spacing steps.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Divider/Divider.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Divider/Divider.module.css"
+        },
+        {
+          "path": "components/ui/Divider/Divider.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Divider/Divider.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Divider } from \"@/components/ui/Divider/Divider\";",
+        "docs": "https://rime.mjsons.net/md/divider.md",
+        "page": "https://rime.mjsons.net/components/divider"
+      }
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:item",
+      "title": "EmptyState",
+      "description": "What an empty list means and what to do next: default, positive (all done) and filtered tones.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/EmptyState/EmptyState.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/EmptyState/EmptyState.module.css"
+        },
+        {
+          "path": "components/ui/EmptyState/EmptyState.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/EmptyState/EmptyState.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { EmptyState } from \"@/components/ui/EmptyState/EmptyState\";",
+        "docs": "https://rime.mjsons.net/md/empty-state.md",
+        "page": "https://rime.mjsons.net/components/empty-state"
+      }
+    },
+    {
+      "name": "error-summary",
+      "type": "registry:item",
+      "title": "ErrorSummary",
+      "description": "The list of form errors at the top of a form, focused on submit, each linking to its field.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ErrorSummary/ErrorSummary.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ErrorSummary/ErrorSummary.module.css"
+        },
+        {
+          "path": "components/ui/ErrorSummary/ErrorSummary.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ErrorSummary/ErrorSummary.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { ErrorSummary } from \"@/components/ui/ErrorSummary/ErrorSummary\";",
+        "docs": "https://rime.mjsons.net/md/error-summary.md",
+        "page": "https://rime.mjsons.net/components/error-summary"
+      }
+    },
+    {
+      "name": "field",
+      "type": "registry:item",
+      "title": "TextInput",
+      "description": "The text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Field/Field.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Field/Field.module.css"
+        },
+        {
+          "path": "components/ui/Field/Field.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Field/Field.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Field } from \"@/components/ui/Field/Field\";",
+        "docs": "https://rime.mjsons.net/md/text-input.md",
+        "page": "https://rime.mjsons.net/components/text-input"
+      }
+    },
+    {
+      "name": "file-drop",
+      "type": "registry:item",
+      "title": "FileDrop",
+      "description": "A drop zone and file picker with type and size checks and per-file status chips.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/FileDrop/FileDrop.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/FileDrop/FileDrop.module.css"
+        },
+        {
+          "path": "components/ui/FileDrop/FileDrop.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/FileDrop/FileDrop.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { FileDrop } from \"@/components/ui/FileDrop/FileDrop\";",
+        "docs": "https://rime.mjsons.net/md/file-drop.md",
+        "page": "https://rime.mjsons.net/components/file-drop"
+      }
+    },
+    {
+      "name": "filter-bar",
+      "type": "registry:item",
+      "title": "FilterBar",
+      "description": "The one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/FilterBar/FilterBar.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/FilterBar/FilterBar.module.css"
+        },
+        {
+          "path": "components/ui/FilterBar/FilterBar.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/FilterBar/FilterBar.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button"
+      ],
+      "meta": {
+        "import": "import { FilterBar } from \"@/components/ui/FilterBar/FilterBar\";",
+        "docs": "https://rime.mjsons.net/md/filter-bar.md",
+        "page": "https://rime.mjsons.net/components/filter-bar"
+      }
+    },
+    {
+      "name": "filter-chip",
+      "type": "registry:item",
+      "title": "FilterBar",
+      "description": "The one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/FilterChip/FilterChip.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/FilterChip/FilterChip.module.css"
+        },
+        {
+          "path": "components/ui/FilterChip/FilterChip.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/FilterChip/FilterChip.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { FilterChip } from \"@/components/ui/FilterChip/FilterChip\";",
+        "docs": "https://rime.mjsons.net/md/filter-bar.md",
+        "page": "https://rime.mjsons.net/components/filter-bar"
+      }
+    },
+    {
+      "name": "glass-panel",
+      "type": "registry:item",
+      "title": "GlassPanel",
+      "description": "Frosted glass over the page field: page, light and nested variants, padding steps and an optional bloom.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/GlassPanel/GlassPanel.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/GlassPanel/GlassPanel.module.css"
+        },
+        {
+          "path": "components/ui/GlassPanel/GlassPanel.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/GlassPanel/GlassPanel.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { GlassPanel } from \"@/components/ui/GlassPanel/GlassPanel\";",
+        "docs": "https://rime.mjsons.net/md/glass-panel.md",
+        "page": "https://rime.mjsons.net/components/glass-panel"
+      }
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:item",
+      "title": "HoverCard",
+      "description": "A rich preview on hover or keyboard focus of a link: a person, a project, a record.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/HoverCard/HoverCard.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/HoverCard/HoverCard.module.css"
+        },
+        {
+          "path": "components/ui/HoverCard/HoverCard.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/HoverCard/HoverCard.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/popover"
+      ],
+      "meta": {
+        "import": "import { HoverCard } from \"@/components/ui/HoverCard/HoverCard\";",
+        "docs": "https://rime.mjsons.net/md/hover-card.md",
+        "page": "https://rime.mjsons.net/components/hover-card"
+      }
+    },
+    {
+      "name": "icon",
+      "type": "registry:item",
+      "title": "icon",
+      "description": "Rime icon.",
+      "files": [
+        {
+          "path": "components/ui/Icon/Icon.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Icon/Icon.tsx"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0"
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Icon } from \"@/components/ui/Icon/Icon\";"
+      }
+    },
+    {
+      "name": "icon-button",
+      "type": "registry:item",
+      "title": "IconButton",
+      "description": "A square action with only an icon, a required accessible label and a tooltip-friendly hit area.",
+      "categories": [
+        "actions"
+      ],
+      "files": [
+        {
+          "path": "components/ui/IconButton/IconButton.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/IconButton/IconButton.module.css"
+        },
+        {
+          "path": "components/ui/IconButton/IconButton.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/IconButton/IconButton.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { IconButton } from \"@/components/ui/IconButton/IconButton\";",
+        "docs": "https://rime.mjsons.net/md/icon-button.md",
+        "page": "https://rime.mjsons.net/components/icon-button"
+      }
+    },
+    {
+      "name": "impact-preview",
+      "type": "registry:item",
+      "title": "ImpactPreview",
+      "description": "What a destructive action will change, row by row, before it is confirmed.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ImpactPreview/ImpactPreview.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ImpactPreview/ImpactPreview.module.css"
+        },
+        {
+          "path": "components/ui/ImpactPreview/ImpactPreview.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ImpactPreview/ImpactPreview.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/skeleton",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { ImpactPreview } from \"@/components/ui/ImpactPreview/ImpactPreview\";",
+        "docs": "https://rime.mjsons.net/md/impact-preview.md",
+        "page": "https://rime.mjsons.net/components/impact-preview"
+      }
+    },
+    {
+      "name": "input-group",
+      "type": "registry:item",
+      "title": "InputGroup",
+      "description": "A text field with addons joined to it: a fixed text segment, an icon, or a button such as Copy.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/InputGroup/InputGroup.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/InputGroup/InputGroup.module.css"
+        },
+        {
+          "path": "components/ui/InputGroup/InputGroup.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/InputGroup/InputGroup.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { InputGroup } from \"@/components/ui/InputGroup/InputGroup\";",
+        "docs": "https://rime.mjsons.net/md/input-group.md",
+        "page": "https://rime.mjsons.net/components/input-group"
+      }
+    },
+    {
+      "name": "kbd",
+      "type": "registry:item",
+      "title": "Kbd and KbdGroup",
+      "description": "Keyboard keys as small raised key caps, alone or as a combination.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Kbd/Kbd.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Kbd/Kbd.module.css"
+        },
+        {
+          "path": "components/ui/Kbd/Kbd.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Kbd/Kbd.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Kbd } from \"@/components/ui/Kbd/Kbd\";",
+        "docs": "https://rime.mjsons.net/md/kbd.md",
+        "page": "https://rime.mjsons.net/components/kbd"
+      }
+    },
+    {
+      "name": "label",
+      "type": "registry:item",
+      "title": "Label",
+      "description": "A standalone form label with required and optional markers, for controls outside a Field.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Label/Label.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Label/Label.module.css"
+        },
+        {
+          "path": "components/ui/Label/Label.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Label/Label.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Label } from \"@/components/ui/Label/Label\";",
+        "docs": "https://rime.mjsons.net/md/label.md",
+        "page": "https://rime.mjsons.net/components/label"
+      }
+    },
+    {
+      "name": "menu",
+      "type": "registry:item",
+      "title": "Menu",
+      "description": "An action menu from a button: groups, headings, separators, icons, links and danger items, in a frosted popover.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Menu/Menu.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Menu/Menu.module.css"
+        },
+        {
+          "path": "components/ui/Menu/Menu.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Menu/Menu.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Menu } from \"@/components/ui/Menu/Menu\";",
+        "docs": "https://rime.mjsons.net/md/menu.md",
+        "page": "https://rime.mjsons.net/components/menu"
+      }
+    },
+    {
+      "name": "menubar",
+      "type": "registry:item",
+      "title": "Menubar",
+      "description": "A desktop application menu bar (File, Edit, View) with keyboard navigation across and within its menus.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Menubar/Menubar.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Menubar/Menubar.module.css"
+        },
+        {
+          "path": "components/ui/Menubar/Menubar.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Menubar/Menubar.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/context-menu",
+        "<owner>/rime/popover"
+      ],
+      "meta": {
+        "import": "import { Menubar } from \"@/components/ui/Menubar/Menubar\";",
+        "docs": "https://rime.mjsons.net/md/menubar.md",
+        "page": "https://rime.mjsons.net/components/menubar"
+      }
+    },
+    {
+      "name": "meter",
+      "type": "registry:item",
+      "title": "Meter and ProgressBar",
+      "description": "A segmented meter for small counts (seats used) and a bar for progress through a total.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Meter/Meter.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Meter/Meter.module.css"
+        },
+        {
+          "path": "components/ui/Meter/Meter.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Meter/Meter.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Meter } from \"@/components/ui/Meter/Meter\";",
+        "docs": "https://rime.mjsons.net/md/meter.md",
+        "page": "https://rime.mjsons.net/components/meter"
+      }
+    },
+    {
+      "name": "modal",
+      "type": "registry:item",
+      "title": "Modal",
+      "description": "A frosted dialog with a focus trap, scroll lock, inert page, scroll-aware edges and a bottom sheet on phones.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Modal/Modal.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Modal/Modal.module.css"
+        },
+        {
+          "path": "components/ui/Modal/Modal.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Modal/Modal.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/icon-button",
+        "<owner>/rime/scroll-area"
+      ],
+      "meta": {
+        "import": "import { Modal } from \"@/components/ui/Modal/Modal\";",
+        "docs": "https://rime.mjsons.net/md/modal.md",
+        "page": "https://rime.mjsons.net/components/modal"
+      }
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:item",
+      "title": "NavigationMenu",
+      "description": "Top-level site navigation with frosted dropdown panels of described links, built as disclosure navigation.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/NavigationMenu/NavigationMenu.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/NavigationMenu/NavigationMenu.module.css"
+        },
+        {
+          "path": "components/ui/NavigationMenu/NavigationMenu.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/NavigationMenu/NavigationMenu.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { NavigationMenu } from \"@/components/ui/NavigationMenu/NavigationMenu\";",
+        "docs": "https://rime.mjsons.net/md/navigation-menu.md",
+        "page": "https://rime.mjsons.net/components/navigation-menu"
+      }
+    },
+    {
+      "name": "nav-search",
+      "type": "registry:item",
+      "title": "NavSearch and SmartSearch",
+      "description": "Top-bar search: NavSearch jumps to pages and actions; SmartSearch queries records with grouped results.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/NavSearch/NavSearch.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/NavSearch/NavSearch.module.css"
+        },
+        {
+          "path": "components/ui/NavSearch/NavSearch.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/NavSearch/NavSearch.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/search-field"
+      ],
+      "meta": {
+        "import": "import { NavSearch } from \"@/components/ui/NavSearch/NavSearch\";",
+        "docs": "https://rime.mjsons.net/md/nav-search.md",
+        "page": "https://rime.mjsons.net/components/nav-search"
+      }
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:item",
+      "title": "OtpInput",
+      "description": "A six-cell one-time code entry with paste, auto-advance and onComplete.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/OtpInput/OtpInput.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/OtpInput/OtpInput.module.css"
+        },
+        {
+          "path": "components/ui/OtpInput/OtpInput.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/OtpInput/OtpInput.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field"
+      ],
+      "meta": {
+        "import": "import { OtpInput } from \"@/components/ui/OtpInput/OtpInput\";",
+        "docs": "https://rime.mjsons.net/md/otp-input.md",
+        "page": "https://rime.mjsons.net/components/otp-input"
+      }
+    },
+    {
+      "name": "popover",
+      "type": "registry:item",
+      "title": "Popover",
+      "description": "An anchored frosted panel for arbitrary content: a short form, a set of options, a details block.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Popover/floating.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/Popover/floating.ts"
+        },
+        {
+          "path": "components/ui/Popover/Popover.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Popover/Popover.module.css"
+        },
+        {
+          "path": "components/ui/Popover/Popover.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Popover/Popover.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Popover } from \"@/components/ui/Popover/Popover\";",
+        "docs": "https://rime.mjsons.net/md/popover.md",
+        "page": "https://rime.mjsons.net/components/popover"
+      }
+    },
+    {
+      "name": "prefixed-input",
+      "type": "registry:item",
+      "title": "PrefixedInput",
+      "description": "A fixed-format code with a set prefix: an invoice number, an account code, a membership number.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/PrefixedInput/prefixed.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/PrefixedInput/prefixed.ts"
+        },
+        {
+          "path": "components/ui/PrefixedInput/PrefixedInput.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/PrefixedInput/PrefixedInput.module.css"
+        },
+        {
+          "path": "components/ui/PrefixedInput/PrefixedInput.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/PrefixedInput/PrefixedInput.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { PrefixedInput } from \"@/components/ui/PrefixedInput/PrefixedInput\";",
+        "docs": "https://rime.mjsons.net/md/prefixed-input.md",
+        "page": "https://rime.mjsons.net/components/prefixed-input"
+      }
+    },
+    {
+      "name": "progress-steps",
+      "type": "registry:item",
+      "title": "ProgressSteps",
+      "description": "A horizontal track of steps with detail and meta lines, or a compact dot track for table cells.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ProgressSteps/ProgressSteps.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/ProgressSteps/ProgressSteps.module.css"
+        },
+        {
+          "path": "components/ui/ProgressSteps/ProgressSteps.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/ProgressSteps/ProgressSteps.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { ProgressSteps } from \"@/components/ui/ProgressSteps/ProgressSteps\";",
+        "docs": "https://rime.mjsons.net/md/progress-steps.md",
+        "page": "https://rime.mjsons.net/components/progress-steps"
+      }
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:item",
+      "title": "RadioGroup",
+      "description": "One choice from a few: a list, inline, or cards in 1 to 3 columns.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/RadioGroup/RadioGroup.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/RadioGroup/RadioGroup.module.css"
+        },
+        {
+          "path": "components/ui/RadioGroup/RadioGroup.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/RadioGroup/RadioGroup.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field"
+      ],
+      "meta": {
+        "import": "import { RadioGroup } from \"@/components/ui/RadioGroup/RadioGroup\";",
+        "docs": "https://rime.mjsons.net/md/radio-group.md",
+        "page": "https://rime.mjsons.net/components/radio-group"
+      }
+    },
+    {
+      "name": "resizable",
+      "type": "registry:item",
+      "title": "Resizable",
+      "description": "Panels split by draggable hairline handles, side by side or stacked, with keyboard resizing and minimum sizes.",
+      "categories": [
+        "layoutandsurfaces"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Resizable/Resizable.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Resizable/Resizable.module.css"
+        },
+        {
+          "path": "components/ui/Resizable/Resizable.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Resizable/Resizable.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Resizable } from \"@/components/ui/Resizable/Resizable\";",
+        "docs": "https://rime.mjsons.net/md/resizable.md",
+        "page": "https://rime.mjsons.net/components/resizable"
+      }
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:item",
+      "title": "Modal",
+      "description": "A frosted dialog with a focus trap, scroll lock, inert page, scroll-aware edges and a bottom sheet on phones.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Scroll/scroll-lock.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/Scroll/scroll-lock.ts"
+        },
+        {
+          "path": "components/ui/Scroll/Scroll.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Scroll/Scroll.module.css"
+        },
+        {
+          "path": "components/ui/Scroll/ScrollArea.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Scroll/ScrollArea.tsx"
+        },
+        {
+          "path": "components/ui/Scroll/useScrollEdges.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/Scroll/useScrollEdges.ts"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Scroll } from \"@/components/ui/Scroll/Scroll\";",
+        "docs": "https://rime.mjsons.net/md/modal.md",
+        "page": "https://rime.mjsons.net/components/modal"
+      }
+    },
+    {
+      "name": "search-field",
+      "type": "registry:item",
+      "title": "SearchField",
+      "description": "Field-size search on the grey frosted recess: clear button, loading state and an optional key hint.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/SearchField/match.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/SearchField/match.tsx"
+        },
+        {
+          "path": "components/ui/SearchField/SearchField.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/SearchField/SearchField.module.css"
+        },
+        {
+          "path": "components/ui/SearchField/SearchField.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/SearchField/SearchField.tsx"
+        },
+        {
+          "path": "components/ui/SearchField/shortcut.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/SearchField/shortcut.ts"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { SearchField } from \"@/components/ui/SearchField/SearchField\";",
+        "docs": "https://rime.mjsons.net/md/search-field.md",
+        "page": "https://rime.mjsons.net/components/search-field"
+      }
+    },
+    {
+      "name": "select",
+      "type": "registry:item",
+      "title": "Select",
+      "description": "A custom listbox: a recessed field or filter chip that opens a frosted popover, optionally searchable.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Select/Select.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Select/Select.module.css"
+        },
+        {
+          "path": "components/ui/Select/Select.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Select/Select.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/search-field",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { Select } from \"@/components/ui/Select/Select\";",
+        "docs": "https://rime.mjsons.net/md/select.md",
+        "page": "https://rime.mjsons.net/components/select"
+      }
+    },
+    {
+      "name": "sheet",
+      "type": "registry:item",
+      "title": "Sheet and Drawer",
+      "description": "A panel that slides in from an edge over a scrim, and a bottom Drawer with a drag handle.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Sheet/Sheet.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Sheet/Sheet.module.css"
+        },
+        {
+          "path": "components/ui/Sheet/Sheet.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Sheet/Sheet.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/alert-dialog",
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/icon-button",
+        "<owner>/rime/scroll-area"
+      ],
+      "meta": {
+        "import": "import { Sheet } from \"@/components/ui/Sheet/Sheet\";",
+        "docs": "https://rime.mjsons.net/md/sheet.md",
+        "page": "https://rime.mjsons.net/components/sheet"
+      }
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:item",
+      "title": "Skeleton",
+      "description": "Loading placeholders shaped like the content they stand in for, with a soft shimmer.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Skeleton/Skeleton.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Skeleton/Skeleton.module.css"
+        },
+        {
+          "path": "components/ui/Skeleton/Skeleton.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Skeleton/Skeleton.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Skeleton } from \"@/components/ui/Skeleton/Skeleton\";",
+        "docs": "https://rime.mjsons.net/md/skeleton.md",
+        "page": "https://rime.mjsons.net/components/skeleton"
+      }
+    },
+    {
+      "name": "slider",
+      "type": "registry:item",
+      "title": "Slider",
+      "description": "Picks a number or a range by dragging along a track, with steps, marks and a value readout.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Slider/Slider.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Slider/Slider.module.css"
+        },
+        {
+          "path": "components/ui/Slider/Slider.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Slider/Slider.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field"
+      ],
+      "meta": {
+        "import": "import { Slider } from \"@/components/ui/Slider/Slider\";",
+        "docs": "https://rime.mjsons.net/md/slider.md",
+        "page": "https://rime.mjsons.net/components/slider"
+      }
+    },
+    {
+      "name": "smart-search",
+      "type": "registry:item",
+      "title": "NavSearch and SmartSearch",
+      "description": "Top-bar search: NavSearch jumps to pages and actions; SmartSearch queries records with grouped results.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/SmartSearch/smart-match.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/SmartSearch/smart-match.tsx"
+        },
+        {
+          "path": "components/ui/SmartSearch/SmartSearch.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/SmartSearch/SmartSearch.module.css"
+        },
+        {
+          "path": "components/ui/SmartSearch/SmartSearch.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/SmartSearch/SmartSearch.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/search-field",
+        "<owner>/rime/skeleton"
+      ],
+      "meta": {
+        "import": "import { SmartSearch } from \"@/components/ui/SmartSearch/SmartSearch\";",
+        "docs": "https://rime.mjsons.net/md/nav-search.md",
+        "page": "https://rime.mjsons.net/components/nav-search"
+      }
+    },
+    {
+      "name": "spinner",
+      "type": "registry:item",
+      "title": "Spinner",
+      "description": "A small brand-tinted spinner for in-flight work inside buttons, fields and panels.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Spinner/Spinner.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Spinner/Spinner.module.css"
+        },
+        {
+          "path": "components/ui/Spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Spinner/Spinner.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Spinner } from \"@/components/ui/Spinner/Spinner\";",
+        "docs": "https://rime.mjsons.net/md/spinner.md",
+        "page": "https://rime.mjsons.net/components/spinner"
+      }
+    },
+    {
+      "name": "stepper",
+      "type": "registry:item",
+      "title": "Stepper",
+      "description": "The wizard's step list: lettered markers, states, and optional navigation back to finished steps.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Stepper/Stepper.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Stepper/Stepper.module.css"
+        },
+        {
+          "path": "components/ui/Stepper/Stepper.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Stepper/Stepper.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Stepper } from \"@/components/ui/Stepper/Stepper\";",
+        "docs": "https://rime.mjsons.net/md/stepper.md",
+        "page": "https://rime.mjsons.net/components/stepper"
+      }
+    },
+    {
+      "name": "switch",
+      "type": "registry:item",
+      "title": "Switch",
+      "description": "An on/off setting that takes effect immediately, with a loading state while it saves.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Switch/Switch.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Switch/Switch.module.css"
+        },
+        {
+          "path": "components/ui/Switch/Switch.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Switch/Switch.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { Switch } from \"@/components/ui/Switch/Switch\";",
+        "docs": "https://rime.mjsons.net/md/switch.md",
+        "page": "https://rime.mjsons.net/components/switch"
+      }
+    },
+    {
+      "name": "table",
+      "type": "registry:item",
+      "title": "Table",
+      "description": "The one table look: neutral header row, whole-cell sortable headers, skeleton, empty and error states, and Pagination.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Table/Table.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Table/Table.module.css"
+        },
+        {
+          "path": "components/ui/Table/Table.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Table/Table.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/skeleton"
+      ],
+      "meta": {
+        "import": "import { Table } from \"@/components/ui/Table/Table\";",
+        "docs": "https://rime.mjsons.net/md/table.md",
+        "page": "https://rime.mjsons.net/components/table"
+      }
+    },
+    {
+      "name": "tabs",
+      "type": "registry:item",
+      "title": "FolderTabs and SegmentedControl",
+      "description": "Folder tabs that sit on a glass panel with always-visible counts, and a segmented control for views.",
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Tabs/Tabs.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Tabs/Tabs.module.css"
+        },
+        {
+          "path": "components/ui/Tabs/Tabs.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Tabs/Tabs.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/glass-panel"
+      ],
+      "meta": {
+        "import": "import { Tabs } from \"@/components/ui/Tabs/Tabs\";",
+        "docs": "https://rime.mjsons.net/md/tabs.md",
+        "page": "https://rime.mjsons.net/components/tabs"
+      }
+    },
+    {
+      "name": "textarea",
+      "type": "registry:item",
+      "title": "Textarea",
+      "description": "Multi-line text in the TextInput box, resizable vertically, with an optional character count.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Textarea/Textarea.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Textarea/Textarea.module.css"
+        },
+        {
+          "path": "components/ui/Textarea/Textarea.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Textarea/Textarea.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { Textarea } from \"@/components/ui/Textarea/Textarea\";",
+        "docs": "https://rime.mjsons.net/md/textarea.md",
+        "page": "https://rime.mjsons.net/components/textarea"
+      }
+    },
+    {
+      "name": "text-input",
+      "type": "registry:item",
+      "title": "TextInput",
+      "description": "The text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/TextInput/TextInput.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/TextInput/TextInput.module.css"
+        },
+        {
+          "path": "components/ui/TextInput/TextInput.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/TextInput/TextInput.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/field",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { TextInput } from \"@/components/ui/TextInput/TextInput\";",
+        "docs": "https://rime.mjsons.net/md/text-input.md",
+        "page": "https://rime.mjsons.net/components/text-input"
+      }
+    },
+    {
+      "name": "toast",
+      "type": "registry:item",
+      "title": "Toast",
+      "description": "Frosted toasts for success, error, info and in-flight work, stacked as a deck that fans out on hover.",
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Toast/Toast.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Toast/Toast.module.css"
+        },
+        {
+          "path": "components/ui/Toast/Toast.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Toast/Toast.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon",
+        "<owner>/rime/spinner"
+      ],
+      "meta": {
+        "import": "import { Toast } from \"@/components/ui/Toast/Toast\";",
+        "docs": "https://rime.mjsons.net/md/toast.md",
+        "page": "https://rime.mjsons.net/components/toast"
+      }
+    },
+    {
+      "name": "toggle",
+      "type": "registry:item",
+      "title": "Toggle",
+      "description": "A two-state button, pressed or not, for toolbar formatting and view options.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Toggle/Toggle.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Toggle/Toggle.module.css"
+        },
+        {
+          "path": "components/ui/Toggle/Toggle.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Toggle/Toggle.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { Toggle } from \"@/components/ui/Toggle/Toggle\";",
+        "docs": "https://rime.mjsons.net/md/toggle.md",
+        "page": "https://rime.mjsons.net/components/toggle"
+      }
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:item",
+      "title": "Tooltip and Toggletip",
+      "description": "Hover and focus tooltips (dark one-liners or light rich cards) and click-to-open toggletips for help.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/Tooltip/Tooltip.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/Tooltip/Tooltip.module.css"
+        },
+        {
+          "path": "components/ui/Tooltip/Tooltip.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/Tooltip/Tooltip.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { Tooltip } from \"@/components/ui/Tooltip/Tooltip\";",
+        "docs": "https://rime.mjsons.net/md/tooltip.md",
+        "page": "https://rime.mjsons.net/components/tooltip"
+      }
+    },
+    {
+      "name": "type-to-confirm",
+      "type": "registry:item",
+      "title": "TypeToConfirmModal and DangerZone",
+      "description": "The heaviest confirm: an impact preview and a typed phrase; and the Danger zone section that leads to it.",
+      "categories": [
+        "overlays"
+      ],
+      "files": [
+        {
+          "path": "components/ui/TypeToConfirm/TypeToConfirm.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/TypeToConfirm/TypeToConfirm.module.css"
+        },
+        {
+          "path": "components/ui/TypeToConfirm/TypeToConfirmModal.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/TypeToConfirm/TypeToConfirmModal.tsx"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0"
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/icon-button",
+        "<owner>/rime/impact-preview",
+        "<owner>/rime/modal",
+        "<owner>/rime/text-input",
+        "<owner>/rime/toast",
+        "<owner>/rime/tooltip"
+      ],
+      "meta": {
+        "import": "import { TypeToConfirm } from \"@/components/ui/TypeToConfirm/TypeToConfirm\";",
+        "docs": "https://rime.mjsons.net/md/type-to-confirm.md",
+        "page": "https://rime.mjsons.net/components/type-to-confirm"
+      }
+    },
+    {
+      "name": "sidebar-shell",
+      "type": "registry:item",
+      "title": "SidebarShell",
+      "description": "The signed-in frame in four layouts: an expanded frosted sidebar, a collapsible icon rail, a header-only top nav, and a drawer on narrow screens.",
+      "categories": [
+        "shell"
+      ],
+      "files": [
+        {
+          "path": "components/shell/SidebarShell.tsx",
+          "type": "registry:file",
+          "target": "~/components/shell/SidebarShell.tsx"
+        },
+        {
+          "path": "components/shell/SidebarShell.module.css",
+          "type": "registry:file",
+          "target": "~/components/shell/SidebarShell.module.css"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0"
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon-button"
+      ],
+      "meta": {
+        "import": "import { SidebarShell } from \"@/components/shell/SidebarShell\";",
+        "docs": "https://rime.mjsons.net/md/sidebar-shell.md",
+        "page": "https://rime.mjsons.net/components/sidebar-shell"
+      }
+    },
+    {
+      "name": "page-header",
+      "type": "registry:item",
+      "title": "PageHeader",
+      "description": "A page's h1 with a back link, a meta line, a description and actions.",
+      "categories": [
+        "shell"
+      ],
+      "files": [
+        {
+          "path": "components/shell/PageHeader.tsx",
+          "type": "registry:file",
+          "target": "~/components/shell/PageHeader.tsx"
+        },
+        {
+          "path": "components/shell/PageHeader.module.css",
+          "type": "registry:file",
+          "target": "~/components/shell/PageHeader.module.css"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { PageHeader } from \"@/components/shell/PageHeader\";",
+        "docs": "https://rime.mjsons.net/md/page-header.md",
+        "page": "https://rime.mjsons.net/components/page-header"
+      }
+    },
+    {
+      "name": "auth-card",
+      "type": "registry:item",
+      "title": "AuthCard and AuthLayout",
+      "description": "The sign-in card: a solid card on a deep field, with a logo slot, icon tile, title, footer strip and back link.",
+      "categories": [
+        "shell"
+      ],
+      "files": [
+        {
+          "path": "components/shell/AuthCard.tsx",
+          "type": "registry:file",
+          "target": "~/components/shell/AuthCard.tsx"
+        },
+        {
+          "path": "components/shell/AuthCard.module.css",
+          "type": "registry:file",
+          "target": "~/components/shell/AuthCard.module.css"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/icon"
+      ],
+      "meta": {
+        "import": "import { AuthCard } from \"@/components/shell/AuthCard\";",
+        "docs": "https://rime.mjsons.net/md/auth-card.md",
+        "page": "https://rime.mjsons.net/components/auth-card"
+      }
+    },
+    {
+      "name": "charts",
+      "type": "registry:item",
+      "title": "Chart",
+      "description": "Themed charts on Recharts: line, area, bar and donut in one frame with a table view, plus sparklines and a stat strip.",
+      "categories": [
+        "datadisplay"
+      ],
+      "files": [
+        {
+          "path": "components/charts/BarChart.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/BarChart.tsx"
+        },
+        {
+          "path": "components/charts/CapacityBar.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/CapacityBar.tsx"
+        },
+        {
+          "path": "components/charts/cartesian.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/cartesian.tsx"
+        },
+        {
+          "path": "components/charts/ChartFrame.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/ChartFrame.tsx"
+        },
+        {
+          "path": "components/charts/ChartPrimitives.module.css",
+          "type": "registry:file",
+          "target": "~/components/charts/ChartPrimitives.module.css"
+        },
+        {
+          "path": "components/charts/Charts.module.css",
+          "type": "registry:file",
+          "target": "~/components/charts/Charts.module.css"
+        },
+        {
+          "path": "components/charts/ChartTooltip.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/ChartTooltip.tsx"
+        },
+        {
+          "path": "components/charts/DonutChart.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/DonutChart.tsx"
+        },
+        {
+          "path": "components/charts/format.ts",
+          "type": "registry:file",
+          "target": "~/components/charts/format.ts"
+        },
+        {
+          "path": "components/charts/index.ts",
+          "type": "registry:file",
+          "target": "~/components/charts/index.ts"
+        },
+        {
+          "path": "components/charts/palette.ts",
+          "type": "registry:file",
+          "target": "~/components/charts/palette.ts"
+        },
+        {
+          "path": "components/charts/primitives.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/primitives.tsx"
+        },
+        {
+          "path": "components/charts/scale.ts",
+          "type": "registry:file",
+          "target": "~/components/charts/scale.ts"
+        },
+        {
+          "path": "components/charts/Sparkline.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/Sparkline.tsx"
+        },
+        {
+          "path": "components/charts/StatStrip.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/StatStrip.tsx"
+        },
+        {
+          "path": "components/charts/TrendChart.tsx",
+          "type": "registry:file",
+          "target": "~/components/charts/TrendChart.tsx"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0",
+        "recharts@^3.10.1"
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/skeleton",
+        "<owner>/rime/tabs"
+      ],
+      "meta": {
+        "import": "import { LineChart, AreaChart, BarChart, DonutChart } from \"@/components/charts\";",
+        "docs": "https://rime.mjsons.net/md/chart.md",
+        "page": "https://rime.mjsons.net/components/chart"
+      }
+    },
+    {
+      "name": "sample-data",
+      "type": "registry:item",
+      "title": "sample-data",
+      "description": "Rime sample-data.",
+      "files": [
+        {
+          "path": "lib/sample-data.ts",
+          "type": "registry:file",
+          "target": "~/lib/sample-data.ts"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/badge",
+        "<owner>/rime/base"
+      ],
+      "meta": {
+        "import": "import { mple-data } from \"@/components/lib/sample-data\";"
+      }
+    },
+    {
+      "name": "dashboard",
+      "type": "registry:item",
+      "title": "Dashboard",
+      "description": "The frosted shell, a page header, headline figures in one strip, an orders chart with a 7, 30 and 90 day switch, and the list-page table.",
+      "categories": [
+        "blocks",
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/dashboard/Dashboard.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/dashboard/Dashboard.module.css"
+        },
+        {
+          "path": "components/blocks/dashboard/data.ts",
+          "type": "registry:file",
+          "target": "~/components/blocks/dashboard/data.ts"
+        },
+        {
+          "path": "components/blocks/dashboard/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/dashboard/index.tsx"
+        },
+        {
+          "path": "registry/pages/dashboard.tsx",
+          "type": "registry:file",
+          "target": "~/app/dashboard/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/charts",
+        "<owner>/rime/filter-bar",
+        "<owner>/rime/filter-chip",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/select",
+        "<owner>/rime/sidebar-shell",
+        "<owner>/rime/table",
+        "<owner>/rime/tabs"
+      ],
+      "docs": "Open /dashboard to see it. The page is app/dashboard/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#dashboard",
+        "route": "/dashboard"
+      }
+    },
+    {
+      "name": "inbox",
+      "type": "registry:item",
+      "title": "Inbox",
+      "description": "A mail-style app in three resizable panes: folders, the message list with search and an unread switch, and the open message with a reply box.",
+      "categories": [
+        "blocks",
+        "apps"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/inbox/data.ts",
+          "type": "registry:file",
+          "target": "~/components/blocks/inbox/data.ts"
+        },
+        {
+          "path": "components/blocks/inbox/Inbox.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/inbox/Inbox.module.css"
+        },
+        {
+          "path": "components/blocks/inbox/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/inbox/index.tsx"
+        },
+        {
+          "path": "registry/pages/inbox.tsx",
+          "type": "registry:file",
+          "target": "~/app/inbox/page.tsx"
+        }
+      ],
+      "dependencies": [
+        "lucide-react@^1.48.0"
+      ],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/empty-state",
+        "<owner>/rime/icon-button",
+        "<owner>/rime/resizable",
+        "<owner>/rime/search-field",
+        "<owner>/rime/switch",
+        "<owner>/rime/tabs",
+        "<owner>/rime/textarea",
+        "<owner>/rime/toast"
+      ],
+      "docs": "Open /inbox to see it. The page is app/inbox/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#inbox",
+        "route": "/inbox"
+      }
+    },
+    {
+      "name": "data-table",
+      "type": "registry:item",
+      "title": "Data table (tasks)",
+      "description": "Tasks with one full-width search, status and priority dropdowns, row selection with select-all, a bulk actions bar and centred pagination.",
+      "categories": [
+        "blocks",
+        "data"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/data-table/data.ts",
+          "type": "registry:file",
+          "target": "~/components/blocks/data-table/data.ts"
+        },
+        {
+          "path": "components/blocks/data-table/DataTable.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/data-table/DataTable.module.css"
+        },
+        {
+          "path": "components/blocks/data-table/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/data-table/index.tsx"
+        },
+        {
+          "path": "registry/pages/data-table.tsx",
+          "type": "registry:file",
+          "target": "~/app/tasks/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/checkbox",
+        "<owner>/rime/empty-state",
+        "<owner>/rime/filter-bar",
+        "<owner>/rime/filter-chip",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/select",
+        "<owner>/rime/sidebar-shell",
+        "<owner>/rime/table"
+      ],
+      "docs": "Open /tasks to see it. The page is app/tasks/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#data-table",
+        "route": "/tasks"
+      }
+    },
+    {
+      "name": "settings",
+      "type": "registry:item",
+      "title": "Settings",
+      "description": "A section nav, field groups in one frosted panel, notification switches and a Danger zone whose actions confirm with a typed phrase.",
+      "categories": [
+        "blocks",
+        "settings"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/settings/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/settings/index.tsx"
+        },
+        {
+          "path": "components/blocks/settings/Settings.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/settings/Settings.module.css"
+        },
+        {
+          "path": "registry/pages/settings.tsx",
+          "type": "registry:file",
+          "target": "~/app/settings/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/danger-zone",
+        "<owner>/rime/field",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/select",
+        "<owner>/rime/sidebar-shell",
+        "<owner>/rime/switch",
+        "<owner>/rime/text-input",
+        "<owner>/rime/textarea",
+        "<owner>/rime/toast"
+      ],
+      "docs": "Open /settings to see it. The page is app/settings/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#settings",
+        "route": "/settings"
+      }
+    },
+    {
+      "name": "sidebar-icon",
+      "type": "registry:item",
+      "title": "Sidebar: collapsible icon rail",
+      "description": "The sidebar folds to an icon rail from the top bar, and the choice is remembered.",
+      "categories": [
+        "blocks",
+        "layout"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/sidebar-icon/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/sidebar-icon/index.tsx"
+        },
+        {
+          "path": "components/blocks/sidebar-icon/SidebarIcon.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/sidebar-icon/SidebarIcon.module.css"
+        },
+        {
+          "path": "registry/pages/sidebar-icon.tsx",
+          "type": "registry:file",
+          "target": "~/app/projects/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/sidebar-shell"
+      ],
+      "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#sidebar-icon",
+        "route": "/projects"
+      }
+    },
+    {
+      "name": "sidebar-inset",
+      "type": "registry:item",
+      "title": "Sidebar: inset",
+      "description": "The page set into one frosted sheet inside the main area, with a secondary nav across its top.",
+      "categories": [
+        "blocks",
+        "layout"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/sidebar-inset/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/sidebar-inset/index.tsx"
+        },
+        {
+          "path": "components/blocks/sidebar-inset/SidebarInset.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/sidebar-inset/SidebarInset.module.css"
+        },
+        {
+          "path": "registry/pages/sidebar-inset.tsx",
+          "type": "registry:file",
+          "target": "~/app/projects/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/sidebar-shell",
+        "<owner>/rime/tabs"
+      ],
+      "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#sidebar-inset",
+        "route": "/projects"
+      }
+    },
+    {
+      "name": "header-only",
+      "type": "registry:item",
+      "title": "Header only",
+      "description": "No sidebar: logo, a short nav and the profile in one frosted top bar, the page full width below.",
+      "categories": [
+        "blocks",
+        "layout"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/header-only/HeaderOnly.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/header-only/HeaderOnly.module.css"
+        },
+        {
+          "path": "components/blocks/header-only/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/header-only/index.tsx"
+        },
+        {
+          "path": "registry/pages/header-only.tsx",
+          "type": "registry:file",
+          "target": "~/app/projects/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/icon",
+        "<owner>/rime/page-header",
+        "<owner>/rime/sidebar-shell"
+      ],
+      "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#header-only",
+        "route": "/projects"
+      }
+    },
+    {
+      "name": "auth-login",
+      "type": "registry:item",
+      "title": "Sign in with MFA",
+      "description": "Password, then the authenticator code, with authenticator setup when a device is lost. Brand bar above, security note below.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-login/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-login/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-login/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-login/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-login.tsx",
+          "type": "registry:file",
+          "target": "~/app/login/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/checkbox",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/otp-input",
+        "<owner>/rime/text-input"
+      ],
+      "docs": "Open /login to see it. The page is app/login/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-login",
+        "route": "/login"
+      }
+    },
+    {
+      "name": "auth-signup",
+      "type": "registry:item",
+      "title": "Create an account",
+      "description": "Name, work email, a password and the terms, in one card.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-signup/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-signup/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-signup/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-signup/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-signup.tsx",
+          "type": "registry:file",
+          "target": "~/app/signup/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/checkbox",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/text-input"
+      ],
+      "docs": "Open /signup to see it. The page is app/signup/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-signup",
+        "route": "/signup"
+      }
+    },
+    {
+      "name": "auth-otp",
+      "type": "registry:item",
+      "title": "Email code",
+      "description": "A six-digit code sent by email, with resend.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-otp/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-otp/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-otp/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-otp/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-otp.tsx",
+          "type": "registry:file",
+          "target": "~/app/verify/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/otp-input"
+      ],
+      "docs": "Open /verify to see it. The page is app/verify/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-otp",
+        "route": "/verify"
+      }
+    },
+    {
+      "name": "auth-mfa-setup",
+      "type": "registry:item",
+      "title": "Set up an authenticator",
+      "description": "Scan a QR code or type the key, then confirm with the first code.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-mfa-setup/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-mfa-setup/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-mfa-setup/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-mfa-setup/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-mfa-setup.tsx",
+          "type": "registry:file",
+          "target": "~/app/security/mfa/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon",
+        "<owner>/rime/otp-input"
+      ],
+      "docs": "Open /security/mfa to see it. The page is app/security/mfa/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-mfa-setup",
+        "route": "/security/mfa"
+      }
+    },
+    {
+      "name": "auth-reset",
+      "type": "registry:item",
+      "title": "Reset password",
+      "description": "Ask for the email and send a reset link.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-reset/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-reset/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-reset/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-reset/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-reset.tsx",
+          "type": "registry:file",
+          "target": "~/app/reset-password/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/field",
+        "<owner>/rime/icon",
+        "<owner>/rime/text-input"
+      ],
+      "docs": "Open /reset-password to see it. The page is app/reset-password/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-reset",
+        "route": "/reset-password"
+      }
+    },
+    {
+      "name": "auth-check-email",
+      "type": "registry:item",
+      "title": "Check your email",
+      "description": "After a magic link or reset: what to do next, with resend.",
+      "categories": [
+        "blocks",
+        "auth"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-check-email/Auth.module.css",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-check-email/Auth.module.css"
+        },
+        {
+          "path": "components/blocks/auth-check-email/index.tsx",
+          "type": "registry:file",
+          "target": "~/components/blocks/auth-check-email/index.tsx"
+        },
+        {
+          "path": "registry/pages/auth-check-email.tsx",
+          "type": "registry:file",
+          "target": "~/app/check-email/page.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "<owner>/rime/auth-card",
+        "<owner>/rime/base",
+        "<owner>/rime/button",
+        "<owner>/rime/icon"
+      ],
+      "docs": "Open /check-email to see it. The page is app/check-email/page.tsx; gate access inside it if the screen needs a signed-in user.",
+      "meta": {
+        "page": "https://rime.mjsons.net/blocks#auth-check-email",
+        "route": "/check-email"
+      }
+    },
+    {
+      "name": "dialog",
+      "type": "registry:item",
+      "title": "dialog (Rime modal)",
+      "description": "The shadcn name \"dialog\": installs Rime's modal.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/modal"
+      ],
+      "meta": {
+        "aliasOf": "modal"
+      }
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:item",
+      "title": "dropdown-menu (Rime menu)",
+      "description": "The shadcn name \"dropdown-menu\": installs Rime's menu.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/menu"
+      ],
+      "meta": {
+        "aliasOf": "menu"
+      }
+    },
+    {
+      "name": "input",
+      "type": "registry:item",
+      "title": "input (Rime text-input)",
+      "description": "The shadcn name \"input\": installs Rime's text-input.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/text-input"
+      ],
+      "meta": {
+        "aliasOf": "text-input"
+      }
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:item",
+      "title": "input-otp (Rime otp-input)",
+      "description": "The shadcn name \"input-otp\": installs Rime's otp-input.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/otp-input"
+      ],
+      "meta": {
+        "aliasOf": "otp-input"
+      }
+    },
+    {
+      "name": "sonner",
+      "type": "registry:item",
+      "title": "sonner (Rime toast)",
+      "description": "The shadcn name \"sonner\": installs Rime's toast.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/toast"
+      ],
+      "meta": {
+        "aliasOf": "toast"
+      }
+    },
+    {
+      "name": "separator",
+      "type": "registry:item",
+      "title": "separator (Rime divider)",
+      "description": "The shadcn name \"separator\": installs Rime's divider.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/divider"
+      ],
+      "meta": {
+        "aliasOf": "divider"
+      }
+    },
+    {
+      "name": "progress",
+      "type": "registry:item",
+      "title": "progress (Rime meter)",
+      "description": "The shadcn name \"progress\": installs Rime's meter.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/meter"
+      ],
+      "meta": {
+        "aliasOf": "meter"
+      }
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:item",
+      "title": "sidebar (Rime sidebar-shell)",
+      "description": "The shadcn name \"sidebar\": installs Rime's sidebar-shell.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/sidebar-shell"
+      ],
+      "meta": {
+        "aliasOf": "sidebar-shell"
+      }
+    },
+    {
+      "name": "empty",
+      "type": "registry:item",
+      "title": "empty (Rime empty-state)",
+      "description": "The shadcn name \"empty\": installs Rime's empty-state.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/empty-state"
+      ],
+      "meta": {
+        "aliasOf": "empty-state"
+      }
+    },
+    {
+      "name": "calendar",
+      "type": "registry:item",
+      "title": "calendar (Rime date-field)",
+      "description": "The shadcn name \"calendar\": installs Rime's date-field.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/date-field"
+      ],
+      "meta": {
+        "aliasOf": "date-field"
+      }
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:item",
+      "title": "date-picker (Rime date-field)",
+      "description": "The shadcn name \"date-picker\": installs Rime's date-field.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/date-field"
+      ],
+      "meta": {
+        "aliasOf": "date-field"
+      }
+    },
+    {
+      "name": "chart",
+      "type": "registry:item",
+      "title": "chart (Rime charts)",
+      "description": "The shadcn name \"chart\": installs Rime's charts.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/charts"
+      ],
+      "meta": {
+        "aliasOf": "charts"
+      }
+    },
+    {
+      "name": "drawer",
+      "type": "registry:item",
+      "title": "drawer (Rime sheet)",
+      "description": "The shadcn name \"drawer\": installs Rime's sheet.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/sheet"
+      ],
+      "meta": {
+        "aliasOf": "sheet"
+      }
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:item",
+      "title": "toggle-group (Rime toggle)",
+      "description": "The shadcn name \"toggle-group\": installs Rime's toggle.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/toggle"
+      ],
+      "meta": {
+        "aliasOf": "toggle"
+      }
+    },
+    {
+      "name": "pagination",
+      "type": "registry:item",
+      "title": "pagination (Rime table)",
+      "description": "The shadcn name \"pagination\": installs Rime's table.",
+      "files": [],
+      "registryDependencies": [
+        "<owner>/rime/table"
+      ],
+      "meta": {
+        "aliasOf": "table"
+      }
+    },
+    {
+      "name": "button-demo",
+      "type": "registry:item",
+      "title": "Button examples",
+      "description": "Usage examples for Button.",
+      "files": [
+        {
+          "path": "registry/examples/button.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/button.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/button"
+      ]
+    },
+    {
+      "name": "icon-button-demo",
+      "type": "registry:item",
+      "title": "IconButton examples",
+      "description": "Usage examples for IconButton.",
+      "files": [
+        {
+          "path": "registry/examples/icon-button.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/icon-button.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/icon-button"
+      ]
+    },
+    {
+      "name": "text-input-demo",
+      "type": "registry:item",
+      "title": "TextInput examples",
+      "description": "Usage examples for TextInput.",
+      "files": [
+        {
+          "path": "registry/examples/text-input.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/text-input.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/field"
+      ]
+    },
+    {
+      "name": "textarea-demo",
+      "type": "registry:item",
+      "title": "Textarea examples",
+      "description": "Usage examples for Textarea.",
+      "files": [
+        {
+          "path": "registry/examples/textarea.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/textarea.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/textarea"
+      ]
+    },
+    {
+      "name": "select-demo",
+      "type": "registry:item",
+      "title": "Select examples",
+      "description": "Usage examples for Select.",
+      "files": [
+        {
+          "path": "registry/examples/select.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/select.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/select"
+      ]
+    },
+    {
+      "name": "search-field-demo",
+      "type": "registry:item",
+      "title": "SearchField examples",
+      "description": "Usage examples for SearchField.",
+      "files": [
+        {
+          "path": "registry/examples/search-field.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/search-field.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/search-field"
+      ]
+    },
+    {
+      "name": "checkbox-demo",
+      "type": "registry:item",
+      "title": "Checkbox examples",
+      "description": "Usage examples for Checkbox.",
+      "files": [
+        {
+          "path": "registry/examples/checkbox.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/checkbox.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/checkbox"
+      ]
+    },
+    {
+      "name": "radio-group-demo",
+      "type": "registry:item",
+      "title": "RadioGroup examples",
+      "description": "Usage examples for RadioGroup.",
+      "files": [
+        {
+          "path": "registry/examples/radio-group.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/radio-group.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/radio-group"
+      ]
+    },
+    {
+      "name": "switch-demo",
+      "type": "registry:item",
+      "title": "Switch examples",
+      "description": "Usage examples for Switch.",
+      "files": [
+        {
+          "path": "registry/examples/switch.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/switch.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/switch"
+      ]
+    },
+    {
+      "name": "otp-input-demo",
+      "type": "registry:item",
+      "title": "OtpInput examples",
+      "description": "Usage examples for OtpInput.",
+      "files": [
+        {
+          "path": "registry/examples/otp-input.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/otp-input.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/otp-input"
+      ]
+    },
+    {
+      "name": "date-field-demo",
+      "type": "registry:item",
+      "title": "DateField examples",
+      "description": "Usage examples for DateField.",
+      "files": [
+        {
+          "path": "registry/examples/date-field.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/date-field.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/date-field"
+      ]
+    },
+    {
+      "name": "date-range-filter-demo",
+      "type": "registry:item",
+      "title": "DateRangeFilter examples",
+      "description": "Usage examples for DateRangeFilter.",
+      "files": [
+        {
+          "path": "registry/examples/date-range-filter.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/date-range-filter.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/date-range-filter"
+      ]
+    },
+    {
+      "name": "file-drop-demo",
+      "type": "registry:item",
+      "title": "FileDrop examples",
+      "description": "Usage examples for FileDrop.",
+      "files": [
+        {
+          "path": "registry/examples/file-drop.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/file-drop.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/file-drop"
+      ]
+    },
+    {
+      "name": "error-summary-demo",
+      "type": "registry:item",
+      "title": "ErrorSummary examples",
+      "description": "Usage examples for ErrorSummary.",
+      "files": [
+        {
+          "path": "registry/examples/error-summary.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/error-summary.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/error-summary"
+      ]
+    },
+    {
+      "name": "prefixed-input-demo",
+      "type": "registry:item",
+      "title": "PrefixedInput examples",
+      "description": "Usage examples for PrefixedInput.",
+      "files": [
+        {
+          "path": "registry/examples/prefixed-input.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/prefixed-input.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/prefixed-input"
+      ]
+    },
+    {
+      "name": "table-demo",
+      "type": "registry:item",
+      "title": "Table examples",
+      "description": "Usage examples for Table.",
+      "files": [
+        {
+          "path": "registry/examples/table.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/table.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/table"
+      ]
+    },
+    {
+      "name": "status-pill-demo",
+      "type": "registry:item",
+      "title": "StatusPill, Badge and CountBadge examples",
+      "description": "Usage examples for StatusPill, Badge and CountBadge.",
+      "files": [
+        {
+          "path": "registry/examples/status-pill.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/status-pill.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/badge"
+      ]
+    },
+    {
+      "name": "avatar-demo",
+      "type": "registry:item",
+      "title": "Avatar examples",
+      "description": "Usage examples for Avatar.",
+      "files": [
+        {
+          "path": "registry/examples/avatar.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/avatar.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/avatar"
+      ]
+    },
+    {
+      "name": "meter-demo",
+      "type": "registry:item",
+      "title": "Meter and ProgressBar examples",
+      "description": "Usage examples for Meter and ProgressBar.",
+      "files": [
+        {
+          "path": "registry/examples/meter.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/meter.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/meter"
+      ]
+    },
+    {
+      "name": "progress-steps-demo",
+      "type": "registry:item",
+      "title": "ProgressSteps examples",
+      "description": "Usage examples for ProgressSteps.",
+      "files": [
+        {
+          "path": "registry/examples/progress-steps.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/progress-steps.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/progress-steps"
+      ]
+    },
+    {
+      "name": "stepper-demo",
+      "type": "registry:item",
+      "title": "Stepper examples",
+      "description": "Usage examples for Stepper.",
+      "files": [
+        {
+          "path": "registry/examples/stepper.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/stepper.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/stepper"
+      ]
+    },
+    {
+      "name": "skeleton-demo",
+      "type": "registry:item",
+      "title": "Skeleton examples",
+      "description": "Usage examples for Skeleton.",
+      "files": [
+        {
+          "path": "registry/examples/skeleton.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/skeleton.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/skeleton"
+      ]
+    },
+    {
+      "name": "filter-bar-demo",
+      "type": "registry:item",
+      "title": "FilterBar examples",
+      "description": "Usage examples for FilterBar.",
+      "files": [
+        {
+          "path": "registry/examples/filter-bar.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/filter-bar.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/filter-bar"
+      ]
+    },
+    {
+      "name": "tabs-demo",
+      "type": "registry:item",
+      "title": "FolderTabs and SegmentedControl examples",
+      "description": "Usage examples for FolderTabs and SegmentedControl.",
+      "files": [
+        {
+          "path": "registry/examples/tabs.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/tabs.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/tabs"
+      ]
+    },
+    {
+      "name": "menu-demo",
+      "type": "registry:item",
+      "title": "Menu examples",
+      "description": "Usage examples for Menu.",
+      "files": [
+        {
+          "path": "registry/examples/menu.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/menu.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/menu"
+      ]
+    },
+    {
+      "name": "nav-search-demo",
+      "type": "registry:item",
+      "title": "NavSearch and SmartSearch examples",
+      "description": "Usage examples for NavSearch and SmartSearch.",
+      "files": [
+        {
+          "path": "registry/examples/nav-search.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/nav-search.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/nav-search"
+      ]
+    },
+    {
+      "name": "alert-demo",
+      "type": "registry:item",
+      "title": "Alert examples",
+      "description": "Usage examples for Alert.",
+      "files": [
+        {
+          "path": "registry/examples/alert.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/alert.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/alert"
+      ]
+    },
+    {
+      "name": "toast-demo",
+      "type": "registry:item",
+      "title": "Toast examples",
+      "description": "Usage examples for Toast.",
+      "files": [
+        {
+          "path": "registry/examples/toast.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/toast.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/toast"
+      ]
+    },
+    {
+      "name": "spinner-demo",
+      "type": "registry:item",
+      "title": "Spinner examples",
+      "description": "Usage examples for Spinner.",
+      "files": [
+        {
+          "path": "registry/examples/spinner.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/spinner.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/spinner"
+      ]
+    },
+    {
+      "name": "empty-state-demo",
+      "type": "registry:item",
+      "title": "EmptyState examples",
+      "description": "Usage examples for EmptyState.",
+      "files": [
+        {
+          "path": "registry/examples/empty-state.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/empty-state.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/empty-state"
+      ]
+    },
+    {
+      "name": "tooltip-demo",
+      "type": "registry:item",
+      "title": "Tooltip and Toggletip examples",
+      "description": "Usage examples for Tooltip and Toggletip.",
+      "files": [
+        {
+          "path": "registry/examples/tooltip.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/tooltip.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/tooltip"
+      ]
+    },
+    {
+      "name": "impact-preview-demo",
+      "type": "registry:item",
+      "title": "ImpactPreview examples",
+      "description": "Usage examples for ImpactPreview.",
+      "files": [
+        {
+          "path": "registry/examples/impact-preview.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/impact-preview.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/impact-preview"
+      ]
+    },
+    {
+      "name": "modal-demo",
+      "type": "registry:item",
+      "title": "Modal examples",
+      "description": "Usage examples for Modal.",
+      "files": [
+        {
+          "path": "registry/examples/modal.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/modal.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/modal"
+      ]
+    },
+    {
+      "name": "type-to-confirm-demo",
+      "type": "registry:item",
+      "title": "TypeToConfirmModal and DangerZone examples",
+      "description": "Usage examples for TypeToConfirmModal and DangerZone.",
+      "files": [
+        {
+          "path": "registry/examples/type-to-confirm.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/type-to-confirm.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/danger-zone"
+      ]
+    },
+    {
+      "name": "glass-panel-demo",
+      "type": "registry:item",
+      "title": "GlassPanel examples",
+      "description": "Usage examples for GlassPanel.",
+      "files": [
+        {
+          "path": "registry/examples/glass-panel.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/glass-panel.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/glass-panel"
+      ]
+    },
+    {
+      "name": "card-demo",
+      "type": "registry:item",
+      "title": "Card examples",
+      "description": "Usage examples for Card.",
+      "files": [
+        {
+          "path": "registry/examples/card.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/card.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/card"
+      ]
+    },
+    {
+      "name": "divider-demo",
+      "type": "registry:item",
+      "title": "Divider examples",
+      "description": "Usage examples for Divider.",
+      "files": [
+        {
+          "path": "registry/examples/divider.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/divider.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/divider"
+      ]
+    },
+    {
+      "name": "sidebar-shell-demo",
+      "type": "registry:item",
+      "title": "SidebarShell examples",
+      "description": "Usage examples for SidebarShell.",
+      "files": [
+        {
+          "path": "registry/examples/sidebar-shell.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/sidebar-shell.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/sidebar-shell"
+      ]
+    },
+    {
+      "name": "page-header-demo",
+      "type": "registry:item",
+      "title": "PageHeader examples",
+      "description": "Usage examples for PageHeader.",
+      "files": [
+        {
+          "path": "registry/examples/page-header.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/page-header.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/page-header"
+      ]
+    },
+    {
+      "name": "auth-card-demo",
+      "type": "registry:item",
+      "title": "AuthCard and AuthLayout examples",
+      "description": "Usage examples for AuthCard and AuthLayout.",
+      "files": [
+        {
+          "path": "registry/examples/auth-card.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/auth-card.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/auth-card"
+      ]
+    },
+    {
+      "name": "button-group-demo",
+      "type": "registry:item",
+      "title": "ButtonGroup examples",
+      "description": "Usage examples for ButtonGroup.",
+      "files": [
+        {
+          "path": "registry/examples/button-group.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/button-group.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/button-group"
+      ]
+    },
+    {
+      "name": "label-demo",
+      "type": "registry:item",
+      "title": "Label examples",
+      "description": "Usage examples for Label.",
+      "files": [
+        {
+          "path": "registry/examples/label.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/label.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/label"
+      ]
+    },
+    {
+      "name": "input-group-demo",
+      "type": "registry:item",
+      "title": "InputGroup examples",
+      "description": "Usage examples for InputGroup.",
+      "files": [
+        {
+          "path": "registry/examples/input-group.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/input-group.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/input-group"
+      ]
+    },
+    {
+      "name": "combobox-demo",
+      "type": "registry:item",
+      "title": "Combobox examples",
+      "description": "Usage examples for Combobox.",
+      "files": [
+        {
+          "path": "registry/examples/combobox.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/combobox.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/combobox"
+      ]
+    },
+    {
+      "name": "slider-demo",
+      "type": "registry:item",
+      "title": "Slider examples",
+      "description": "Usage examples for Slider.",
+      "files": [
+        {
+          "path": "registry/examples/slider.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/slider.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/slider"
+      ]
+    },
+    {
+      "name": "toggle-demo",
+      "type": "registry:item",
+      "title": "Toggle examples",
+      "description": "Usage examples for Toggle.",
+      "files": [
+        {
+          "path": "registry/examples/toggle.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/toggle.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/toggle"
+      ]
+    },
+    {
+      "name": "kbd-demo",
+      "type": "registry:item",
+      "title": "Kbd and KbdGroup examples",
+      "description": "Usage examples for Kbd and KbdGroup.",
+      "files": [
+        {
+          "path": "registry/examples/kbd.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/kbd.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/kbd"
+      ]
+    },
+    {
+      "name": "popover-demo",
+      "type": "registry:item",
+      "title": "Popover examples",
+      "description": "Usage examples for Popover.",
+      "files": [
+        {
+          "path": "registry/examples/popover.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/popover.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/popover"
+      ]
+    },
+    {
+      "name": "hover-card-demo",
+      "type": "registry:item",
+      "title": "HoverCard examples",
+      "description": "Usage examples for HoverCard.",
+      "files": [
+        {
+          "path": "registry/examples/hover-card.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/hover-card.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/hover-card"
+      ]
+    },
+    {
+      "name": "context-menu-demo",
+      "type": "registry:item",
+      "title": "ContextMenu examples",
+      "description": "Usage examples for ContextMenu.",
+      "files": [
+        {
+          "path": "registry/examples/context-menu.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/context-menu.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/context-menu"
+      ]
+    },
+    {
+      "name": "sheet-demo",
+      "type": "registry:item",
+      "title": "Sheet and Drawer examples",
+      "description": "Usage examples for Sheet and Drawer.",
+      "files": [
+        {
+          "path": "registry/examples/sheet.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/sheet.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/sheet"
+      ]
+    },
+    {
+      "name": "alert-dialog-demo",
+      "type": "registry:item",
+      "title": "AlertDialog examples",
+      "description": "Usage examples for AlertDialog.",
+      "files": [
+        {
+          "path": "registry/examples/alert-dialog.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/alert-dialog.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/alert-dialog"
+      ]
+    },
+    {
+      "name": "command-demo",
+      "type": "registry:item",
+      "title": "Command examples",
+      "description": "Usage examples for Command.",
+      "files": [
+        {
+          "path": "registry/examples/command.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/command.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/command"
+      ]
+    },
+    {
+      "name": "menubar-demo",
+      "type": "registry:item",
+      "title": "Menubar examples",
+      "description": "Usage examples for Menubar.",
+      "files": [
+        {
+          "path": "registry/examples/menubar.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/menubar.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/menubar"
+      ]
+    },
+    {
+      "name": "accordion-demo",
+      "type": "registry:item",
+      "title": "Accordion examples",
+      "description": "Usage examples for Accordion.",
+      "files": [
+        {
+          "path": "registry/examples/accordion.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/accordion.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/accordion"
+      ]
+    },
+    {
+      "name": "collapsible-demo",
+      "type": "registry:item",
+      "title": "Collapsible examples",
+      "description": "Usage examples for Collapsible.",
+      "files": [
+        {
+          "path": "registry/examples/collapsible.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/collapsible.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/collapsible"
+      ]
+    },
+    {
+      "name": "breadcrumb-demo",
+      "type": "registry:item",
+      "title": "Breadcrumb examples",
+      "description": "Usage examples for Breadcrumb.",
+      "files": [
+        {
+          "path": "registry/examples/breadcrumb.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/breadcrumb.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/breadcrumb"
+      ]
+    },
+    {
+      "name": "navigation-menu-demo",
+      "type": "registry:item",
+      "title": "NavigationMenu examples",
+      "description": "Usage examples for NavigationMenu.",
+      "files": [
+        {
+          "path": "registry/examples/navigation-menu.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/navigation-menu.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/navigation-menu"
+      ]
+    },
+    {
+      "name": "carousel-demo",
+      "type": "registry:item",
+      "title": "Carousel examples",
+      "description": "Usage examples for Carousel.",
+      "files": [
+        {
+          "path": "registry/examples/carousel.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/carousel.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/carousel"
+      ]
+    },
+    {
+      "name": "aspect-ratio-demo",
+      "type": "registry:item",
+      "title": "AspectRatio examples",
+      "description": "Usage examples for AspectRatio.",
+      "files": [
+        {
+          "path": "registry/examples/aspect-ratio.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/aspect-ratio.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/aspect-ratio"
+      ]
+    },
+    {
+      "name": "resizable-demo",
+      "type": "registry:item",
+      "title": "Resizable examples",
+      "description": "Usage examples for Resizable.",
+      "files": [
+        {
+          "path": "registry/examples/resizable.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/resizable.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/resizable"
+      ]
+    },
+    {
+      "name": "chart-demo",
+      "type": "registry:item",
+      "title": "Chart examples",
+      "description": "Usage examples for Chart.",
+      "files": [
+        {
+          "path": "registry/examples/chart.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/chart.md"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/charts"
+      ]
+    },
+    {
+      "name": "kit",
+      "type": "registry:item",
+      "title": "Rime: everything",
+      "description": "Base, every component, the shells, the charts and the barrel (import { Button } from \"@/components/ui\"). One command to bootstrap or re-sync a project.",
+      "files": [
+        {
+          "path": "components/ui/index.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/index.ts"
+        },
+        {
+          "path": "components/ui/_barrels/forms.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_barrels/forms.ts"
+        },
+        {
+          "path": "components/ui/_barrels/layout.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_barrels/layout.ts"
+        },
+        {
+          "path": "components/ui/_barrels/overlays.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/_barrels/overlays.ts"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/accordion",
+        "<owner>/rime/alert",
+        "<owner>/rime/alert-dialog",
+        "<owner>/rime/aspect-ratio",
+        "<owner>/rime/auth-card",
+        "<owner>/rime/avatar",
+        "<owner>/rime/badge",
+        "<owner>/rime/base",
+        "<owner>/rime/breadcrumb",
+        "<owner>/rime/button",
+        "<owner>/rime/button-group",
+        "<owner>/rime/card",
+        "<owner>/rime/carousel",
+        "<owner>/rime/charts",
+        "<owner>/rime/checkbox",
+        "<owner>/rime/collapsible",
+        "<owner>/rime/combobox",
+        "<owner>/rime/command",
+        "<owner>/rime/context-menu",
+        "<owner>/rime/danger-zone",
+        "<owner>/rime/date-field",
+        "<owner>/rime/date-range-filter",
+        "<owner>/rime/divider",
+        "<owner>/rime/empty-state",
+        "<owner>/rime/error-summary",
+        "<owner>/rime/field",
+        "<owner>/rime/file-drop",
+        "<owner>/rime/filter-bar",
+        "<owner>/rime/filter-chip",
+        "<owner>/rime/glass-panel",
+        "<owner>/rime/hover-card",
+        "<owner>/rime/icon",
+        "<owner>/rime/icon-button",
+        "<owner>/rime/impact-preview",
+        "<owner>/rime/input-group",
+        "<owner>/rime/kbd",
+        "<owner>/rime/label",
+        "<owner>/rime/menu",
+        "<owner>/rime/menubar",
+        "<owner>/rime/meter",
+        "<owner>/rime/modal",
+        "<owner>/rime/nav-search",
+        "<owner>/rime/navigation-menu",
+        "<owner>/rime/otp-input",
+        "<owner>/rime/page-header",
+        "<owner>/rime/popover",
+        "<owner>/rime/prefixed-input",
+        "<owner>/rime/progress-steps",
+        "<owner>/rime/radio-group",
+        "<owner>/rime/resizable",
+        "<owner>/rime/sample-data",
+        "<owner>/rime/scroll-area",
+        "<owner>/rime/search-field",
+        "<owner>/rime/select",
+        "<owner>/rime/sheet",
+        "<owner>/rime/sidebar-shell",
+        "<owner>/rime/skeleton",
+        "<owner>/rime/slider",
+        "<owner>/rime/smart-search",
+        "<owner>/rime/spinner",
+        "<owner>/rime/stepper",
+        "<owner>/rime/switch",
+        "<owner>/rime/table",
+        "<owner>/rime/tabs",
+        "<owner>/rime/text-input",
+        "<owner>/rime/textarea",
+        "<owner>/rime/toast",
+        "<owner>/rime/toggle",
+        "<owner>/rime/tooltip",
+        "<owner>/rime/type-to-confirm"
+      ],
+      "docs": "Then add your theme: export theme.css from Rime Studio into app/styles/theme.css and import it after the base styles."
+    },
+    {
+      "name": "starter",
+      "type": "registry:item",
+      "title": "Rime starter: layout, globals and theme setup",
+      "description": "Root layout with Inter, the no-flash preset and dark-mode script and ToastProvider; globals importing Rime's styles and an empty theme.css.",
+      "files": [
+        {
+          "path": "templates/starter-item/app/layout.tsx",
+          "type": "registry:file",
+          "target": "~/app/layout.tsx"
+        },
+        {
+          "path": "templates/starter-item/app/ThemeScript.tsx",
+          "type": "registry:file",
+          "target": "~/app/ThemeScript.tsx"
+        },
+        {
+          "path": "templates/starter-item/app/fonts.ts",
+          "type": "registry:file",
+          "target": "~/app/fonts.ts"
+        },
+        {
+          "path": "templates/starter-item/app/globals.css",
+          "type": "registry:file",
+          "target": "~/app/globals.css"
+        },
+        {
+          "path": "templates/starter-item/app/styles/theme.css",
+          "type": "registry:file",
+          "target": "~/app/styles/theme.css"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base",
+        "<owner>/rime/toast"
+      ],
+      "docs": "Put Inter at app/fonts/inter-latin-100-900-normal.woff2 (from the Rime repo, or use next/font/google in app/fonts.ts). Then make your theme in Rime Studio (https://rime.mjsons.net/themes) and paste it into app/styles/theme.css."
+    },
+    {
+      "name": "tailwind-bridge",
+      "type": "registry:item",
+      "title": "Tailwind bridge",
+      "description": "Maps shadcn's Tailwind colour and radius utilities onto Rime's tokens, for projects that also use real shadcn components.",
+      "files": [
+        {
+          "path": "app/styles/tailwind-bridge.css",
+          "type": "registry:file",
+          "target": "~/app/styles/tailwind-bridge.css"
+        }
+      ],
+      "registryDependencies": [
+        "<owner>/rime/base"
+      ],
+      "docs": "Import it in your Tailwind CSS entry, after the Rime base styles: @import \"./styles/tailwind-bridge.css\";"
+    },
+    {
+      "name": "agents",
+      "type": "registry:item",
+      "title": "Rime agent docs",
+      "description": "docs/ui (llms.txt, llms-full.txt), the Rime Claude Code skill and an AGENTS.md block, so agents in a project build with Rime.",
+      "files": [
+        {
+          "path": "docs/ui/llms.txt",
+          "type": "registry:file",
+          "target": "~/docs/ui/llms.txt"
+        },
+        {
+          "path": "docs/ui/llms-full.txt",
+          "type": "registry:file",
+          "target": "~/docs/ui/llms-full.txt"
+        },
+        {
+          "path": "agents/AGENTS.rime.md",
+          "type": "registry:file",
+          "target": "~/AGENTS.rime.md"
+        },
+        {
+          "path": "agents/skills/rime/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/rime/SKILL.md"
+        }
+      ],
+      "registryDependencies": [],
+      "docs": "Add one line to your AGENTS.md: \"UI: follow AGENTS.rime.md.\" Re-run after kit updates."
+    }
+  ]
+}

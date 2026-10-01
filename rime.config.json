@@ -1,0 +1,9 @@
+{
+  "$comment": "Rime publishing settings, in one place. siteUrl is where the docs are hosted (registry mirror /r, llms.txt links, the @rime MCP namespace, Open in Claude, metadata). owner is the GitHub owner: replace <owner> once the repo exists on github.com. package is the npm name.",
+  "name": "rime",
+  "owner": "<owner>",
+  "repo": "rime",
+  "siteUrl": "https://rime.mjsons.net",
+  "namespace": "@rime",
+  "package": "@kezlahd/rime"
+}
