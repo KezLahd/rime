@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Field } from "@/components/ui/Field/Field";
 import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers } from "@/components/ui";
+import { Alert } from "@/components/ui/Alert/Alert";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
+import { Meter } from "@/components/ui/Meter/Meter";
 import { TextInput } from "@/components/ui/TextInput/TextInput";
 // Switch intentionally omitted here; it's a controlled component and we want
 // a static showcase. Checkboxes carry both toggle rows instead.
@@ -263,8 +265,68 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               <div className={styles.colourProgressFill} style={{ width: "72%" }} />
             </div>
           </Spot>
+          {/* Meter uses --brand-soft to --brand-deep as its fill gradient,
+              so dragging Accent in the controls shows an immediate change. */}
+          <Spot as="div" tokens="--brand-soft --brand-deep" peek={peek}>
+            <Meter label="Capacity used" value={4} max={5} size="sm" />
+          </Spot>
         </GlassPanel>
       </section>
+
+      {/* Alerts: info (--brand-soft) + neutral (--support) + a table-head
+          strip (--support via --table-head-fill). Previously the preview
+          had nothing that used Accent (--brand-soft) or Neutral (--support)
+          so dragging those rows did nothing visible. */}
+      <section className={styles.colourAlertsRow}>
+        <Spot as="div" tokens="--brand --brand-deep --info-ink --line-brand" peek={peek}>
+          <Alert tone="info" title="Three invoices awaiting review">
+            Review and sign off on the current batch to clear the queue by end of day.
+          </Alert>
+        </Spot>
+        <Spot as="div" tokens="--support --support-deep --ink-secondary" peek={peek}>
+          <Alert tone="legal" title="Last quarter archived">
+            Historical invoices and attached notes have moved to the archive. Access via Settings.
+          </Alert>
+        </Spot>
+      </section>
+
+      {/* Mini table head: --support drives the sweep gradient (see
+          --table-head-fill in tokens.css), so changing Neutral tints the
+          strip here. */}
+      <GlassPanel padding="md" className={styles.colourTableCard}>
+        <header className={styles.colourCardHead}>
+          <h3 className={styles.colourCardTitle}>Recent invoices</h3>
+          <Badge tone="neutral" variant="soft">24 total</Badge>
+        </header>
+        <Spot as="div" tokens="--support --support-deep --ink-muted" peek={peek}>
+          <div className={styles.colourTable}>
+            <div className={styles.colourTableHead}>
+              <span>Client</span>
+              <span>Amount</span>
+              <span>Due</span>
+              <span>Status</span>
+            </div>
+            <div className={styles.colourTableRow}>
+              <span className={styles.colourTableCell}>Acme Inc</span>
+              <span className={styles.colourTableCell}>$2,400.00</span>
+              <span className={styles.colourTableCell}>12 Oct</span>
+              <span className={styles.colourTableCell}><Badge tone="success" variant="solid">Paid</Badge></span>
+            </div>
+            <div className={styles.colourTableRow}>
+              <span className={styles.colourTableCell}>Globex</span>
+              <span className={styles.colourTableCell}>$880.00</span>
+              <span className={styles.colourTableCell}>18 Oct</span>
+              <span className={styles.colourTableCell}><Badge tone="warning">Pending</Badge></span>
+            </div>
+            <div className={styles.colourTableRow}>
+              <span className={styles.colourTableCell}>Initech</span>
+              <span className={styles.colourTableCell}>$1,120.00</span>
+              <span className={styles.colourTableCell}>22 Sep</span>
+              <span className={styles.colourTableCell}><Badge tone="danger" variant="solid">Overdue</Badge></span>
+            </div>
+          </div>
+        </Spot>
+      </GlassPanel>
 
       {/* Chart + form */}
       <section className={styles.colourGrid}>
