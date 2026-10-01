@@ -147,8 +147,8 @@ const CHART_DATA = [
 function ColourShowcase() {
   return (
     <div className={styles.colourShowcase}>
-      {/* Hero card: text hierarchy + brand button + secondary + link */}
-      <section className={styles.colourHero}>
+      {/* Hero: brand ink + action + secondary + ghost */}
+      <GlassPanel padding="lg" className={styles.colourHero}>
         <div className={styles.colourHeroText}>
           <p className={styles.colourEyebrow}>This month</p>
           <h2 className={styles.colourTitle}>Good morning, Jane</h2>
@@ -169,19 +169,19 @@ function ColourShowcase() {
           <Avatar name="Marco Silva" size="md" />
           <Avatar name="Priya Shah" size="md" />
         </div>
-      </section>
+      </GlassPanel>
 
-      {/* Row: status badges + progress */}
+      {/* Status badges + progress */}
       <section className={styles.colourStatusRow}>
-        <div className={styles.colourBadges}>
+        <GlassPanel padding="md" className={styles.colourBadges}>
           <Badge tone="brand">Draft</Badge>
           <Badge tone="success" variant="solid">Paid</Badge>
           <Badge tone="warning">Pending</Badge>
           <Badge tone="danger" variant="solid">Overdue</Badge>
           <Badge tone="info">In review</Badge>
           <Badge tone="neutral">Archived</Badge>
-        </div>
-        <div className={styles.colourProgressCard}>
+        </GlassPanel>
+        <GlassPanel padding="md" className={styles.colourProgressCard}>
           <div className={styles.colourProgressTop}>
             <span className={styles.colourProgressLabel}>Collected this quarter</span>
             <span className={styles.colourProgressValue}>72%</span>
@@ -189,12 +189,12 @@ function ColourShowcase() {
           <div className={styles.colourProgressTrack} role="progressbar" aria-valuenow={72} aria-valuemin={0} aria-valuemax={100} aria-label="Collected this quarter">
             <div className={styles.colourProgressFill} style={{ width: "72%" }} />
           </div>
-        </div>
+        </GlassPanel>
       </section>
 
-      {/* Row: chart + form */}
+      {/* Chart + form */}
       <section className={styles.colourGrid}>
-        <article className={styles.colourChartCard}>
+        <GlassPanel padding="lg" className={styles.colourChartCard}>
           <header className={styles.colourCardHead}>
             <h3 className={styles.colourCardTitle}>Revenue by product</h3>
             <IconButton size="sm" variant="ghost" label="More" icon={<MoreHorizontal size={14} aria-hidden="true" />} />
@@ -215,9 +215,9 @@ function ColourShowcase() {
               height={200}
             />
           </div>
-        </article>
+        </GlassPanel>
 
-        <article className={styles.colourFormCard}>
+        <GlassPanel padding="lg" className={styles.colourFormCard}>
           <header className={styles.colourCardHead}>
             <h3 className={styles.colourCardTitle}>New project</h3>
             <Badge tone="brand" variant="soft">Draft</Badge>
@@ -235,11 +235,11 @@ function ColourShowcase() {
             </div>
             <Button iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Save project</Button>
           </div>
-        </article>
+        </GlassPanel>
       </section>
 
-      {/* Row: filter chips + search */}
-      <section className={styles.colourFilterBar}>
+      {/* Filter chips + search */}
+      <GlassPanel padding="md" className={styles.colourFilterBar}>
         <div className={styles.colourChips}>
           <button type="button" className={styles.colourChipActive}>
             <Filter size={12} aria-hidden="true" /> All invoices · 24
@@ -254,7 +254,7 @@ function ColourShowcase() {
           placeholder="Search invoices"
           className={styles.colourSearch}
         />
-      </section>
+      </GlassPanel>
     </div>
   );
 }
