@@ -1,115 +1,100 @@
-# Rime
+<div align="center">
+  <img src="./public/rime/rime-lockup.svg" alt="Rime" width="340"/>
+</div>
 
-Rime is the frost that forms on surfaces, and the name of this kit: an
-unbranded React component kit with frosted-glass surfaces, its own docs site,
-and Rime Studio for theming. It installs like shadcn/ui (the shadcn CLI copies
-the source into your project) and themes with one CSS file.
+<p align="center">
+  <img src="https://img.shields.io/badge/Stack-Next.js_16-468CFB?style=for-the-badge&labelColor=0F1620" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/UI-React_19-94C4FB?style=for-the-badge&labelColor=0F1620" alt="React"/>
+  <img src="https://img.shields.io/badge/Styles-CSS_Modules-C8DDF9?style=for-the-badge&labelColor=0F1620" alt="CSS Modules"/>
+  <img src="https://img.shields.io/badge/Install-shadcn_CLI-468CFB?style=for-the-badge&labelColor=0F1620" alt="shadcn CLI"/>
+  <img src="https://img.shields.io/badge/Docs-rime.mjsons.net-1F5BC4?style=for-the-badge&labelColor=0F1620" alt="Docs"/>
+</p>
 
-- **Stack:** Next.js 16 (App Router), React 19, TypeScript, CSS Modules and CSS
-  custom properties. No Tailwind, no Radix, no shadcn underneath: every
-  component is built here, accessible and themed by tokens.
-- **What's in it:** components, blocks (whole screens), charts on Recharts and
-  patterns. Every component has a docs page with live examples, its API
-  generated from the source, the tokens it reads, accessibility notes, do and
-  don't rules, and an install command.
-- **Theme = preset x mode:** Rime Default (frosted glass in the Rime blues)
-  and Rime Flat (opaque, small radii, no blur), each in light and dark mode.
-- **Rime Studio** (`/themes`): start from a preset, drop in a logo or
-  screenshot to extract a palette, tune glass, shape, shadows and hover, check
-  contrast in both modes, save themes by name, export `theme.css`.
-- **AI ready:** `/llms.txt`, a markdown twin of every page (add `.md`), a
-  shadcn registry with an MCP namespace, and a Claude skill.
-- **Offline:** fonts are self-hosted in `app/fonts`.
+<p align="center">
+  <a href="https://rime.mjsons.net"><b>Live docs</b></a> ·
+  <a href="https://rime.mjsons.net/components"><b>Components</b></a> ·
+  <a href="https://rime.mjsons.net/blocks"><b>Blocks</b></a> ·
+  <a href="https://rime.mjsons.net/themes"><b>Rime Studio</b></a> ·
+  <a href="https://rime.mjsons.net/llms.txt"><b>llms.txt</b></a>
+</p>
 
-## Run it
+<br/>
+
+> **Rime** is a React component kit with frosted-glass surfaces, its own docs site, and a theme studio — installed with the shadcn CLI, themed with one CSS file, no Tailwind underneath.
+
+<br/>
+
+## What this repo is (and isn't)
+
+**This repo is the component kit.** 69 components, blocks (whole screens), charts, patterns, and a theme studio, all built from CSS Modules and CSS custom properties. The shadcn CLI copies the source into your project — you own what you install. The repo also doubles as the live docs site at [rime.mjsons.net](https://rime.mjsons.net).
+
+**This repo is *not* a Tailwind preset or a shadcn fork.** Rime emits a shadcn-compatible registry so the install flow feels identical (`npx shadcn@latest add KezLahd/rime/<item>`), but every component underneath is Rime's own — no Radix, no Tailwind, no shadcn primitives. Themes swap one `theme.css`; the rest of the kit stays put.
+
+<br/>
+
+## What it does
+
+- **Frosted glass by default** — translucent panels, lit edges, soft two-layer shadows over a tinted field. Rime Flat is the opaque variant; both ship light and dark.
+- **Rime Studio** (`/themes`) — start from a preset, drop a logo to extract a palette, tune glass / shape / shadows / hover, check contrast, export `theme.css`.
+- **Blocks** — whole screens you install with one command: Dashboard, Inbox, Settings, Data Table, Auth cards, shells.
+- **Charts** — line, area, bar, donut, stat strips, segmented tooltips, built on Recharts.
+- **AI ready** — every page has a markdown twin (`add .md` to the URL), the whole site is in `/llms.txt`, the registry speaks shadcn MCP, and an `AGENTS.rime.md` + Claude skill ship with the agents item.
+- **Starter template** — `npx shadcn@latest add KezLahd/rime/starter` scaffolds a Next.js 16 app with Supabase auth (password + TOTP), the dashboard behind the gate, agent docs wired in.
+
+<br/>
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| App framework | **Next.js 16** (App Router) · React 19 · TypeScript |
+| Styles | **CSS Modules** · CSS custom properties · zero Tailwind |
+| Install flow | **shadcn CLI** — Rime emits its own registry at `/r/*.json` |
+| Charts | Recharts |
+| Icons | lucide-react |
+| Fonts | Inter (self-hosted under `app/fonts/`, SIL OFL) |
+| Dev server | `npm run dev` → <http://localhost:3100> |
+
+<br/>
+
+## Running locally
 
 ```bash
+# 1. Clone
+git clone https://github.com/KezLahd/rime.git
+cd rime
+
+# 2. Install (Node 20+, developed on 24)
 npm install
-npm run dev        # http://localhost:3100
+
+# 3. Dev — the docs site at http://localhost:3100
+npm run dev
+
+# 4. Production build
+npm run build
+npm start
 ```
 
-It runs on port **3100**, so it never clashes with another app on 3000.
-
-| Script | What |
-|---|---|
-| `npm run dev` | The site at http://localhost:3100 |
-| `npm run build` / `npm run start` | Production build, served on 3100 |
-| `RIME_HOST=1 npm run build` | Build for hosting under the site URL's path (only needed if `siteUrl` has a path) |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run lint` | ESLint (next config) |
-| `npm run registry` | Regenerate props and token tables from the source (`components/ui/_registry/generated.ts`) |
-| `npm run docs:export` | Write the docs as markdown to `docs/ui/` (llms.txt, llms-full.txt, one file per component) |
-| `npm run registry:shadcn` | Generate the shadcn registry: `registry.json`, the `public/r/` mirror, `components.json`, and `components/ui/_registry/site.ts` |
-
-After changing a component: `npm run registry && npm run docs:export && npm run registry:shadcn`.
-
-## The site
-
-| Route | What |
-|---|---|
-| `/` | Home: the pitch, the install command, live example apps (Dashboard, Inbox, Tasks, Settings, Authentication) |
-| `/docs` | Introduction, Installation, Theming, Dark mode, AI agents, Coming from shadcn |
-| `/components` | Every component as a live card, with search and a category filter; `/components/<slug>` for each |
-| `/blocks` | Whole screens with a viewer (desktop, tablet, mobile), Preview / Code and the install command |
-| `/charts` | Line, area, bar, donut and stats, plus every tooltip variant |
-| `/themes` | Rime Studio (`/studio` redirects here) |
-| `/colors`, `/foundations`, `/patterns` | Colour tokens, type and shape, composed patterns |
-| `/llms.txt`, `/llms-full.txt`, `/md/<slug>.md`, `/components/<slug>.md` | The docs as markdown |
-| `/r/registry.json`, `/r/<item>.json` | The built shadcn registry mirror |
-
-Press Cmd or Ctrl K (or /) to search, and D to switch light and dark.
-
-## Where things live
-
-```
-app/
-  page.tsx, _home/         the home page and its showcase
-  docs/                    the docs pages
-  components/              the index and [slug] pages
-  blocks/, charts/, colors/, foundations/, patterns/
-  themes/ -> studio/       Rime Studio (engine/, panels/)
-  llms.txt/, llms-full.txt/, md/[file]/   markdown for AI agents
-  _docs/                   docs shell, nav, search, code blocks, previews
-  fonts/                   self-hosted fonts (SIL Open Font License)
-  styles/
-    tokens.css             every token: Rime Default, Rime Flat, light and dark
-    base.css               reset, type, focus, keyframes
-    shadcn-bridge.css      shadcn variable names, aliased to Rime tokens
-    tailwind-bridge.css    optional, for projects that also run Tailwind v4
-    rime-site.css          Rime's own brand colours (the docs site)
-components/
-  ui/                      the components, _registry/ (docs source) and barrels
-  shell/                   SidebarShell, PageHeader, AuthCard
-  charts/                  charts and the shadcn-style chart primitives
-  blocks/                  whole screens (blocks.json lists them)
-agents/                    AGENTS.rime.md and the Claude skill, shipped by the "agents" item
-templates/                 the starter project and the "starter" item
-public/rime/               Rime brand assets
-public/r/                  the generated registry mirror
-registry.json              the generated GitHub registry
-rime.config.json           publishing settings (owner, site URL, namespace, package)
-brand/rime-source/         the master artwork and the scripts that make public/rime/
-```
-
-## Publishing settings
-
-Everything about where Rime lives is in **`rime.config.json`**:
-
-- `siteUrl` (`https://rime.mjsons.net`): the hosted docs. Used by the
-  registry mirror (`/r`), absolute links in llms.txt, the `@rime` MCP
-  namespace, Open in Claude and the page metadata.
-- `owner` (`KezLahd`): the GitHub owner. Install addresses are
-  `npx shadcn@latest add KezLahd/rime/<item>`.
-- `namespace` (`@rime`) and `package` (`@kezlahd/rime`).
-
-## Use it in another project
-
-With the shadcn CLI (via the GitHub source or the hosted mirror at `rime.mjsons.net/r`):
+**After editing a component:**
 
 ```bash
-npx shadcn@latest add KezLahd/rime/kit      # everything
-npx shadcn@latest add KezLahd/rime/select   # one component and what it needs
-npx shadcn@latest add KezLahd/rime/agents   # docs/ui, AGENTS.rime.md, the Claude skill
+npm run registry        # regenerate props + token tables
+npm run docs:export     # write docs/ui markdown (llms.txt + per-component .md)
+npm run registry:shadcn # rebuild registry.json, public/r mirror, components.json
+```
+
+<br/>
+
+## Use Rime in another project
+
+With the shadcn CLI (talking to the GitHub source, or the hosted mirror at `rime.mjsons.net/r`):
+
+```bash
+npx shadcn@latest add KezLahd/rime/kit       # everything
+npx shadcn@latest add KezLahd/rime/button    # one component + what it needs
+npx shadcn@latest add KezLahd/rime/dashboard # the dashboard block
+npx shadcn@latest add KezLahd/rime/agents    # AGENTS.rime.md + Claude skill + docs/ui
+npx shadcn@latest add KezLahd/rime/starter   # the full Supabase starter template
 ```
 
 Then import the styles first in `app/globals.css`:
@@ -121,75 +106,82 @@ Then import the styles first in `app/globals.css`:
 @import "./styles/theme.css"; /* your theme from Rime Studio */
 ```
 
-Wrap the app in `<ToastProvider>`. Dark mode is the `.dark` class (or
-`data-mode="dark"`) on `<html>`; Rime Flat is `data-theme="flat"`. A complete
-starting project is in `templates/starter` (Supabase auth with MFA, the
-dashboard block, AGENTS.md, `.mcp.json`).
+Wrap the app in `<ToastProvider>`. Dark mode is the `.dark` class (or `data-mode="dark"`) on `<html>`; Rime Flat is `data-theme="flat"`.
 
-Manually: copy `app/styles/{tokens,base,shadcn-bridge}.css`,
-`components/ui/_internal` and the component folders you need (each component
-page lists its files and dependencies), and install `lucide-react` (and
-`recharts` for charts). Keep the `@/*` path alias and no `src/` directory.
+<br/>
 
-### A theme
+## Project layout
 
-Open `/themes`, start from a preset, adjust, check the Contrast tab in both
-modes, save it by name, then Export `theme.css` into the project's
-`app/styles/`. To move a theme between laptops, export `theme.json` and Import
-it in the Studio on the other machine (saved themes live in each browser).
+```
+app/                     Next.js App Router (the docs site)
+  _docs/                 docs shell: top bar, sidebar, TOC, search, previews
+  _home/                 home page sections
+  components/            index + [slug] pages (one per registry entry)
+  blocks/                block gallery + /view route for the iframe previews
+  charts/, patterns/     gallery pages
+  foundations/, colors/  tokens explorer
+  studio/                Rime Studio (theming engine + panels)
+  styles/
+    tokens.css           every token: Rime Default, Rime Flat, light + dark
+    base.css             reset, type, focus, keyframes
+    shadcn-bridge.css    shadcn variable names aliased to Rime tokens
+
+components/
+  ui/                    the components (69 of them) + _registry/
+  shell/                 SidebarShell, PageHeader, AuthCard
+  charts/                charts and the shadcn-style chart primitives
+  blocks/                whole screens shipped as registry items
+
+agents/                  AGENTS.rime.md + Claude skill (installed by the "agents" item)
+templates/starter/       Next.js 16 + Supabase MFA starter project
+
+registry.json            the generated GitHub registry
+public/r/                the generated registry mirror served from rime.mjsons.net/r
+rime.config.json         publishing settings (owner, site URL, namespace, package)
+```
+
+<br/>
 
 ## For AI agents
 
-- `/llms.txt`: the index, the rules, the shadcn name map and install lines. Start here.
-- `/llms-full.txt`: everything in one file.
-- Any page as markdown: add `.md` (for example `/components/button.md`), or use the Copy page menu.
-- `docs/ui/`: the same files in the repo (`npm run docs:export`).
+- `/llms.txt` — the index, the rules, the shadcn name map, and the install lines. Start here.
+- `/llms-full.txt` — everything in one file.
+- Any page as markdown — add `.md` (e.g. `/components/button.md`).
+- `docs/ui/` — the same files in the repo (`npm run docs:export`).
 - The `agents` item installs them into a project with `AGENTS.rime.md` and a Claude skill.
 
-A good instruction: "Read docs/ui/llms.txt (or https://rime.mjsons.net/llms.txt)
-first, follow its rules, and build only with Rime components and tokens."
+A good instruction for an agent:
 
-## Rime brand assets
+> Read `docs/ui/llms.txt` (or <https://rime.mjsons.net/llms.txt>) first, follow its rules, and build only with Rime components and tokens.
 
-Rime's own look (separate from the themes it ships):
+<br/>
 
-- **Artwork:** `public/rime/`: `rime-mark.svg`, `rime-wordmark.svg`,
-  `rime-lockup.svg`, their `-white` variants for dark mode, `rime-mark-mono.svg`,
-  `icon.svg`, `favicon.ico`, `icon-192.png`, `icon-512.png`, `apple-icon.png`.
-  The docs logo (`app/_docs/DocsLogo.tsx`) uses the lockup, and the mark alone
-  on narrow screens. `app/icon.svg`, `app/apple-icon.png` and `app/favicon.ico`
-  are copies (Next's app file conventions); `app/manifest.ts` uses the 192 and
-  512 icons. To regenerate from the master: `brand/rime-source/README.md`.
-- **Colours:** Frost `#468CFB`, Ice `#94C4FB`, Mist `#C8DDF9`, declared in
-  `app/styles/rime-site.css`. Rime Default (in `app/styles/tokens.css`) is
-  built from them: `--brand` is Frost, `--brand-soft` Ice, the field blooms
-  Mist and Ice. Text never sits on Frost: `--brand-action` (#2B6CDB) starts the
-  primary gradient and `--ink-brand` (#1F5BC4) carries links.
+## Rime brand
 
-## Move it to another laptop
+| Token | Hex | Role |
+|---|---|---|
+| Frost | `#468CFB` | `--brand`, the glass accent |
+| Ice | `#94C4FB` | `--brand-soft`, field blooms |
+| Mist | `#C8DDF9` | `--brand-wash`, field tint |
+| Brand action | `#2B6CDB` | gradient start, strong CTA |
+| Ink brand | `#1F5BC4` | links and brand text (6.27:1 on white) |
 
-Clone it from GitHub:
+Artwork lives in `public/rime/`; the master is in `brand/rime-source/`.
 
-```bash
-git clone https://github.com/KezLahd/rime.git
-cd rime
-npm install
-npm run dev        # http://localhost:3100
-```
-
-Or copy the folder (leave out `node_modules` and `.next`, they are rebuilt) and
-run `npm install` then `npm run dev` in the copy. Node 20 or newer (developed
-on Node 24).
+<br/>
 
 ## Design rules carried by the kit
 
 - No eyebrow or small label stacked over a title.
-- No bento grids of cards, no left accent bars.
-- No hover scale or lift by default.
-- Summary stats are one card with hairline cells.
-- Filters are dropdowns plus one full-width search; sortable headers are the
-  whole cell; pagination is centred.
-- Text uses the full width of its column, with no narrow measure caps.
-- The docs sidebar is a flush frosted rail with its scrollbar hidden until
-  hover; modal and sheet headers keep one left edge.
+- No bento grids of cards. No left accent bars. No hover scale or lift by default.
+- Summary stats are one card with hairline cells, never a grid of separate stat cards.
+- Filters are dropdowns plus one full-width search; sortable headers are the whole cell; pagination is centred.
+- Text uses the full width of its column — no narrow measure caps.
+- The docs sidebar is transparent (the frosted sidebar belongs to `SidebarShell`, the dashboard rail).
 - No em dashes in copy.
+
+<br/>
+
+<p align="center">
+  <sub>Built in Sydney · <a href="https://instagram.com/kezlahd">another kez curation</a></sub>
+</p>
