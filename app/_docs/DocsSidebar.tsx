@@ -44,8 +44,6 @@ export function DocsSidebar({ children }: { children: ReactNode }) {
       <div ref={scrollRef} className={styles.navScroll}>
         {children}
       </div>
-      <div className={styles.navFadeTop} aria-hidden="true" />
-      <div className={styles.navFadeBottom} aria-hidden="true" />
     </div>
   );
 }
