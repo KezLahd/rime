@@ -56,6 +56,7 @@ import {
   type StudioTheme,
 } from "./engine/theme";
 import { BrandPanel, ColourPanel, TypePanel } from "./panels/BrandPanel";
+import { LogoPanel } from "./panels/LogoPanel";
 import { ComponentsPanel, ExportPanel, TokensPanel } from "./panels/DataPanels";
 import { GradientPanel } from "./panels/GradientPanel";
 import { ContrastPanel, ImagePanel } from "./panels/GuardPanels";
@@ -604,33 +605,20 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
                 Save
               </Button>
             </div>
-            <div className={styles.headRow}>
-              <Select
-                size="sm"
-                aria-label="Start from a preset"
-                className={styles.grow}
-                value={null}
-                placeholder="Start from a preset"
-                onChange={(v) => startFrom(v as Preset)}
-                options={PRESETS.map((p) => ({ value: p.id, label: p.name, description: p.note }))}
-              />
-              <SegmentedControl
-                aria-label="Mode being edited"
-                size="sm"
-                value={theme.mode}
-                onChange={switchMode}
-                options={[
-                  { value: "light", label: "Light" },
-                  { value: "dark", label: "Dark" },
-                ]}
-              />
-              {saved.length ? (
+            {/* The preset dropdown (Rime Default / Rime Flat) and the
+                Light / Dark toggle used to live here. Both are already in
+                the kit's own top bar (Default | Flat and the sun / moon
+                icon), so showing them again just made the inspector feel
+                like two popups stacked. Opening a saved theme stays, since
+                there's no other place to do that. */}
+            {saved.length ? (
+              <div className={styles.headRow}>
                 <Select
                   size="sm"
                   aria-label="Open a saved theme"
                   className={styles.grow}
                   value={null}
-                  placeholder={`Saved (${saved.length})`}
+                  placeholder={`Open a saved theme (${saved.length})`}
                   onChange={(name) => {
                     const t = saved.find((s) => s.name === name);
                     if (t) {
@@ -640,8 +628,8 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
                   }}
                   options={saved.map((t) => ({ value: t.name, label: t.name, description: lookName(t.base, t.mode) }))}
                 />
-              ) : null}
-            </div>
+              </div>
+            ) : null}
             <div className={styles.headRow}>
               <span className={styles.changeCount}>{changes ? `${changes} change${changes === 1 ? "" : "s"} on ${lookName(theme.base, theme.mode)}` : `${lookName(theme.base, theme.mode)}, unchanged`}</span>
               <span className={styles.toolbarGroup}>
@@ -679,9 +667,12 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
-              <BrandPanel api={api} />
+              <LogoPanel api={api} />
             ) : section === "colour" ? (
-              <ColourPanel api={api} />
+              <>
+                <BrandPanel api={api} />
+                <ColourPanel api={api} />
+              </>
             ) : section === "type" ? (
               <TypePanel api={api} />
             ) : section === "image" ? (

@@ -95,7 +95,6 @@ export function BrandPanel({ api }: { api: StudioApi }) {
       <Group title="Brand colours" note="Pick the brand. Every tint, wash, glow and gradient built from it follows.">
         {PALETTE.map(row)}
       </Group>
-      <LogoGroup api={api} />
       <Advanced api={api} tokens={[...withChannels(PALETTE), "--brand-gradient", "--brand-gradient-soft", "--brand-gradient-wash"]} />
     </>
   );
