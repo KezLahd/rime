@@ -4,8 +4,10 @@ import { memo } from "react";
 import { SidebarShell } from "@/components/shell/SidebarShell";
 import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers } from "@/components/ui";
 import { entriesByCategory } from "@/components/ui/_registry";
+import type { Category } from "@/components/ui/_registry/types";
 import { FitPreview } from "../_docs/FitPreview";
 import { PREVIEWS } from "../_docs/previews";
+import type { PreviewFocus } from "./Studio";
 import styles from "./ThemePreview.module.css";
 
 const NAV = [
@@ -16,26 +18,48 @@ const NAV = [
 ];
 
 /**
- * The Studio's live preview: the dashboard frame with every documented
- * component inside it, grouped by category, each the first example from the
- * docs shown whole and centred. Memoised on its props, so dragging a slider
- * (which only changes a style element) never re-renders it.
+ * Which component categories to surface for each walkthrough step. Steps
+ * not in the map get the full set (all categories). Keeping focused
+ * previews means a Colours step only shows the components whose colour
+ * actually changes, not the entire kit.
+ */
+const FOCUS_CATEGORIES: Partial<Record<PreviewFocus, ReadonlyArray<Category>>> = {
+  logo: ["Shell"],
+  colour: ["Actions", "Feedback", "Forms"],
+  type: ["Actions", "Forms", "Data display"],
+  shape: ["Actions", "Forms", "Overlays", "Layout and surfaces"],
+  gradients: ["Actions", "Shell"],
+  glass: ["Overlays", "Layout and surfaces", "Shell"],
+  shadows: ["Overlays", "Layout and surfaces"],
+  layout: ["Shell"],
+};
+
+/**
+ * The Studio's live preview: the dashboard frame with the component
+ * categories relevant to the current step. Memoised on its props so
+ * dragging a slider (which only changes a style element) never re-renders
+ * it. When `focus` is "export", "contrast" or "components" the preview
+ * shows the full set.
  */
 export const ThemePreview = memo(function ThemePreview({
   logoSrc,
   logoAlt,
   logoCorner,
   layout,
+  focus,
 }: {
   logoSrc?: string;
   logoAlt?: string;
   logoCorner: "glass" | "fill";
   layout: "sidebar" | "rail" | "header";
+  focus?: PreviewFocus;
 }) {
+  const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
+  const groups = entriesByCategory().filter(([category]) => !whitelist || whitelist.includes(category));
   return (
     <SidebarShell contained navLabel="Preview" nav={NAV} activeHref="#preview-top" title="Theme preview" logoSrc={logoSrc} logoAlt={logoAlt} logoCorner={logoCorner} layout={layout}>
       <div id="preview-top" className={styles.stack}>
-        {entriesByCategory().map(([category, list]) => (
+        {groups.map(([category, list]) => (
           <GlassPanel key={category} padding="lg">
             <h2 className={styles.h2}>{category}</h2>
             <div className={styles.grid}>

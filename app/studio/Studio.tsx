@@ -80,40 +80,57 @@ type Section =
   | "export"
   | "tokens";
 
-const NAV: ReadonlyArray<{ heading: string; items: ReadonlyArray<{ id: Section; label: string; icon: LucideIcon; lede: string }> }> = [
-  {
-    heading: "Theme",
-    items: [
-      { id: "brand", label: "Brand", icon: Palette, lede: "The brand colours and the logo." },
-      { id: "colour", label: "Colour", icon: Droplets, lede: "Text, signals and the page field." },
-      { id: "type", label: "Type", icon: Type, lede: "The body and heading families." },
-      { id: "shape", label: "Shape", icon: Shapes, lede: "Corners, density, control sizes and dialog widths." },
-      { id: "glass", label: "Glass", icon: SunMedium, lede: "Frosted surfaces: tint, opacity and blur per surface." },
-      { id: "shadows", label: "Shadows", icon: SquareStack, lede: "Depth for everything at once, or one elevation at a time." },
-      { id: "gradients", label: "Gradients", icon: Blend, lede: "Every gradient, stop by stop, and the page blooms." },
-      { id: "hover", label: "Hover", icon: MousePointer2, lede: "Hover, press, washes and motion." },
-    ],
-  },
-  {
-    heading: "Shell",
-    items: [{ id: "layout", label: "Layout", icon: LayoutDashboard, lede: "Sidebar, collapsed rail or header only, and the logo corner." }],
-  },
-  {
-    heading: "Tools",
-    items: [
-      { id: "components", label: "Components", icon: Component, lede: "One component's own tokens, its usage and its CSS." },
-      { id: "image", label: "Image", icon: ImageIcon, lede: "Drop a logo or a screenshot and build a theme from its colours." },
-      { id: "contrast", label: "Contrast", icon: Contrast, lede: "Every text and control pair, measured live, with a fix for each failure." },
-      { id: "export", label: "Export", icon: Code, lede: "theme.css and theme.json, ready for another project." },
-    ],
-  },
-  {
-    heading: "Advanced",
-    items: [{ id: "tokens", label: "All tokens", icon: ListTree, lede: "Every token by name, searchable and editable as CSS." }],
-  },
+type Step = {
+  id: Section;
+  label: string;
+  icon: LucideIcon;
+  lede: string;
+  /** Which component categories to spotlight in the preview on this step. */
+  previewFocus: PreviewFocus;
+};
+
+export type PreviewFocus =
+  | "logo"
+  | "colour"
+  | "type"
+  | "shape"
+  | "gradients"
+  | "glass"
+  | "shadows"
+  | "layout"
+  | "image"
+  | "contrast"
+  | "components"
+  | "export"
+  | "tokens";
+
+/** Ordered steps for the walkthrough: logo first, then paint, then shape,
+ *  then details. The sidebar renders them as a numbered stepper. */
+const STEPS: ReadonlyArray<Step> = [
+  { id: "brand", label: "Logo", icon: ImageIcon, lede: "Upload your logo. The theme can derive its colours from it next.", previewFocus: "logo" },
+  { id: "colour", label: "Colours", icon: Palette, lede: "Pick the brand, text, status and page colours.", previewFocus: "colour" },
+  { id: "type", label: "Fonts", icon: Type, lede: "Choose the body and heading families.", previewFocus: "type" },
+  { id: "shape", label: "Shape", icon: Shapes, lede: "Corner radius, density and control sizes.", previewFocus: "shape" },
+  { id: "gradients", label: "Gradients", icon: Blend, lede: "Brand, danger and success gradients plus the page blooms.", previewFocus: "gradients" },
+  { id: "glass", label: "Glass", icon: SunMedium, lede: "Frosted surfaces: tint, opacity and blur per surface.", previewFocus: "glass" },
+  { id: "shadows", label: "Shadows", icon: SquareStack, lede: "Depth at every elevation, from cards to dialogs.", previewFocus: "shadows" },
+  { id: "hover", label: "Hover", icon: MousePointer2, lede: "Hover, press, washes and motion.", previewFocus: "shadows" },
+  { id: "layout", label: "Layout", icon: LayoutDashboard, lede: "Sidebar, collapsed rail or header-only, and the logo corner.", previewFocus: "layout" },
+  { id: "contrast", label: "Contrast", icon: Contrast, lede: "Every text and control pair, measured live, with a fix for each failure.", previewFocus: "contrast" },
+  { id: "export", label: "Export", icon: Code, lede: "theme.css and theme.json, ready for another project.", previewFocus: "export" },
 ];
 
-const ALL = NAV.flatMap((g) => g.items);
+/** Secondary tools accessible without being part of the main flow. */
+const ADVANCED: ReadonlyArray<Step> = [
+  { id: "image", label: "Palette from image", icon: ImageIcon, lede: "Drop a logo or screenshot and build a theme from its colours.", previewFocus: "image" },
+  { id: "components", label: "Per-component tokens", icon: Component, lede: "One component's own tokens, its usage and its CSS.", previewFocus: "components" },
+  { id: "tokens", label: "All tokens", icon: ListTree, lede: "Every token by name, searchable and editable as CSS.", previewFocus: "tokens" },
+];
+
+const ALL_STEPS: ReadonlyArray<Step> = [...STEPS, ...ADVANCED];
+const NAV = { steps: STEPS, advanced: ADVANCED };
+
+const ALL = ALL_STEPS;
 
 const HISTORY = 60;
 /** Slider drags inside this window are one undo step. */
@@ -517,30 +534,58 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         data-rail-only={inspectorWidth < INSPECTOR_RAIL_PX ? "" : undefined}
       >
         <div className={styles.inspector}>
-        <nav className={styles.sectionNav} aria-label="Studio sections" data-studio-panel="">
-          {NAV.map((g) => (
-            <div key={g.heading} className={styles.navGroup}>
-              <p className={styles.navHeading}>{g.heading}</p>
-              <div className={styles.navList}>
-                {g.items.map((s) => {
-                  const Icon = s.icon;
-                  return (
+        <nav className={styles.sectionNav} aria-label="Theme steps" data-studio-panel="">
+          <p className={styles.stepperLabel}>
+            Step {Math.max(1, STEPS.findIndex((s) => s.id === section) + 1)} of {STEPS.length}
+          </p>
+          <ol className={styles.stepperList}>
+            {STEPS.map((s, i) => {
+              const Icon = s.icon;
+              const isActive = section === s.id;
+              const stepsIndex = STEPS.findIndex((x) => x.id === section);
+              const isDone = stepsIndex > i;
+              return (
+                <li key={s.id} className={styles.stepperItem}>
+                  <button
+                    type="button"
+                    className={cx(styles.stepperLink, isActive && styles.stepperLinkActive, isDone && styles.stepperLinkDone)}
+                    aria-current={isActive ? "step" : undefined}
+                    onClick={() => choose(s.id)}
+                  >
+                    <span className={styles.stepperNumber} aria-hidden="true">
+                      {isDone ? "✓" : i + 1}
+                    </span>
+                    <Icon className={styles.stepperIcon} size={14} aria-hidden="true" />
+                    <span className={styles.stepperLabelInline}>{s.label}</span>
+                    {s.id === "contrast" && failing ? <CountBadge count={failing} tone="danger" label={`${failing} failing`} /> : null}
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+
+          <details className={styles.advanced}>
+            <summary className={styles.advancedSummary}>Advanced</summary>
+            <ol className={styles.stepperList}>
+              {ADVANCED.map((s) => {
+                const Icon = s.icon;
+                const isActive = section === s.id;
+                return (
+                  <li key={s.id} className={styles.stepperItem}>
                     <button
-                      key={s.id}
                       type="button"
-                      className={styles.navLink}
-                      aria-current={section === s.id ? "page" : undefined}
+                      className={cx(styles.stepperLink, isActive && styles.stepperLinkActive)}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => choose(s.id)}
                     >
-                      <Icon size={15} aria-hidden="true" />
-                      <span>{s.label}</span>
-                      {s.id === "contrast" && failing ? <CountBadge count={failing} tone="danger" label={`${failing} failing`} /> : null}
+                      <Icon className={styles.stepperIcon} size={14} aria-hidden="true" />
+                      <span className={styles.stepperLabelInline}>{s.label}</span>
                     </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+                  </li>
+                );
+              })}
+            </ol>
+          </details>
         </nav>
 
         <aside className={styles.panel} aria-label="Theme controls" data-studio-panel="">
@@ -663,6 +708,43 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
           </div>
+
+          {/* Walkthrough footer: previous / next buttons for the ordered
+              steps. Advanced sections (image, components, tokens) are not in
+              the sequence and don't change the footer labels. */}
+          {STEPS.some((s) => s.id === section) ? (
+            <div className={styles.panelFoot}>
+              {(() => {
+                const idx = STEPS.findIndex((s) => s.id === section);
+                const prev = idx > 0 ? STEPS[idx - 1] : null;
+                const next = idx < STEPS.length - 1 ? STEPS[idx + 1] : null;
+                return (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      iconStart={<ChevronLeft size={14} aria-hidden="true" />}
+                      disabled={!prev}
+                      onClick={() => prev && choose(prev.id)}
+                    >
+                      {prev ? prev.label : "Previous"}
+                    </Button>
+                    <span className={styles.stepperLabel}>
+                      Step {idx + 1} of {STEPS.length}
+                    </span>
+                    <Button
+                      size="sm"
+                      iconEnd={<ChevronRight size={14} aria-hidden="true" />}
+                      disabled={!next}
+                      onClick={() => next && choose(next.id)}
+                    >
+                      {next ? next.label : "Done"}
+                    </Button>
+                  </>
+                );
+              })()}
+            </div>
+          ) : null}
         </aside>
 
         </div>
@@ -695,7 +777,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         <section className={styles.preview} aria-label="Live preview">
           <div className={styles.previewScroll} data-theme-studio="">
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} />
+            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} />
           </div>
         </section>
       </div>
