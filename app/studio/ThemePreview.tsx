@@ -12,7 +12,7 @@ import { Field } from "@/components/ui/Field/Field";
 import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers } from "@/components/ui";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
-import { Meter } from "@/components/ui/Meter/Meter";
+import { ProgressBar } from "@/components/ui/Meter/Meter";
 import { TextInput } from "@/components/ui/TextInput/TextInput";
 // Switch intentionally omitted here; it's a controlled component and we want
 // a static showcase. Checkboxes carry both toggle rows instead.
@@ -265,10 +265,15 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               <div className={styles.colourProgressFill} style={{ width: "72%" }} />
             </div>
           </Spot>
-          {/* Meter uses --brand-soft to --brand-deep as its fill gradient,
-              so dragging Accent in the controls shows an immediate change. */}
+          {/* ProgressBar's fill is literally linear-gradient(--brand-soft,
+              --brand-deep), so dragging Accent in the controls paints
+              the bar immediately. The main Progress above uses the brand
+              gradient (--brand-action -> --brand-strong). */}
+          <div className={styles.colourProgressTop}>
+            <span className={styles.colourProgressLabel}>Accent gradient (Progress bar)</span>
+          </div>
           <Spot as="div" tokens="--brand-soft --brand-deep" peek={peek}>
-            <Meter label="Capacity used" value={4} max={5} size="sm" />
+            <ProgressBar value={60} max={100} label="Review progress" valueText="60%" />
           </Spot>
         </GlassPanel>
       </section>
