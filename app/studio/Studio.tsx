@@ -527,14 +527,21 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         {status}
       </p>
 
-      <DocsTopBar key={barKey} current="studio" />
+      {/* Pin the kit's top bar to the base preset: the theme being edited
+          should NEVER paint the chrome around the preview, only the
+          preview itself. The DocsTopBar wrapper carries data-studio-panel
+          so pinCss re-declares every base token on it, blocking the
+          edited theme from leaking into the kit's own navigation. */}
+      <div data-studio-panel="">
+        <DocsTopBar key={barKey} current="studio" />
+      </div>
 
       <div
         className={cx(styles.workspace, collapsed && styles.workspaceCollapsed)}
         style={{ ["--inspector-w" as string]: `${inspectorWidth}px` }}
         data-rail-only={inspectorWidth < INSPECTOR_RAIL_PX ? "" : undefined}
       >
-        <div className={styles.inspector}>
+        <div className={styles.inspector} data-studio-panel="">
         <nav className={styles.sectionNav} aria-label="Theme steps" data-studio-panel="">
           <p className={styles.stepperLabel}>
             Step {Math.max(1, STEPS.findIndex((s) => s.id === section) + 1)} of {STEPS.length}
@@ -749,6 +756,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize inspector"
+          data-studio-panel=""
         >
           <button
             type="button"
