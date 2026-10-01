@@ -1,0 +1,55 @@
+.rule {
+  height: 1px;
+  border: 0;
+  background: var(--line-glass);
+}
+
+:global([data-surface="solid"]) .rule {
+  background: var(--line-soft);
+}
+
+.none {
+  margin: 0;
+}
+
+.sm {
+  margin: 10px 0;
+}
+
+.md {
+  margin: 18px 0;
+}
+
+.lg {
+  margin: 28px 0;
+}
+
+.vertical {
+  display: inline-block;
+  align-self: stretch;
+  width: 1px;
+  min-height: 1em;
+  background: var(--line-glass);
+}
+
+.labelled {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.labelled::before,
+.labelled::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-glass);
+}
+
+.label {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}

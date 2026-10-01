@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-bar",
+  "type": "registry:item",
+  "title": "FilterBar",
+  "description": "The one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action.",
+  "categories": [
+    "navigation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/FilterBar/FilterBar.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/FilterBar/FilterBar.module.css",
+      "content": "/* One row, the table's full width: search grows, dropdowns sit at the end,\n   the list's own action (if any) after a hairline. Everything stays on one\n   row, vertically centred, until the bar itself is genuinely narrow (a\n   container query on the bar, so it follows the panel it sits in, not the\n   viewport). Then the search takes the first line to itself, the chips wrap\n   cleanly under it, and the action sits on its own line at the end. */\n\n.bar {\n  container-type: inline-size;\n  width: 100%;\n  margin-bottom: var(--filter-bar-gap, 14px);\n}\n\n.row {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: center;\n  gap: 8px 12px;\n}\n\n.filters {\n  display: flex;\n  flex: 1 1 auto;\n  flex-wrap: nowrap;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n}\n\n/* Every filter except the search keeps its natural width. */\n.filters > * {\n  flex-shrink: 0;\n}\n\n.filters > :first-child {\n  flex: 1 1 200px;\n  min-width: 160px;\n}\n\n/* Dropdowns hold a steady width, so picking \"Paid\" over \"All statuses\" does\n   not make the search jump. */\n.filters > [role=\"combobox\"] {\n  min-width: 136px;\n}\n\n.clear {\n  flex-shrink: 0;\n}\n\n.actions {\n  display: flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 12px;\n  padding-left: 12px;\n  border-left: 1px solid var(--line-glass);\n}\n\n@container (max-width: 640px) {\n  .row {\n    flex-wrap: wrap;\n  }\n\n  .filters {\n    flex: 1 1 100%;\n    flex-wrap: wrap;\n  }\n\n  .filters > :first-child {\n    flex: 1 1 100%;\n  }\n\n  .actions {\n    margin-left: auto;\n    padding-left: 0;\n    border-left: 0;\n  }\n}\n"
+    },
+    {
+      "path": "components/ui/FilterBar/FilterBar.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/FilterBar/FilterBar.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { Button } from \"../Button/Button\";\nimport styles from \"./FilterBar.module.css\";\n\nexport type FilterBarProps = {\n  /**\n   * The filters, in order: a <FilterSearch grow /> first, then <Select\n   * appearance=\"chip\" /> dropdowns. The search fills whatever the dropdowns\n   * leave, so the row always spans the table's full width.\n   */\n  children: ReactNode;\n  /** Names the filter group for screen readers: \"Filter seats\". */\n  \"aria-label\": string;\n  /** Shown as a ghost \"Clear filters\" after the dropdowns. Pass it only while a filter is applied. */\n  onClear?: () => void;\n  clearLabel?: string;\n  /** The list's own action, at the far end after a hairline: \"Add team member\". */\n  actions?: ReactNode;\n  className?: string;\n};\n\n/**\n * The one filter row above every table: no title or\n * \"n of m shown\" line above it, search stretching to fill, dropdowns at the\n * end, never a row of toggle chips. Presentational: filter state lives with\n * the screen.\n */\nexport function FilterBar({ children, \"aria-label\": ariaLabel, onClear, clearLabel = \"Clear filters\", actions, className }: FilterBarProps) {\n  return (\n    <div data-slot=\"filter-bar\" className={cx(styles.bar, className)}>\n      <div className={styles.row}>\n        <div role=\"group\" aria-label={ariaLabel} className={styles.filters}>\n          {children}\n          {onClear ? (\n            <Button variant=\"ghost\" size=\"sm\" onClick={onClear} className={styles.clear}>\n              {clearLabel}\n            </Button>\n          ) : null}\n        </div>\n        {actions ? <div className={styles.actions}>{actions}</div> : null}\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/button.json"
+  ],
+  "meta": {
+    "import": "import { FilterBar } from \"@/components/ui/FilterBar/FilterBar\";",
+    "docs": "https://rime.mjsons.net/md/filter-bar.md",
+    "page": "https://rime.mjsons.net/components/filter-bar"
+  }
+}

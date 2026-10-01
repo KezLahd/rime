@@ -1,0 +1,445 @@
+/* ── Anchor: trigger plus its clear button, which are siblings ─────────────
+   A button can't hold a button, so the ✕ sits over the trigger's right end
+   and the trigger reserves room for it. */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.rootField {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Trigger, chip appearance: the reference recessed filter chip (§4.4) ─── */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--chip-height, var(--control-h-sm));
+  max-width: 100%;
+  padding: 0 calc(10px * var(--density)) 0 calc(11px * var(--density));
+  border: 0;
+  border-radius: var(--chip-radius, var(--r-sm));
+  background: var(--recess-fill);
+  box-shadow: var(--shadow-recess);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--recess-fill-hover);
+  color: var(--ink-body);
+}
+
+.chip:active:not(:disabled) {
+  box-shadow: inset 0 1px 2px rgba(var(--rgb-contact), 0.14), inset 0 -1px 0 rgba(var(--rgb-white), 0.6);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-recess), var(--focus-ring);
+}
+
+.chip.clearable {
+  padding-right: 30px;
+}
+
+/* ── Trigger, field appearance: Select's grey frosted field ─────────────
+   Same fill, blur and recess as .field[class] in Select, at the TextInput
+   md height and radius, so the two sit level in a form row. */
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px 0 14px;
+  border: 1.5px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--recess-fill);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: var(--shadow-recess);
+  font-family: var(--font-body);
+  font-size: var(--text-input);
+  color: var(--ink-body);
+  text-align: left;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.field:hover:not(:disabled) {
+  background: var(--recess-fill-hover);
+}
+
+.field:active:not(:disabled) {
+  box-shadow: inset 0 1px 2px rgba(var(--rgb-contact), 0.14), inset 0 -1px 0 rgba(var(--rgb-white), 0.6);
+}
+
+.field:focus-visible {
+  outline: none;
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  box-shadow: var(--shadow-recess), var(--field-focus-ring, var(--focus-halo));
+}
+
+.field.clearable {
+  padding-right: 44px;
+}
+
+/* ── Shared states ─────────────────────────────────────────────────────── */
+
+/* A range is set. Tint and ink only: a ring would make this one control
+   look outlined beside its neighbours. */
+.active,
+.active:hover:not(:disabled) {
+  background: var(--chip-active-fill);
+  color: var(--brand-deep);
+  font-weight: 700;
+  box-shadow: var(--chip-active-shadow);
+}
+
+.chip.active:hover:not(:disabled),
+.field.active:hover:not(:disabled) {
+  background: var(--chip-active-fill-hover);
+}
+
+.open,
+.open:hover:not(:disabled) {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.field.open {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  box-shadow: var(--shadow-recess), var(--field-focus-ring, var(--focus-halo));
+}
+
+.chip:disabled,
+.field:disabled {
+  cursor: not-allowed;
+  background: var(--recess-fill);
+  color: var(--ink-disabled);
+}
+
+.field:disabled {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  background: rgba(var(--rgb-brand-deep), 0.05);
+}
+
+/* Invalid keeps the recess and adds the danger red edge, as Select does. The
+   chip has no border, so its edge is drawn as an inset ring. */
+.field[aria-invalid="true"] {
+  border-color: rgba(var(--rgb-danger), 0.75);
+  background: rgba(var(--rgb-danger), 0.06);
+}
+
+.field[aria-invalid="true"]:focus-visible,
+.field[aria-invalid="true"].open {
+  border-color: var(--danger-base);
+  box-shadow: var(--shadow-recess), var(--field-focus-ring-invalid, 0 0 0 4px rgba(var(--rgb-danger), 0.14));
+}
+
+.chip[aria-invalid="true"] {
+  background: rgba(var(--rgb-danger), 0.06);
+  box-shadow: var(--shadow-recess), inset 0 0 0 1.5px rgba(var(--rgb-danger), 0.75);
+}
+
+.chip[aria-invalid="true"]:focus-visible {
+  box-shadow:
+    var(--shadow-recess),
+    inset 0 0 0 1.5px rgba(var(--rgb-danger), 0.75),
+    0 0 0 2px var(--focus-gap),
+    0 0 0 4px var(--danger-base);
+}
+
+.icon {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.field .icon {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+.field.active .icon,
+.field.open .icon {
+  color: var(--ink-brand);
+}
+
+.field:disabled .icon {
+  color: var(--ink-disabled);
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On the recess the lighter placeholder ink falls to ~3.5:1; muted holds. */
+.field .placeholder {
+  color: var(--ink-muted);
+}
+
+.field:disabled .placeholder {
+  color: var(--ink-disabled);
+}
+
+.chevron {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform var(--dur) ease;
+}
+
+.field .chevron {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+/* Clear: inset from the trigger edge, so its radius steps down to 4. */
+.clear {
+  position: absolute;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-2xs);
+  background: transparent;
+  color: var(--ink-brand);
+  opacity: 0.75;
+  transition:
+    opacity var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.rootField .clear {
+  right: 8px;
+  width: 28px;
+  height: 28px;
+}
+
+.clear:hover {
+  opacity: 1;
+  background: rgba(var(--rgb-white), 0.7);
+}
+
+.clear:active {
+  background: rgba(var(--rgb-white), 0.9);
+}
+
+.clear:focus-visible {
+  outline: none;
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--focus-color);
+}
+
+/* ── Popover: solid white float, never glass ────────────────────────────── */
+
+.popup {
+  position: fixed;
+  z-index: var(--z-popover);
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-menu);
+  animation: pop-in var(--dur) var(--ease-out);
+}
+
+.body {
+  display: flex;
+}
+
+/* Presets: a recessed side panel, tinted apart from the white calendar side
+   so the shortcuts read as their own column. A faint
+   accent wash over the white float, a hairline divider, and a soft inner
+   shade along the divider so the calendar side sits a step above it. The
+   picked preset lifts out of the recess as a white key. The flat preset gets the
+   same structure through the tokens: a flat neutral grey, square. */
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 156px;
+  margin: 0;
+  padding: 12px 8px;
+  list-style: none;
+  background: linear-gradient(var(--wash-subtle), var(--wash-subtle)), var(--surface-solid);
+  border-right: 1px solid var(--line);
+  box-shadow: inset -6px 0 10px -8px rgba(var(--rgb-contact), 0.12);
+}
+
+/* Items: 6px inside a 12px popover corner, so radius 6. */
+.preset {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--ink-body);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.preset:hover:not(:disabled) {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.preset:active:not(:disabled) {
+  background: var(--wash-strong);
+}
+
+.preset:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.presetActive,
+.presetActive:hover:not(:disabled) {
+  background: var(--surface-solid);
+  box-shadow:
+    inset 0 0 0 1px var(--line-brand),
+    0 1px 3px rgba(var(--rgb-contact), 0.1);
+  color: var(--ink-brand);
+  font-weight: 700;
+}
+
+.presetActive:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.preset:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+}
+
+.calendars {
+  padding: 14px 16px 10px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px 10px 16px;
+  border-top: 1px solid var(--line-soft);
+  background: linear-gradient(var(--wash-row), var(--wash-row)), var(--surface-solid);
+}
+
+.summary {
+  min-width: 0;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.summarySet {
+  font-weight: 700;
+  color: var(--ink-body);
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/* One calendar: presets become a wrapping row above it, so the popover
+   fits a phone. */
+.popupNarrow .body {
+  flex-direction: column;
+}
+
+.popupNarrow .presets {
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 328px;
+  padding: 8px;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+  box-shadow: inset 0 -6px 10px -8px rgba(var(--rgb-contact), 0.12);
+}
+
+.popupNarrow .presets li {
+  flex: 0 0 auto;
+}
+
+.popupNarrow .preset {
+  padding: 6px 9px;
+  font-size: var(--text-small);
+}
+
+.popupNarrow .footer {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.popupNarrow .actions {
+  justify-content: flex-end;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Inline: the panel shown open under the trigger, in flow, for docs and
+   thumbnails. */
+.inlineWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.popupInline[class] {
+  position: static;
+  max-height: none;
+  animation: none;
+}

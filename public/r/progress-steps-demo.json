@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-steps-demo",
+  "type": "registry:item",
+  "title": "ProgressSteps examples",
+  "description": "Usage examples for ProgressSteps.",
+  "files": [
+    {
+      "path": "registry/examples/progress-steps.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/progress-steps.md",
+      "content": "# ProgressSteps examples\n\nA horizontal track of steps with detail and meta lines, or a compact dot track for table cells.\n\n```tsx\nimport { ProgressSteps } from \"@/components/ui\";\n\n<ProgressSteps aria-label=\"Shipment\" steps={[{ label: \"Packed\", state: \"done\" }, { label: \"Shipped\", state: \"current\" }]} />\n```\n\n## Full and compact\n\n```tsx\n<ProgressSteps steps={steps} aria-label=\"Shipment\" />\n<ProgressSteps compact steps={steps} aria-label=\"Shipment\" />\n```\n\nDocs: https://rime.mjsons.net/components/progress-steps\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/progress-steps.json"
+  ]
+}

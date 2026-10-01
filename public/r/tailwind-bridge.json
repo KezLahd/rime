@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tailwind-bridge",
+  "type": "registry:item",
+  "title": "Tailwind bridge",
+  "description": "Maps shadcn's Tailwind colour and radius utilities onto Rime's tokens, for projects that also use real shadcn components.",
+  "files": [
+    {
+      "path": "app/styles/tailwind-bridge.css",
+      "type": "registry:file",
+      "target": "~/app/styles/tailwind-bridge.css",
+      "content": "/* Optional, for projects that ALSO use Tailwind v4 and real shadcn\n   components: maps shadcn's colour utilities onto the bridge, so\n   bg-primary, text-muted-foreground and friends wear Rime's theme. Import\n   after shadcn-bridge.css. Rime itself never needs this file. */\n\n@theme inline {\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n}\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "docs": "Import it in your Tailwind CSS entry, after the Rime base styles: @import \"./styles/tailwind-bridge.css\";"
+}

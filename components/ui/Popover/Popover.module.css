@@ -1,0 +1,55 @@
+/* Popover: the frosted popover family (Select, Menu) holding arbitrary
+   content. Every surface value is a --popover-* token, so the flat and dark
+   presets restyle it with no change here. */
+
+.panel {
+  min-width: var(--popover-min-width, 220px);
+  max-width: min(var(--popover-max-width, 380px), calc(100vw - 16px));
+  padding: var(--popover-content-pad, calc(16px * var(--density)));
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  border: var(--border-w) solid var(--popover-border);
+  border-radius: var(--popover-radius, var(--r-lg));
+  box-shadow: var(--popover-shadow);
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.panel:focus-visible {
+  outline: none;
+  box-shadow: var(--popover-shadow), var(--focus-ring);
+}
+
+.floating {
+  position: fixed;
+  z-index: var(--z-popover);
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+/* Inline: the trigger, then the open panel under it, in the page flow. */
+.inlineWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.alignEnd {
+  align-items: flex-end;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.inline {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating {
+    animation: fade-in var(--dur) linear;
+  }
+}

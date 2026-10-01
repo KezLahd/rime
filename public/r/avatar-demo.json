@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-demo",
+  "type": "registry:item",
+  "title": "Avatar examples",
+  "description": "Usage examples for Avatar.",
+  "files": [
+    {
+      "path": "registry/examples/avatar.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/avatar.md",
+      "content": "# Avatar examples\n\nInitials on the brand gradient or a neutral disc, in three sizes.\n\n```tsx\nimport { Avatar } from \"@/components/ui\";\n\n<Avatar name=\"Jane Cooper\" />\n```\n\n## Sizes and tones\n\n```tsx\n<Avatar name=\"Jane Cooper\" size=\"sm\" />\n<Avatar name=\"Wade Warren\" />\n<Avatar name=\"Esther Howard\" size=\"lg\" tone=\"neutral\" />\n```\n\nDocs: https://rime.mjsons.net/components/avatar\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/avatar.json"
+  ]
+}

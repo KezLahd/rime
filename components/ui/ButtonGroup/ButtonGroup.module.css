@@ -1,0 +1,47 @@
+/* The group squares the joins between its buttons; the outer corners keep
+   the buttons' own radius. A 1px overlap lets neighbouring edges share one
+   hairline. Two class selectors outrank a button's own radius rule. */
+.group {
+  display: inline-flex;
+  isolation: isolate;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.group > * {
+  position: relative;
+}
+
+/* Focus or hover lifts a button over its neighbours, so its ring is whole. */
+.group > *:hover,
+.group > *:focus-visible {
+  z-index: 1;
+}
+
+.horizontal > *:not(:last-child) {
+  border-top-right-radius: var(--button-group-join, 0);
+  border-bottom-right-radius: var(--button-group-join, 0);
+}
+
+.horizontal > *:not(:first-child) {
+  margin-left: -1px;
+  border-top-left-radius: var(--button-group-join, 0);
+  border-bottom-left-radius: var(--button-group-join, 0);
+}
+
+.vertical > *:not(:last-child) {
+  border-bottom-left-radius: var(--button-group-join, 0);
+  border-bottom-right-radius: var(--button-group-join, 0);
+}
+
+.vertical > *:not(:first-child) {
+  margin-top: -1px;
+  border-top-left-radius: var(--button-group-join, 0);
+  border-top-right-radius: var(--button-group-join, 0);
+}
+
+.vertical > * {
+  justify-content: flex-start;
+}

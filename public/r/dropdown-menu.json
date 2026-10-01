@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dropdown-menu",
+  "type": "registry:item",
+  "title": "dropdown-menu (Rime menu)",
+  "description": "The shadcn name \"dropdown-menu\": installs Rime's menu.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/menu.json"
+  ],
+  "meta": {
+    "aliasOf": "menu"
+  }
+}

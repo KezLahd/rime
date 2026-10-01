@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio-demo",
+  "type": "registry:item",
+  "title": "AspectRatio examples",
+  "description": "Usage examples for AspectRatio.",
+  "files": [
+    {
+      "path": "registry/examples/aspect-ratio.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/aspect-ratio.md",
+      "content": "# AspectRatio examples\n\nA box held to a width-to-height ratio, so media keeps its shape and never shifts the layout while loading.\n\n```tsx\nimport { AspectRatio } from \"@/components/ui\";\n\n<AspectRatio ratio={16 / 9}>\n  <img src=\"/cover.jpg\" alt=\"The new office, from the street\" />\n</AspectRatio>\n```\n\n## 16 / 9\n\n```tsx\n<AspectRatio ratio={16 / 9}>…</AspectRatio>\n```\n\n## Square and 4 / 3\n\n```tsx\n<AspectRatio ratio={1}>…</AspectRatio>\n<AspectRatio ratio={4 / 3}>…</AspectRatio>\n```\n\nDocs: https://rime.mjsons.net/components/aspect-ratio\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/aspect-ratio.json"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon",
+  "type": "registry:item",
+  "title": "icon",
+  "description": "Rime icon.",
+  "files": [
+    {
+      "path": "components/ui/Icon/Icon.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Icon/Icon.tsx",
+      "content": "import type { SVGProps } from \"react\";\nimport {\n  ArrowLeft,\n  ArrowRight,\n  BookText,\n  BuildingComplex,\n  Calendar,\n  Check,\n  ChevronDown,\n  ChevronLeft,\n  ChevronRight,\n  ChevronUp,\n  ChevronsLeft,\n  ChevronsRight,\n  ChevronsUpDown,\n  CircleAlert,\n  CircleCheck,\n  ClipboardList,\n  Clock,\n  Ellipsis,\n  ExternalLink,\n  Eye,\n  EyeOff,\n  File,\n  Funnel,\n  House,\n  Inbox,\n  Info,\n  Lock,\n  LogOut,\n  Mail,\n  Minus,\n  Play,\n  Plus,\n  Printer,\n  RefreshCw,\n  Search,\n  ShieldCheck,\n  Snowflake,\n  TriangleAlert,\n  Truck,\n  Upload,\n  User,\n  Users,\n  X,\n  type LucideIcon,\n} from \"lucide-react\";\n\n/*\n * Lucide icons as drawn, at Lucide's own stroke (2) unless a call site sets\n * one. The Icon* names\n * are kept so no call site changes; each maps to its Lucide counterpart.\n * Default size 16 matches button and control text.\n */\n\nexport type IconProps = Omit<SVGProps<SVGSVGElement>, \"children\" | \"ref\"> & {\n  size?: number;\n  /** Accessible name. Omit for decorative icons (the default). */\n  title?: string;\n};\n\nfunction make(name: string, Lucide: LucideIcon) {\n  function IconComponent({ size = 16, title, ...rest }: IconProps) {\n    return (\n      <Lucide\n        size={size}\n        aria-hidden={title ? undefined : true}\n        aria-label={title}\n        role={title ? \"img\" : undefined}\n        focusable=\"false\"\n        {...rest}\n      />\n    );\n  }\n  IconComponent.displayName = name;\n  return IconComponent;\n}\n\nexport const IconCheck = make(\"IconCheck\", Check);\nexport const IconMinus = make(\"IconMinus\", Minus);\nexport const IconX = make(\"IconX\", X);\nexport const IconPlus = make(\"IconPlus\", Plus);\nexport const IconChevronDown = make(\"IconChevronDown\", ChevronDown);\nexport const IconChevronUp = make(\"IconChevronUp\", ChevronUp);\nexport const IconChevronLeft = make(\"IconChevronLeft\", ChevronLeft);\nexport const IconChevronRight = make(\"IconChevronRight\", ChevronRight);\nexport const IconChevronsLeft = make(\"IconChevronsLeft\", ChevronsLeft);\nexport const IconChevronsRight = make(\"IconChevronsRight\", ChevronsRight);\nexport const IconChevronsUpDown = make(\"IconChevronsUpDown\", ChevronsUpDown);\nexport const IconArrowLeft = make(\"IconArrowLeft\", ArrowLeft);\nexport const IconArrowRight = make(\"IconArrowRight\", ArrowRight);\nexport const IconSearch = make(\"IconSearch\", Search);\nexport const IconInfo = make(\"IconInfo\", Info);\nexport const IconAlertCircle = make(\"IconAlertCircle\", CircleAlert);\nexport const IconAlertTriangle = make(\"IconAlertTriangle\", TriangleAlert);\nexport const IconCheckCircle = make(\"IconCheckCircle\", CircleCheck);\nexport const IconUpload = make(\"IconUpload\", Upload);\nexport const IconFile = make(\"IconFile\", File);\nexport const IconCalendar = make(\"IconCalendar\", Calendar);\nexport const IconUser = make(\"IconUser\", User);\nexport const IconUsers = make(\"IconUsers\", Users);\nexport const IconBuilding = make(\"IconBuilding\", BuildingComplex);\nexport const IconLogOut = make(\"IconLogOut\", LogOut);\nexport const IconShield = make(\"IconShield\", ShieldCheck);\nexport const IconLock = make(\"IconLock\", Lock);\nexport const IconEye = make(\"IconEye\", Eye);\nexport const IconEyeOff = make(\"IconEyeOff\", EyeOff);\nexport const IconClipboard = make(\"IconClipboard\", ClipboardList);\nexport const IconInbox = make(\"IconInbox\", Inbox);\nexport const IconHome = make(\"IconHome\", House);\nexport const IconBook = make(\"IconBook\", BookText);\nexport const IconTruck = make(\"IconTruck\", Truck);\nexport const IconSnowflake = make(\"IconSnowflake\", Snowflake);\nexport const IconPlay = make(\"IconPlay\", Play);\nexport const IconExternal = make(\"IconExternal\", ExternalLink);\nexport const IconMail = make(\"IconMail\", Mail);\nexport const IconFilter = make(\"IconFilter\", Funnel);\nexport const IconMoreHorizontal = make(\"IconMoreHorizontal\", Ellipsis);\nexport const IconPrinter = make(\"IconPrinter\", Printer);\nexport const IconClock = make(\"IconClock\", Clock);\nexport const IconRefresh = make(\"IconRefresh\", RefreshCw);\n"
+    }
+  ],
+  "dependencies": [
+    "lucide-react@^1.48.0"
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Icon } from \"@/components/ui/Icon/Icon\";"
+  }
+}

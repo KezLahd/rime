@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "type": "registry:item",
+  "title": "AspectRatio",
+  "description": "A box held to a width-to-height ratio, so media keeps its shape and never shifts the layout while loading.",
+  "categories": [
+    "layoutandsurfaces"
+  ],
+  "files": [
+    {
+      "path": "components/ui/AspectRatio/AspectRatio.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/AspectRatio/AspectRatio.module.css",
+      "content": "/* A fixed-ratio box. Direct media children fill it. */\n\n.root {\n  position: relative;\n  width: var(--aspect-width, 100%);\n  aspect-ratio: var(--aspect-ratio, 1.7778);\n}\n\n.framed {\n  overflow: hidden;\n  border-radius: var(--aspect-radius, var(--inner-radius, var(--r-lg)));\n  background: var(--surface-sunken);\n  box-shadow: inset 0 0 0 var(--border-w) var(--line);\n}\n\n.root > img,\n.root > video,\n.root > iframe,\n.root > picture {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  border: 0;\n}\n"
+    },
+    {
+      "path": "components/ui/AspectRatio/AspectRatio.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/AspectRatio/AspectRatio.tsx",
+      "content": "import type { CSSProperties, HTMLAttributes, ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./AspectRatio.module.css\";\n\nexport type AspectRatioProps = HTMLAttributes<HTMLDivElement> & {\n  /** Width over height: 16 / 9, 4 / 3, 1. Default 16 / 9. */\n  ratio?: number;\n  /** Rounded, clipped frame with a hairline, for media on a panel. Default true. */\n  framed?: boolean;\n  children?: ReactNode;\n};\n\n/**\n * Holds its children to a fixed width-to-height ratio, so images, video and\n * maps keep their shape at any width and never shift the layout while they\n * load. An <img> or <video> child fills the box with object-fit: cover.\n */\nexport function AspectRatio({ ratio = 16 / 9, framed = true, className, style, children, ...rest }: AspectRatioProps) {\n  return (\n    <div data-slot=\"aspect-ratio\"\n      className={cx(styles.root, framed && styles.framed, className)}\n      style={{ \"--aspect-ratio\": ratio, ...style } as CSSProperties}\n      {...rest}\n    >\n      {children}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { AspectRatio } from \"@/components/ui/AspectRatio/AspectRatio\";",
+    "docs": "https://rime.mjsons.net/md/aspect-ratio.md",
+    "page": "https://rime.mjsons.net/components/aspect-ratio"
+  }
+}

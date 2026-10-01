@@ -1,0 +1,15 @@
+[
+  { "name": "dashboard", "title": "Dashboard", "description": "The frosted shell, a page header, headline figures in one strip, an orders chart with a 7, 30 and 90 day switch, and the list-page table.", "category": "dashboard", "route": "/dashboard" },
+  { "name": "inbox", "title": "Inbox", "description": "A mail-style app in three resizable panes: folders, the message list with search and an unread switch, and the open message with a reply box.", "category": "apps", "route": "/inbox" },
+  { "name": "data-table", "title": "Data table (tasks)", "description": "Tasks with one full-width search, status and priority dropdowns, row selection with select-all, a bulk actions bar and centred pagination.", "category": "data", "route": "/tasks" },
+  { "name": "settings", "title": "Settings", "description": "A section nav, field groups in one frosted panel, notification switches and a Danger zone whose actions confirm with a typed phrase.", "category": "settings", "route": "/settings" },
+  { "name": "sidebar-icon", "title": "Sidebar: collapsible icon rail", "description": "The sidebar folds to an icon rail from the top bar, and the choice is remembered.", "category": "layout", "route": "/projects" },
+  { "name": "sidebar-inset", "title": "Sidebar: inset", "description": "The page set into one frosted sheet inside the main area, with a secondary nav across its top.", "category": "layout", "route": "/projects" },
+  { "name": "header-only", "title": "Header only", "description": "No sidebar: logo, a short nav and the profile in one frosted top bar, the page full width below.", "category": "layout", "route": "/projects" },
+  { "name": "auth-login", "title": "Sign in with MFA", "description": "Password, then the authenticator code, with authenticator setup when a device is lost. Brand bar above, security note below.", "category": "auth", "route": "/login" },
+  { "name": "auth-signup", "title": "Create an account", "description": "Name, work email, a password and the terms, in one card.", "category": "auth", "route": "/signup" },
+  { "name": "auth-otp", "title": "Email code", "description": "A six-digit code sent by email, with resend.", "category": "auth", "route": "/verify" },
+  { "name": "auth-mfa-setup", "title": "Set up an authenticator", "description": "Scan a QR code or type the key, then confirm with the first code.", "category": "auth", "route": "/security/mfa" },
+  { "name": "auth-reset", "title": "Reset password", "description": "Ask for the email and send a reset link.", "category": "auth", "route": "/reset-password" },
+  { "name": "auth-check-email", "title": "Check your email", "description": "After a magic link or reset: what to do next, with resend.", "category": "auth", "route": "/check-email" }
+]

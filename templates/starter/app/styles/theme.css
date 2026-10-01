@@ -1,0 +1,23 @@
+/* Acme's theme: only what differs from Rime Default.
+   Make one in Rime Studio (https://rime.mjsons.net/themes): start from a
+   preset, drop in your logo to extract a palette, check contrast in light
+   and dark, then Export and paste the result here. For example:
+
+   :root {
+     --brand: #0f9b8e;
+     --brand-action: #0b7a70;
+     --brand-strong: #075f57;
+     --rgb-brand: 15, 155, 142;
+     --r-md: 6px;
+   }
+
+   .dark, [data-mode="dark"] {
+     --brand: #3fc6b8;
+     --rgb-brand: 63, 198, 184;
+   }
+
+   Load it after the Rime styles (app/globals.css does). Never edit
+   tokens.css itself: re-running the CLI would overwrite it. */
+
+:root {
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-demo",
+  "type": "registry:item",
+  "title": "Table examples",
+  "description": "Usage examples for Table.",
+  "files": [
+    {
+      "path": "registry/examples/table.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/table.md",
+      "content": "# Table examples\n\nThe one table look: neutral header row, whole-cell sortable headers, skeleton, empty and error states, and Pagination.\n\n```tsx\nimport { Pagination, Table, type Column, type SortState } from \"@/components/ui\";\n\nconst columns: Column<Invoice>[] = [\n  { key: \"ref\", header: \"Invoice\", cell: (i) => i.reference, mono: true },\n  { key: \"customer\", header: \"Customer\", sortable: true, cell: (i) => i.customer },\n];\n\n<Table caption=\"Invoices\" columns={columns} rows={rows} rowKey={(i) => i.id} sort={sort} onSortChange={setSort} />\n<Pagination page={page} pageCount={pageCount} onPageChange={setPage} totalItems={total} pageSize={20} itemLabel=\"invoices\" />\n```\n\n## Sortable, with pagination\n\n```tsx\n<Table caption=\"Invoices\" columns={columns} rows={pageRows} rowKey={(i) => i.id} sort={sort} onSortChange={setSort} />\n<Pagination page={page} pageCount={3} onPageChange={setPage} totalItems={11} pageSize={4} itemLabel=\"invoices\" />\n```\n\n## Loading, empty and error\n\nSwitch the state to see each. Empty tells the user what to do next.\n\n```tsx\n<Table … loading />\n<Table … rows={[]} empty={<EmptyState compact tone=\"filtered\" title=\"No invoices match\" description=\"Clear a filter to see more.\" />} />\n<Table … error={<Alert tone=\"danger\" title=\"Couldn't load invoices\" action={<Button size=\"sm\" variant=\"secondary\" onClick={retry}>Try again</Button>} />} />\n```\n\n## White appearance\n\n```tsx\n<Table appearance=\"white\" caption=\"Invoices\" columns={columns} rows={rows} rowKey={(r) => r.id} />\n```\n\nDocs: https://rime.mjsons.net/components/table\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/table.json"
+  ]
+}

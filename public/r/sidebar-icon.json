@@ -1,0 +1,47 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sidebar-icon",
+  "type": "registry:item",
+  "title": "Sidebar: collapsible icon rail",
+  "description": "The sidebar folds to an icon rail from the top bar, and the choice is remembered.",
+  "categories": [
+    "blocks",
+    "layout"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/sidebar-icon/index.tsx",
+      "type": "registry:file",
+      "target": "~/components/blocks/sidebar-icon/index.tsx",
+      "content": "\"use client\";\n\nimport { PageHeader } from \"@/components/shell/PageHeader\";\nimport { SidebarShell } from \"@/components/shell/SidebarShell\";\nimport { Avatar } from \"@/components/ui/Avatar/Avatar\";\nimport { StatusPill } from \"@/components/ui/Badge/Badge\";\nimport { Button } from \"@/components/ui/Button/Button\";\nimport { GlassPanel } from \"@/components/ui/GlassPanel/GlassPanel\";\nimport { IconBook, IconClipboard, IconFile, IconHome, IconPlus, IconUsers } from \"@/components/ui/Icon/Icon\";\nimport styles from \"./SidebarIcon.module.css\";\n\nconst NAV = [\n  { href: \"/dashboard\", label: \"Dashboard\", icon: <IconHome size={16} />, exact: true },\n  { href: \"/projects\", label: \"Projects\", icon: <IconClipboard size={16} />, count: 3 },\n  { href: \"/invoices\", label: \"Invoices\", icon: <IconFile size={16} /> },\n  { href: \"/team\", label: \"Team\", icon: <IconUsers size={16} /> },\n  { href: \"/docs\", label: \"Docs\", icon: <IconBook size={16} /> },\n];\n\nconst PROJECTS = [\n  { name: \"Atlas redesign\", owner: \"Jane Cooper\", due: \"14 Oct\", status: \"On track\", tone: \"success\" },\n  { name: \"Cobalt billing API\", owner: \"Wade Warren\", due: \"21 Oct\", status: \"At risk\", tone: \"warning\" },\n  { name: \"Ember mobile app\", owner: \"Esther Howard\", due: \"2 Nov\", status: \"On track\", tone: \"success\" },\n  { name: \"Fjord analytics\", owner: \"Robert Fox\", due: \"9 Nov\", status: \"Planning\", tone: \"neutral\" },\n] as const;\n\nexport type SidebarIconProps = {\n  /** Fill the parent instead of the viewport. */\n  contained?: boolean;\n};\n\n/**\n * Sidebar that collapses to an icon rail: the panel button at the start of\n * the top bar folds it, and the choice is remembered (storageKey). Labels\n * stay as tooltips and for screen readers; counts move onto the icons.\n */\nexport default function SidebarIcon({ contained }: SidebarIconProps) {\n  return (\n    <SidebarShell\n      contained={contained}\n      collapsible\n      defaultCollapsed\n      storageKey=\"acme-sidebar-collapsed\"\n      navLabel=\"Main\"\n      nav={NAV}\n      activeHref=\"/projects\"\n      title=\"Projects\"\n      topbarRight={<Avatar name=\"Jane Cooper\" size=\"sm\" tone=\"brand\" />}\n    >\n      <div className={styles.page}>\n        <PageHeader title=\"Projects\" description=\"Four active projects across two teams.\" actions={<Button iconStart={<IconPlus size={15} />}>New project</Button>} />\n        <GlassPanel padding=\"none\">\n          <ul className={styles.list}>\n            {PROJECTS.map((p) => (\n              <li key={p.name} className={styles.row}>\n                <span className={styles.name}>{p.name}</span>\n                <span className={styles.meta}>\n                  <Avatar name={p.owner} size=\"sm\" tone=\"neutral\" /> {p.owner}\n                </span>\n                <span className={styles.meta}>Due {p.due}</span>\n                <StatusPill tone={p.tone}>{p.status}</StatusPill>\n              </li>\n            ))}\n          </ul>\n        </GlassPanel>\n      </div>\n    </SidebarShell>\n  );\n}\n"
+    },
+    {
+      "path": "components/blocks/sidebar-icon/SidebarIcon.module.css",
+      "type": "registry:file",
+      "target": "~/components/blocks/sidebar-icon/SidebarIcon.module.css",
+      "content": ".page {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n\n.list {\n  display: flex;\n  flex-direction: column;\n}\n\n.row {\n  display: grid;\n  grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1fr) auto;\n  align-items: center;\n  gap: 16px;\n  padding: 14px 20px;\n  border-bottom: var(--border-w) solid var(--line-glass);\n}\n\n.row:last-child {\n  border-bottom: 0;\n}\n\n.name {\n  font-weight: 700;\n  color: var(--ink-heading);\n}\n\n.meta {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  font-size: var(--text-small);\n  color: var(--ink-muted);\n}\n\n@media (max-width: 640px) {\n  .row {\n    grid-template-columns: minmax(0, 1fr) auto;\n  }\n\n  .row .meta {\n    display: none;\n  }\n}\n"
+    },
+    {
+      "path": "registry/pages/sidebar-icon.tsx",
+      "type": "registry:file",
+      "target": "~/app/projects/page.tsx",
+      "content": "import SidebarIcon from \"@/components/blocks/sidebar-icon\";\n\nexport default function Page() {\n  return <SidebarIcon />;\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/avatar.json",
+    "https://rime.mjsons.net/r/badge.json",
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/button.json",
+    "https://rime.mjsons.net/r/glass-panel.json",
+    "https://rime.mjsons.net/r/icon.json",
+    "https://rime.mjsons.net/r/page-header.json",
+    "https://rime.mjsons.net/r/sidebar-shell.json"
+  ],
+  "docs": "Open /projects to see it. The page is app/projects/page.tsx; gate access inside it if the screen needs a signed-in user.",
+  "meta": {
+    "page": "https://rime.mjsons.net/blocks#sidebar-icon",
+    "route": "/projects"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart",
+  "type": "registry:item",
+  "title": "chart (Rime charts)",
+  "description": "The shadcn name \"chart\": installs Rime's charts.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/charts.json"
+  ],
+  "meta": {
+    "aliasOf": "charts"
+  }
+}

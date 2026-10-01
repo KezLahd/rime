@@ -1,0 +1,102 @@
+/* Themed scrolling. Three parts, all tokens:
+
+   - thin native scrollbars in a tint of the brand (--scrollbar-width,
+     --scrollbar-thumb, --scrollbar-track), never a JS scrollbar;
+   - overscroll-behavior: contain, so reaching the end of a list never
+     scrolls the page behind it;
+   - edge shadows at the start and end (--scroll-edge-top, --scroll-edge-bottom),
+     shown by useScrollEdges' data-scrolled and data-more attributes. */
+
+.themed {
+  overscroll-behavior: contain;
+  scrollbar-width: var(--scrollbar-width);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ── ScrollArea: a clipped frame round a scrolling viewport ────────────
+   The edges are pseudo-elements parked just outside the frame, so only
+   their shadows fall inside it: the same hairline and soft shade the modal
+   header and footer cast, and no box of their own over the content. */
+
+.area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.x .viewport {
+  overflow-y: hidden;
+}
+
+/* Sized by its content, so the observer sees a wide table grow. */
+.x .content {
+  width: max-content;
+  min-width: 100%;
+}
+
+.y .viewport {
+  overflow-x: hidden;
+}
+
+.area::before,
+.area::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  height: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+.area::before {
+  bottom: 100%;
+  box-shadow: var(--scroll-edge-top);
+}
+
+.area::after {
+  top: 100%;
+  box-shadow: var(--scroll-edge-bottom);
+}
+
+/* Horizontal: the same edges, turned to the left and right. */
+.x::before,
+.x::after {
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  height: auto;
+}
+
+.x::before {
+  left: auto;
+  right: 100%;
+  box-shadow: var(--scroll-edge-left);
+}
+
+.x::after {
+  left: 100%;
+  right: auto;
+  box-shadow: var(--scroll-edge-right);
+}
+
+.area[data-scrolled]::before,
+.area[data-more]::after {
+  opacity: 1;
+}
+
+.viewport:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}

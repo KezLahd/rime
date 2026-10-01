@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-demo",
+  "type": "registry:item",
+  "title": "Combobox examples",
+  "description": "Usage examples for Combobox.",
+  "files": [
+    {
+      "path": "registry/examples/combobox.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/combobox.md",
+      "content": "# Combobox examples\n\nA text field that filters a list of options as you type and picks one, with optional create.\n\n```tsx\nimport { Combobox } from \"@/components/ui\";\n\n<Field label=\"Project\">\n  <Combobox options={PROJECTS} value={project} onChange={setProject} placeholder=\"Type to search projects\" />\n</Field>\n```\n\n## Open list\n\nShown inline so the list is visible; in a form it is a popover.\n\n```tsx\n<Combobox inline aria-label=\"Project\" options={PROJECTS} value={project} onChange={setProject} />\n```\n\n## In a Field\n\n```tsx\n<Field label=\"Project\">\n  <Combobox options={PROJECTS} value={project} onChange={setProject} placeholder=\"Type to search projects\" />\n</Field>\n```\n\n## Creatable\n\n```tsx\n<Combobox\n  creatable\n  options={tags}\n  value={tag}\n  onChange={setTag}\n  onCreate={(label) => {\n    const value = slugify(label);\n    setTags((t) => [...t, { value, label }]);\n    setTag(value);\n  }}\n/>\n```\n\nDocs: https://rime.mjsons.net/components/combobox\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/combobox.json"
+  ]
+}

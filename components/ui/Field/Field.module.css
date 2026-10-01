@@ -1,0 +1,78 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  padding: 0;
+  color: var(--ink-secondary);
+}
+
+.sentence {
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: -0.003em;
+}
+
+/* the reference auth label: 11.5px / 600 / 0.04em / uppercase. the body face's caps sit
+   lighter than Jakarta's, so this runs at 700. */
+.caps {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.required {
+  color: var(--danger-ink);
+  font-weight: 700;
+}
+
+.optional {
+  margin-left: 4px;
+  font-weight: 400;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.hint {
+  margin-top: -2px;
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 1px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--danger-ink);
+}
+
+.error svg {
+  margin-top: 1px;
+}

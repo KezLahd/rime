@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-pill-demo",
+  "type": "registry:item",
+  "title": "StatusPill, Badge and CountBadge examples",
+  "description": "Usage examples for StatusPill, Badge and CountBadge.",
+  "files": [
+    {
+      "path": "registry/examples/status-pill.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/status-pill.md",
+      "content": "# StatusPill, Badge and CountBadge examples\n\nStatus pills (tinted fill, tinted edge, deep ink), small uppercase tags, and count badges.\n\n```tsx\nimport { Badge, CountBadge, StatusPill } from \"@/components/ui\";\n\n<StatusPill tone=\"success\">Paid</StatusPill>\n```\n\n## Tones\n\n```tsx\n<StatusPill tone=\"neutral\">Draft</StatusPill>\n<StatusPill tone=\"info\">Sent</StatusPill>\n<StatusPill tone=\"warning\" dot>Overdue</StatusPill>\n<StatusPill tone=\"success\">Paid</StatusPill>\n<StatusPill tone=\"danger\">Void</StatusPill>\n<Badge tone=\"brand\" variant=\"solid\">New</Badge>\n<CountBadge count={4} label=\"4 waiting\" />\n```\n\n## shadcn badge variants\n\nBadge accepts shadcn's variant names: default (solid accent), secondary (soft neutral), destructive (solid danger) and outline (a hairline, no fill). asChild renders a link with the badge's look.\n\n```tsx\n<Badge variant=\"default\">New</Badge>\n<Badge variant=\"secondary\">Draft</Badge>\n<Badge variant=\"destructive\">Overdue</Badge>\n<Badge variant=\"outline\">Beta</Badge>\n<Badge variant=\"outline\" asChild><a href=\"#changelog\">Changelog</a></Badge>\n```\n\nDocs: https://rime.mjsons.net/components/status-pill\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/badge.json"
+  ]
+}

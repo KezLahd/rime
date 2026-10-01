@@ -1,0 +1,540 @@
+/* Modal on frosted glass, the popover and toast
+   family at reading weight: a touch more opaque than a menu (0.86 against
+   0.72) because people read a whole form in here, with a stronger blur.
+   Depth comes from shadows above and below plus a white specular top edge,
+   never an outline. The tone is a soft wash washed in from the icon side
+   and a soft icon tile, never a fill or a side bar.
+
+   Every surface value is a --modal-* token, so the flat preset turns it
+   into the flat flat white square with a hairline, a neutral scrim and
+   no blur, without a selector here. Width, radius and padding are
+   per-component tokens too (--modal-width-sm|md|lg, --modal-radius,
+   --modal-radius-lg, --modal-pad-x). Widths: sm 480, md 640, lg 880
+  . */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.root[data-state="closed"] {
+  pointer-events: none;
+}
+
+/* ── Scrim: the page recedes under a deep veil ─────────────────────────
+   Deeper at the edges than behind the panel so the eye settles on the
+   dialog; the blur takes the page's detail away without hiding where you
+   are. Flat: a flat neutral veil, no blur. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-scrim);
+  -webkit-backdrop-filter: var(--modal-scrim-blur);
+  backdrop-filter: var(--modal-scrim-blur);
+  animation: scrim-in 240ms var(--ease) both;
+}
+
+.root[data-state="closed"] .scrim {
+  animation: scrim-out 200ms var(--ease) forwards;
+}
+
+/* ── Panel ───────────────────────────────────────────────────────────── */
+
+.panel {
+  --_pad-x: var(--modal-pad-x, calc(24px * var(--density)));
+
+  /* Tone channels. Default is the brand gesture, barely there. */
+  --tone-color: rgb(var(--rgb-brand));
+  --tone-ink: var(--ink-brand);
+  --tone-bar: var(--brand-gradient);
+  --tone-wash: 7%;
+  --tone-tile: 12%;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: min(calc(100dvh - 48px), 880px);
+  overflow: hidden;
+  background: var(--modal-surface);
+  -webkit-backdrop-filter: var(--modal-blur);
+  backdrop-filter: var(--modal-blur);
+  border-radius: var(--modal-radius, var(--r-xl));
+  box-shadow: var(--modal-shadow);
+  outline: none;
+  transform-origin: 50% 60%;
+  animation: panel-in 320ms var(--ease-out) both;
+}
+
+.root[data-state="closed"] .panel {
+  animation: panel-out 180ms var(--ease) forwards;
+}
+
+.sm {
+  max-width: var(--modal-width-sm, 480px);
+}
+
+.md {
+  max-width: var(--modal-width-md, 640px);
+}
+
+/* The widest panel takes the page-level radius: the scale tracks size. */
+.lg {
+  max-width: var(--modal-width-lg, 880px);
+  border-radius: var(--modal-radius-lg, var(--r-2xl));
+}
+
+.tone-danger {
+  --tone-color: rgb(var(--rgb-danger));
+  --tone-ink: var(--danger-ink);
+  --tone-bar: var(--danger-gradient);
+  /* Warnings carry a clearly red header bloom. */
+  --tone-wash: 26%;
+  --tone-tile: 13%;
+}
+
+.tone-success {
+  --tone-color: var(--success-solid);
+  --tone-ink: var(--success-ink);
+  --tone-bar: var(--success-gradient);
+  --tone-wash: 24%;
+  --tone-tile: 12%;
+}
+
+.tone-info {
+  --tone-color: rgb(var(--rgb-brand-soft));
+  --tone-ink: var(--info-ink);
+  --tone-wash: 12%;
+  --tone-tile: 18%;
+}
+
+/* The tone wash: a soft light from the tile's corner, gone by the body.
+   Behind everything, clipped by the panel's radius. Flat: off. */
+.wash {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 200px;
+  pointer-events: none;
+  /* Two soft layers: a broad light from the tile's corner and a gentler
+     sweep across the header, both gone before the body text. */
+  background:
+    radial-gradient(
+      120% 100% at 0% 0%,
+      color-mix(in srgb, var(--tone-color) var(--tone-wash), transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--tone-color) calc(var(--tone-wash) * 0.45), transparent) 0%,
+      transparent 100%
+    );
+  opacity: var(--modal-wash-opacity);
+  transition: opacity 300ms var(--ease);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+
+.header {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: calc(22px * var(--density)) calc(16px * var(--density)) calc(18px * var(--density)) var(--_pad-x);
+  transition: box-shadow 200ms var(--ease);
+}
+
+/* Scroll-aware: a hairline and a short soft shade once the body has moved
+   under the header. None while the content sits at the top. */
+.panel[data-scrolled] .header {
+  box-shadow: var(--scroll-edge-top);
+}
+
+/* One left edge for everything: the icon tile sits on
+   its own row with the close button, and the eyebrow, title and description
+   run full width beneath it, flush with the body text. Without a tile the
+   heading and close share the first row. */
+.headerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 14px;
+  row-gap: 14px;
+}
+
+.headerRow .heading {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.headerRow:has(.tile) .heading {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.headerRow .tile {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+/* Soft tile: a light wash of the tone, the icon in the tone's ink, a white
+   specular edge and a faint tone ring. No gradient fill, no glow. */
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  color: var(--tone-ink);
+  background: color-mix(in srgb, var(--tone-color) var(--tone-tile), transparent);
+  box-shadow:
+    var(--shadow-specular),
+    inset 0 0 0 1px color-mix(in srgb, var(--tone-color) 18%, transparent);
+  transition:
+    color 300ms var(--ease),
+    background-color 300ms var(--ease);
+}
+
+.heading {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 1px;
+  animation: heading-in 260ms var(--ease-out) both;
+}
+
+/* A quiet line under the title (a reference, "Step 1 of 2"), never a label
+   stacked over it. */
+.meta {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.25;
+  color: var(--ink-heading);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin-top: 2px;
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+/* IconButton ghost, pulled up and out so its glyph sits on the title's
+   cap line and its hit area reaches the corner. */
+.close {
+  grid-column: 2;
+  grid-row: 1;
+  margin: -6px -4px 0 0;
+}
+
+/* With a tile, centre the close button on the tile rather than the title. */
+.headerRow:has(.tile) .close {
+  align-self: center;
+  margin: 0 -4px 0 0;
+}
+
+/* Step rule: one segment per step, filled up to the current one. the reference design's
+   invoice dialog, thinned to a hairline weight. */
+.progress {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.segment {
+  flex: 1;
+  height: 3px;
+  border-radius: var(--r-full);
+  background: rgba(var(--rgb-brand-deep), 0.1);
+  transition: background 320ms var(--ease);
+}
+
+.segment[data-done] {
+  background: var(--tone-bar);
+}
+
+/* ── Body ────────────────────────────────────────────────────────────── */
+
+.body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px var(--_pad-x) calc(22px * var(--density));
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--ink-body);
+  /* overscroll-behavior and the thin tinted scrollbar: Scroll's .themed,
+     composed in Modal.tsx so every scroller shares one recipe. */
+}
+
+.body:focus-visible {
+  outline: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Text uses the panel's full width; balanced breaks instead. */
+.content > p {
+  text-wrap: pretty;
+}
+
+/* ConfirmModal's step: cross-fades in the direction of travel. */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  outline: none;
+  animation: step-in 280ms var(--ease-out) both;
+}
+
+.step[data-direction="back"] {
+  animation-name: step-in-back;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+
+.footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  padding: calc(14px * var(--density)) var(--_pad-x) calc(20px * var(--density));
+  transition: box-shadow 200ms var(--ease);
+}
+
+/* Scroll-aware: shows only while there is more content below. */
+.panel[data-more] .footer {
+  box-shadow: var(--scroll-edge-bottom);
+}
+
+.footerStart {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-left: -8px; /* a ghost Back button's label lines up with the body text */
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+}
+
+/* Plain text on the left (not a button) sits on the body's edge. */
+.footerStart:not(:has(> button, > a[class])) {
+  margin-left: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* ── Mobile: a bottom sheet ───────────────────────────────────────────
+   Every size slides up from the bottom edge under 640px, square at the
+   foot, rounded at the head. fullscreen takes the whole viewport for long
+   forms. Actions stack full width, primary last, nearest the thumb. */
+@media (max-width: 639px) {
+  .root {
+    align-items: flex-end;
+    padding: 12px 0 0;
+  }
+
+  .panel,
+  .lg {
+    max-width: none;
+    max-height: calc(100dvh - 12px);
+    border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+    transform-origin: 50% 100%;
+    animation-name: sheet-in;
+    animation-duration: 360ms;
+  }
+
+  .root[data-state="closed"] .panel {
+    animation-name: sheet-out;
+    animation-duration: 200ms;
+  }
+
+  .fullscreen {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .root:has(.fullscreen) {
+    padding: 0;
+  }
+
+  .header {
+    padding: 20px 12px 16px 20px;
+  }
+
+  .body {
+    padding: 4px 20px 20px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 20px max(20px, calc(env(safe-area-inset-bottom) + 12px));
+  }
+
+  .footerStart {
+    margin-left: 0;
+  }
+
+  .footerStart > * {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────── */
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes scrim-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Entrance only: a 12px rise and a settle from 0.98. Never on hover. */
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@keyframes panel-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes heading-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+@keyframes step-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+@keyframes fade-only {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-only-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: everything fades in place, nothing travels or scales. */
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .step,
+  .step[data-direction="back"],
+  .heading {
+    animation: fade-only 140ms linear both;
+  }
+
+  .root[data-state="closed"] .panel {
+    animation: fade-only-out 140ms linear forwards;
+  }
+
+  .scrim {
+    animation: fade-only 140ms linear both;
+  }
+
+  .root[data-state="closed"] .scrim {
+    animation: fade-only-out 140ms linear forwards;
+  }
+}
+
+/* Inline: the open panel in normal flow, for docs and thumbnails. No entry
+   animation, no viewport clamp, a fixed reading width. */
+.inline {
+  width: var(--modal-inline-width, 520px);
+  max-width: 100%;
+  max-height: none;
+  animation: none;
+}
+
+.inline.lg {
+  width: var(--modal-inline-width-lg, 640px);
+}
+
+.inline .heading,
+.inline .step {
+  animation: none;
+}

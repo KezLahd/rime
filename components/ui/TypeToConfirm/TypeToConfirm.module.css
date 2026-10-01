@@ -1,0 +1,135 @@
+/* Type-to-confirm body. The Modal supplies the danger header (wash, tile,
+   alertdialog); this is the impact panel, the caller's fields and the
+   phrase. */
+
+.form {
+  display: contents;
+}
+
+/* Reset: a native fieldset only so `disabled` reaches every control. */
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* The instruction is a sentence with the phrase inline in it. The
+   sentence is plain body text so the phrase, in bold mono, is what the eye
+   lands on. */
+.instruction {
+  font-size: var(--text-small);
+  line-height: 1.7;
+  color: var(--ink-body);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+/* The phrase: mono, the heading ink, and a faint highlighter band under the
+   lower half of the letters. No box, no border; it wraps with the sentence. */
+.phrase {
+  padding: 0 2px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-heading);
+  background: linear-gradient(transparent 58%, var(--wash-active) 58%, var(--wash-active) 92%, transparent 92%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  /* One click selects the whole phrase, for a manual copy. */
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+/* A small ghost button riding the text line. Doubled class to outrank
+   IconButton's size rule whatever the stylesheet order. */
+.copy.copy {
+  width: 24px;
+  height: 24px;
+  margin: -4px 0 -4px 2px;
+  vertical-align: middle;
+}
+
+.copy.copied,
+.copy.copied:hover:not(:disabled) {
+  color: var(--success-ink);
+  background: var(--success-fill);
+}
+
+/* Matched: the box settles to a quiet success edge. Doubled class so it
+   outranks TextInput's own hover and focus rules without !important. */
+.matchedBox.matchedBox,
+.matchedBox.matchedBox:hover {
+  border-color: color-mix(in srgb, var(--success-solid) 55%, transparent);
+}
+
+.matchedBox.matchedBox:focus-within {
+  border-color: var(--success-solid);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--success-solid) 14%, transparent);
+}
+
+.trailingCheck {
+  display: inline-flex;
+  padding-right: 12px;
+  color: var(--success-ink);
+}
+
+/* One line under the input. Its height is held while empty so nothing
+   below it moves as the state changes. */
+.status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 18px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.status svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.empty {
+  color: var(--ink-muted);
+}
+
+/* Still typing: not an error yet, just not there. */
+.partial {
+  color: var(--ink-muted);
+}
+
+.mismatch {
+  font-weight: 700;
+  color: var(--danger-ink);
+}
+
+.match {
+  font-weight: 700;
+  color: var(--success-ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .match svg,
+  .trailingCheck svg {
+    animation: check-in 220ms var(--ease-out) both;
+  }
+}
+
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}

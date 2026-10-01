@@ -1,0 +1,240 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* At rest a recessed well, not a dashed box: it sits into the glass the way
+   the reference chips do. The dashes are kept for when a file is over it. */
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 26px 20px 22px;
+  border-radius: var(--r-lg);
+  background: rgba(var(--rgb-white), 0.5);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(var(--rgb-brand), 0.28),
+    inset 0 2px 6px rgba(var(--rgb-contact), 0.05);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.zone:hover:not(.disabled) {
+  background: rgba(var(--rgb-white), 0.72);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(var(--rgb-brand), 0.45),
+    inset 0 2px 6px rgba(var(--rgb-contact), 0.04);
+}
+
+/* Listening: a file is over the zone. The edge breaks into a dashed line
+  , the familiar "drop here" signal, so the change of
+   state reads from the outline itself and not only from the tint. An inset
+   outline, since box-shadow can't dash; it follows the radius. The halo
+   stays outside. The hover selector is repeated so a pointer resting on the
+   zone can't wash the state out. */
+.zone.dragging,
+.zone.dragging:hover:not(.disabled) {
+  background: linear-gradient(135deg, rgba(var(--rgb-brand), 0.14), rgba(var(--rgb-brand-deep), 0.06)), var(--surface-solid);
+  box-shadow: 0 0 0 4px rgba(var(--rgb-brand), 0.14);
+  outline: 2px dashed var(--brand);
+  outline-offset: -2px;
+}
+
+.dragging .zoneIcon {
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-sm);
+  color: var(--ink-inverse);
+}
+
+.invalid:not(.dragging) {
+  background: var(--danger-field-fill);
+  box-shadow: inset 0 0 0 1.5px rgba(var(--rgb-danger), 0.65);
+}
+
+.disabled {
+  cursor: not-allowed;
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1.5px rgba(var(--rgb-brand-deep), 0.1);
+}
+
+.disabled .zoneTitle,
+.disabled .zoneHint,
+.disabled .zoneIcon {
+  color: var(--ink-disabled);
+}
+
+.zone > *:not(button) {
+  pointer-events: none;
+}
+
+.zoneIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  border-radius: var(--r-md);
+  background: var(--brand-gradient-soft);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-brand);
+}
+
+.zoneTitle {
+  font-size: var(--text-body);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.zoneHint {
+  margin-bottom: 8px;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.input {
+  display: none;
+}
+
+.rejections:empty {
+  display: none;
+}
+
+.rejection {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--danger-ink);
+}
+
+.rejection svg {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── File chip: the reference nested glass row ────────────────────────────── */
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 8px 8px 10px;
+  border-radius: var(--r-md);
+  background: rgba(var(--rgb-white), 0.72);
+  box-shadow: inset 0 0 0 1px rgba(var(--rgb-white), 0.9), 0 1px 3px rgba(var(--rgb-contact), 0.07);
+}
+
+:global([data-surface="solid"]) .chip {
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+
+.chipIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-xs);
+  background: var(--brand-fill);
+  color: var(--ink-brand);
+}
+
+.ext {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--brand-deep);
+}
+
+.chip_done .chipIcon {
+  background: var(--success-fill);
+  color: var(--success-ink);
+}
+
+.chip_error {
+  background: var(--danger-field-fill);
+  box-shadow: inset 0 0 0 1px var(--danger-line);
+}
+
+.chip_error .chipIcon {
+  background: var(--danger-fill);
+  color: var(--danger-ink);
+}
+
+.chip_error .chipMeta {
+  color: var(--danger-ink);
+  font-weight: 700;
+}
+
+.chipText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chipName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-body);
+}
+
+.chipMeta {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.remove:hover:not(:disabled) {
+  background: var(--danger-fill);
+  color: var(--danger-ink);
+}
+
+.remove:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.remove:disabled {
+  color: var(--ink-disabled);
+  cursor: not-allowed;
+}

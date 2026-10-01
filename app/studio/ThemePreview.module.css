@@ -1,0 +1,44 @@
+/* The Studio preview's layout only. Everything visual comes from the
+   components and the tokens being edited. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 24px;
+}
+
+.h2 {
+  margin-bottom: 14px;
+  font-size: var(--text-section);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill-nested);
+  border: var(--border-w) solid var(--glass-edge);
+}
+
+/* Live specimens, fully interactive here: the preview is for trying the
+   theme, not only looking at it. */
+.window {
+  height: 220px;
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.caption {
+  padding: 10px 14px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-bar-demo",
+  "type": "registry:item",
+  "title": "FilterBar examples",
+  "description": "Usage examples for FilterBar.",
+  "files": [
+    {
+      "path": "registry/examples/filter-bar.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/filter-bar.md",
+      "content": "# FilterBar examples\n\nThe one filter row above every table: a growing search, dropdown chips at the end, clear, and the list's own action.\n\n```tsx\nimport { FilterBar, FilterSearch, Select } from \"@/components/ui\";\n\n<FilterBar aria-label=\"Filter invoices\" onClear={filtering ? clear : undefined} actions={<Button size=\"sm\" iconStart={<IconPlus size={14} />}>New invoice</Button>}>\n  <FilterSearch grow aria-label=\"Search invoices\" value={query} onChange={setQuery} placeholder=\"Customer or invoice number\" />\n  <Select appearance=\"chip\" aria-label=\"Status\" value={status} onChange={setStatus} active={status !== \"all\"} options={STATUSES} />\n</FilterBar>\n```\n\n## Search, dropdowns, clear and action\n\nType or pick a status to see Clear filters appear.\n\n```tsx\n<FilterBar aria-label=\"Filter invoices\" onClear={filtering ? clear : undefined} actions={<Button size=\"sm\">New invoice</Button>}>\n  <FilterSearch grow aria-label=\"Search\" value={q} onChange={setQ} />\n  <Select appearance=\"chip\" aria-label=\"Status\" … />\n  <DateRangeFilter aria-label=\"Issued\" … />\n</FilterBar>\n```\n\nDocs: https://rime.mjsons.net/components/filter-bar\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/filter-bar.json"
+  ]
+}

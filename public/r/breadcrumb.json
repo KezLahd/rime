@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "type": "registry:item",
+  "title": "Breadcrumb",
+  "description": "Where this page sits: a trail of links ending on the current page, folding its middle into a menu when long.",
+  "categories": [
+    "navigation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Breadcrumb/Breadcrumb.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Breadcrumb/Breadcrumb.module.css",
+      "content": "/* Breadcrumb: muted links, a small chevron between them, the current page\n   in heading ink. One line; long trails fold rather than wrap. */\n\n.root {\n  min-width: 0;\n}\n\n.list {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--breadcrumb-gap, 6px);\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  font-size: var(--breadcrumb-size, var(--text-small));\n}\n\n.item {\n  display: inline-flex;\n  align-items: center;\n  min-width: 0;\n}\n\n.link,\n.current {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  padding: 2px 4px;\n  margin: 0 -4px;\n  border-radius: var(--r-xs);\n  white-space: nowrap;\n}\n\n.link {\n  color: var(--ink-muted);\n  text-decoration: none;\n  transition:\n    color var(--dur) var(--ease),\n    background-color var(--dur) var(--ease);\n}\n\n.link:hover {\n  color: var(--ink-brand);\n  background: var(--wash-subtle);\n}\n\n.link:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n}\n\n.current {\n  font-weight: 700;\n  color: var(--ink-heading);\n}\n\n.plain {\n  font-weight: 400;\n  color: var(--ink-muted);\n}\n\n.sep {\n  display: inline-flex;\n  align-items: center;\n  color: var(--ink-disabled);\n}\n"
+    },
+    {
+      "path": "components/ui/Breadcrumb/Breadcrumb.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Breadcrumb/Breadcrumb.tsx",
+      "content": "\"use client\";\n\nimport Link from \"next/link\";\nimport type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconChevronRight, IconMoreHorizontal } from \"../Icon/Icon\";\nimport { Menu } from \"../Menu/Menu\";\nimport styles from \"./Breadcrumb.module.css\";\n\nexport type BreadcrumbItem = {\n  label: ReactNode;\n  /** Omit on the current page (the last item). */\n  href?: string;\n  icon?: ReactNode;\n};\n\nexport type BreadcrumbProps = {\n  items: ReadonlyArray<BreadcrumbItem>;\n  /**\n   * Past this many items the middle folds into an ellipsis menu: the first\n   * item, the menu, then the last (maxItems - 2). Default 4.\n   */\n  maxItems?: number;\n  /** Between items. Defaults to a small chevron; \"/\" is the other common choice. */\n  separator?: ReactNode;\n  \"aria-label\"?: string;\n  className?: string;\n};\n\n/**\n * Where this page sits: a nav landmark holding an ordered list of links,\n * the last item marked aria-current=\"page\" and not a link. Long trails fold\n * their middle into a Menu so the row never wraps.\n */\nexport function Breadcrumb({ items, maxItems = 4, separator, \"aria-label\": ariaLabel = \"Breadcrumb\", className }: BreadcrumbProps) {\n  const fold = items.length > maxItems && maxItems >= 3;\n  const tail = fold ? items.slice(items.length - (maxItems - 2)) : [];\n  const hidden = fold ? items.slice(1, items.length - (maxItems - 2)) : [];\n  const shown: Array<BreadcrumbItem | \"fold\"> = fold ? [items[0], \"fold\", ...tail] : [...items];\n  const sep = (\n    <li className={styles.sep} role=\"presentation\" aria-hidden=\"true\">\n      {separator ?? <IconChevronRight size={13} />}\n    </li>\n  );\n\n  return (\n    <nav data-slot=\"breadcrumb\" aria-label={ariaLabel} className={cx(styles.root, className)}>\n      <ol className={styles.list}>\n        {shown.map((item, i) => {\n          const last = i === shown.length - 1;\n          return (\n            <ItemFragment key={i} sep={i > 0 ? sep : null}>\n              {item === \"fold\" ? (\n                <li className={styles.item}>\n                  <Menu\n                    label={<IconMoreHorizontal size={16} />}\n                    aria-label={`Show ${hidden.length} more`}\n                    iconOnly\n                    items={hidden.map((h, j) => ({ id: `h${j}`, label: h.label, href: h.href }))}\n                  />\n                </li>\n              ) : (\n                <li className={styles.item}>\n                  {last || !item.href ? (\n                    <span className={cx(styles.current, !last && styles.plain)} aria-current={last ? \"page\" : undefined}>\n                      {item.icon}\n                      {item.label}\n                    </span>\n                  ) : (\n                    <Link href={item.href} className={styles.link}>\n                      {item.icon}\n                      {item.label}\n                    </Link>\n                  )}\n                </li>\n              )}\n            </ItemFragment>\n          );\n        })}\n      </ol>\n    </nav>\n  );\n}\n\nfunction ItemFragment({ sep, children }: { sep: ReactNode; children: ReactNode }) {\n  return (\n    <>\n      {sep}\n      {children}\n    </>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json",
+    "https://rime.mjsons.net/r/menu.json"
+  ],
+  "meta": {
+    "import": "import { Breadcrumb } from \"@/components/ui/Breadcrumb/Breadcrumb\";",
+    "docs": "https://rime.mjsons.net/md/breadcrumb.md",
+    "page": "https://rime.mjsons.net/components/breadcrumb"
+  }
+}

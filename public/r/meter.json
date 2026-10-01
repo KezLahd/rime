@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter",
+  "type": "registry:item",
+  "title": "Meter and ProgressBar",
+  "description": "A segmented meter for small counts (seats used) and a bar for progress through a total.",
+  "categories": [
+    "datadisplay"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Meter/Meter.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Meter/Meter.module.css",
+      "content": ".meter {\n  display: inline-flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n.head {\n  display: flex;\n  align-items: baseline;\n  gap: 10px;\n}\n\n.value {\n  font-size: 26px;\n  font-weight: 900;\n  letter-spacing: -0.03em;\n  line-height: 1;\n  font-variant-numeric: tabular-nums;\n  color: var(--ink-heading);\n}\n\n.of {\n  font-size: 16px;\n  font-weight: 700;\n  letter-spacing: 0;\n  color: var(--ink-muted);\n}\n\n.label {\n  font-size: var(--text-micro);\n  font-weight: 700;\n  letter-spacing: var(--tracking-eyebrow);\n  text-transform: uppercase;\n  color: var(--ink-muted);\n}\n\n.segments {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n}\n\n/* Empty slots are recessed wells; filled ones stand proud with the gradient. */\n.segment {\n  width: 22px;\n  height: 8px;\n  border-radius: var(--r-flat, 3px);\n  background: rgba(var(--rgb-brand-deep), 0.08);\n  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.12), inset 0 0 0 1px rgba(var(--rgb-brand-deep), 0.06);\n  transition: background-color var(--dur-slow) var(--ease);\n}\n\n.filled {\n  background: var(--brand-gradient);\n  box-shadow: 0 1px 3px rgba(var(--rgb-brand), 0.35), var(--shadow-specular-dark);\n}\n\n.full .filled {\n  background: linear-gradient(135deg, var(--danger-base), var(--danger-base-solid));\n  box-shadow: 0 1px 3px rgba(var(--rgb-danger), 0.35), var(--shadow-specular-dark);\n}\n\n.note {\n  font-size: var(--text-caption);\n  font-weight: 700;\n  color: var(--ink-muted);\n}\n\n.full .note {\n  color: var(--danger-ink);\n}\n\n.sm {\n  gap: 4px;\n}\n\n.sm .segments {\n  gap: 3px;\n}\n\n.sm .segment {\n  width: 12px;\n  height: 6px;\n  border-radius: var(--r-flat, 2px);\n}\n\n.inlineValue {\n  margin-left: 6px;\n  font-size: var(--text-caption);\n  font-weight: 700;\n  font-variant-numeric: tabular-nums;\n  color: var(--ink-secondary);\n}\n\n/* ── Progress bar ─────────────────────────────────────────────────────── */\n\n.bar {\n  position: relative;\n  width: 100%;\n  height: 6px;\n  border-radius: var(--r-flat, 3px);\n  background: rgba(var(--rgb-brand-deep), 0.08);\n  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.1);\n  overflow: hidden;\n}\n\n.barFill {\n  position: absolute;\n  inset: 0 auto 0 0;\n  border-radius: inherit;\n  background: linear-gradient(90deg, var(--brand-soft), var(--brand-deep));\n  transition: width var(--dur-slow) var(--ease);\n}\n"
+    },
+    {
+      "path": "components/ui/Meter/Meter.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Meter/Meter.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./Meter.module.css\";\n\nexport type MeterProps = {\n  value: number;\n  /** Discrete slots. The team member cap is 5. */\n  max?: number;\n  /** Visible caption and the basis of the accessible name, e.g. \"Slots in use\". */\n  label: string;\n  /** Spoken value; defaults to \"3 of 5\". */\n  valueText?: string;\n  /** Line under the segments, e.g. \"At capacity: withdraw a customer to free a slot\". */\n  note?: ReactNode;\n  /** md = dashboard header block. sm = inline in a table cell. */\n  size?: \"sm\" | \"md\";\n  className?: string;\n};\n\n/**\n * Discrete capacity: one segment per slot, not a continuous bar, because a\n * slot is a whole customer. Filled segments take the brand gradient; at the\n * cap they turn danger red (a fill, so the guide value is allowed) and the\n * note carries the words.\n */\nexport function Meter({ value, max = 5, label, valueText, note, size = \"md\", className }: MeterProps) {\n  const clamped = Math.max(0, Math.min(value, max));\n  const full = clamped >= max;\n  return (\n    <div data-slot=\"meter\"\n      role=\"meter\"\n      aria-label={label}\n      aria-valuenow={clamped}\n      aria-valuemin={0}\n      aria-valuemax={max}\n      aria-valuetext={valueText ?? `${clamped} of ${max}`}\n      className={cx(styles.meter, styles[size], full && styles.full, className)}\n    >\n      {size === \"md\" ? (\n        <div className={styles.head}>\n          <span className={styles.value}>\n            {clamped}\n            <span className={styles.of}>/{max}</span>\n          </span>\n          <span className={styles.label}>{label}</span>\n        </div>\n      ) : null}\n      <div className={styles.segments} aria-hidden=\"true\">\n        {Array.from({ length: max }, (_, i) => (\n          <span key={i} className={cx(styles.segment, i < clamped && styles.filled)} />\n        ))}\n        {size === \"sm\" ? (\n          <span className={styles.inlineValue}>\n            {clamped}/{max}\n          </span>\n        ) : null}\n      </div>\n      {note ? <p className={styles.note}>{note}</p> : null}\n    </div>\n  );\n}\n\nexport type ProgressBarProps = {\n  value: number;\n  max: number;\n  label: string;\n  valueText?: string;\n  className?: string;\n};\n\n/** Continuous bar for program-level totals (seats allocated of 80). */\nexport function ProgressBar({ value, max, label, valueText, className }: ProgressBarProps) {\n  const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;\n  return (\n    <div data-slot=\"progress-bar\"\n      role=\"progressbar\"\n      aria-label={label}\n      aria-valuenow={value}\n      aria-valuemin={0}\n      aria-valuemax={max}\n      aria-valuetext={valueText ?? `${value} of ${max}`}\n      className={cx(styles.bar, className)}\n    >\n      <span className={styles.barFill} style={{ width: `${pct}%` }} />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Meter } from \"@/components/ui/Meter/Meter\";",
+    "docs": "https://rime.mjsons.net/md/meter.md",
+    "page": "https://rime.mjsons.net/components/meter"
+  }
+}

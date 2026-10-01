@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "type-to-confirm-demo",
+  "type": "registry:item",
+  "title": "TypeToConfirmModal and DangerZone examples",
+  "description": "Usage examples for TypeToConfirmModal and DangerZone.",
+  "files": [
+    {
+      "path": "registry/examples/type-to-confirm.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/type-to-confirm.md",
+      "content": "# TypeToConfirmModal and DangerZone examples\n\nThe heaviest confirm: an impact preview and a typed phrase; and the Danger zone section that leads to it.\n\n```tsx\nimport { DangerZone, DangerZoneRow, TypeToConfirmModal } from \"@/components/ui\";\n\n<DangerZone>\n  <DangerZoneRow title=\"Remove team member\" actionLabel=\"Remove team member\" confirm={{ title: \"Remove Jane Cooper?\", phrase: \"remove jane cooper\", confirmLabel: \"Remove team member\", onConfirm: remove, impact: ITEMS }} />\n</DangerZone>\n```\n\n## Open\n\nThe confirm itself, rendered in place with inline.\n\n```tsx\n<TypeToConfirmModal inline open onClose={close} title=\"Remove Jane Cooper?\" meta=\"Team member · Design\" phrase=\"remove jane cooper\" confirmLabel=\"Remove team member\" impact={ITEMS} onConfirm={remove} />\n```\n\n## Danger zone\n\n```tsx\n<DangerZone>…</DangerZone>\n```\n\nDocs: https://rime.mjsons.net/components/type-to-confirm\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/danger-zone.json"
+  ]
+}

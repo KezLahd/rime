@@ -1,0 +1,193 @@
+/* Command: a search row over a grouped list, in the popover glass. On its
+   own it is a panel in the page; CommandDialog lifts it over a scrim with the
+   modal surface. */
+
+.command {
+  display: flex;
+  flex-direction: column;
+  width: var(--command-width, 440px);
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  border: var(--border-w) solid var(--popover-border);
+  border-radius: var(--command-radius, var(--r-lg));
+  box-shadow: var(--popover-shadow);
+  color: var(--ink-body);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 calc(14px * var(--density));
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.searchRow:focus-within {
+  box-shadow: inset 0 -2px 0 rgba(var(--rgb-brand), 0.45);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--command-input-h, 48px);
+  border: 0;
+  background: transparent;
+  font-size: var(--text-input);
+  color: var(--ink-heading);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--ink-placeholder);
+}
+
+.list {
+  max-height: var(--command-list-max, 320px);
+  overflow-y: auto;
+  padding: var(--popover-pad, calc(6px * var(--density)));
+}
+
+.group + .group {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: var(--border-w) solid var(--line-soft);
+}
+
+.heading {
+  padding: 8px 10px 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  user-select: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: calc(8px * var(--density)) calc(10px * var(--density));
+  border-radius: var(--popover-item-radius, var(--r-xs));
+  font-size: 13.5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.active {
+  background: var(--popover-item-active-bg, linear-gradient(to right, rgba(var(--rgb-brand), 0.14), rgba(var(--rgb-brand-deep), 0.07)));
+  color: var(--ink-brand);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--ink-muted);
+}
+
+.icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.active .icon {
+  color: var(--ink-brand);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shortcut {
+  margin-left: 16px;
+  padding: 1px 6px;
+  border-radius: var(--r-2xs);
+  background: rgba(var(--rgb-white), 0.6);
+  box-shadow: inset 0 0 0 1px var(--line), 0 1px 0 var(--line);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+}
+
+.empty {
+  padding: 28px 12px;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* ── CommandDialog ─────────────────────────────────────────────────────── */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12dvh 16px 16px;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-scrim);
+  -webkit-backdrop-filter: var(--modal-scrim-blur);
+  backdrop-filter: var(--modal-scrim-blur);
+  animation: fade-in var(--dur-slow) var(--ease);
+}
+
+.root[data-state="closed"] {
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+.dialog {
+  position: relative;
+  width: min(var(--command-dialog-width, 560px), 100%);
+  border-radius: var(--command-radius, var(--r-lg));
+  outline: none;
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+.dialog .command {
+  width: 100%;
+  background: var(--modal-surface);
+  -webkit-backdrop-filter: var(--modal-blur);
+  backdrop-filter: var(--modal-blur);
+  box-shadow: var(--modal-shadow);
+}
+
+.inline {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog {
+    animation: fade-in var(--dur) linear;
+  }
+
+  .inline {
+    animation: none;
+  }
+}

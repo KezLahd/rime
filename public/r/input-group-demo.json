@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-demo",
+  "type": "registry:item",
+  "title": "InputGroup examples",
+  "description": "Usage examples for InputGroup.",
+  "files": [
+    {
+      "path": "registry/examples/input-group.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/input-group.md",
+      "content": "# InputGroup examples\n\nA text field with addons joined to it: a fixed text segment, an icon, or a button such as Copy.\n\n```tsx\nimport { InputGroup } from \"@/components/ui\";\n\n<Field label=\"Website\">\n  <InputGroup start=\"https://\" placeholder=\"example.com\" />\n</Field>\n```\n\n## Text, icon and button addons\n\n```tsx\n<InputGroup start=\"https://\" placeholder=\"example.com\" aria-label=\"Website\" />\n<InputGroup start={<IconSearch size={16} />} placeholder=\"Search invoices\" aria-label=\"Search invoices\" />\n<InputGroup start=\"$\" end=\"USD\" inputMode=\"decimal\" aria-label=\"Amount\" />\n<InputGroup readOnly mono defaultValue=\"sk_live_4f9a2c\" aria-label=\"API key\"\n  end={<IconButton size=\"sm\" label=\"Copy key\" icon={<Copy size={14} />} />} />\n```\n\n## In a Field\n\n```tsx\n<Field label=\"Workspace address\" hint=\"Letters, numbers and dashes.\">\n  <InputGroup end=\".example.app\" placeholder=\"acme\" />\n</Field>\n<Field label=\"Weight\" error=\"Enter a weight under 30 kg.\">\n  <InputGroup end=\"kg\" inputMode=\"decimal\" />\n</Field>\n```\n\nDocs: https://rime.mjsons.net/components/input-group\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/input-group.json"
+  ]
+}

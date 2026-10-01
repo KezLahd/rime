@@ -1,0 +1,78 @@
+/* One row, the table's full width: search grows, dropdowns sit at the end,
+   the list's own action (if any) after a hairline. Everything stays on one
+   row, vertically centred, until the bar itself is genuinely narrow (a
+   container query on the bar, so it follows the panel it sits in, not the
+   viewport). Then the search takes the first line to itself, the chips wrap
+   cleanly under it, and the action sits on its own line at the end. */
+
+.bar {
+  container-type: inline-size;
+  width: 100%;
+  margin-bottom: var(--filter-bar-gap, 14px);
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.filters {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Every filter except the search keeps its natural width. */
+.filters > * {
+  flex-shrink: 0;
+}
+
+.filters > :first-child {
+  flex: 1 1 200px;
+  min-width: 160px;
+}
+
+/* Dropdowns hold a steady width, so picking "Paid" over "All statuses" does
+   not make the search jump. */
+.filters > [role="combobox"] {
+  min-width: 136px;
+}
+
+.clear {
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line-glass);
+}
+
+@container (max-width: 640px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .filters {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+  }
+
+  .filters > :first-child {
+    flex: 1 1 100%;
+  }
+
+  .actions {
+    margin-left: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
+}

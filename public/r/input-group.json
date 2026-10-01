@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group",
+  "type": "registry:item",
+  "title": "InputGroup",
+  "description": "A text field with addons joined to it: a fixed text segment, an icon, or a button such as Copy.",
+  "categories": [
+    "forms"
+  ],
+  "files": [
+    {
+      "path": "components/ui/InputGroup/InputGroup.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/InputGroup/InputGroup.module.css",
+      "content": "/* The TextInput box with addons set into its ends. A text addon is a sunken\n   strip the full height of the field, divided from the typed text by a\n   hairline, the way a unit is set off in a form. An element addon (an icon\n   or a button) sits inline with a little air. [class] lifts these over the\n   shared TextInput rules whatever order the CSS loads in. */\n\n.box[class] {\n  align-items: stretch;\n  overflow: hidden;\n}\n\n.text {\n  display: inline-flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: 0 calc(12px * var(--density));\n  background: var(--input-addon-bg, var(--recess-fill));\n  font-size: var(--text-small);\n  font-weight: 700;\n  color: var(--ink-secondary);\n  white-space: nowrap;\n  user-select: none;\n  transition:\n    color var(--dur) var(--ease),\n    background-color var(--dur) var(--ease);\n}\n\n.text_start {\n  border-right: var(--border-w) solid var(--line);\n}\n\n.text_end {\n  border-left: var(--border-w) solid var(--line);\n}\n\n.box:focus-within .text {\n  color: var(--ink-brand);\n  background: var(--wash-active);\n}\n\n.box[data-invalid] .text {\n  border-color: var(--danger-line);\n}\n\n.box[data-disabled] .text {\n  color: var(--ink-disabled);\n  background: transparent;\n}\n\n.slot {\n  display: inline-flex;\n  align-items: center;\n  flex-shrink: 0;\n  gap: 4px;\n  color: var(--ink-muted);\n}\n\n.slot_start {\n  padding-left: calc(12px * var(--density));\n}\n\n.slot_end {\n  padding-right: 4px;\n}\n\n/* A text addon already separates; with an icon the input tucks in closer. */\n.slot_start + .input[class] {\n  padding-left: 8px;\n}\n\n.text + .input[class] {\n  padding-left: 10px;\n}\n"
+    },
+    {
+      "path": "components/ui/InputGroup/InputGroup.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/InputGroup/InputGroup.tsx",
+      "content": "\"use client\";\n\nimport { useId, type ComponentPropsWithRef, type ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { mergeDescribedBy, useField } from \"../Field/Field\";\nimport boxStyles from \"../TextInput/TextInput.module.css\";\nimport styles from \"./InputGroup.module.css\";\n\nexport type InputGroupProps = Omit<ComponentPropsWithRef<\"input\">, \"size\" | \"prefix\"> & {\n  /**\n   * Before the input. A string (\"https://\", \"$\") is set off as a sunken text\n   * segment with a hairline; an element (an icon, an IconButton) sits inline.\n   */\n  start?: ReactNode;\n  /** After the input, the same way: a unit (\"kg\", \".com\") or a button. */\n  end?: ReactNode;\n  size?: \"sm\" | \"md\";\n  /** Overrides the Field's invalid state. */\n  invalid?: boolean;\n  mono?: boolean;\n  /** Class for the outer box rather than the <input>. */\n  boxClassName?: string;\n};\n\nconst isText = (node: ReactNode) => typeof node === \"string\" || typeof node === \"number\";\n\n/**\n * A text field with addons joined to it: a fixed text segment (a protocol, a\n * currency, a unit), an icon, or a button such as Copy or Search. It wears\n * the TextInput box and tokens, so focus, invalid and disabled draw on the\n * whole group, addons included. The <input> takes every native attribute.\n */\nexport function InputGroup({\n  start,\n  end,\n  size = \"md\",\n  invalid: invalidProp,\n  mono,\n  boxClassName,\n  className,\n  id: idProp,\n  disabled,\n  readOnly,\n  required,\n  \"aria-describedby\": describedBy,\n  ...rest\n}: InputGroupProps) {\n  const field = useField();\n  const autoId = useId();\n  const id = idProp ?? field?.id ?? `input-group-${autoId}`;\n  const invalid = invalidProp ?? Boolean(field?.invalid);\n\n  const addon = (node: ReactNode, side: \"start\" | \"end\") =>\n    node === undefined || node === null || node === false ? null : isText(node) ? (\n      <span className={cx(styles.text, styles[`text_${side}`])} aria-hidden=\"true\">\n        {node}\n      </span>\n    ) : (\n      <span className={cx(styles.slot, styles[`slot_${side}`])}>{node}</span>\n    );\n\n  return (\n    <div data-slot=\"input-group\"\n      className={cx(\n        boxStyles.box,\n        boxStyles[size],\n        styles.box,\n        invalid && boxStyles.invalid,\n        disabled && boxStyles.disabled,\n        readOnly && boxStyles.readOnly,\n        boxClassName,\n      )}\n      data-invalid={invalid || undefined}\n      data-disabled={disabled || undefined}\n    >\n      {addon(start, \"start\")}\n      <input\n        {...rest}\n        id={id}\n        disabled={disabled}\n        readOnly={readOnly}\n        required={required ?? field?.required}\n        aria-invalid={invalid || undefined}\n        aria-describedby={mergeDescribedBy(describedBy, field?.describedBy)}\n        className={cx(boxStyles.input, mono && boxStyles.mono, styles.input, className)}\n      />\n      {addon(end, \"end\")}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/field.json",
+    "https://rime.mjsons.net/r/text-input.json"
+  ],
+  "meta": {
+    "import": "import { InputGroup } from \"@/components/ui/InputGroup/InputGroup\";",
+    "docs": "https://rime.mjsons.net/md/input-group.md",
+    "page": "https://rime.mjsons.net/components/input-group"
+  }
+}

@@ -1,0 +1,843 @@
+/* Chart layer. The palette (--chart-1..6, --chart-other, --chart-seq-*,
+   --chart-good|warning|danger) lives in app/styles/tokens.css at :root, so
+   the Studio, the presets, dark mode and the shadcn aliases all see it.
+   Hexes mirror palette.ts: change both together. .tokens, which every chart
+   root, stat strip, sparkline and capacity bar carries, holds only the
+   chrome (grid, axis, ticks, gap, cursor), derived from the global tokens. */
+
+.tokens {
+  /* Chrome. Grid is one step off the surface, solid, never dashed. */
+  --chart-grid: var(--line-glass);
+  --chart-axis: var(--line);
+  --chart-tick: var(--ink-muted);
+  --chart-label: var(--ink-secondary);
+  --chart-value: var(--ink-heading);
+  /* The 2px separator between touching fills and the ring round markers:
+     the surface colour doing the separating, not a drawn border. */
+  --chart-gap: var(--surface-solid);
+  --chart-cursor: rgba(var(--rgb-brand-deep), 0.3);
+  --chart-band: var(--wash-hover);
+  /* Unfilled track of a meter: a lighter step of the fill's own ramp. */
+  --chart-track: rgba(var(--rgb-brand), 0.14);
+}
+
+/* The figure every Cartesian and donut chart mounts in. */
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+}
+
+
+/* ── Frame: head, legend, plot ───────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.subtitle {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.headActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+/* "Table" / "Chart" toggle: a quiet text control, the chart is the content. */
+.viewToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.viewToggle:hover {
+  background: var(--wash-hover);
+  color: var(--ink-heading);
+}
+
+.viewToggle:active {
+  background: var(--wash-active);
+}
+
+.viewToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.viewToggle[aria-pressed="true"] {
+  background: var(--wash-active);
+  color: var(--ink-heading);
+}
+
+.viewToggle:disabled {
+  color: var(--ink-disabled);
+  background: transparent;
+  cursor: default;
+}
+
+.plot {
+  position: relative;
+  min-width: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+/* Refetch keeps the frame: the last render holds at reduced opacity. */
+.refreshing {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ── Legend ────────────────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--text-caption);
+  color: var(--chart-label);
+}
+
+.legendValue {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--chart-value);
+}
+
+/* Keys mirror the mark: a short stroke for lines, a small block for fills. */
+.keyLine {
+  width: 14px;
+  height: 2px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.keyRect {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: var(--r-flat, 2px);
+}
+
+.keyDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: var(--r-circle, 50%);
+}
+
+/* ── Recharts surface ─────────────────────────────────────────────────── */
+
+.plot :global(.recharts-surface) {
+  overflow: visible;
+}
+
+/* Keyboard focus lands on the SVG (Recharts' accessibility layer: arrow keys
+   walk the data points). The global :focus-visible outline already applies;
+   this rounds it to the plot and keeps it inside the frame. */
+.plot :global(.recharts-surface:focus-visible) {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+.plot :global(.recharts-cartesian-axis-tick-value),
+.plot :global(.recharts-label),
+.plot :global(.recharts-text) {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.plot :global(.recharts-tooltip-wrapper) {
+  z-index: 2;
+  outline: none;
+}
+
+/* ── Tooltip: the overlay surface ───────────────────────────────────── */
+
+/* shadcn's compact tooltip on the kit's popover glass: frosted in Default,
+   opaque in Flat, deep glass in Dark. Small, so the 400ms glide reads as
+   following the pointer rather than lagging it. */
+.tooltip {
+  display: grid;
+  gap: 6px;
+  min-width: 8rem;
+  max-width: 280px;
+  padding: 6px 10px;
+  border: 1px solid var(--popover-border);
+  border-radius: var(--r-md);
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  box-shadow: var(--popover-shadow);
+  pointer-events: none;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+}
+
+.tooltipHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.tooltipTag {
+  padding: 0 5px;
+  border-radius: var(--r-2xs);
+  background: var(--wash-active);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-brand);
+}
+
+.tooltipRows {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.tooltipRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.tooltipRow dt {
+  overflow: hidden;
+  color: var(--ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tooltipRow dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink-heading);
+}
+
+/* Indicators, as shadcn: dot, line (mirrors a stroke) or dashed. */
+.tooltipKey {
+  flex-shrink: 0;
+  border: 0 solid var(--indicator);
+  border-radius: 2px;
+  background: var(--indicator);
+}
+
+.tooltipKey[data-shape="dot"] {
+  width: 10px;
+  height: 10px;
+}
+
+.tooltipKey[data-shape="line"] {
+  width: 4px;
+  height: 14px;
+}
+
+.tooltipKey[data-shape="dashed"] {
+  width: 0;
+  height: 14px;
+  border-width: 1.5px;
+  border-style: dashed;
+  background: transparent;
+}
+
+.tooltipFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding-top: 5px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--ink-muted);
+}
+
+.tooltipFoot strong {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-heading);
+}
+
+/* ── Table view: the WCAG-clean twin of every chart ───────────────────── */
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: var(--r-md);
+  background: var(--glass-fill-nested);
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-small);
+}
+
+.table th,
+.table td {
+  padding: var(--table-cell-pad);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: var(--table-head-pad);
+  background: var(--table-head-fill);
+  border-bottom: var(--table-head-rule);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--table-head-ink);
+}
+
+.table tbody tr {
+  transition: background-color var(--dur) var(--ease);
+}
+
+.table tbody tr:hover {
+  background: var(--table-row-hover);
+}
+
+.table tbody th {
+  font-weight: 700;
+  color: var(--ink-body);
+}
+
+.table td {
+  color: var(--ink-body);
+}
+
+.table tbody tr + tr > * {
+  border-top: var(--table-row-line);
+}
+
+.num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.table tfoot th,
+.table tfoot td {
+  border-top: 2px solid var(--line-glass);
+  font-weight: 800;
+  color: var(--ink-heading);
+}
+
+/* ── States ─────────────────────────────────────────────────────────── */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: 16px 24px;
+  border-radius: var(--r-md);
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+  text-align: center;
+}
+
+.stateIcon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  border-radius: var(--r-sm);
+  background: var(--wash-subtle);
+  color: var(--ink-brand);
+}
+
+.stateError .stateIcon {
+  background: var(--danger-fill);
+  color: var(--danger-ink);
+}
+
+.stateTitle {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.stateBody {
+  max-width: 44ch;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.stateAction {
+  margin-top: 8px;
+}
+
+/* Ghost axes behind the empty message, so the empty chart still reads as the
+   chart it will become. */
+.ghostAxes {
+  position: absolute;
+  inset: 8px 8px 28px 44px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(25% - 1px),
+    var(--chart-grid) calc(25% - 1px),
+    var(--chart-grid) 25%
+  );
+  border-bottom: 1px solid var(--chart-axis);
+  opacity: 0.8;
+  /* Clear behind the message so no gridline runs through the text. */
+  -webkit-mask-image: linear-gradient(to right, #000 0, transparent 22%, transparent 78%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0, transparent 22%, transparent 78%, #000 100%);
+}
+
+.stateOver {
+  position: relative;
+  z-index: 1;
+  box-shadow: none;
+}
+
+/* ── Skeletons: shaped like the chart, not a grey block ───────────────── */
+
+.skeleton {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 22px;
+  gap: 6px 10px;
+  height: 100%;
+}
+
+.skYTicks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.skPlot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--chart-axis);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(25% - 1px),
+    var(--chart-grid) calc(25% - 1px),
+    var(--chart-grid) 25%
+  );
+}
+
+.skXTicks {
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.skLine {
+  position: absolute;
+  inset: 8% 0 0;
+  width: 100%;
+  height: 92%;
+  overflow: visible;
+}
+
+.skLine path {
+  fill: none;
+  stroke: rgba(var(--rgb-brand-deep), 0.12);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  animation: skPulse 1.6s var(--ease) infinite;
+}
+
+.skLine .skArea {
+  fill: rgba(var(--rgb-brand-deep), 0.05);
+  stroke: none;
+}
+
+.skBarsH {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 10px;
+  height: 100%;
+}
+
+.skBarRowH {
+  display: grid;
+  grid-template-columns: 30% minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.skDonut {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+}
+
+.skRing {
+  flex-shrink: 0;
+  border-radius: var(--r-circle, 50%);
+  border: 18px solid rgba(var(--rgb-brand-deep), 0.075);
+  animation: skPulse 1.6s var(--ease) infinite;
+}
+
+.skLegend {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@keyframes skPulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skLine path,
+  .skRing {
+    animation: none;
+  }
+}
+
+/* ── Donut ───────────────────────────────────────────────────────────── */
+
+.donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+
+.donutPlot {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.donutCentre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.donutTotal {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink-heading);
+}
+
+.donutTotalLabel {
+  margin-top: 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* The donut's legend carries every value and share, so no segment needs a
+   label on the ring and the tooltip never gates a number. */
+.donutLegend {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 180px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.donutLegend li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: var(--text-small);
+  color: var(--chart-label);
+}
+
+.donutLegend li + li {
+  border-top: 1px solid var(--line-glass);
+}
+
+.donutValue {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--chart-value);
+}
+
+.donutShare {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink-muted);
+}
+
+/* ── Sparkline ───────────────────────────────────────────────────────── */
+
+.sparkline {
+  display: block;
+  overflow: visible;
+}
+
+.sparkline path {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ── Stat strip: one panel, hairline dividers, no card grid ─────────── */
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(var(--stat-count, 4), minmax(0, 1fr));
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 2px 20px;
+}
+
+.stat dd {
+  margin: 0;
+}
+
+.statSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat:first-child {
+  padding-left: 0;
+}
+
+.stat:last-child {
+  padding-right: 0;
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--line-glass);
+}
+
+/* Sentence case, never a small uppercase label over the figure. */
+.statLabel {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+/* Proportional figures at display size: tabular digits look loose here. */
+.statValue {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink-heading);
+}
+
+.statUnit {
+  margin-left: 3px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+
+.statFoot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 28px;
+}
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.deltaGood {
+  color: var(--success-ink);
+}
+
+.deltaBad {
+  color: var(--danger-ink);
+}
+
+.deltaFlat {
+  color: var(--ink-muted);
+}
+
+.deltaPeriod {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 860px) {
+  .strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 18px;
+  }
+
+  .stat,
+  .stat:first-child,
+  .stat:last-child {
+    padding: 2px 16px;
+  }
+
+  .stat:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* ── Capacity bar: one limit, three quantities ────────────────────────── */
+
+.capacity {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.capacityTrack {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  overflow: hidden;
+  border-radius: var(--r-2xs);
+}
+
+.capacitySeg {
+  height: 100%;
+  min-width: 2px;
+}
+
+.capacityScale {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+/* Recharts ships grey (#ccc / #fff) chrome. The same overrides shadcn's
+   ChartContainer applies, for anything a consumer adds inside a chart. */
+.root :global(.recharts-cartesian-axis-tick text) {
+  fill: var(--chart-tick);
+}
+
+.root :global(.recharts-cartesian-grid line[stroke="#ccc"]) {
+  stroke: var(--chart-grid);
+}
+
+.root :global(.recharts-polar-grid [stroke="#ccc"]),
+.root :global(.recharts-reference-line [stroke="#ccc"]) {
+  stroke: var(--chart-axis);
+}
+
+.root :global(.recharts-curve.recharts-tooltip-cursor) {
+  stroke: var(--chart-cursor);
+}
+
+.root :global(.recharts-rectangle.recharts-tooltip-cursor) {
+  fill: var(--chart-band);
+}
+
+.root :global(.recharts-radial-bar-background-sector) {
+  fill: var(--surface-sunken);
+}
+
+.root :global(.recharts-dot[stroke="#fff"]),
+.root :global(.recharts-sector[stroke="#fff"]) {
+  stroke: transparent;
+}
+
+.root :global(.recharts-surface),
+.root :global(.recharts-layer),
+.root :global(.recharts-sector) {
+  outline: none;
+}

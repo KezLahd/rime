@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-demo",
+  "type": "registry:item",
+  "title": "Carousel examples",
+  "description": "Usage examples for Carousel.",
+  "files": [
+    {
+      "path": "registry/examples/carousel.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/carousel.md",
+      "content": "# Carousel examples\n\nA row of slides on a native scroll-snap track, with frosted prev and next buttons, dots and arrow keys.\n\n```tsx\nimport { Carousel } from \"@/components/ui\";\n\n<Carousel aria-label=\"Featured projects\" perView={3}>\n  {projects.map((p) => <ProjectCard key={p.id} project={p} />)}\n</Carousel>\n```\n\n## One per view\n\n```tsx\n<Carousel aria-label=\"Projects\">{slides}</Carousel>\n```\n\n## Three per view\n\n```tsx\n<Carousel aria-label=\"Projects\" perView={3}>{slides}</Carousel>\n```\n\nDocs: https://rime.mjsons.net/components/carousel\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/carousel.json"
+  ]
+}

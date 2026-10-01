@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter-demo",
+  "type": "registry:item",
+  "title": "Meter and ProgressBar examples",
+  "description": "Usage examples for Meter and ProgressBar.",
+  "files": [
+    {
+      "path": "registry/examples/meter.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/meter.md",
+      "content": "# Meter and ProgressBar examples\n\nA segmented meter for small counts (seats used) and a bar for progress through a total.\n\n```tsx\nimport { Meter, ProgressBar } from \"@/components/ui\";\n\n<Meter label=\"Seats\" value={3} max={5} valueText=\"3 of 5 used\" />\n```\n\n## Default\n\n```tsx\n<Meter label=\"Seats\" value={3} max={5} />\n<ProgressBar label=\"Quarterly target\" value={240} max={400} />\n```\n\nDocs: https://rime.mjsons.net/components/meter\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/meter.json"
+  ]
+}

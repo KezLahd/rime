@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth-check-email",
+  "type": "registry:item",
+  "title": "Check your email",
+  "description": "After a magic link or reset: what to do next, with resend.",
+  "categories": [
+    "blocks",
+    "auth"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/auth-check-email/Auth.module.css",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-check-email/Auth.module.css",
+      "content": "/* Auth block layout. Visuals come from AuthLayout, AuthCard and the tokens. */\n\n.frame {\n  width: 100%;\n  height: 100%;\n}\n\n.mark {\n  display: inline-flex;\n  align-items: center;\n  gap: 9px;\n  font-family: var(--font-display);\n  font-size: 18px;\n  font-weight: 700;\n  letter-spacing: var(--tracking-display);\n  color: inherit;\n}\n\n.glyph {\n  display: inline-grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  border-radius: var(--r-sm);\n  background: var(--brand-gradient);\n  box-shadow: var(--glow-sm);\n  font-size: 14px;\n  color: var(--ink-inverse);\n}\n\n.help {\n  font-size: var(--text-small);\n  font-weight: 700;\n  color: inherit;\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.otp {\n  display: flex;\n  justify-content: center;\n}\n\n.alt {\n  font-size: var(--text-small);\n  color: var(--ink-muted);\n  text-align: center;\n}\n\n.link {\n  padding: 0;\n  border: 0;\n  background: none;\n  font-weight: 700;\n  color: var(--ink-brand);\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.link:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n  border-radius: var(--r-2xs);\n}\n\n.setup {\n  display: grid;\n  grid-template-columns: 148px minmax(0, 1fr);\n  gap: 18px;\n  align-items: center;\n}\n\n@media (max-width: 480px) {\n  .setup {\n    grid-template-columns: minmax(0, 1fr);\n    justify-items: center;\n  }\n}\n\n.qr {\n  display: block;\n  width: 148px;\n  height: 148px;\n  border-radius: var(--r-md);\n  box-shadow: inset 0 0 0 1px var(--line);\n}\n\n.steps {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  font-size: var(--text-small);\n  color: var(--ink-body);\n}\n\n.secret {\n  align-self: flex-start;\n  padding: 6px 10px;\n  border-radius: var(--r-sm);\n  background: var(--surface-sunken);\n  box-shadow: inset 0 0 0 1px var(--line);\n  font-family: var(--font-mono);\n  font-size: 13px;\n  letter-spacing: 0.08em;\n  color: var(--ink-heading);\n}\n\n.row {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 12px;\n}\n\n@media (max-width: 480px) {\n  .row {\n    grid-template-columns: minmax(0, 1fr);\n  }\n}\n\n.between {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n"
+    },
+    {
+      "path": "components/blocks/auth-check-email/index.tsx",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-check-email/index.tsx",
+      "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport { AuthCard, AuthLayout } from \"@/components/shell/AuthCard\";\nimport { Button } from \"@/components/ui/Button/Button\";\nimport { IconMail, IconShield } from \"@/components/ui/Icon/Icon\";\nimport styles from \"./Auth.module.css\";\n\nexport type AuthCheckEmailProps = {\n  /** Fill the parent instead of the viewport. */\n  contained?: boolean;\n};\n\n/** After a magic link or reset: \"check your email\", with resend. Drop it at app/check-email. */\nexport default function AuthCheckEmail({ contained }: AuthCheckEmailProps) {\n  const [sent, setSent] = useState(false);\n  return (\n    <div className={contained ? styles.frame : undefined}>\n      <AuthLayout\n        contained={contained}\n        header={\n          <span className={styles.mark}>\n            <span className={styles.glyph} aria-hidden=\"true\">\n              A\n            </span>\n            Acme\n          </span>\n        }\n        footer={\n          <>\n            <IconShield size={14} />\n            Acme never asks for your password or code by email.\n          </>\n        }\n      >\n        <AuthCard icon={<IconMail size={22} />} title=\"Check your email\" subtitle=\"We sent a sign-in link to jane@acme.example. It works once and expires in 15 minutes.\" back={{ href: \"#login\", label: \"Back to sign in\" }}>\n          <Button size=\"lg\" fullWidth variant=\"secondary\" href=\"mailto:\">\n            Open your email\n          </Button>\n          <p className={styles.alt} role=\"status\">\n            {sent ? (\n              \"Sent again. Check your spam folder too.\"\n            ) : (\n              <>\n                Nothing yet?{\" \"}\n                <button type=\"button\" className={styles.link} onClick={() => setSent(true)}>\n                  Send it again\n                </button>\n              </>\n            )}\n          </p>\n        </AuthCard>\n      </AuthLayout>\n    </div>\n  );\n}\n"
+    },
+    {
+      "path": "registry/pages/auth-check-email.tsx",
+      "type": "registry:file",
+      "target": "~/app/check-email/page.tsx",
+      "content": "import AuthCheckEmail from \"@/components/blocks/auth-check-email\";\n\nexport default function Page() {\n  return <AuthCheckEmail />;\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/auth-card.json",
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/button.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "docs": "Open /check-email to see it. The page is app/check-email/page.tsx; gate access inside it if the screen needs a signed-in user.",
+  "meta": {
+    "page": "https://rime.mjsons.net/blocks#auth-check-email",
+    "route": "/check-email"
+  }
+}

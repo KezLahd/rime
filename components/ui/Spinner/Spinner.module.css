@@ -1,0 +1,37 @@
+.spinner {
+  flex-shrink: 0;
+  color: currentColor;
+  animation: spin 0.9s linear infinite;
+}
+
+.brand {
+  color: var(--brand);
+}
+
+.track {
+  stroke: currentColor;
+  opacity: 0.2;
+}
+
+.arc {
+  stroke: currentColor;
+}
+
+.labelled {
+  display: inline-flex;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A still spinner reads as a broken icon, so it keeps turning, slower, when
+   the user has asked for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.6s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

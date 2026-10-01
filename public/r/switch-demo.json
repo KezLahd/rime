@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch-demo",
+  "type": "registry:item",
+  "title": "Switch examples",
+  "description": "Usage examples for Switch.",
+  "files": [
+    {
+      "path": "registry/examples/switch.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/switch.md",
+      "content": "# Switch examples\n\nAn on/off setting that takes effect immediately, with a loading state while it saves.\n\n```tsx\nimport { Switch } from \"@/components/ui\";\n\n<Switch label=\"Email me when an invoice is paid\" checked={on} onChange={setOn} />\n```\n\n## States\n\n```tsx\n<Switch label=\"Saving\" checked loading onChange={…} />\n```\n\nDocs: https://rime.mjsons.net/components/switch\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/switch.json"
+  ]
+}

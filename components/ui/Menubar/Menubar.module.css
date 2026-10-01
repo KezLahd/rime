@@ -1,0 +1,70 @@
+/* Menubar: a row of menu titles on the recessed control fill, each opening
+   the shared menu list (ContextMenu/MenuList.module.css). */
+
+.wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--menubar-radius, var(--r-md));
+  background: var(--menubar-bg, rgba(var(--rgb-white), 0.5));
+  -webkit-backdrop-filter: var(--blur-recess);
+  backdrop-filter: var(--blur-recess);
+  box-shadow: var(--shadow-recess);
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--control-h-sm) - 4px);
+  padding: 0 calc(12px * var(--density));
+  border: 0;
+  border-radius: var(--menubar-item-radius, var(--r-sm));
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.trigger:hover {
+  background: var(--wash-hover);
+  color: var(--ink-heading);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.triggerOpen,
+.triggerOpen:hover {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.floating {
+  position: fixed;
+  z-index: var(--z-popover);
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+/* Inline: the open menu in the page flow under its title. */
+.inlineMenu {
+  margin-top: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating {
+    animation: fade-in var(--dur) linear;
+  }
+}

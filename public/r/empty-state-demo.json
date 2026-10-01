@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state-demo",
+  "type": "registry:item",
+  "title": "EmptyState examples",
+  "description": "Usage examples for EmptyState.",
+  "files": [
+    {
+      "path": "registry/examples/empty-state.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/empty-state.md",
+      "content": "# EmptyState examples\n\nWhat an empty list means and what to do next: default, positive (all done) and filtered tones.\n\n```tsx\nimport { EmptyState } from \"@/components/ui\";\n\n<EmptyState title=\"No projects yet\" description=\"Create a project to start tracking work.\" action={<Button href=\"/projects/new\">New project</Button>} />\n```\n\n## Tones\n\n```tsx\n<EmptyState tone=\"positive\" title=\"All caught up\" description=\"Nothing is waiting for review.\" />\n```\n\nDocs: https://rime.mjsons.net/components/empty-state\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/empty-state.json"
+  ]
+}

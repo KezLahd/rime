@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-field-demo",
+  "type": "registry:item",
+  "title": "SearchField examples",
+  "description": "Usage examples for SearchField.",
+  "files": [
+    {
+      "path": "registry/examples/search-field.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/search-field.md",
+      "content": "# SearchField examples\n\nField-size search on the grey frosted recess: clear button, loading state and an optional key hint.\n\n```tsx\nimport { SearchField } from \"@/components/ui\";\n\n<SearchField aria-label=\"Search invoices\" value={q} onValueChange={setQ} placeholder=\"Customer or invoice number\" />\n```\n\n## Default, loading\n\n```tsx\n<SearchField value={q} onValueChange={setQ} loading={pending} shortcut=\"/\" aria-label=\"Search\" />\n```\n\nDocs: https://rime.mjsons.net/components/search-field\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/search-field.json"
+  ]
+}

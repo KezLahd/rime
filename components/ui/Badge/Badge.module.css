@@ -1,0 +1,149 @@
+/* ── Status pill: the reference .pill, tinted fill + tinted border + deep ink ── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: var(--border-w) solid;
+  border-radius: var(--pill-radius, var(--r-full));
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.md {
+  padding: 3px var(--pill-pad-x, calc(10px * var(--density)));
+  font-size: var(--pill-font-size, 12px);
+}
+
+.sm {
+  padding: 1px calc(8px * var(--density));
+  font-size: 11px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-circle, 50%);
+  background: currentColor;
+}
+
+.neutral {
+  color: var(--neutral-ink);
+  background: var(--neutral-fill);
+  border-color: var(--neutral-line);
+}
+
+.info {
+  color: var(--info-ink);
+  background: var(--info-fill);
+  border-color: var(--info-line);
+}
+
+.success {
+  color: var(--success-ink);
+  background: var(--success-fill);
+  border-color: var(--success-line);
+}
+
+.warning {
+  color: var(--warning-ink);
+  background: var(--warning-fill);
+  border-color: var(--warning-line);
+}
+
+.danger {
+  color: var(--danger-ink);
+  background: var(--danger-fill);
+  border-color: var(--danger-line);
+}
+
+.brand {
+  color: var(--brand-ink);
+  background: var(--brand-fill);
+  border-color: var(--brand-line);
+}
+
+/* ── Tag ──────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: var(--tag-radius, var(--r-2xs));
+  border: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.solid.neutral {
+  color: var(--ink-inverse);
+  background: var(--ink-secondary);
+}
+
+.solid.info,
+.solid.brand {
+  color: var(--ink-inverse);
+  background: var(--tag-brand-bg, var(--brand-gradient));
+}
+
+.solid.success {
+  color: var(--ink-inverse);
+  background: var(--success-solid);
+}
+
+.solid.warning {
+  color: var(--ink-inverse);
+  background: var(--warning-solid);
+}
+
+.solid.danger {
+  color: var(--ink-inverse);
+  background: var(--danger-ink);
+}
+
+/* ── Count ───────────────────────────────────────────────────────────── */
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.count_brand {
+  color: var(--ink-brand);
+  background: var(--wash-strong);
+}
+
+.count_danger {
+  color: var(--ink-inverse);
+  background: var(--danger-ink);
+}
+
+.count_warning {
+  color: var(--ink-inverse);
+  background: var(--warning-solid);
+}
+
+.count_neutral {
+  color: var(--ink-secondary);
+  background: var(--neutral-fill);
+}
+
+/* shadcn's outline badge: a hairline in the tone's ink, no fill. */
+.badge.outline {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover-demo",
+  "type": "registry:item",
+  "title": "Popover examples",
+  "description": "Usage examples for Popover.",
+  "files": [
+    {
+      "path": "registry/examples/popover.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/popover.md",
+      "content": "# Popover examples\n\nAn anchored frosted panel for arbitrary content: a short form, a set of options, a details block.\n\n```tsx\nimport { Button, Popover } from \"@/components/ui\";\n\n<Popover label=\"Canvas dimensions\" trigger={<Button variant=\"secondary\">Dimensions</Button>}>\n  …fields…\n</Popover>\n```\n\n## Open\n\nThe panel under its trigger, drawn inline.\n\n```tsx\n<Popover inline label=\"Canvas dimensions\" width={260} trigger={<Button variant=\"secondary\">Dimensions</Button>}>\n  <Field label=\"Width\"><TextInput size=\"sm\" defaultValue=\"1280\" trailing=\"px\" /></Field>\n  <Field label=\"Height\"><TextInput size=\"sm\" defaultValue=\"720\" trailing=\"px\" /></Field>\n</Popover>\n```\n\n## From its trigger\n\nPress the button. Esc or a press outside closes it.\n\n```tsx\n<Popover label=\"Canvas dimensions\" width={260} trigger={<Button variant=\"secondary\">Dimensions</Button>}>\n  …\n</Popover>\n```\n\nDocs: https://rime.mjsons.net/components/popover\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/popover.json"
+  ]
+}

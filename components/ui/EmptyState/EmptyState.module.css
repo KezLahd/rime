@@ -1,0 +1,68 @@
+/* Quiet and text-led, as in the reference design: no illustrations. The icon tile and
+   the next-step line are what stop it reading as a failure. */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.compact {
+  padding: 22px 16px;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+  border-radius: var(--r-md);
+  background: var(--brand-gradient-soft);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-brand);
+}
+
+.positive .icon {
+  background: var(--success-fill);
+  box-shadow: inset 0 0 0 1px var(--success-line);
+  color: var(--success-ink);
+}
+
+.filtered .icon {
+  background: var(--neutral-fill);
+  box-shadow: inset 0 0 0 1px var(--neutral-line);
+  color: var(--ink-muted);
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.description {
+  max-width: 46ch;
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.compact .title {
+  font-size: var(--text-body);
+}
+
+.compact .description {
+  font-size: var(--text-caption);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}

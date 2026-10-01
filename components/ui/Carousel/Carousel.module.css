@@ -1,0 +1,149 @@
+/* Carousel: a scroll-snap track with frosted round buttons over its ends
+   and a dot row beneath. The scrollbar is hidden; the buttons, dots, keys
+   and swipe all scroll the same native track. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.viewport {
+  position: relative;
+}
+
+.track {
+  display: flex;
+  gap: var(--carousel-gap, 12px);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--carousel-radius, var(--r-lg));
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.slide {
+  flex: 0 0 calc((100% - (var(--carousel-per-view, 1) - 1) * var(--carousel-gap, 12px)) / var(--carousel-per-view, 1));
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .slide {
+    flex-basis: 100%;
+  }
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  border: 0;
+  border-radius: var(--carousel-nav-radius, var(--r-full));
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  box-shadow: var(--shadow-float);
+  color: var(--ink-heading);
+  transition:
+    background-color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.nav:hover:not(:disabled) {
+  background: var(--surface-solid);
+  color: var(--ink-brand);
+}
+
+.nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-float), var(--focus-ring);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-circle, 50%);
+  background: var(--line-input);
+  transition:
+    background-color var(--dur) var(--ease),
+    width var(--dur) var(--ease);
+}
+
+.dot:hover {
+  background: var(--neutral-border);
+}
+
+.dot[aria-current="true"] {
+  width: 20px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+}
+
+.dot:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.pause {
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--recess-fill);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.pause:hover {
+  background: var(--recess-fill-hover);
+}
+
+.pause:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

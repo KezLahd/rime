@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-demo",
+  "type": "registry:item",
+  "title": "Textarea examples",
+  "description": "Usage examples for Textarea.",
+  "files": [
+    {
+      "path": "registry/examples/textarea.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/textarea.md",
+      "content": "# Textarea examples\n\nMulti-line text in the TextInput box, resizable vertically, with an optional character count.\n\n```tsx\nimport { Field, Textarea } from \"@/components/ui\";\n\n<Field label=\"Note for the customer\">\n  <Textarea maxLength={1000} showCount rows={4} />\n</Field>\n```\n\n## With a count\n\n```tsx\n<Textarea maxLength={280} showCount placeholder=\"Plain language.\" />\n```\n\nDocs: https://rime.mjsons.net/components/textarea\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/textarea.json"
+  ]
+}

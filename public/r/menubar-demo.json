@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menubar-demo",
+  "type": "registry:item",
+  "title": "Menubar examples",
+  "description": "Usage examples for Menubar.",
+  "files": [
+    {
+      "path": "registry/examples/menubar.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/menubar.md",
+      "content": "# Menubar examples\n\nA desktop application menu bar (File, Edit, View) with keyboard navigation across and within its menus.\n\n```tsx\nimport { Menubar } from \"@/components/ui\";\n\n<Menubar\n  aria-label=\"Editor\"\n  menus={[\n    { id: \"file\", label: \"File\", items: [{ id: \"new\", label: \"New project\", shortcut: \"Ctrl N\", onSelect: create }] },\n    { id: \"edit\", label: \"Edit\", items: [{ id: \"undo\", label: \"Undo\", shortcut: \"Ctrl Z\", onSelect: undo }] },\n  ]}\n/>\n```\n\n## Open\n\nThe File menu drawn open under its title.\n\n```tsx\n<Menubar inline aria-label=\"Editor\" menus={MENUS} inlineOpenId=\"file\" inlineHighlightId=\"open\" />\n```\n\n## Interactive\n\nClick a title, then use the arrow keys.\n\n```tsx\n<Menubar aria-label=\"Editor\" menus={MENUS} />\n```\n\nDocs: https://rime.mjsons.net/components/menubar\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/menubar.json"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "type": "registry:item",
+  "title": "Spinner",
+  "description": "A small brand-tinted spinner for in-flight work inside buttons, fields and panels.",
+  "categories": [
+    "feedback"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Spinner/Spinner.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Spinner/Spinner.module.css",
+      "content": ".spinner {\n  flex-shrink: 0;\n  color: currentColor;\n  animation: spin 0.9s linear infinite;\n}\n\n.brand {\n  color: var(--brand);\n}\n\n.track {\n  stroke: currentColor;\n  opacity: 0.2;\n}\n\n.arc {\n  stroke: currentColor;\n}\n\n.labelled {\n  display: inline-flex;\n}\n\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n\n/* A still spinner reads as a broken icon, so it keeps turning, slower, when\n   the user has asked for reduced motion. */\n@media (prefers-reduced-motion: reduce) {\n  .spinner {\n    animation-duration: 1.6s !important;\n    animation-iteration-count: infinite !important;\n  }\n}\n"
+    },
+    {
+      "path": "components/ui/Spinner/Spinner.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Spinner/Spinner.tsx",
+      "content": "import { cx } from \"../_internal/cx\";\nimport styles from \"./Spinner.module.css\";\n\nexport type SpinnerProps = {\n  /** Pixel size. 14 inside buttons, 16–20 inline, 24 for a panel. */\n  size?: number;\n  /** brand = accent on light surfaces; current = inherits text colour (buttons). */\n  tone?: \"brand\" | \"current\";\n  /** Announced to screen readers. Omit when the parent already says it is busy. */\n  label?: string;\n  className?: string;\n};\n\nexport function Spinner({ size = 16, tone = \"brand\", label, className }: SpinnerProps) {\n  const svg = (\n    <svg data-slot=\"spinner\"\n      className={cx(styles.spinner, tone === \"brand\" && styles.brand, className)}\n      width={size}\n      height={size}\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <circle className={styles.track} cx=\"12\" cy=\"12\" r=\"9\" strokeWidth=\"2.5\" />\n      <path className={styles.arc} d=\"M21 12a9 9 0 0 0-9-9\" strokeWidth=\"2.5\" strokeLinecap=\"round\" />\n    </svg>\n  );\n\n  if (!label) return svg;\n  return (\n    <span data-slot=\"spinner\" role=\"status\" className={styles.labelled}>\n      {svg}\n      <span className=\"sr-only\">{label}</span>\n    </span>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Spinner } from \"@/components/ui/Spinner/Spinner\";",
+    "docs": "https://rime.mjsons.net/md/spinner.md",
+    "page": "https://rime.mjsons.net/components/spinner"
+  }
+}

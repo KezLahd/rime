@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:item",
+  "title": "Avatar",
+  "description": "Initials on the brand gradient or a neutral disc, in three sizes.",
+  "categories": [
+    "datadisplay"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Avatar/Avatar.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Avatar/Avatar.module.css",
+      "content": "/* Circular: an avatar is the one place a full circle reads as intended. */\n.avatar {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  border-radius: var(--r-circle, 50%);\n  font-weight: 900;\n  letter-spacing: 0.02em;\n  user-select: none;\n}\n\n.sm {\n  width: 26px;\n  height: 26px;\n  font-size: 10px;\n}\n\n.md {\n  width: 32px;\n  height: 32px;\n  font-size: 11.5px;\n}\n\n.lg {\n  width: 44px;\n  height: 44px;\n  font-size: 15px;\n}\n\n.brand {\n  background: var(--brand-gradient);\n  color: var(--ink-inverse);\n  box-shadow: 0 2px 6px rgba(var(--rgb-brand), 0.3), var(--shadow-specular-dark);\n}\n\n.neutral {\n  background: var(--brand-fill);\n  color: var(--brand-deep);\n  box-shadow: inset 0 0 0 1px var(--brand-line);\n}\n"
+    },
+    {
+      "path": "components/ui/Avatar/Avatar.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Avatar/Avatar.tsx",
+      "content": "import { cx } from \"../_internal/cx\";\nimport styles from \"./Avatar.module.css\";\n\nexport type AvatarProps = {\n  /** Full name; initials are derived (titles like \"Dr\" are skipped). */\n  name?: string;\n  /** Explicit initials, e.g. a customer's \"R.T.\" (dots are dropped). */\n  initials?: string;\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** brand = the gradient (the signed-in user). neutral = a record (a customer). */\n  tone?: \"brand\" | \"neutral\";\n  /** Decorative when a name sits next to it (the default). */\n  label?: string;\n  className?: string;\n};\n\nconst TITLES = new Set([\"dr\", \"a/prof\", \"prof\", \"mr\", \"ms\", \"mrs\", \"mx\", \"assoc\"]);\n\nexport function initialsFrom(name: string): string {\n  const parts = name\n    .split(/\\s+/)\n    .map((p) => p.replace(/[.,]/g, \"\"))\n    .filter((p) => p && !TITLES.has(p.toLowerCase()));\n  if (parts.length === 0) return \"?\";\n  const first = parts[0][0] ?? \"\";\n  const last = parts.length > 1 ? (parts[parts.length - 1][0] ?? \"\") : \"\";\n  return (first + last).toUpperCase();\n}\n\nexport function Avatar({ name, initials, size = \"md\", tone = \"brand\", label, className }: AvatarProps) {\n  const text = initials ? initials.replace(/[^A-Za-z]/g, \"\").slice(0, 2).toUpperCase() : initialsFrom(name ?? \"\");\n  return (\n    <span data-slot=\"avatar\"\n      className={cx(styles.avatar, styles[size], styles[tone], className)}\n      role={label ? \"img\" : undefined}\n      aria-label={label}\n      aria-hidden={label ? undefined : true}\n    >\n      {text}\n    </span>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Avatar } from \"@/components/ui/Avatar/Avatar\";",
+    "docs": "https://rime.mjsons.net/md/avatar.md",
+    "page": "https://rime.mjsons.net/components/avatar"
+  }
+}

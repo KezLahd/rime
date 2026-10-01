@@ -1,0 +1,39 @@
+/* HoverCard: the popover glass, a little roomier, for a preview of a person,
+   a project or a record. Content layout is the caller's. */
+
+.card {
+  max-width: calc(100vw - 16px);
+  padding: var(--hover-card-pad, calc(16px * var(--density)));
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  border: var(--border-w) solid var(--popover-border);
+  border-radius: var(--hover-card-radius, var(--r-lg));
+  box-shadow: var(--popover-shadow);
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.floating {
+  position: fixed;
+  z-index: var(--z-popover);
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+.inlineWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.inline {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating {
+    animation: fade-in var(--dur) linear;
+  }
+}

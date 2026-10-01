@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-demo",
+  "type": "registry:item",
+  "title": "Toggle examples",
+  "description": "Usage examples for Toggle.",
+  "files": [
+    {
+      "path": "registry/examples/toggle.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/toggle.md",
+      "content": "# Toggle examples\n\nA two-state button, pressed or not, for toolbar formatting and view options.\n\n```tsx\nimport { Toggle } from \"@/components/ui\";\n\n<Toggle aria-label=\"Bold\" icon={<Bold size={16} />} pressed={bold} onPressedChange={setBold} />\n```\n\n## Icon, text and disabled\n\n```tsx\n<Toggle aria-label=\"Bold\" icon={<Bold size={16} />} pressed={bold} onPressedChange={setBold} />\n<Toggle variant=\"outline\" pressed={archived} onPressedChange={setArchived}>Show archived</Toggle>\n<Toggle disabled>Disabled</Toggle>\n```\n\nDocs: https://rime.mjsons.net/components/toggle\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/toggle.json"
+  ]
+}

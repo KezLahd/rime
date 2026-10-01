@@ -1,0 +1,80 @@
+/* The prefixed box is TextInput's box with a fixed prefix segment set into its left
+   end: a sunken strip the full height of the field, divided from the typed
+   digits by a hairline, the way a unit is set off in a form. It reads as
+   part of the number but plainly not a place to type. */
+
+/* [class] lifts these over the shared TextInput rules whatever order the
+   CSS loads in. */
+.box[class] {
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.prefix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 11px 0 13px;
+  border-right: 1px solid var(--line);
+  background: var(--recess-fill);
+  box-shadow: inset -1px 0 0 rgba(var(--rgb-white), 0.6);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-secondary);
+  user-select: none;
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.box:focus-within .prefix {
+  color: var(--ink-brand);
+  background: var(--wash-active);
+}
+
+.box[data-invalid] .prefix {
+  border-right-color: var(--danger-line);
+}
+
+.box[data-disabled] .prefix {
+  color: var(--ink-disabled);
+  background: transparent;
+}
+
+.input[class] {
+  padding-left: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  padding: 0 13px 0 6px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+
+.counterDone {
+  color: var(--success-ink);
+}
+
+.counterInvalid {
+  color: var(--danger-ink);
+}
+
+/* A refused key: brand ink, not red. Nothing is wrong yet; it is a pointer. */
+.counterNudge {
+  color: var(--ink-brand);
+}
+
+.box[data-disabled] .counter {
+  color: var(--ink-disabled);
+}

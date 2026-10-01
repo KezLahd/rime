@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-demo",
+  "type": "registry:item",
+  "title": "Checkbox examples",
+  "description": "Usage examples for Checkbox.",
+  "files": [
+    {
+      "path": "registry/examples/checkbox.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/checkbox.md",
+      "content": "# Checkbox examples\n\nA native checkbox drawn as a gradient tick, plain or as a selectable card, with indeterminate.\n\n```tsx\nimport { Checkbox } from \"@/components/ui\";\n\n<Checkbox label=\"I accept the workspace terms\" checked={ok} onChange={(e) => setOk(e.target.checked)} />\n```\n\n## Plain, card, indeterminate\n\n```tsx\n<Checkbox label=\"Email me updates\" />\n<Checkbox variant=\"card\" label=\"I accept the terms\" description=\"Required to continue.\" />\n<Checkbox indeterminate label=\"Select all\" />\n```\n\nDocs: https://rime.mjsons.net/components/checkbox\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/checkbox.json"
+  ]
+}

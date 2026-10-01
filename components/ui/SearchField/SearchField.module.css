@@ -1,0 +1,195 @@
+/* Field-size search. the reference grey frosted control (the Select field and
+   the filter chips): recessed fill, blur, lit top edge and darker bottom
+   inset, so search reads as part of the page's controls rather than a data
+   entry box. It lifts toward white on focus because it takes typing, and the
+   border turns accent with the halo, as TextInput does. The flat preset is square
+   and neutral through the tokens alone. */
+
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: var(--input-border-width, var(--border-w-field)) solid transparent;
+  border-radius: var(--input-radius, var(--r-md));
+  background: var(--recess-fill);
+  -webkit-backdrop-filter: var(--blur-recess);
+  backdrop-filter: var(--blur-recess);
+  box-shadow: var(--shadow-recess);
+  color: var(--ink-muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.md {
+  min-height: var(--input-height-md, var(--field-h-md));
+}
+
+.sm {
+  min-height: var(--input-height-sm, var(--field-h-sm));
+  border-radius: var(--input-radius, var(--r-sm));
+}
+
+.box:hover:not(.disabled) {
+  background: var(--recess-fill-hover);
+}
+
+.box:focus-within:not(.disabled) {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  background: rgba(var(--rgb-white), 0.78);
+  box-shadow: var(--shadow-recess), var(--field-focus-ring, var(--focus-halo));
+  color: var(--ink-brand);
+}
+
+/* A query is doing something to the page: the icon takes the brand ink. */
+.filled {
+  color: var(--ink-brand);
+}
+
+.invalid,
+.invalid:hover:not(.disabled) {
+  border-color: rgba(var(--rgb-danger), 0.75);
+  background: rgba(var(--rgb-danger), 0.06);
+}
+
+.invalid:focus-within:not(.disabled) {
+  border-color: var(--danger-base);
+  box-shadow: var(--shadow-recess), var(--field-focus-ring-invalid, 0 0 0 4px rgba(var(--rgb-danger), 0.14));
+}
+
+.disabled {
+  background: rgba(var(--rgb-brand-deep), 0.05);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  color: var(--ink-disabled);
+}
+
+.leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding-left: 13px;
+}
+
+.sm .leading {
+  padding-left: 11px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: calc(10px * var(--density)) calc(12px * var(--density)) calc(10px * var(--density)) calc(9px * var(--density));
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--input-font-size, var(--text-input));
+  color: var(--ink-body);
+}
+
+/* Focus is drawn on the whole box (.box:focus-within), icon and clear
+   button included. (0,2,0) outranks globals.css's :focus-visible fallback. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
+
+.sm .input {
+  padding: 6px 10px 6px 8px;
+  font-size: var(--text-body);
+}
+
+/* On the recess the lighter placeholder ink falls to ~3.5:1; muted holds. */
+.input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  -webkit-text-fill-color: var(--ink-disabled);
+}
+
+.input:disabled::placeholder {
+  color: var(--ink-disabled);
+}
+
+.input::-webkit-search-cancel-button,
+.input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* Clear: inset 7px from a 10px box, so its radius steps down to 6. */
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.sm .clear {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  border-radius: var(--r-2xs);
+}
+
+.clear:hover {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.clear:active {
+  background: var(--wash-strong);
+}
+
+.clear:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Key hint: the reference esc badge, a raised key on the recess. */
+.kbd {
+  flex-shrink: 0;
+  margin-right: 10px;
+  padding: 2px 6px;
+  border-radius: var(--r-2xs);
+  background: rgba(var(--rgb-white), 0.75);
+  box-shadow:
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.14),
+    0 0 0 1px rgba(var(--rgb-brand-deep), 0.1);
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 16px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.box:focus-within .kbd {
+  opacity: 0;
+}
+
+.disabled .kbd {
+  color: var(--ink-disabled);
+}

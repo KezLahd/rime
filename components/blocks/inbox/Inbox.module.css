@@ -1,0 +1,271 @@
+/* Inbox block layout. The panes are one frosted group on the page field. */
+
+.root {
+  height: 100dvh;
+  padding: 16px;
+  background: var(--page-background);
+}
+
+.contained {
+  height: 100%;
+}
+
+.group {
+  height: 100%;
+}
+
+.folders,
+.listPane,
+.detail,
+.detailEmpty {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.folders {
+  gap: 14px;
+  padding: 16px 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 6px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-heading);
+  white-space: nowrap;
+}
+
+.glyph {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-sm);
+  background: var(--brand-gradient);
+  font-size: 13px;
+  color: var(--ink-inverse);
+}
+
+.folderList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.folder {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 700;
+  text-align: left;
+  color: var(--ink-secondary);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.folder:hover {
+  background: var(--wash-hover);
+}
+
+.folder[aria-current="page"] {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.folder:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.folderLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.h2 {
+  font-size: var(--text-section);
+}
+
+.search {
+  padding: 0 16px 12px;
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+  text-align: left;
+  color: var(--ink-body);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.message:hover {
+  background: var(--wash-hover);
+}
+
+.message[aria-current="true"] {
+  background: var(--wash-active);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+}
+
+.message:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.messageTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.from {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.unread {
+  color: var(--ink-heading);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+}
+
+.date {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.subject {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.preview {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.detail {
+  overflow-y: auto;
+}
+
+.toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.detailHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 0;
+}
+
+.detailMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailFrom {
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.detailEmail {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.detailSubject {
+  padding: 14px 20px 0;
+  font-size: var(--text-card-title);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 20px 20px;
+  line-height: 1.65;
+  color: var(--ink-body);
+}
+
+.reply {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 20px 18px;
+  border-top: var(--border-w) solid var(--line-glass);
+}
+
+.replyFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.detailEmpty {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}

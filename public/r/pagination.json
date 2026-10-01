@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pagination",
+  "type": "registry:item",
+  "title": "pagination (Rime table)",
+  "description": "The shadcn name \"pagination\": installs Rime's table.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/table.json"
+  ],
+  "meta": {
+    "aliasOf": "table"
+  }
+}

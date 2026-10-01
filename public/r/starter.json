@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "starter",
+  "type": "registry:item",
+  "title": "Rime starter: layout, globals and theme setup",
+  "description": "Root layout with Inter, the no-flash preset and dark-mode script and ToastProvider; globals importing Rime's styles and an empty theme.css.",
+  "files": [
+    {
+      "path": "templates/starter-item/app/layout.tsx",
+      "type": "registry:file",
+      "target": "~/app/layout.tsx",
+      "content": "import type { Metadata } from \"next\";\nimport { ToastProvider } from \"@/components/ui/Toast/Toast\";\nimport { inter } from \"./fonts\";\nimport { ThemeScript } from \"./ThemeScript\";\nimport \"./globals.css\";\n\nexport const metadata: Metadata = {\n  title: { default: \"Acme\", template: \"%s · Acme\" },\n  description: \"Built with Rime.\",\n};\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" className={inter.variable} suppressHydrationWarning>\n      <head>\n        <ThemeScript />\n      </head>\n      <body>\n        <ToastProvider>{children}</ToastProvider>\n      </body>\n    </html>\n  );\n}\n"
+    },
+    {
+      "path": "templates/starter-item/app/ThemeScript.tsx",
+      "type": "registry:file",
+      "target": "~/app/ThemeScript.tsx",
+      "content": "// Sets the Rime preset and colour mode on <html> before first paint, so a\n// reload never flashes the wrong theme. Preset: data-theme=\"flat\" for Rime\n// Flat (nothing for Rime Default). Mode: the .dark class plus\n// data-mode=\"dark\", from the stored choice or the system setting.\n// Store \"flat\" in localStorage \"rime-preset\" and \"light\" or \"dark\" in\n// \"rime-mode\" to change them.\n\nconst SCRIPT = `try{var d=document.documentElement,p=localStorage.getItem(\"rime-preset\"),m=localStorage.getItem(\"rime-mode\");if(p===\"flat\")d.setAttribute(\"data-theme\",\"flat\");if(m!==\"light\"&&m!==\"dark\")m=matchMedia(\"(prefers-color-scheme: dark)\").matches?\"dark\":\"light\";if(m===\"dark\"){d.classList.add(\"dark\");d.setAttribute(\"data-mode\",\"dark\")}d.style.colorScheme=m}catch(e){}`;\n\nexport function ThemeScript() {\n  return <script dangerouslySetInnerHTML={{ __html: SCRIPT }} />;\n}\n"
+    },
+    {
+      "path": "templates/starter-item/app/fonts.ts",
+      "type": "registry:file",
+      "target": "~/app/fonts.ts",
+      "content": "import localFont from \"next/font/local\";\n\n// Inter, self-hosted (SIL Open Font License), so the app builds offline.\n// Rime's tokens point --font-body and --font-display at --font-inter.\nexport const inter = localFont({\n  src: \"./fonts/inter-latin-100-900-normal.woff2\",\n  weight: \"100 900\",\n  variable: \"--font-inter\",\n  display: \"swap\",\n});\n"
+    },
+    {
+      "path": "templates/starter-item/app/globals.css",
+      "type": "registry:file",
+      "target": "~/app/globals.css",
+      "content": "/* Rime first (installed by the shadcn CLI), then your theme. */\n@import \"./styles/tokens.css\";\n@import \"./styles/base.css\";\n@import \"./styles/shadcn-bridge.css\";\n@import \"./styles/theme.css\";\n"
+    },
+    {
+      "path": "templates/starter-item/app/styles/theme.css",
+      "type": "registry:file",
+      "target": "~/app/styles/theme.css",
+      "content": "/* Acme's theme: only what differs from Rime Default.\n   Make one in Rime Studio (https://rime.mjsons.net/themes): start from a\n   preset, drop in your logo to extract a palette, check contrast in light\n   and dark, then Export and paste the result here. For example:\n\n   :root {\n     --brand: #0f9b8e;\n     --brand-action: #0b7a70;\n     --brand-strong: #075f57;\n     --rgb-brand: 15, 155, 142;\n     --r-md: 6px;\n   }\n\n   .dark, [data-mode=\"dark\"] {\n     --brand: #3fc6b8;\n     --rgb-brand: 63, 198, 184;\n   }\n\n   Load it after the Rime styles (app/globals.css does). Never edit\n   tokens.css itself: re-running the CLI would overwrite it. */\n\n:root {\n}\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/toast.json"
+  ],
+  "docs": "Put Inter at app/fonts/inter-latin-100-900-normal.woff2 (from the Rime repo, or use next/font/google in app/fonts.ts). Then make your theme in Rime Studio (https://rime.mjsons.net/themes) and paste it into app/styles/theme.css."
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar",
+  "type": "registry:item",
+  "title": "calendar (Rime date-field)",
+  "description": "The shadcn name \"calendar\": installs Rime's date-field.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/date-field.json"
+  ],
+  "meta": {
+    "aliasOf": "date-field"
+  }
+}

@@ -1,0 +1,240 @@
+/* shadcn-shaped chart primitives (ChartContainer, ChartTooltipContent,
+   ChartLegendContent) drawn with Rime's tokens. Pairs with primitives.tsx.
+   Nothing here carries a hex: the palette (--chart-1..6) lives in
+   tokens.css and the chrome (--chart-grid, --chart-tick, --chart-cursor,
+   --chart-band) in Charts.module.css .tokens, which ChartContainer applies. */
+
+/* ── Container ─────────────────────────────────────────────────────────── */
+
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  color: var(--ink-body);
+}
+
+/* Recharts ships grey (#ccc / #fff) chrome. These are the same overrides
+   shadcn's ChartContainer applies with Tailwind arbitrary variants, written
+   as :global selectors scoped under the container. */
+.container :global(.recharts-cartesian-axis-tick text) {
+  fill: var(--chart-tick, var(--ink-muted));
+}
+
+.container :global(.recharts-cartesian-grid line[stroke="#ccc"]) {
+  stroke: var(--chart-grid, var(--line-soft));
+}
+
+.container :global(.recharts-polar-grid [stroke="#ccc"]),
+.container :global(.recharts-reference-line [stroke="#ccc"]) {
+  stroke: var(--chart-axis, var(--line));
+}
+
+/* Line and area crosshair: a quiet hairline. */
+.container :global(.recharts-curve.recharts-tooltip-cursor) {
+  stroke: var(--chart-cursor, var(--line));
+}
+
+/* Bar cursor: a faint band behind the hovered category. */
+.container :global(.recharts-rectangle.recharts-tooltip-cursor) {
+  fill: var(--chart-band, var(--wash-hover));
+}
+
+.container :global(.recharts-radial-bar-background-sector) {
+  fill: var(--surface-sunken);
+}
+
+.container :global(.recharts-dot[stroke="#fff"]),
+.container :global(.recharts-sector[stroke="#fff"]) {
+  stroke: transparent;
+}
+
+/* accessibilityLayer makes the surface focusable; the kit's focus ring is
+   drawn by the chart frame, not by a browser outline on an SVG layer. */
+.container :global(.recharts-surface),
+.container :global(.recharts-layer),
+.container :global(.recharts-sector) {
+  outline: none;
+}
+
+/* ── Tooltip content ───────────────────────────────────────────────────── */
+
+/* The surface is the kit's popover glass: frosted in Default, opaque in
+   Flat, deep glass in Dark, all from tokens. Compact like shadcn's
+   (min 8rem, 12px text, 6px by 10px padding) so it glides rather than
+   lurches: a small box moving 400ms reads as motion, a big one reads as lag. */
+.tooltip {
+  display: grid;
+  gap: 6px;
+  min-width: 8rem;
+  max-width: 280px;
+  padding: 6px 10px;
+  border: 1px solid var(--popover-border, transparent);
+  border-radius: var(--r-md);
+  background: var(--popover-surface, var(--surface-solid));
+  box-shadow: var(--popover-shadow, var(--shadow-float));
+  -webkit-backdrop-filter: var(--popover-blur, none);
+  backdrop-filter: var(--popover-blur, none);
+  font-size: var(--text-caption);
+  line-height: 1.2;
+  color: var(--ink-body);
+  pointer-events: none;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--ink-heading);
+}
+
+.tag {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: var(--r-2xs);
+  background: var(--wash-active);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.rows {
+  display: grid;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.row[data-indicator="dot"] {
+  align-items: center;
+}
+
+.row > svg {
+  width: 10px;
+  height: 10px;
+  color: var(--ink-muted);
+}
+
+.rowBody {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  line-height: 1;
+}
+
+.rowBody[data-nested="true"] {
+  align-items: flex-end;
+}
+
+.rowText {
+  display: grid;
+  gap: 6px;
+}
+
+.name {
+  color: var(--ink-muted);
+}
+
+/* Values: the strong element, tabular so a column of them lines up while
+   the box glides. */
+.value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--ink-heading);
+}
+
+/* ── Indicators: dot, line, dashed (the shadcn set) ────────────────────── */
+
+.indicator {
+  flex-shrink: 0;
+  border: 0 solid var(--indicator);
+  border-radius: 2px;
+  background: var(--indicator);
+}
+
+.indicator[data-shape="dot"] {
+  width: 10px;
+  height: 10px;
+}
+
+.indicator[data-shape="line"] {
+  width: 4px;
+}
+
+.indicator[data-shape="dashed"] {
+  width: 0;
+  border-width: 1.5px;
+  border-style: dashed;
+  background: transparent;
+}
+
+.indicator[data-shape="dashed"][data-nested="true"] {
+  margin: 2px 0;
+}
+
+/* Optional total row (stacked charts): a hairline, then the sum. */
+.total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 2px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line-soft);
+  font-weight: 600;
+  color: var(--ink-heading);
+}
+
+.total .value {
+  font-weight: 700;
+}
+
+/* ── Legend content ────────────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 16px;
+  font-size: var(--text-caption);
+  color: var(--ink-secondary);
+}
+
+.legend[data-align="top"] {
+  padding-bottom: 12px;
+}
+
+.legend[data-align="bottom"] {
+  padding-top: 12px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendItem > svg {
+  width: 12px;
+  height: 12px;
+  color: var(--ink-muted);
+}
+
+.legendSwatch {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}

@@ -1,0 +1,55 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.box {
+  align-items: stretch;
+}
+
+.textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 88px;
+  padding: calc(11px * var(--density)) var(--input-pad-x, calc(14px * var(--density)));
+  border: 0;
+  outline: none;
+  background: transparent;
+  resize: vertical;
+  font-family: var(--font-body);
+  font-size: var(--input-font-size, var(--text-input));
+  line-height: 1.55;
+  color: var(--ink-body);
+  border-radius: inherit;
+}
+
+/* Focus is drawn on the whole box (TextInput's .box:focus-within). (0,2,0)
+   outranks globals.css's :focus-visible fallback in any load order. */
+.textarea:focus,
+.textarea:focus-visible {
+  outline: none;
+}
+
+.textarea::placeholder {
+  color: var(--ink-placeholder);
+  opacity: 1;
+}
+
+.textarea:disabled {
+  cursor: not-allowed;
+  resize: none;
+  color: var(--ink-disabled);
+}
+
+.count {
+  align-self: flex-end;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.countNear {
+  color: var(--warning-ink);
+  font-weight: 700;
+}

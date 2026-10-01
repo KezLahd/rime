@@ -1,0 +1,93 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.segment {
+  display: block;
+  height: 6px;
+  border-radius: var(--r-flat, 3px);
+  background: rgba(var(--rgb-brand-deep), 0.08);
+  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.12);
+}
+
+.compact .segment {
+  height: 5px;
+}
+
+.done .segment {
+  background: var(--brand-gradient);
+  box-shadow: 0 1px 3px rgba(var(--rgb-brand), 0.3);
+}
+
+/* In flight: the gradient at half strength, with a solid accent leading edge
+   to say "this one is moving". */
+.current .segment {
+  background:
+    linear-gradient(90deg, rgba(var(--rgb-brand), 0.55) 0 55%, rgba(var(--rgb-brand-deep), 0.08) 55%);
+  box-shadow: inset 0 0 0 1px rgba(var(--rgb-brand), 0.35);
+}
+
+.issue .segment {
+  background: var(--danger-base);
+  box-shadow: 0 1px 3px rgba(var(--rgb-danger), 0.35);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.label {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.current .label {
+  color: var(--ink-brand);
+}
+
+.issue .label {
+  color: var(--danger-ink);
+}
+
+.upcoming .label {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.detail {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.meta {
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.caption {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}

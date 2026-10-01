@@ -1,0 +1,347 @@
+/* Buttons. Hover deepens the glow; it never lifts
+   (--button-lift is 0 in the default theme), never scales and never fades the fill (opacity would drop white label
+   contrast at the gradient's light stop).
+
+   Per-component tokens (--button-*): every size, radius, padding, label
+   and fill knob reads one, and none is declared in tokens.css, so each
+   fallback below IS the default theme value; change a fallback and every
+   button changes. A Theme
+   Studio theme can set any of them. Defaults chain to the scale tokens
+   (--control-h-*, --r-*, --density), so a theme that only moves the scales
+   still moves the buttons. Full list: docs/design/theme-studio.md. */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap, 8px);
+  border: 0;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-weight: var(--button-weight, 700);
+  letter-spacing: var(--button-tracking, -0.005em);
+  text-transform: var(--button-case, none);
+  text-decoration: none;
+  user-select: none;
+  cursor: pointer;
+  transition:
+    background-color var(--button-dur, var(--dur)) var(--button-ease, var(--ease)),
+    box-shadow var(--button-dur, var(--dur)) var(--button-ease, var(--ease)),
+    transform var(--button-dur, var(--dur)) var(--button-ease, var(--ease)),
+    color var(--button-dur, var(--dur)) var(--button-ease, var(--ease));
+}
+
+.button svg {
+  flex-shrink: 0;
+}
+
+.label {
+  min-width: 0;
+  /* Wide tracking leaves a gap after the last letter; trim it so the label
+     sits optically centred. 0 (no trim) when tracking is tight. */
+  margin-inline-end: calc(-1 * var(--button-trim, 0em));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button:focus-visible {
+  outline: none;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────────────── */
+
+.sm {
+  height: var(--button-height-sm, var(--control-h-sm));
+  padding: 0 var(--button-pad-sm, calc(12px * var(--density)));
+  gap: 6px;
+  border-radius: var(--button-radius, var(--r-sm));
+  font-size: var(--button-size-sm, 12.5px);
+}
+
+.md {
+  height: var(--button-height-md, var(--control-h-md));
+  padding: 0 var(--button-pad-md, calc(18px * var(--density)));
+  border-radius: var(--button-radius, var(--r-md));
+  font-size: var(--button-size-md, 14px);
+}
+
+.lg {
+  height: var(--button-height-lg, var(--control-h-lg));
+  padding: 0 var(--button-pad-lg, calc(24px * var(--density)));
+  border-radius: var(--button-radius, var(--r-lg));
+  font-size: var(--button-size-lg, 15px);
+}
+
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Primary: the brand gesture ─────────────────────────────────────────── */
+
+.primary {
+  color: var(--button-primary-ink, var(--ink-inverse));
+  background: var(--button-primary-bg, var(--brand-gradient));
+  box-shadow: var(--glow-md), var(--shadow-specular-dark);
+}
+
+.primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--button-primary-ink, var(--ink-inverse));
+  background:
+    linear-gradient(var(--button-hover-overlay, rgba(var(--rgb-white), 0.07)), var(--button-hover-overlay, rgba(var(--rgb-white), 0.07))),
+    var(--button-primary-bg, var(--brand-gradient));
+  box-shadow: var(--button-hover-glow, var(--glow-md-hover)), var(--shadow-specular-dark);
+  transform: translateY(var(--button-lift, 0px));
+}
+
+.primary:active:not(:disabled):not([aria-disabled="true"]) {
+  background:
+    linear-gradient(var(--button-press-overlay, rgba(var(--rgb-shade), 0.14)), var(--button-press-overlay, rgba(var(--rgb-shade), 0.14))),
+    var(--button-primary-bg, var(--brand-gradient));
+  box-shadow: var(--glow-sm), inset 0 1px 2px rgba(var(--rgb-shade), 0.2);
+  transform: translateY(0);
+}
+
+.primary:focus-visible {
+  box-shadow: var(--focus-ring), var(--glow-md);
+}
+
+/* ── Danger: the same gesture in danger red ───────────────────────────────── */
+
+.danger {
+  color: var(--ink-inverse);
+  background: var(--button-danger-bg, var(--danger-gradient));
+  box-shadow: var(--glow-danger), var(--shadow-specular-dark);
+}
+
+.danger:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--ink-inverse);
+  background:
+    linear-gradient(rgba(var(--rgb-shade), 0.06), rgba(var(--rgb-shade), 0.06)),
+    var(--button-danger-bg, var(--danger-gradient));
+  box-shadow: var(--glow-danger-hover), var(--shadow-specular-dark);
+  transform: translateY(var(--button-lift, 0px));
+}
+
+.danger:active:not(:disabled):not([aria-disabled="true"]) {
+  background:
+    linear-gradient(rgba(var(--rgb-shade), 0.16), rgba(var(--rgb-shade), 0.16)),
+    var(--button-danger-bg, var(--danger-gradient));
+  box-shadow: 0 1px 4px rgba(var(--rgb-danger), 0.3), inset 0 1px 2px rgba(var(--rgb-shade), 0.2);
+  transform: translateY(0);
+}
+
+.danger:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus-gap), 0 0 0 4px var(--danger-ink), var(--glow-danger);
+}
+
+/* ── Secondary: glass on the page, white inside solid surfaces ─────────── */
+
+.secondary {
+  color: var(--button-secondary-ink, var(--ink-heading));
+  background: var(--button-secondary-bg, rgba(var(--rgb-white), 0.45));
+  -webkit-backdrop-filter: var(--blur-callout);
+  backdrop-filter: var(--blur-callout);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge-strong),
+    var(--shadow-specular),
+    0 1px 3px rgba(var(--rgb-contact), 0.08);
+}
+
+.secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--button-secondary-ink, var(--ink-heading));
+  background: var(--button-secondary-hover-bg, rgba(var(--rgb-white), 0.68));
+  box-shadow: var(--button-secondary-hover-shadow, inset 0 0 0 1px rgba(var(--rgb-white), 0.9), var(--shadow-specular), 0 4px 12px rgba(var(--rgb-brand-deep), 0.1));
+  transform: translateY(var(--button-lift, 0px));
+}
+
+.secondary:active:not(:disabled):not([aria-disabled="true"]) {
+  background: rgba(var(--rgb-white), 0.55);
+  box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 2px rgba(var(--rgb-contact), 0.1);
+  transform: translateY(0);
+}
+
+.secondary:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Glass is invisible on white, so inside a modal, auth card or white card the
+   secondary becomes the reference white tile button with a accent inset ring. */
+:global([data-surface="solid"]) .secondary {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--button-outline, var(--shadow-control));
+}
+
+:global([data-surface="solid"]) .secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: linear-gradient(var(--wash-hover), var(--wash-hover)), var(--surface-solid);
+  box-shadow: var(--button-outline-hover, 0 3px 8px rgba(var(--rgb-brand-deep), 0.1), inset 0 0 0 1px rgba(var(--rgb-brand), 0.32));
+}
+
+:global([data-surface="solid"]) .secondary:active:not(:disabled):not([aria-disabled="true"]) {
+  background: linear-gradient(var(--wash-subtle), var(--wash-subtle)), var(--surface-solid);
+  box-shadow: var(--button-outline-active, inset 0 0 0 1px rgba(var(--rgb-brand), 0.32));
+}
+
+:global([data-surface="solid"]) .secondary:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Danger secondary ──────────────────────────────────────────────────
+   The inverse of danger, as secondary is the inverse of primary: the
+   secondary's glass (white tile on solid surfaces) with danger ink and a
+   danger ring. For destructive steps that aren't the final, irreversible one
+   (e.g. "Review withdrawal"); the solid danger gradient is kept for that. */
+.dangerSecondary {
+  color: var(--danger-ink);
+  background: rgba(var(--rgb-white), 0.45);
+  -webkit-backdrop-filter: var(--blur-callout);
+  backdrop-filter: var(--blur-callout);
+  box-shadow:
+    inset 0 0 0 1px var(--danger-line),
+    var(--shadow-specular),
+    0 1px 3px rgba(var(--rgb-contact), 0.08);
+}
+
+.dangerSecondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: linear-gradient(var(--danger-fill), var(--danger-fill)), rgba(var(--rgb-white), 0.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--rgb-danger), 0.5),
+    var(--shadow-specular),
+    0 4px 12px rgba(var(--rgb-danger), 0.14);
+  transform: translateY(var(--button-lift, 0px));
+}
+
+.dangerSecondary:active:not(:disabled):not([aria-disabled="true"]) {
+  background: linear-gradient(var(--danger-fill), var(--danger-fill)), rgba(var(--rgb-white), 0.6);
+  box-shadow: inset 0 0 0 1px var(--danger-line), inset 0 1px 2px rgba(var(--rgb-contact), 0.1);
+  transform: translateY(0);
+}
+
+.dangerSecondary:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--danger-line), var(--focus-ring);
+}
+
+:global([data-surface="solid"]) .dangerSecondary {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: inset 0 0 0 1px var(--danger-line), 0 1px 2px rgba(var(--rgb-contact), 0.06);
+}
+
+:global([data-surface="solid"]) .dangerSecondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: linear-gradient(var(--danger-fill), var(--danger-fill)), var(--surface-solid);
+  box-shadow: inset 0 0 0 1px rgba(var(--rgb-danger), 0.5), 0 3px 8px rgba(var(--rgb-danger), 0.12);
+}
+
+/* ── Ghost ──────────────────────────────────────────────────────────────── */
+
+.ghost {
+  color: var(--button-ghost-ink, var(--ink-brand));
+  background: transparent;
+}
+
+.ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--brand-deep);
+  background: var(--wash-subtle);
+}
+
+.ghost:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--wash-active);
+}
+
+.ghost:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Disabled: a flat cool grey tint, as the reference auth button does,
+   rather than a faded gradient that still looks pressable. ─────────────── */
+
+.button:disabled:not(.loading),
+.button[aria-disabled="true"]:not(.loading) {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  background: rgba(var(--rgb-brand-deep), 0.06);
+  box-shadow: none;
+  transform: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.ghost:disabled:not(.loading),
+.ghost[aria-disabled="true"]:not(.loading) {
+  background: transparent;
+}
+
+/* Loading keeps its colour but is dulled by a dark layer over the fill, so
+   the label stays legible (the reference overlay trick) and it reads as busy. */
+.loading {
+  cursor: progress;
+}
+
+.primary.loading {
+  background:
+    linear-gradient(rgba(var(--rgb-shade), 0.18), rgba(var(--rgb-shade), 0.18)),
+    var(--button-primary-bg, var(--brand-gradient));
+  box-shadow: var(--shadow-specular-dark);
+}
+
+.danger.loading {
+  background:
+    linear-gradient(rgba(var(--rgb-shade), 0.18), rgba(var(--rgb-shade), 0.18)),
+    var(--button-danger-bg, var(--danger-gradient));
+  box-shadow: var(--shadow-specular-dark);
+}
+
+.secondary.loading,
+.ghost.loading {
+  color: var(--ink-muted);
+}
+
+/* ── Square icon sizes (shadcn's icon, icon-sm, icon-lg) ─────────────── */
+
+.iconSm,
+.iconMd,
+.iconLg {
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.iconSm {
+  width: var(--button-height-sm, var(--control-h-sm));
+  height: var(--button-height-sm, var(--control-h-sm));
+  border-radius: var(--button-radius, var(--r-sm));
+}
+
+.iconMd {
+  width: var(--button-height-md, var(--control-h-md));
+  height: var(--button-height-md, var(--control-h-md));
+  border-radius: var(--button-radius, var(--r-md));
+}
+
+.iconLg {
+  width: var(--button-height-lg, var(--control-h-lg));
+  height: var(--button-height-lg, var(--control-h-lg));
+  border-radius: var(--button-radius, var(--r-lg));
+}
+
+/* ── Link: inline text, accent ink, underline on hover. No fill, no lift. ── */
+
+.link[class] {
+  height: auto;
+  padding: 0;
+  border-radius: var(--r-2xs);
+  background: transparent;
+  color: var(--button-link-ink, var(--ink-brand));
+  text-underline-offset: 3px;
+}
+
+.link:hover:not(:disabled):not([aria-disabled="true"]) {
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  box-shadow: var(--focus-ring);
+}

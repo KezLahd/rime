@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert",
+  "type": "registry:item",
+  "title": "Alert",
+  "description": "An inline message in a tone (info, success, warning, danger) or a quiet legal box for fixed wording, with an action and dismiss.",
+  "categories": [
+    "feedback"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Alert/Alert.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Alert/Alert.module.css",
+      "content": ".alert {\n  position: relative;\n  display: flex;\n  align-items: flex-start;\n  gap: 11px;\n  padding: calc(12px * var(--density)) calc(14px * var(--density));\n  border-radius: var(--alert-radius, var(--r-md));\n  border: var(--border-w) solid;\n}\n\n.icon {\n  display: inline-flex;\n  flex-shrink: 0;\n  margin-top: 1px;\n}\n\n.content {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  gap: 3px;\n  min-width: 0;\n}\n\n.titleRow {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n}\n\n.title {\n  font-size: 13.5px;\n  font-weight: 700;\n  line-height: 1.4;\n}\n\n.badge {\n  display: inline-flex;\n  align-items: center;\n  gap: 4px;\n  padding: 2px 7px;\n  border-radius: var(--r-2xs);\n  background: rgba(var(--rgb-white), 0.75);\n  box-shadow: inset 0 0 0 1px currentColor;\n  font-size: 10.5px;\n  font-weight: 700;\n  letter-spacing: 0.05em;\n  text-transform: uppercase;\n}\n\n.body {\n  font-size: var(--text-small);\n  line-height: 1.55;\n  color: var(--ink-body);\n}\n\n.body > * + * {\n  margin-top: 6px;\n}\n\n.body ul {\n  margin: 4px 0 0;\n  padding-left: 18px;\n}\n\n.action {\n  flex-shrink: 0;\n  align-self: center;\n}\n\n.dismiss {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  width: 24px;\n  height: 24px;\n  margin: -2px -4px 0 0;\n  border: 0;\n  border-radius: var(--r-xs);\n  background: transparent;\n  color: var(--ink-muted);\n}\n\n.dismiss:hover {\n  background: rgba(var(--rgb-white), 0.6);\n  color: var(--ink-body);\n}\n\n.dismiss:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n}\n\n@media (max-width: 640px) {\n  .alert {\n    flex-wrap: wrap;\n  }\n\n  .action {\n    flex-basis: 100%;\n    padding-left: 28px;\n  }\n}\n\n/* ── Tones ───────────────────────────────────────────────────────────── */\n\n/* the reference tinted callout: two-stop brand wash with a little blur. */\n.info {\n  background: linear-gradient(135deg, rgba(var(--rgb-brand), 0.12), rgba(var(--rgb-brand-deep), 0.06));\n  -webkit-backdrop-filter: var(--blur-callout);\n  backdrop-filter: var(--blur-callout);\n  border-color: var(--line-brand);\n  color: var(--info-ink);\n}\n\n.success {\n  background: var(--success-fill);\n  border-color: var(--success-line);\n  color: var(--success-ink);\n}\n\n.warning {\n  background: var(--warning-fill);\n  border-color: var(--warning-line);\n  color: var(--warning-ink);\n}\n\n.danger {\n  background: var(--danger-fill);\n  border-color: var(--danger-line);\n  color: var(--danger-ink);\n}\n\n/* Approved copy: the support neutral, the guide's quiet neutral. */\n.legal {\n  padding: 16px 18px;\n  background: linear-gradient(135deg, rgba(var(--rgb-support), 0.42), rgba(var(--rgb-support), 0.22)), rgba(var(--rgb-white), 0.6);\n  border-color: rgba(var(--rgb-support-deep), 0.36);\n  color: var(--ink-heading);\n}\n\n.legal .body {\n  font-size: var(--text-body);\n  line-height: 1.6;\n}\n\n.jobCode {\n  margin-top: 8px;\n  font-family: var(--font-mono);\n  font-size: var(--text-micro);\n  letter-spacing: 0.06em;\n  color: var(--ink-muted);\n}\n"
+    },
+    {
+      "path": "components/ui/Alert/Alert.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Alert/Alert.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconAlertCircle, IconAlertTriangle, IconCheckCircle, IconInfo, IconX } from \"../Icon/Icon\";\nimport styles from \"./Alert.module.css\";\n\nexport type AlertTone = \"info\" | \"success\" | \"warning\" | \"danger\" | \"legal\";\n\nexport type AlertProps = {\n  tone: AlertTone;\n  title?: ReactNode;\n  children?: ReactNode;\n  /** A button or link on the right (desktop) or below (mobile). */\n  action?: ReactNode;\n  icon?: ReactNode | false;\n  /** Small uppercase tag before the title: \"Cold chain\", \"Awaiting MLR\". */\n  badge?: ReactNode;\n  /** legal only: the approval job code, set in mono under the copy. */\n  jobCode?: string;\n  /**\n   * Announce on appearance. Use for banners that appear in response to an\n   * action (a failed save), not for ones present on page load.\n   */\n  live?: boolean;\n  onDismiss?: () => void;\n  className?: string;\n};\n\nconst ICONS: Record<Exclude<AlertTone, \"legal\">, ReactNode> = {\n  info: <IconInfo size={17} />,\n  success: <IconCheckCircle size={17} />,\n  warning: <IconAlertTriangle size={17} />,\n  danger: <IconAlertCircle size={17} />,\n};\n\n/**\n * Banners and callouts. info is the reference tinted callout (brand wash, small\n * blur); legal is a the support neutral box for approved copy that must be shown\n * verbatim, with its job code.\n */\nexport function Alert({ tone, title, children, action, icon, badge, jobCode, live, onDismiss, className }: AlertProps) {\n  const glyph = icon === false ? null : (icon ?? (tone === \"legal\" ? null : ICONS[tone]));\n  const role = live ? (tone === \"danger\" || tone === \"warning\" ? \"alert\" : \"status\") : undefined;\n\n  return (\n    <div data-slot=\"alert\" role={role} className={cx(styles.alert, styles[tone], className)}>\n      {glyph ? (\n        <span className={styles.icon} aria-hidden=\"true\">\n          {glyph}\n        </span>\n      ) : null}\n      <div className={styles.content}>\n        {badge || title ? (\n          <p className={styles.titleRow}>\n            {badge ? <span className={styles.badge}>{badge}</span> : null}\n            {title ? <span className={styles.title}>{title}</span> : null}\n          </p>\n        ) : null}\n        {children ? <div className={styles.body}>{children}</div> : null}\n        {jobCode ? <p className={styles.jobCode}>{jobCode}</p> : null}\n      </div>\n      {action ? <div className={styles.action}>{action}</div> : null}\n      {onDismiss ? (\n        <button type=\"button\" className={styles.dismiss} onClick={onDismiss} aria-label=\"Dismiss\">\n          <IconX size={14} />\n        </button>\n      ) : null}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "meta": {
+    "import": "import { Alert } from \"@/components/ui/Alert/Alert\";",
+    "docs": "https://rime.mjsons.net/md/alert.md",
+    "page": "https://rime.mjsons.net/components/alert"
+  }
+}

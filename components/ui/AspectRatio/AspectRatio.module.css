@@ -1,0 +1,26 @@
+/* A fixed-ratio box. Direct media children fill it. */
+
+.root {
+  position: relative;
+  width: var(--aspect-width, 100%);
+  aspect-ratio: var(--aspect-ratio, 1.7778);
+}
+
+.framed {
+  overflow: hidden;
+  border-radius: var(--aspect-radius, var(--inner-radius, var(--r-lg)));
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 var(--border-w) var(--line);
+}
+
+.root > img,
+.root > video,
+.root > iframe,
+.root > picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}

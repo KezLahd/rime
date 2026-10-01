@@ -1,0 +1,88 @@
+/* Resizable panels. The handle is a hairline with a wide invisible hit
+   area; it turns accent on hover, drag and focus. */
+
+.group {
+  display: flex;
+  width: 100%;
+  min-height: var(--resizable-min-height, 200px);
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.framed {
+  overflow: hidden;
+  border-radius: var(--resizable-radius, var(--r-lg));
+  background: var(--glass-fill-nested);
+  -webkit-backdrop-filter: var(--blur-panel-light);
+  backdrop-filter: var(--blur-panel-light);
+  border: var(--border-w) solid var(--glass-edge);
+  box-shadow: var(--shadow-specular), var(--shadow-hairline-card);
+}
+
+.panel {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.handle {
+  position: relative;
+  flex: 0 0 var(--border-w);
+  background: var(--line);
+  touch-action: none;
+  outline: none;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.horizontal > .handle {
+  cursor: col-resize;
+}
+
+.vertical > .handle {
+  cursor: row-resize;
+}
+
+/* The hit area: 12px across the rule, invisible. */
+.handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 -6px;
+}
+
+.vertical > .handle::before {
+  inset: -6px 0;
+}
+
+.handle:hover,
+.handle:active,
+.handle:focus-visible {
+  background: var(--brand);
+}
+
+.handle:focus-visible {
+  box-shadow: 0 0 0 2px rgba(var(--rgb-brand), 0.3);
+}
+
+.grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 10px;
+  height: 22px;
+  border-radius: var(--r-2xs);
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 var(--border-w) var(--line-input), var(--shadow-input);
+  transform: translate(-50%, -50%);
+}
+
+.vertical .grip {
+  width: 22px;
+  height: 10px;
+}

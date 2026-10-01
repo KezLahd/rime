@@ -1,0 +1,144 @@
+.stepper {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.stepper::-webkit-scrollbar {
+  display: none;
+}
+
+.list {
+  display: flex;
+  margin: 0;
+  padding: 2px;
+  list-style: none;
+  min-width: max-content;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 120px;
+}
+
+/* Connector: a 2px rule from this marker toward the next. */
+.hasNext::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 42px;
+  right: 8px;
+  height: 2px;
+  border-radius: var(--r-flat, 1px);
+  background: rgba(var(--rgb-brand-deep), 0.12);
+}
+
+.complete.hasNext::after {
+  background: linear-gradient(90deg, var(--brand), rgba(var(--rgb-brand), 0.5));
+}
+
+.hit {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0 14px 0 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+button.hit {
+  cursor: pointer;
+  border-radius: var(--r-sm);
+}
+
+button.hit:focus-visible {
+  outline: none;
+}
+
+button.hit:focus-visible .marker {
+  box-shadow: var(--focus-ring);
+}
+
+button.hit:hover .label {
+  color: var(--brand-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.upcoming .marker {
+  background: var(--recess-fill);
+  box-shadow: var(--shadow-recess);
+  color: var(--ink-muted);
+}
+
+.current .marker {
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 2px var(--brand), 0 0 0 4px rgba(var(--rgb-brand), 0.14);
+  color: var(--ink-brand);
+}
+
+.complete .marker {
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-sm);
+  color: var(--ink-inverse);
+}
+
+.error .marker {
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 2px var(--danger-base), 0 0 0 4px rgba(var(--rgb-danger), 0.14);
+  color: var(--danger-ink);
+  font-weight: 900;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.label {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+
+.upcoming .label {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.current .label {
+  color: var(--ink-heading);
+}
+
+.error .label {
+  color: var(--danger-ink);
+}
+
+.description {
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}

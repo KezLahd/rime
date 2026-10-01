@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "impact-preview-demo",
+  "type": "registry:item",
+  "title": "ImpactPreview examples",
+  "description": "Usage examples for ImpactPreview.",
+  "files": [
+    {
+      "path": "registry/examples/impact-preview.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/impact-preview.md",
+      "content": "# ImpactPreview examples\n\nWhat a destructive action will change, row by row, before it is confirmed.\n\n```tsx\nimport { ImpactPreview } from \"@/components/ui\";\n\n<ImpactPreview items={[{ id: \"a\", severity: \"destructive\", title: \"Signed out everywhere\" }]} />\n```\n\n## Default\n\n```tsx\n<ImpactPreview statement=\"This action cannot be undone\" items={ITEMS} />\n```\n\nDocs: https://rime.mjsons.net/components/impact-preview\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/impact-preview.json"
+  ]
+}

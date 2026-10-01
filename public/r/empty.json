@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty",
+  "type": "registry:item",
+  "title": "empty (Rime empty-state)",
+  "description": "The shadcn name \"empty\": installs Rime's empty-state.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/empty-state.json"
+  ],
+  "meta": {
+    "aliasOf": "empty-state"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-demo",
+  "type": "registry:item",
+  "title": "Card examples",
+  "description": "Usage examples for Card.",
+  "files": [
+    {
+      "path": "registry/examples/card.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/card.md",
+      "content": "# Card examples\n\nA solid card with a washed header, a lifted highlight tone, and a sunken muted tone.\n\n```tsx\nimport { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from \"@/components/ui\";\n\n<Card title=\"This month\" description=\"Updated hourly\" actions={<Button size=\"sm\" variant=\"secondary\">Export</Button>}>…</Card>\n```\n\n## Tones\n\n```tsx\n<Card title=\"Default\">…</Card>\n<Card tone=\"highlight\" title=\"Two invoices are overdue\">…</Card>\n<Card tone=\"muted\">Secondary info</Card>\n```\n\n## Composed from parts\n\nThe same card written with shadcn's parts; it renders identically to the props form below it.\n\n```tsx\n<Card>\n  <CardHeader>\n    <CardTitle>This month</CardTitle>\n    <CardDescription>Updated hourly</CardDescription>\n    <CardAction><Button size=\"sm\" variant=\"secondary\">Export</Button></CardAction>\n  </CardHeader>\n  <CardContent>32 invoices paid</CardContent>\n  <CardFooter><Button size=\"sm\">View all</Button></CardFooter>\n</Card>\n\n// identical to:\n<Card title=\"This month\" description=\"Updated hourly\" actions={…} footer={…}>32 invoices paid</Card>\n```\n\nDocs: https://rime.mjsons.net/components/card\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/card.json"
+  ]
+}

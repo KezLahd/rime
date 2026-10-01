@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-demo",
+  "type": "registry:item",
+  "title": "Kbd and KbdGroup examples",
+  "description": "Usage examples for Kbd and KbdGroup.",
+  "files": [
+    {
+      "path": "registry/examples/kbd.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/kbd.md",
+      "content": "# Kbd and KbdGroup examples\n\nKeyboard keys as small raised key caps, alone or as a combination.\n\n```tsx\nimport { Kbd, KbdGroup } from \"@/components/ui\";\n\n<KbdGroup keys={[\"Ctrl\", \"K\"]} />\n```\n\n## Keys and combinations\n\n```tsx\n<KbdGroup keys={[\"Ctrl\", \"K\"]} />\n<KbdGroup keys={[\"Shift\", \"Alt\", \"N\"]} />\n<Kbd>Esc</Kbd>\n<p>Press <KbdGroup keys={[\"Ctrl\", \"S\"]} size=\"sm\" /> to save the invoice.</p>\n```\n\nDocs: https://rime.mjsons.net/components/kbd\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/kbd.json"
+  ]
+}

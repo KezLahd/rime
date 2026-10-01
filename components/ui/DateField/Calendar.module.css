@@ -1,0 +1,401 @@
+.calendar {
+  width: 296px;
+  user-select: none;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.captionLabel {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.navGroup {
+  display: flex;
+  gap: 2px;
+}
+
+/* ── Dropdown caption ───────────────────────────────────────────────────
+   the reference customer form puts Month and Year selects in the caption. Here
+   they are quiet text buttons with a chevron, so the caption still reads as
+   a heading ("September 2026") until pointed at. */
+
+.captionButtons {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.captionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 6px 0 9px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-heading);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.captionChevron {
+  color: var(--ink-muted);
+  transition:
+    transform var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.captionButton:hover {
+  background: var(--wash-hover);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-brand);
+}
+
+.captionButton:hover .captionChevron,
+.captionButton[aria-expanded="true"] .captionChevron {
+  color: var(--ink-brand);
+}
+
+.captionButton:active {
+  background: var(--wash-strong);
+}
+
+.captionButton[aria-expanded="true"] {
+  background: var(--wash-active);
+  box-shadow: inset 0 0 0 1px var(--line-brand-strong);
+  color: var(--ink-brand);
+}
+
+.captionButton[aria-expanded="true"] .captionChevron {
+  transform: rotate(180deg);
+}
+
+.captionButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Quick pickers ──────────────────────────────────────────────────────
+   Same footprint as the day grid (weekday row + six weeks), so opening one
+   never resizes the popup. */
+
+.picker {
+  display: grid;
+  gap: 4px;
+  height: 268px;
+}
+
+.monthPicker {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+}
+
+.yearPicker {
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 38px;
+  align-content: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Room for the focus ring on the outer options. */
+  padding: 3px;
+  margin: -3px;
+  scrollbar-width: thin;
+}
+
+.pickerOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-body);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.pickerOption:hover:not(.pickerSelected):not(.pickerBlocked) {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.pickerOption:active:not(.pickerBlocked) {
+  background: var(--wash-strong);
+}
+
+.pickerOption:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* This year, as today is in the grid: an inset ring, not a fill. */
+.pickerCurrent {
+  box-shadow: inset 0 0 0 2px var(--brand);
+  color: var(--ink-brand);
+  font-weight: 700;
+}
+
+.pickerSelected {
+  background: var(--brand-gradient);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  box-shadow: var(--glow-sm);
+}
+
+.pickerSelected:focus-visible {
+  box-shadow: var(--focus-ring), var(--glow-sm);
+}
+
+.pickerBlocked {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  text-decoration: line-through;
+  text-decoration-color: rgba(var(--rgb-brand-deep), 0.25);
+}
+
+/* the reference design: 28px glass-outline nav, faint until hovered. */
+.nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.nav:hover:not(:disabled) {
+  color: var(--ink-brand);
+  background: var(--wash-hover);
+  box-shadow: inset 0 0 0 1px var(--line-brand-strong);
+}
+
+.nav:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.nav:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  opacity: 0.5;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.cell {
+  display: flex;
+}
+
+/* A neighbouring month's day: an empty slot that holds the grid, with
+   the same height as a day so the six rows never change size. */
+.empty {
+  min-height: 38px;
+}
+
+.day {
+  width: 100%;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-body);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.day:hover:not(.disabled):not(.selected) {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.day:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.today {
+  box-shadow: inset 0 0 0 2px var(--brand);
+  color: var(--ink-brand);
+  font-weight: 700;
+}
+
+.selected {
+  background: var(--brand-gradient);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  box-shadow: var(--glow-sm);
+}
+
+.selected:focus-visible {
+  box-shadow: var(--focus-ring), var(--glow-sm);
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  text-decoration: line-through;
+  text-decoration-color: rgba(var(--rgb-brand-deep), 0.25);
+}
+
+/* ── Months side by side ───────────────────────────────────────────────── */
+
+.multi {
+  display: flex;
+  gap: 28px;
+  width: auto;
+}
+
+.multi .month {
+  width: 296px;
+}
+
+/* Same footprint as a nav group (2 × 28 + 2), so both captions centre. */
+.navSpacer {
+  width: 58px;
+  flex-shrink: 0;
+}
+
+/* ── Range ──────────────────────────────────────────────────────────────
+   the reference §4.11, recoloured. The band lives on the cell, the ends on the
+   day: start and end carry the gradient with only their outer corners
+   rounded, and the band runs half-way under each so it meets them flush.
+   Columns close up so the band reads as one strip, not stripes. */
+
+.range .row {
+  column-gap: 0;
+}
+
+.cell {
+  --band: var(--wash-active);
+}
+
+/* While only the start is picked the band is a proposal: lighter. */
+.bandPreview {
+  --band: var(--wash-subtle);
+}
+
+.bandMiddle {
+  background: var(--band);
+}
+
+.bandStart {
+  background: linear-gradient(to right, transparent 50%, var(--band) 50%);
+}
+
+.bandEnd {
+  background: linear-gradient(to left, transparent 50%, var(--band) 50%);
+}
+
+/* The band turns its corners at the week's edges rather than running off. */
+.bandMiddle:first-child {
+  border-radius: var(--r-xs) 0 0 var(--r-xs);
+}
+
+.bandMiddle:last-child {
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
+}
+
+/* Where the band crosses into another month it is cut square, even on a
+   Monday or Sunday: the range carries on in the next pane (or the next page),
+   so a rounded corner there would read as its end. Only the range's own ends
+   round. Same specificity as the week-edge rules above and later, so it wins. */
+.bandMiddle.bandContinuesIn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.bandMiddle.bandContinuesOut {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.rangeStart {
+  border-radius: var(--r-xs) 0 0 var(--r-xs);
+}
+
+.rangeEnd {
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
+}
+
+.rangeMiddle {
+  border-radius: 0;
+  color: var(--ink-brand);
+}
+
+.day.rangeMiddle:hover:not(.disabled) {
+  background: var(--wash-active);
+}
+
+/* Provisional end under the pointer: outlined, not filled, until clicked. */
+.previewEnd {
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
+  background: var(--wash-active);
+  box-shadow: inset 0 0 0 1.5px var(--line-brand-strong);
+  color: var(--ink-brand);
+  font-weight: 700;
+}
+
+.previewEnd:focus-visible {
+  box-shadow: var(--focus-ring);
+}

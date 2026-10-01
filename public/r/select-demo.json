@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-demo",
+  "type": "registry:item",
+  "title": "Select examples",
+  "description": "Usage examples for Select.",
+  "files": [
+    {
+      "path": "registry/examples/select.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/select.md",
+      "content": "# Select examples\n\nA custom listbox: a recessed field or filter chip that opens a frosted popover, optionally searchable.\n\n```tsx\nimport { Field, Select } from \"@/components/ui\";\n\n<Field label=\"Topic\">\n  <Select\n    value={topic}\n    onChange={setTopic}\n    placeholder=\"Choose a topic\"\n    options={[\n      { value: \"billing\", label: \"Billing and invoices\" },\n      { value: \"access\", label: \"Account access\" },\n    ]}\n  />\n</Field>\n```\n\n## Open\n\ninline renders the list open under its trigger, in place: how it looks when someone opens it.\n\n```tsx\n<Select inline aria-label=\"Topic\" value={topic} onChange={setTopic} options={TOPICS} />\n```\n\n## Field appearance\n\n```tsx\n<Select value={value} onChange={setValue} placeholder=\"Choose a topic\" options={TOPICS} />\n```\n\n## Chip appearance (filters)\n\nactive marks a chip whose filter is applied; count shows the rows each option would leave.\n\n```tsx\n<Select\n  appearance=\"chip\"\n  aria-label=\"Status\"\n  value={status}\n  onChange={setStatus}\n  active={status !== \"all\"}\n  options={[\n    { value: \"all\", label: \"All statuses\" },\n    { value: \"sent\", label: \"Sent\", count: 2 },\n    { value: \"paid\", label: \"Paid\", count: 5 },\n  ]}\n/>\n```\n\n## Searchable, grouped\n\n```tsx\n<Select searchable value={project} onChange={setProject} placeholder=\"Choose a project\" options={PROJECTS} />\n```\n\n## Invalid and disabled\n\n```tsx\n<Select invalid … />\n<Select disabled … />\n```\n\nDocs: https://rime.mjsons.net/components/select\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/select.json"
+  ]
+}

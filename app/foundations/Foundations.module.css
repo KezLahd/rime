@@ -1,0 +1,213 @@
+/* Foundations page layout. Values come from the tokens being shown. */
+
+.section {
+  margin-top: 40px;
+  scroll-margin-top: 80px;
+}
+
+.h2 {
+  margin-bottom: 12px;
+  font-size: var(--text-section);
+}
+
+.h3 {
+  margin: 18px 0 10px;
+  font-size: var(--text-card-title);
+}
+
+.note {
+  margin-bottom: 14px;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.note code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-heading);
+}
+
+.swatches,
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.tiles + .tiles {
+  margin-top: 16px;
+}
+
+.swatch,
+.tileFig {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill-nested);
+  border: var(--border-w) solid var(--glass-edge);
+}
+
+.chip {
+  height: 64px;
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+}
+
+.name {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-heading);
+  overflow-wrap: anywhere;
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.typeList {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill-nested);
+  border: var(--border-w) solid var(--glass-edge);
+}
+
+.typeRow {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+.typeRow + .typeRow {
+  border-top: var(--border-w) solid var(--line-glass);
+}
+
+.typeLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.typeSample {
+  color: var(--ink-heading);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.radiusTile {
+  height: 64px;
+  margin: 12px 12px 0;
+  background: var(--brand-gradient-soft);
+  border: 2px solid var(--line-brand-strong);
+}
+
+.shadowTile {
+  height: 64px;
+  margin: 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+}
+
+/* One surface with hairline cells, never a bento of cards. */
+.cells {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill-nested);
+  border: var(--border-w) solid var(--glass-edge);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.cell + .cell {
+  border-left: var(--border-w) solid var(--line-glass);
+}
+
+.cell dd {
+  margin: 0;
+}
+
+.icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.iconCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 14px 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--glass-fill-nested);
+  border: var(--border-w) solid var(--glass-edge);
+  color: var(--ink-heading);
+}
+
+.iconName {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .typeRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Colour swatches on /colors are buttons: a click copies var(--token). */
+button.swatch {
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.swatch .chip {
+  display: block;
+}
+
+button.swatch:hover {
+  box-shadow: 0 0 0 1px var(--line-brand-strong);
+}
+
+button.swatch:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+button.swatch .meta {
+  display: flex;
+}

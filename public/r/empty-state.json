@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:item",
+  "title": "EmptyState",
+  "description": "What an empty list means and what to do next: default, positive (all done) and filtered tones.",
+  "categories": [
+    "feedback"
+  ],
+  "files": [
+    {
+      "path": "components/ui/EmptyState/EmptyState.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/EmptyState/EmptyState.module.css",
+      "content": "/* Quiet and text-led, as in the reference design: no illustrations. The icon tile and\n   the next-step line are what stop it reading as a failure. */\n.empty {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 6px;\n  padding: 40px 24px;\n  text-align: center;\n}\n\n.compact {\n  padding: 22px 16px;\n}\n\n.icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px;\n  height: 40px;\n  margin-bottom: 6px;\n  border-radius: var(--r-md);\n  background: var(--brand-gradient-soft);\n  box-shadow: inset 0 0 0 1px var(--line-brand);\n  color: var(--ink-brand);\n}\n\n.positive .icon {\n  background: var(--success-fill);\n  box-shadow: inset 0 0 0 1px var(--success-line);\n  color: var(--success-ink);\n}\n\n.filtered .icon {\n  background: var(--neutral-fill);\n  box-shadow: inset 0 0 0 1px var(--neutral-line);\n  color: var(--ink-muted);\n}\n\n.title {\n  font-size: 15px;\n  font-weight: 700;\n  color: var(--ink-heading);\n}\n\n.description {\n  max-width: 46ch;\n  font-size: var(--text-small);\n  line-height: 1.55;\n  color: var(--ink-muted);\n}\n\n.compact .title {\n  font-size: var(--text-body);\n}\n\n.compact .description {\n  font-size: var(--text-caption);\n}\n\n.actions {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 8px;\n  margin-top: 12px;\n}\n"
+    },
+    {
+      "path": "components/ui/EmptyState/EmptyState.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/EmptyState/EmptyState.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconCheck, IconInbox } from \"../Icon/Icon\";\nimport styles from \"./EmptyState.module.css\";\n\nexport type EmptyStateProps = {\n  title: ReactNode;\n  /** What to do next. Required: a bare \"No data\" is not an empty state. */\n  description: ReactNode;\n  action?: ReactNode;\n  secondaryAction?: ReactNode;\n  icon?: ReactNode;\n  /**\n   * default  = nothing here yet.\n   * positive = nothing needs you (\"All caught up\"), a green tile.\n   * filtered = the filters exclude everything; offer to clear them.\n   */\n  tone?: \"default\" | \"positive\" | \"filtered\";\n  /** Tighter spacing for inside tables and dropdowns. */\n  compact?: boolean;\n  className?: string;\n};\n\nexport function EmptyState({\n  title,\n  description,\n  action,\n  secondaryAction,\n  icon,\n  tone = \"default\",\n  compact,\n  className,\n}: EmptyStateProps) {\n  const glyph = icon ?? (tone === \"positive\" ? <IconCheck size={18} strokeWidth={2.4} /> : <IconInbox size={18} />);\n  return (\n    <div data-slot=\"empty-state\" className={cx(styles.empty, compact && styles.compact, styles[tone], className)}>\n      <span className={styles.icon} aria-hidden=\"true\">\n        {glyph}\n      </span>\n      <p className={styles.title}>{title}</p>\n      <p className={styles.description}>{description}</p>\n      {action || secondaryAction ? (\n        <div className={styles.actions}>\n          {action}\n          {secondaryAction}\n        </div>\n      ) : null}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "meta": {
+    "import": "import { EmptyState } from \"@/components/ui/EmptyState/EmptyState\";",
+    "docs": "https://rime.mjsons.net/md/empty-state.md",
+    "page": "https://rime.mjsons.net/components/empty-state"
+  }
+}

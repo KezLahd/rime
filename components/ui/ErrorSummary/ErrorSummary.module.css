@@ -1,0 +1,181 @@
+/* No coloured bar down the left edge. Tone is carried
+   by a full danger hairline, a tinted head band, the danger icon tile and the
+   heading, so the box reads as an error from any edge. */
+
+.summary {
+  overflow: hidden;
+  border: 1px solid var(--danger-line);
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-lift);
+  outline: none;
+}
+
+.summary:focus-visible {
+  box-shadow: var(--focus-ring), var(--shadow-lift);
+}
+
+/* ── Head: tinted band, icon tile, heading and how-to line ─────────────── */
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--danger-fill);
+  border-bottom: 1px solid var(--danger-line);
+}
+
+/* The toast tile's form: the danger gesture in miniature, white glyph.
+   White on --danger-base-solid is 4.6:1; the glyph only needs 3:1. */
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: var(--danger-gradient);
+  box-shadow: var(--glow-danger), var(--shadow-specular-dark);
+  color: var(--ink-inverse);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--danger-ink);
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+}
+
+/* ── Entries: one row per error, each a jump link ─────────────────────── */
+
+.list {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+}
+
+.list li + li {
+  border-top: 1px solid var(--line-soft);
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 16px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--danger-ink);
+  text-decoration: none;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+/* Numbered like the count in the heading, so "Fix 3 things" maps onto 1–3. */
+.index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 20px;
+  height: 20px;
+  margin-top: 0.5px;
+  padding: 0 5px;
+  border-radius: var(--r-2xs);
+  background: var(--danger-fill);
+  box-shadow: inset 0 0 0 1px var(--danger-line);
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(var(--rgb-danger), 0.45);
+}
+
+.go {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.item:hover {
+  background: var(--danger-fill);
+}
+
+.item:hover .message {
+  text-decoration-color: currentColor;
+}
+
+.item:hover .go,
+.item:focus-visible .go {
+  opacity: 1;
+}
+
+.item:active {
+  background: rgba(var(--rgb-danger), 0.14);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+  background: var(--danger-fill);
+}
+
+@media (hover: none) {
+  .go {
+    opacity: 1;
+  }
+}
+
+@media (forced-colors: active) {
+  .summary {
+    border: 2px solid CanvasText;
+  }
+
+  .item:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}
+
+@media print {
+  .summary {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .go {
+    display: none;
+  }
+}

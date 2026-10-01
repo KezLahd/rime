@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-demo",
+  "type": "registry:item",
+  "title": "ButtonGroup examples",
+  "description": "Usage examples for ButtonGroup.",
+  "files": [
+    {
+      "path": "registry/examples/button-group.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/button-group.md",
+      "content": "# ButtonGroup examples\n\nJoins Buttons and IconButtons into one segmented row or column with shared outer corners.\n\n```tsx\nimport { Button, ButtonGroup } from \"@/components/ui\";\n\n<ButtonGroup aria-label=\"Invoice actions\">\n  <Button variant=\"secondary\">Archive</Button>\n  <Button variant=\"secondary\">Report</Button>\n</ButtonGroup>\n```\n\n## Groups and a split button\n\n```tsx\n<ButtonGroup aria-label=\"Invoice actions\">\n  <Button variant=\"secondary\">Archive</Button>\n  <Button variant=\"secondary\">Report</Button>\n  <Button variant=\"secondary\">Snooze</Button>\n</ButtonGroup>\n<ButtonGroup aria-label=\"Send\">\n  <Button>Send invoice</Button>\n  <IconButton variant=\"primary\" label=\"More send options\" icon={<IconChevronDown size={16} />} />\n</ButtonGroup>\n```\n\n## Vertical\n\n```tsx\n<ButtonGroup orientation=\"vertical\" aria-label=\"Order view\">\n  <Button variant=\"secondary\">Details</Button>\n  <Button variant=\"secondary\">Line items</Button>\n  <Button variant=\"secondary\">History</Button>\n</ButtonGroup>\n```\n\nDocs: https://rime.mjsons.net/components/button-group\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/button-group.json"
+  ]
+}

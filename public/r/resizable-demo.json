@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-demo",
+  "type": "registry:item",
+  "title": "Resizable examples",
+  "description": "Usage examples for Resizable.",
+  "files": [
+    {
+      "path": "registry/examples/resizable.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/resizable.md",
+      "content": "# Resizable examples\n\nPanels split by draggable hairline handles, side by side or stacked, with keyboard resizing and minimum sizes.\n\n```tsx\nimport { ResizableHandle, ResizablePanel, ResizablePanelGroup } from \"@/components/ui\";\n\n<ResizablePanelGroup height={320}>\n  <ResizablePanel defaultSize={30} minSize={20}>Projects</ResizablePanel>\n  <ResizableHandle withGrip />\n  <ResizablePanel>Details</ResizablePanel>\n</ResizablePanelGroup>\n```\n\n## Three panels\n\nDrag a handle, or focus it and use the arrow keys.\n\n```tsx\n<ResizablePanelGroup height={240}>\n  <ResizablePanel defaultSize={25} minSize={15}>Projects</ResizablePanel>\n  <ResizableHandle withGrip />\n  <ResizablePanel defaultSize={50}>Invoice INV-004213</ResizablePanel>\n  <ResizableHandle withGrip />\n  <ResizablePanel defaultSize={25} minSize={15}>Details</ResizablePanel>\n</ResizablePanelGroup>\n```\n\n## Vertical\n\n```tsx\n<ResizablePanelGroup direction=\"vertical\" height={280}>…</ResizablePanelGroup>\n```\n\nDocs: https://rime.mjsons.net/components/resizable\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/resizable.json"
+  ]
+}

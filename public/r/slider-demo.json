@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-demo",
+  "type": "registry:item",
+  "title": "Slider examples",
+  "description": "Usage examples for Slider.",
+  "files": [
+    {
+      "path": "registry/examples/slider.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/slider.md",
+      "content": "# Slider examples\n\nPicks a number or a range by dragging along a track, with steps, marks and a value readout.\n\n```tsx\nimport { Slider } from \"@/components/ui\";\n\n<Slider label=\"Volume\" value={volume} onValueChange={setVolume} showValue formatValue={(n) => `${n}%`} />\n```\n\n## Single value\n\n```tsx\n<Slider label=\"Volume\" value={v} onValueChange={setV} showValue formatValue={(n) => `${n}%`} />\n```\n\n## Range with marks\n\n```tsx\n<Slider\n  label=\"Order value\"\n  value={range}\n  onValueChange={setRange}\n  min={0}\n  max={1000}\n  step={50}\n  showValue\n  formatValue={(n) => `$${n}`}\n  marks={[{ value: 0, label: \"$0\" }, { value: 500, label: \"$500\" }, { value: 1000, label: \"$1,000\" }]}\n/>\n```\n\n## Step and disabled\n\n```tsx\n<Slider label=\"Step 5\" value={35} onValueChange={set} step={5} showValue />\n<Slider label=\"Disabled\" value={40} onValueChange={set} disabled />\n```\n\nDocs: https://rime.mjsons.net/components/slider\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/slider.json"
+  ]
+}

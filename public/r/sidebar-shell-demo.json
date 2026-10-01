@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sidebar-shell-demo",
+  "type": "registry:item",
+  "title": "SidebarShell examples",
+  "description": "Usage examples for SidebarShell.",
+  "files": [
+    {
+      "path": "registry/examples/sidebar-shell.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/sidebar-shell.md",
+      "content": "# SidebarShell examples\n\nThe signed-in frame in four layouts: an expanded frosted sidebar, a collapsible icon rail, a header-only top nav, and a drawer on narrow screens.\n\n```tsx\nimport { SidebarShell } from \"@/components/shell/SidebarShell\";\n\n<SidebarShell\n  navLabel=\"Main\"\n  logo={<img src=\"/logo.svg\" alt=\"Acme\" width={140} height={32} />}\n  nav={[\n    { href: \"/dashboard\", label: \"Dashboard\", icon: <IconHome size={16} />, exact: true },\n    { href: \"/projects\", label: \"Projects\", icon: <IconClipboard size={16} />, count: 2 },\n  ]}\n  title=\"Projects\"\n  topbarRight={<Avatar name=\"Jane Cooper\" size=\"sm\" />}\n  collapsible\n  storageKey=\"app-sidebar-collapsed\"\n>\n  {children}\n</SidebarShell>\n```\n\n## Sidebar expanded (logo corner: match glass)\n\n```tsx\n<SidebarShell contained navLabel=\"Main\" nav={NAV} activeHref=\"/projects\" title=\"Projects\">\n  …\n</SidebarShell>\n```\n\n## Collapsible, remembered\n\nThe panel button folds the sidebar to the icon rail and back. storageKey keeps the choice across reloads.\n\n```tsx\n<SidebarShell\n  contained\n  collapsible\n  storageKey=\"app-sidebar-collapsed\"\n  onCollapsedChange={(collapsed) => console.log(\"collapsed\", collapsed)}\n  navLabel=\"Main\"\n  nav={NAV}\n  title=\"Projects\"\n>\n  …\n</SidebarShell>\n```\n\n## Collapsed to an icon rail\n\nlayout=\"rail\" starts collapsed. With collapsible it can still be expanded.\n\n```tsx\n<SidebarShell contained layout=\"rail\" collapsible navLabel=\"Main\" nav={NAV} title=\"Projects\" logoCompact={<Mark />}>\n  …\n</SidebarShell>\n```\n\n## Header only (top nav)\n\nNo sidebar: the logo, the nav and topbarRight share one frosted bar.\n\n```tsx\n<SidebarShell contained layout=\"header\" navLabel=\"Main\" nav={NAV} topbarRight={<Avatar name=\"Jane Cooper\" size=\"sm\" />}>\n  …\n</SidebarShell>\n```\n\n## Mobile drawer\n\nBelow 900px the sidebar is a drawer from the menu button. Shown open here with forceMobile and defaultDrawerOpen.\n\n```tsx\n// Automatic below 900px of the frame's width. For a preview at desktop width:\n<SidebarShell contained forceMobile defaultDrawerOpen navLabel=\"Main\" nav={NAV} title=\"Projects\">\n  …\n</SidebarShell>\n\n// Keep the icon rail on narrow screens instead of a drawer:\n<SidebarShell mobileDrawer={false} navLabel=\"Main\" nav={NAV}>…</SidebarShell>\n```\n\n## Logo corner: brand fill\n\nOpt in for brands that require a set colour behind the logo. Set the colour with --logo-corner-bg (a colour or a gradient).\n\n```tsx\n<SidebarShell contained logoCorner=\"fill\" navLabel=\"Main\" nav={NAV} activeHref=\"/projects\" title=\"Projects\">…</SidebarShell>\n\n/* theme.css */\n:root { --logo-corner-bg: linear-gradient(135deg, #0f766e, #0b5c56); --logo-corner-ink: #ffffff; }\n```\n\n## With a context strip\n\n```tsx\n<SidebarShell contained strip=\"Admin session\" navLabel=\"Admin\" nav={ADMIN_NAV} activeHref=\"/admin\" title=\"Overview\">…</SidebarShell>\n```\n\nDocs: https://rime.mjsons.net/components/sidebar-shell\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/sidebar-shell.json"
+  ]
+}

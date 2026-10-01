@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-demo",
+  "type": "registry:item",
+  "title": "Command examples",
+  "description": "Usage examples for Command.",
+  "files": [
+    {
+      "path": "registry/examples/command.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/command.md",
+      "content": "# Command examples\n\nA command palette: a search box over grouped actions with shortcuts, keyboard-first, inline or as a Ctrl+K dialog.\n\n```tsx\nimport { Command, CommandDialog } from \"@/components/ui\";\n\n<CommandDialog\n  open={open}\n  onOpenChange={setOpen}\n  groups={[\n    { heading: \"Suggestions\", items: [{ id: \"invoice\", label: \"Create invoice\", shortcut: \"Ctrl N\", onSelect: create }] },\n    { heading: \"Go to\", items: [{ id: \"orders\", label: \"Orders\", onSelect: () => router.push(\"/orders\") }] },\n  ]}\n/>\n```\n\n## Palette\n\nType to filter; arrows and Enter run a command.\n\n```tsx\n<Command groups={GROUPS} label=\"Search commands\" />\n```\n\n## As a dialog with Ctrl+K\n\nPress the button, or Ctrl K anywhere on this page.\n\n```tsx\n<CommandDialog open={open} onOpenChange={setOpen} groups={GROUPS} />\n```\n\nDocs: https://rime.mjsons.net/components/command\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/command.json"
+  ]
+}

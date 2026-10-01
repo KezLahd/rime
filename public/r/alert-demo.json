@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-demo",
+  "type": "registry:item",
+  "title": "Alert examples",
+  "description": "Usage examples for Alert.",
+  "files": [
+    {
+      "path": "registry/examples/alert.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/alert.md",
+      "content": "# Alert examples\n\nAn inline message in a tone (info, success, warning, danger) or a quiet legal box for fixed wording, with an action and dismiss.\n\n```tsx\nimport { Alert } from \"@/components/ui\";\n\n<Alert tone=\"warning\" title=\"Payment is processing\">We will email you when the bank confirms it.</Alert>\n```\n\n## Tones\n\n```tsx\n<Alert tone=\"info\" title=\"Heads up\">…</Alert>\n<Alert tone=\"danger\" title=\"Couldn't save\" action={<Button size=\"sm\" variant=\"secondary\">Try again</Button>} />\n```\n\nDocs: https://rime.mjsons.net/components/alert\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/alert.json"
+  ]
+}

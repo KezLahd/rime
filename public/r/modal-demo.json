@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-demo",
+  "type": "registry:item",
+  "title": "Modal examples",
+  "description": "Usage examples for Modal.",
+  "files": [
+    {
+      "path": "registry/examples/modal.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/modal.md",
+      "content": "# Modal examples\n\nA frosted dialog with a focus trap, scroll lock, inert page, scroll-aware edges and a bottom sheet on phones.\n\n```tsx\nimport { Button, Modal } from \"@/components/ui\";\n\n<Modal\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Contact support\"\n  description=\"Ask a question about invoice INV-1042.\"\n  footer={\n    <>\n      <Button variant=\"secondary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button onClick={send}>Send question</Button>\n    </>\n  }\n>\n  …form fields…\n</Modal>\n```\n\n## Open\n\ninline renders the panel in place: no portal, scrim, focus trap or scroll lock. For docs and reviews.\n\n```tsx\n<Modal inline open onClose={close} title=\"Contact support\" meta=\"Invoice INV-1042\" description=\"Ask a question about this invoice.\" footer={…}>\n  <Field label=\"Your question\"><TextInput /></Field>\n</Modal>\n```\n\n## Form in a modal\n\n```tsx\n<Modal open={open} onClose={close} title=\"Contact support\" footerStart=\"Recorded on the activity log.\" footer={…}>\n  <Field label=\"What is it about?\" required><Select … /></Field>\n</Modal>\n```\n\n## Long content: scroll edges\n\nScroll the body: the header shade appears once content passes under it, and the footer shade shows while there is more.\n\n```tsx\n<Modal open={open} onClose={close} size=\"lg\" title=\"Workspace terms\" footer={<Button onClick={close}>I agree</Button>}>\n  {terms}\n</Modal>\n```\n\n## Terms with a scroll-gated accept\n\nAccept stays disabled until the body has been scrolled to the end. onScrollEnd comes from useScrollEdges, the same listener that clears data-more when nothing is left below. Open it and scroll.\n\n```tsx\nconst [read, setRead] = useState(false);\nconst onEnd = useCallback(() => setRead(true), []);\n\n<Modal\n  open={open}\n  onClose={close}\n  size=\"lg\"\n  title=\"Workspace terms\"\n  onScrollEnd={onEnd}\n  footerStart={read ? <span role=\"status\">You have reached the end</span> : <span role=\"status\" id=\"terms-hint\">Scroll to the end to accept</span>}\n  footer={<Button disabled={!read} aria-describedby={read ? undefined : \"terms-hint\"} onClick={accept}>Accept terms</Button>}\n>\n  {terms}\n</Modal>\n```\n\n## ConfirmModal, danger, two steps\n\nThe irreversible button only appears on the review step, so a stray Enter cannot confirm.\n\n```tsx\n<ConfirmModal\n  open={open}\n  onClose={close}\n  tone=\"danger\"\n  title=\"Delete Atlas redesign\"\n  review={<p>Files are removed from the shared drive immediately.</p>}\n  proceedLabel=\"Review deletion\"\n  confirmLabel=\"Delete project\"\n  onConfirm={remove}\n  busy={pending}\n>\n  …reason fields…\n</ConfirmModal>\n```\n\nDocs: https://rime.mjsons.net/components/modal\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/modal.json"
+  ]
+}

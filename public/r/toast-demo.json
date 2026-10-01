@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast-demo",
+  "type": "registry:item",
+  "title": "Toast examples",
+  "description": "Usage examples for Toast.",
+  "files": [
+    {
+      "path": "registry/examples/toast.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/toast.md",
+      "content": "# Toast examples\n\nFrosted toasts for success, error, info and in-flight work, stacked as a deck that fans out on hover.\n\n```tsx\nimport { useToast } from \"@/components/ui\";\n\nconst toast = useToast();\nawait toast.promise(save(), { loading: \"Saving…\", success: \"Saved\", error: \"Couldn't save\" });\n```\n\n## The stack\n\nToastStackPreview draws the real stack in place, with no timers and no live region: loading, an error with an action, and a success.\n\n```tsx\n<ToastStackPreview\n  expanded\n  items={[\n    { id: 1, tone: \"loading\", title: \"Saving changes…\" },\n    { id: 2, tone: \"error\", title: \"Couldn't send\", description: \"Check your connection.\", action: { label: \"Retry\", onClick: retry } },\n    { id: 3, tone: \"success\", title: \"Invoice sent\", description: \"INV-1042 is on its way to Jane Cooper.\" },\n  ]}\n/>\n```\n\n## Tones\n\n```tsx\ntoast.success(\"Invoice sent\", { description: \"INV-1042 is on its way to Jane Cooper.\" });\ntoast.error(\"Couldn't send\", { action: { label: \"Retry\", onClick: retry } });\n```\n\nDocs: https://rime.mjsons.net/components/toast\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/toast.json"
+  ]
+}

@@ -1,0 +1,73 @@
+/* The TextInput box with addons set into its ends. A text addon is a sunken
+   strip the full height of the field, divided from the typed text by a
+   hairline, the way a unit is set off in a form. An element addon (an icon
+   or a button) sits inline with a little air. [class] lifts these over the
+   shared TextInput rules whatever order the CSS loads in. */
+
+.box[class] {
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 calc(12px * var(--density));
+  background: var(--input-addon-bg, var(--recess-fill));
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.text_start {
+  border-right: var(--border-w) solid var(--line);
+}
+
+.text_end {
+  border-left: var(--border-w) solid var(--line);
+}
+
+.box:focus-within .text {
+  color: var(--ink-brand);
+  background: var(--wash-active);
+}
+
+.box[data-invalid] .text {
+  border-color: var(--danger-line);
+}
+
+.box[data-disabled] .text {
+  color: var(--ink-disabled);
+  background: transparent;
+}
+
+.slot {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+  color: var(--ink-muted);
+}
+
+.slot_start {
+  padding-left: calc(12px * var(--density));
+}
+
+.slot_end {
+  padding-right: 4px;
+}
+
+/* A text addon already separates; with an icon the input tucks in closer. */
+.slot_start + .input[class] {
+  padding-left: 8px;
+}
+
+.text + .input[class] {
+  padding-left: 10px;
+}

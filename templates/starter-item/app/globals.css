@@ -1,0 +1,5 @@
+/* Rime first (installed by the shadcn CLI), then your theme. */
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/shadcn-bridge.css";
+@import "./styles/theme.css";

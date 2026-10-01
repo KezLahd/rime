@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "type": "registry:item",
+  "title": "Kbd and KbdGroup",
+  "description": "Keyboard keys as small raised key caps, alone or as a combination.",
+  "categories": [
+    "datadisplay"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Kbd/Kbd.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Kbd/Kbd.module.css",
+      "content": "/* A raised key on any surface: a light fill, a hairline edge and a darker\n   bottom lip, so it reads as something pressed, not a badge. */\n.kbd {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: var(--kbd-radius, var(--r-2xs));\n  background: var(--kbd-bg, rgba(var(--rgb-white), 0.8));\n  box-shadow:\n    inset 0 0 0 var(--border-w) var(--line),\n    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.14),\n    0 1px 1px rgba(var(--rgb-contact), 0.06);\n  font-family: var(--font-body);\n  font-weight: 700;\n  font-variant-numeric: tabular-nums;\n  line-height: 1;\n  color: var(--kbd-ink, var(--ink-secondary));\n  white-space: nowrap;\n}\n\n.md {\n  min-width: 22px;\n  height: 22px;\n  padding: 0 6px;\n  font-size: var(--text-caption);\n}\n\n.sm {\n  min-width: 18px;\n  height: 18px;\n  padding: 0 4px;\n  font-size: var(--text-micro);\n}\n\n.group {\n  display: inline-flex;\n  align-items: center;\n  gap: 4px;\n  font-family: var(--font-body);\n}\n\n.separator {\n  font-size: var(--text-caption);\n  color: var(--ink-muted);\n}\n"
+    },
+    {
+      "path": "components/ui/Kbd/Kbd.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Kbd/Kbd.tsx",
+      "content": "import { Fragment, type HTMLAttributes, type ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./Kbd.module.css\";\n\nexport type KbdProps = HTMLAttributes<HTMLElement> & {\n  children: ReactNode;\n  /** sm sits inside menus and tooltips; md in running text. */\n  size?: \"sm\" | \"md\";\n};\n\n/** One keyboard key, as a small raised key cap. Renders a real <kbd>. */\nexport function Kbd({ children, size = \"md\", className, ...rest }: KbdProps) {\n  return (\n    <kbd data-slot=\"kbd\" className={cx(styles.kbd, styles[size], className)} {...rest}>\n      {children}\n    </kbd>\n  );\n}\n\nexport type KbdGroupProps = {\n  /** The keys pressed together, in order: [\"Ctrl\", \"K\"]. */\n  keys: ReadonlyArray<string>;\n  /** Between the keys. Defaults to a muted \"+\". */\n  separator?: ReactNode;\n  size?: \"sm\" | \"md\";\n  className?: string;\n};\n\n/**\n * A key combination. The outer <kbd> wraps one <kbd> per key, which is how\n * HTML marks up a chord, so a screen reader reads it as one input.\n */\nexport function KbdGroup({ keys, separator = \"+\", size = \"md\", className }: KbdGroupProps) {\n  return (\n    <kbd data-slot=\"kbd-group\" className={cx(styles.group, className)}>\n      {keys.map((k, i) => (\n        <Fragment key={`${k}-${i}`}>\n          {i ? (\n            <span className={styles.separator} aria-hidden=\"true\">\n              {separator}\n            </span>\n          ) : null}\n          <kbd className={cx(styles.kbd, styles[size])}>{k}</kbd>\n        </Fragment>\n      ))}\n    </kbd>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Kbd } from \"@/components/ui/Kbd/Kbd\";",
+    "docs": "https://rime.mjsons.net/md/kbd.md",
+    "page": "https://rime.mjsons.net/components/kbd"
+  }
+}

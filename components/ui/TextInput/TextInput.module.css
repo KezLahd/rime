@@ -1,0 +1,176 @@
+/* the reference auth field, the best-crafted input in that app: white box,
+   1.5px tinted border, hairline shadow, accent border plus soft halo on focus.
+   Shared by Textarea, Select (field appearance), DateField and PrefixedInput.
+
+   Focus is drawn on the BOX, never the <input>: the box is the field as the
+   user sees it, adornments included (PrefixedInput's fixed prefix and counter,
+   the password reveal button, a leading icon, a trailing unit). The inner
+   control drops its own outline, including the global :focus-visible
+   fallback in globals.css, which would otherwise draw a second ring round
+   the text area only.
+
+   Focus hooks (--field-focus-*, --field-hover-border): the public token
+   layer sets a square near-black edge; the gated layer never declares them,
+   so each fallback below IS the gated value (accent border, accent halo).
+
+   Box tokens (--input-*): height, radius, border, fill, padding and type
+   size. SearchField, Select's field trigger, DateField and PrefixedInput all
+   wear this box, so one set of tokens moves every text-like field. */
+
+.box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--input-bg, var(--surface-solid));
+  border: var(--input-border-width, var(--border-w-field)) solid var(--input-border, var(--line-input));
+  border-radius: var(--input-radius, var(--r-md));
+  box-shadow: var(--input-shadow, var(--shadow-input));
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.md {
+  min-height: var(--input-height-md, var(--field-h-md));
+}
+
+.sm {
+  min-height: var(--input-height-sm, var(--field-h-sm));
+  border-radius: var(--input-radius, var(--r-sm));
+}
+
+.box:hover:not(.disabled):not(.readOnly) {
+  border-color: var(--field-hover-border, rgba(var(--rgb-brand-deep), 0.3));
+}
+
+.box:focus-within:not(.readOnly) {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  box-shadow: var(--field-focus-ring, var(--focus-halo));
+}
+
+.invalid,
+.invalid:hover:not(.disabled) {
+  border-color: rgba(var(--rgb-danger), 0.75);
+  background: var(--danger-field-fill);
+}
+
+.invalid:focus-within:not(.readOnly) {
+  border-color: var(--danger-base);
+  box-shadow: var(--field-focus-ring-invalid, 0 0 0 4px rgba(var(--rgb-danger), 0.14));
+}
+
+.disabled {
+  background: var(--surface-sunken);
+  border-color: rgba(var(--rgb-brand-deep), 0.1);
+  box-shadow: none;
+}
+
+.readOnly {
+  background: var(--surface-sunken);
+  border-style: dashed;
+  border-color: rgba(var(--rgb-brand-deep), 0.16);
+  box-shadow: none;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: calc(10px * var(--density)) var(--input-pad-x, calc(14px * var(--density)));
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--input-font-size, var(--text-input));
+  font-weight: 400;
+  color: var(--ink-body);
+}
+
+/* (0,2,0): outranks globals.css's :focus-visible fallback in any load order. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
+
+.sm .input {
+  padding: calc(6px * var(--density)) calc(11px * var(--density));
+  font-size: var(--text-body);
+}
+
+.leading + .input {
+  padding-left: 9px;
+}
+
+.input::placeholder {
+  color: var(--ink-placeholder);
+  opacity: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  -webkit-text-fill-color: var(--ink-disabled);
+}
+
+.input:read-only {
+  color: var(--ink-secondary);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+
+.leading {
+  display: inline-flex;
+  padding-left: 13px;
+  color: var(--ink-muted);
+}
+
+.box:focus-within .leading {
+  color: var(--ink-brand);
+}
+
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  padding-right: 12px;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.reveal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.reveal:hover:not(:disabled) {
+  color: var(--ink-brand);
+  background: var(--wash-subtle);
+}
+
+/* The box already shows the field holds focus, so the reveal button marks
+   itself inside it with an inset ring, clear of the box's own edge. */
+.reveal:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--field-focus-border, var(--focus-color));
+}
+
+/* Browser autofill paints its own yellow; keep the field white. */
+.input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 40px var(--surface-solid) inset;
+  -webkit-text-fill-color: var(--ink-body);
+}

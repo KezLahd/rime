@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth-card-demo",
+  "type": "registry:item",
+  "title": "AuthCard and AuthLayout examples",
+  "description": "Usage examples for AuthCard and AuthLayout.",
+  "files": [
+    {
+      "path": "registry/examples/auth-card.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/auth-card.md",
+      "content": "# AuthCard and AuthLayout examples\n\nThe sign-in card: a solid card on a deep field, with a logo slot, icon tile, title, footer strip and back link.\n\n```tsx\nimport { AuthCard, AuthLayout } from \"@/components/shell/AuthCard\";\n\n<AuthLayout>\n  <AuthCard logo={<Logo />} title=\"Sign in\" subtitle=\"Use the email you signed up with.\">\n    …form…\n  </AuthCard>\n</AuthLayout>\n```\n\n## Sign in with multi-factor authentication\n\nA brand bar in the header, the card centred, the security note in the footer. Switch between the password, MFA code and authenticator setup steps.\n\n```tsx\n<AuthLayout\n  header={<Logo />}\n  footer={<><IconShield size={14} /> Protected by multi-factor authentication.</>}\n>\n  <AuthCard icon={<IconLock size={22} />} title=\"Sign in\" subtitle=\"Use your work email.\">\n    <Field label=\"Work email\"><TextInput type=\"email\" autoComplete=\"username\" /></Field>\n    <Field label=\"Password\"><TextInput type=\"password\" revealable autoComplete=\"current-password\" /></Field>\n    <Button size=\"lg\" fullWidth>Continue</Button>\n  </AuthCard>\n</AuthLayout>\n```\n\n## MFA code step\n\n```tsx\n<AuthCard icon={<IconShield size={22} />} title=\"Enter your code\" subtitle=\"Open your authenticator app and enter the 6-digit code.\">\n  <OtpInput aria-label=\"Authentication code\" value={code} onChange={setCode} onComplete={verify} />\n  <Button size=\"lg\" fullWidth disabled={code.length < 6}>Verify</Button>\n</AuthCard>\n```\n\n## Authenticator setup step\n\n```tsx\n<AuthCard width=\"md\" icon={<IconShield size={22} />} title=\"Set up your authenticator\">\n  <QrCode value={otpauthUrl} />\n  <code>{secret}</code>\n  <OtpInput aria-label=\"Code from your authenticator app\" value={code} onChange={setCode} />\n  <Button size=\"lg\" fullWidth>Turn on two-step sign-in</Button>\n</AuthCard>\n```\n\nDocs: https://rime.mjsons.net/components/auth-card\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/auth-card.json"
+  ]
+}

@@ -1,0 +1,231 @@
+/* ── Folder tabs ──────────────────────────────────────────────────────── */
+
+.folder {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabRow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding-left: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabRow::-webkit-scrollbar {
+  display: none;
+}
+
+.panel:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-panel), var(--focus-ring);
+}
+
+/* The fill is a pseudo-element so the inactive tab can step back to 0.62
+   without dimming its label (the reference dimmed the whole tab, text included,
+   which pulled small labels under 4.5:1). */
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: calc(9px * var(--density)) var(--tab-pad-x, calc(20px * var(--density))) calc(8px * var(--density));
+  border: 0;
+  border-radius: var(--tab-radius, var(--r-md)) var(--tab-radius, var(--r-md)) 0 0;
+  background: transparent;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--tab-ink);
+  isolation: isolate;
+  transition:
+    box-shadow var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+  box-shadow: inset 0 1px 0 rgba(var(--rgb-white), 0.65);
+}
+
+.tab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--tab-from), var(--tab-to));
+  opacity: 0.55;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.tab:hover:not(.tabActive)::before {
+  opacity: 0.8;
+}
+
+/* Inactive tabs recede: a much fainter fill and
+   neutral muted ink instead of their own hue, so only the active tab carries
+   colour. Muted ink holds 5.2:1+ on the pale fill. Hover brings the hue back. */
+.tab:not(.tabActive) {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.tab:not(.tabActive):hover {
+  color: var(--tab-ink);
+}
+
+/* Tab pastels are lifted well above the page lightness. Active: the lightest fill of the tab's own hue, and a slightly
+   larger tab (taller and wider, label a step up) so it stands in front of its
+   row. Sized with padding and type rather than a transform, so the label stays
+   crisp and the tab still meets its panel. */
+.tabActive {
+  padding: calc(11px * var(--density)) calc(var(--tab-pad-x, calc(20px * var(--density))) + 4px) calc(9px * var(--density));
+  font-size: var(--text-small);
+  font-weight: 900;
+}
+
+/* Keeps our button shading on the selected fill: a liquid-glass sheen over
+   the top half, a crisp specular top edge and a faint inner shade at the base
+   in the tab's own hue. No outline, no outer shadow. */
+.tabActive::before {
+  opacity: 1;
+  background:
+    linear-gradient(180deg, rgba(var(--rgb-white), 0.5) 0%, rgba(var(--rgb-white), 0.12) 48%, rgba(var(--rgb-white), 0) 52%),
+    linear-gradient(180deg, var(--tab-active-from, var(--tab-from)), var(--tab-active-to, var(--tab-to)));
+  box-shadow:
+    inset 0 1px 0 rgba(var(--rgb-white), 0.95),
+    inset 0 -1px 0 rgba(var(--tab-rgb, 78, 52, 112), 0.14),
+    inset 0 -6px 10px -6px rgba(var(--tab-rgb, 78, 52, 112), 0.12);
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}
+
+.tabCount {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+/* The brand tone is the default tab and the one a theme re-colours, so its
+   pastels are tokens; the status tones below are fixed tints of their hue. */
+.tab_brand {
+  --tab-from: var(--tab-brand-from, #f7f4fc);
+  --tab-to: var(--tab-brand-to, #efe9f8);
+  --tab-ink: var(--tab-brand-ink, #4e3470);
+  --tab-active-from: var(--tab-brand-active-from, #fdfcff);
+  --tab-active-to: var(--tab-brand-active-to, #f3eefb);
+  --tab-rgb: var(--tab-brand-rgb, 78, 52, 112);
+}
+
+.tab_stone {
+  --tab-from: #fbf8f0;
+  --tab-to: #f4eddb;
+  --tab-ink: #5a4a1e;
+  --tab-active-from: #fffdf8;
+  --tab-active-to: #f7f0e0;
+  --tab-rgb: 90, 74, 30;
+}
+
+.tab_rose {
+  --tab-from: #fef3f1;
+  --tab-to: #fbe3df;
+  --tab-ink: var(--danger-ink);
+  --tab-active-from: #fffaf9;
+  --tab-active-to: #fce9e5;
+  --tab-rgb: 158, 43, 38;
+}
+
+.tab_green {
+  --tab-from: #f0f8f3;
+  --tab-to: #e0f1e7;
+  --tab-ink: var(--success-ink);
+  --tab-active-from: #fafdfb;
+  --tab-active-to: #e6f4eb;
+  --tab-rgb: 40, 92, 72;
+}
+
+.tab_amber {
+  --tab-from: #fdf7e9;
+  --tab-to: #f9ebcb;
+  --tab-ink: var(--warning-ink);
+  --tab-active-from: #fffcf4;
+  --tab-active-to: #faefd3;
+  --tab-rgb: 107, 79, 12;
+}
+
+.tab_slate {
+  --tab-from: #f7f6fa;
+  --tab-to: #ebe9f1;
+  --tab-ink: var(--ink-secondary);
+  --tab-active-from: #fdfcfe;
+  --tab-active-to: #efedf4;
+  --tab-rgb: 74, 68, 85;
+}
+
+/* ── Segmented control ────────────────────────────────────────────────── */
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  /* 1px more on top: the recess's white top highlight visually merges with
+     the white thumb and ate a pixel, so the thumb read high. */
+  padding: 4px 3px 3px;
+  border-radius: var(--segmented-radius, var(--r-sm));
+  background: var(--recess-fill);
+  box-shadow: var(--shadow-recess);
+}
+
+/* Thumb radius 5 = track 8 minus 3 inset. */
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 calc(12px * var(--density));
+  border: 0;
+  border-radius: var(--r-flat, max(0px, calc(var(--segmented-radius, var(--r-sm)) - 3px)));
+  background: transparent;
+  font-weight: 700;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.track_sm .segment {
+  height: 24px;
+  font-size: 11.5px;
+}
+
+.track_md .segment {
+  height: 30px;
+  font-size: var(--text-caption);
+}
+
+.segment:hover:not(:disabled):not(.segmentActive) {
+  color: var(--ink-body);
+  background: rgba(var(--rgb-white), 0.45);
+}
+
+.segmentActive {
+  color: var(--ink-brand);
+  background: var(--surface-solid);
+  box-shadow: 0 1px 2px rgba(var(--rgb-contact), 0.1), var(--shadow-specular), inset 0 0 0 1px rgba(var(--rgb-brand), 0.14);
+}
+
+.segment:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.segment:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion-demo",
+  "type": "registry:item",
+  "title": "Accordion examples",
+  "description": "Usage examples for Accordion.",
+  "files": [
+    {
+      "path": "registry/examples/accordion.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/accordion.md",
+      "content": "# Accordion examples\n\nStacked sections that open and close in place: one at a time or several, on glass or plain hairlines.\n\n```tsx\nimport { Accordion } from \"@/components/ui\";\n\n<Accordion\n  defaultValue={[\"billing\"]}\n  items={[\n    { id: \"billing\", title: \"When is an invoice issued?\", content: \"On the first working day of each month.\" },\n    { id: \"seats\", title: \"Can I add a team member mid-cycle?\", content: \"Yes, from the day it is added.\" },\n  ]}\n/>\n```\n\n## Single, one open\n\n```tsx\n<Accordion items={FAQ} defaultValue={[\"billing\"]} />\n```\n\n## Multiple open\n\ntype=\"multiple\": opening one section leaves the others as they are.\n\n```tsx\n<Accordion type=\"multiple\" items={FAQ} defaultValue={[\"billing\", \"seats\"]} />\n```\n\n## Plain, inside a surface\n\n```tsx\n<Card title=\"Help\">\n  <Accordion appearance=\"plain\" items={FAQ} />\n</Card>\n```\n\nDocs: https://rime.mjsons.net/components/accordion\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/accordion.json"
+  ]
+}

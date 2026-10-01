@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "type": "registry:item",
+  "title": "Collapsible",
+  "description": "One disclosure: a title row with a toggle, an always-visible summary and a region that opens beneath it.",
+  "categories": [
+    "layoutandsurfaces"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Collapsible/Collapsible.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Collapsible/Collapsible.module.css",
+      "content": "/* Collapsible: a title row with a small square toggle, an always-visible\n   summary and a region that opens beneath it on a grid-row transition. */\n\n.root {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  width: var(--collapsible-width, min(380px, 100%));\n}\n\n.row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n\n.title {\n  font-size: var(--text-small);\n  font-weight: 700;\n  color: var(--ink-heading);\n}\n\n.toggle {\n  display: inline-grid;\n  place-items: center;\n  width: 30px;\n  height: 30px;\n  flex-shrink: 0;\n  border: 0;\n  border-radius: var(--r-sm);\n  background: transparent;\n  color: var(--ink-muted);\n  transition:\n    background-color var(--dur) var(--ease),\n    color var(--dur) var(--ease);\n}\n\n.toggle:hover {\n  background: var(--wash-subtle);\n  color: var(--ink-brand);\n}\n\n.toggle:active {\n  background: var(--wash-active);\n}\n\n.toggle:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n}\n\n.region {\n  display: grid;\n  grid-template-rows: 0fr;\n  transition: grid-template-rows var(--dur-slow) var(--ease-out);\n}\n\n.region[data-open] {\n  grid-template-rows: 1fr;\n}\n\n.inner {\n  min-height: 0;\n  overflow: hidden;\n}\n\n.summary,\n.content {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n"
+    },
+    {
+      "path": "components/ui/Collapsible/Collapsible.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Collapsible/Collapsible.tsx",
+      "content": "\"use client\";\n\nimport { useId, useState, type ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconChevronsUpDown } from \"../Icon/Icon\";\nimport styles from \"./Collapsible.module.css\";\n\nexport type CollapsibleProps = {\n  /** The trigger's text. A chevron button sits at its right. */\n  title: ReactNode;\n  /** Shown whether open or closed, under the trigger row (the first item of a list, say). */\n  summary?: ReactNode;\n  children: ReactNode;\n  open?: boolean;\n  defaultOpen?: boolean;\n  onOpenChange?: (open: boolean) => void;\n  /** Accessible name for the icon trigger. Defaults to \"Show more\" / \"Show less\". */\n  toggleLabel?: string;\n  className?: string;\n};\n\n/**\n * One disclosure: a row with a toggle button and a region that opens and\n * closes beneath it. The region animates its height (grid rows) and drops out\n * of the tab order while closed. Reduced motion makes it instant.\n */\nexport function Collapsible({ title, summary, children, open: openProp, defaultOpen = false, onOpenChange, toggleLabel, className }: CollapsibleProps) {\n  const id = useId();\n  const [inner, setInner] = useState(defaultOpen);\n  const open = openProp ?? inner;\n  const set = (next: boolean) => {\n    if (openProp === undefined) setInner(next);\n    onOpenChange?.(next);\n  };\n  return (\n    <div data-slot=\"collapsible\" className={cx(styles.root, className)} data-state={open ? \"open\" : \"closed\"}>\n      <div className={styles.row}>\n        <span className={styles.title}>{title}</span>\n        <button\n          type=\"button\"\n          className={styles.toggle}\n          aria-expanded={open}\n          aria-controls={`${id}-region`}\n          aria-label={toggleLabel ?? (open ? \"Show less\" : \"Show more\")}\n          onClick={() => set(!open)}\n        >\n          <IconChevronsUpDown size={15} aria-hidden=\"true\" />\n        </button>\n      </div>\n      {summary ? <div className={styles.summary}>{summary}</div> : null}\n      <div id={`${id}-region`} className={styles.region} data-open={open || undefined}>\n        <div className={styles.inner} inert={!open}>\n          <div className={styles.content}>{children}</div>\n        </div>\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "meta": {
+    "import": "import { Collapsible } from \"@/components/ui/Collapsible/Collapsible\";",
+    "docs": "https://rime.mjsons.net/md/collapsible.md",
+    "page": "https://rime.mjsons.net/components/collapsible"
+  }
+}

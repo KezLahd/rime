@@ -1,0 +1,113 @@
+.meter {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.value {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-heading);
+}
+
+.of {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+
+.label {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.segments {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Empty slots are recessed wells; filled ones stand proud with the gradient. */
+.segment {
+  width: 22px;
+  height: 8px;
+  border-radius: var(--r-flat, 3px);
+  background: rgba(var(--rgb-brand-deep), 0.08);
+  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.12), inset 0 0 0 1px rgba(var(--rgb-brand-deep), 0.06);
+  transition: background-color var(--dur-slow) var(--ease);
+}
+
+.filled {
+  background: var(--brand-gradient);
+  box-shadow: 0 1px 3px rgba(var(--rgb-brand), 0.35), var(--shadow-specular-dark);
+}
+
+.full .filled {
+  background: linear-gradient(135deg, var(--danger-base), var(--danger-base-solid));
+  box-shadow: 0 1px 3px rgba(var(--rgb-danger), 0.35), var(--shadow-specular-dark);
+}
+
+.note {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.full .note {
+  color: var(--danger-ink);
+}
+
+.sm {
+  gap: 4px;
+}
+
+.sm .segments {
+  gap: 3px;
+}
+
+.sm .segment {
+  width: 12px;
+  height: 6px;
+  border-radius: var(--r-flat, 2px);
+}
+
+.inlineValue {
+  margin-left: 6px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-secondary);
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────── */
+
+.bar {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--r-flat, 3px);
+  background: rgba(var(--rgb-brand-deep), 0.08);
+  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.1);
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand-soft), var(--brand-deep));
+  transition: width var(--dur-slow) var(--ease);
+}

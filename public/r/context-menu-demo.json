@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-menu-demo",
+  "type": "registry:item",
+  "title": "ContextMenu examples",
+  "description": "Usage examples for ContextMenu.",
+  "files": [
+    {
+      "path": "registry/examples/context-menu.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/context-menu.md",
+      "content": "# ContextMenu examples\n\nA menu of actions for a region, opened at the pointer with a right-click, Shift+F10 or a long press.\n\n```tsx\nimport { ContextMenu } from \"@/components/ui\";\n\n<ContextMenu label=\"Actions for Invoice INV-0042\" items={[\n  { id: \"open\", label: \"Open\", onSelect: open },\n  { id: \"rename\", label: \"Rename\", shortcut: \"F2\", onSelect: rename },\n  { id: \"sep\", separator: true },\n  { id: \"delete\", label: \"Move to bin\", tone: \"danger\", onSelect: remove },\n]}>\n  Invoice INV-0042.pdf\n</ContextMenu>\n```\n\n## Open\n\nThe menu over its region, drawn inline with one item highlighted.\n\n```tsx\n<ContextMenu inline label=\"Actions for Invoice INV-0042\" items={ITEMS} highlightId=\"rename\">\n  Invoice INV-0042.pdf\n</ContextMenu>\n```\n\n## On a region\n\nRight-click it, or focus it and press Shift F10.\n\n```tsx\n<ContextMenu label=\"Actions for Invoice INV-0042\" items={ITEMS}>…</ContextMenu>\n```\n\nDocs: https://rime.mjsons.net/components/context-menu\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/context-menu.json"
+  ]
+}

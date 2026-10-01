@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hover-card",
+  "type": "registry:item",
+  "title": "HoverCard",
+  "description": "A rich preview on hover or keyboard focus of a link: a person, a project, a record.",
+  "categories": [
+    "overlays"
+  ],
+  "files": [
+    {
+      "path": "components/ui/HoverCard/HoverCard.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/HoverCard/HoverCard.module.css",
+      "content": "/* HoverCard: the popover glass, a little roomier, for a preview of a person,\n   a project or a record. Content layout is the caller's. */\n\n.card {\n  max-width: calc(100vw - 16px);\n  padding: var(--hover-card-pad, calc(16px * var(--density)));\n  background: var(--popover-surface);\n  -webkit-backdrop-filter: var(--popover-blur);\n  backdrop-filter: var(--popover-blur);\n  border: var(--border-w) solid var(--popover-border);\n  border-radius: var(--hover-card-radius, var(--r-lg));\n  box-shadow: var(--popover-shadow);\n  color: var(--ink-body);\n  font-size: var(--text-small);\n  line-height: 1.5;\n}\n\n.floating {\n  position: fixed;\n  z-index: var(--z-popover);\n  animation: pop-in var(--dur-slow) var(--ease-out);\n}\n\n.inlineWrap {\n  display: inline-flex;\n  flex-direction: column;\n  align-items: flex-start;\n  gap: 8px;\n}\n\n.inline {\n  position: relative;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .floating {\n    animation: fade-in var(--dur) linear;\n  }\n}\n"
+    },
+    {
+      "path": "components/ui/HoverCard/HoverCard.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/HoverCard/HoverCard.tsx",
+      "content": "\"use client\";\n\nimport {\n  cloneElement,\n  isValidElement,\n  useCallback,\n  useEffect,\n  useId,\n  useRef,\n  useState,\n  type FocusEvent,\n  type PointerEvent,\n  type ReactElement,\n  type ReactNode,\n  type Ref,\n} from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { mergeRefs } from \"../_internal/merge-refs\";\nimport { Portal } from \"../_internal/portal\";\nimport { useDismiss, useFloatingPlacement, type FloatAlign, type FloatSide } from \"../Popover/floating\";\nimport styles from \"./HoverCard.module.css\";\n\ntype TriggerProps = {\n  ref?: Ref<HTMLElement>;\n  onPointerEnter?: (e: PointerEvent<HTMLElement>) => void;\n  onPointerLeave?: (e: PointerEvent<HTMLElement>) => void;\n  onFocus?: (e: FocusEvent<HTMLElement>) => void;\n  onBlur?: (e: FocusEvent<HTMLElement>) => void;\n  \"aria-describedby\"?: string;\n};\n\nexport type HoverCardProps = {\n  /** A link or button the card previews: a person's name, a project, a reference. */\n  trigger: ReactElement<TriggerProps>;\n  /** The preview: a few lines of supporting detail. Never the only route to an action. */\n  children: ReactNode;\n  /** ms of hover or focus before it opens. */\n  openDelay?: number;\n  /** ms after the pointer leaves before it closes, so it can travel onto the card. */\n  closeDelay?: number;\n  side?: FloatSide;\n  align?: FloatAlign;\n  /** Panel width in px. */\n  width?: number;\n  /** Render the card open in the page flow under the trigger (docs, previews). */\n  inline?: boolean;\n  className?: string;\n};\n\n/**\n * A rich preview that appears on hover or keyboard focus of a link, after a\n * short delay, and stays while the pointer moves onto it. It is supplementary:\n * the trigger works on its own (a link still goes somewhere), the card is\n * tied to it with aria-describedby, and Esc dismisses it.\n */\nexport function HoverCard({\n  trigger,\n  children,\n  openDelay = 500,\n  closeDelay = 200,\n  side = \"bottom\",\n  align = \"start\",\n  width = 300,\n  inline,\n  className,\n}: HoverCardProps) {\n  const [open, setOpen] = useState(false);\n  const id = useId();\n  const anchorRef = useRef<HTMLElement | null>(null);\n  const panelRef = useRef<HTMLDivElement | null>(null);\n  const timer = useRef(0);\n\n  useFloatingPlacement(open, anchorRef, panelRef, { side, align, enabled: !inline });\n  const dismiss = useCallback(() => setOpen(false), []);\n  useDismiss(open, [anchorRef, panelRef], dismiss, !inline);\n  useEffect(() => () => window.clearTimeout(timer.current), []);\n\n  const schedule = (next: boolean) => {\n    if (inline) return;\n    window.clearTimeout(timer.current);\n    timer.current = window.setTimeout(() => setOpen(next), next ? openDelay : closeDelay);\n  };\n\n  const triggerEl = isValidElement(trigger)\n    ? cloneElement(trigger, {\n        ref: mergeRefs(trigger.props.ref, anchorRef),\n        \"aria-describedby\": open || inline ? id : trigger.props[\"aria-describedby\"],\n        onPointerEnter: (e: PointerEvent<HTMLElement>) => {\n          trigger.props.onPointerEnter?.(e);\n          if (e.pointerType !== \"touch\") schedule(true);\n        },\n        onPointerLeave: (e: PointerEvent<HTMLElement>) => {\n          trigger.props.onPointerLeave?.(e);\n          schedule(false);\n        },\n        onFocus: (e: FocusEvent<HTMLElement>) => {\n          trigger.props.onFocus?.(e);\n          schedule(true);\n        },\n        onBlur: (e: FocusEvent<HTMLElement>) => {\n          trigger.props.onBlur?.(e);\n          schedule(false);\n        },\n      })\n    : trigger;\n\n  const panel = (\n    <div data-slot=\"hover-card\"\n      ref={panelRef}\n      id={id}\n      role=\"tooltip\"\n      className={cx(styles.card, inline ? styles.inline : styles.floating, className)}\n      style={{ width }}\n      onPointerEnter={() => schedule(true)}\n      onPointerLeave={() => schedule(false)}\n    >\n      {children}\n    </div>\n  );\n\n  if (inline) {\n    return (\n      <div className={styles.inlineWrap}>\n        {triggerEl}\n        {panel}\n      </div>\n    );\n  }\n  return (\n    <>\n      {triggerEl}\n      {open ? <Portal>{panel}</Portal> : null}\n    </>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/popover.json"
+  ],
+  "meta": {
+    "import": "import { HoverCard } from \"@/components/ui/HoverCard/HoverCard\";",
+    "docs": "https://rime.mjsons.net/md/hover-card.md",
+    "page": "https://rime.mjsons.net/components/hover-card"
+  }
+}

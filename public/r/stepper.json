@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stepper",
+  "type": "registry:item",
+  "title": "Stepper",
+  "description": "The wizard's step list: lettered markers, states, and optional navigation back to finished steps.",
+  "categories": [
+    "navigation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Stepper/Stepper.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Stepper/Stepper.module.css",
+      "content": ".stepper {\n  overflow-x: auto;\n  scrollbar-width: none;\n}\n\n.stepper::-webkit-scrollbar {\n  display: none;\n}\n\n.list {\n  display: flex;\n  margin: 0;\n  padding: 2px;\n  list-style: none;\n  min-width: max-content;\n}\n\n.step {\n  position: relative;\n  display: flex;\n  flex: 1 1 0;\n  min-width: 120px;\n}\n\n/* Connector: a 2px rule from this marker toward the next. */\n.hasNext::after {\n  content: \"\";\n  position: absolute;\n  top: 15px;\n  left: 42px;\n  right: 8px;\n  height: 2px;\n  border-radius: var(--r-flat, 1px);\n  background: rgba(var(--rgb-brand-deep), 0.12);\n}\n\n.complete.hasNext::after {\n  background: linear-gradient(90deg, var(--brand), rgba(var(--rgb-brand), 0.5));\n}\n\n.hit {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  gap: 8px;\n  padding: 0 14px 0 0;\n  border: 0;\n  background: transparent;\n  text-align: left;\n  font: inherit;\n  color: inherit;\n}\n\nbutton.hit {\n  cursor: pointer;\n  border-radius: var(--r-sm);\n}\n\nbutton.hit:focus-visible {\n  outline: none;\n}\n\nbutton.hit:focus-visible .marker {\n  box-shadow: var(--focus-ring);\n}\n\nbutton.hit:hover .label {\n  color: var(--brand-deep);\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.marker {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 32px;\n  height: 32px;\n  border-radius: var(--r-sm);\n  font-size: 13px;\n  font-weight: 700;\n  font-variant-numeric: tabular-nums;\n  transition:\n    background-color var(--dur) var(--ease),\n    box-shadow var(--dur) var(--ease);\n}\n\n.upcoming .marker {\n  background: var(--recess-fill);\n  box-shadow: var(--shadow-recess);\n  color: var(--ink-muted);\n}\n\n.current .marker {\n  background: var(--surface-solid);\n  box-shadow: inset 0 0 0 2px var(--brand), 0 0 0 4px rgba(var(--rgb-brand), 0.14);\n  color: var(--ink-brand);\n}\n\n.complete .marker {\n  background: var(--brand-gradient);\n  box-shadow: var(--glow-sm);\n  color: var(--ink-inverse);\n}\n\n.error .marker {\n  background: var(--surface-solid);\n  box-shadow: inset 0 0 0 2px var(--danger-base), 0 0 0 4px rgba(var(--rgb-danger), 0.14);\n  color: var(--danger-ink);\n  font-weight: 900;\n}\n\n.text {\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n}\n\n.label {\n  font-size: var(--text-caption);\n  font-weight: 700;\n  line-height: 1.35;\n  color: var(--ink-secondary);\n}\n\n.upcoming .label {\n  font-weight: 400;\n  color: var(--ink-muted);\n}\n\n.current .label {\n  color: var(--ink-heading);\n}\n\n.error .label {\n  color: var(--danger-ink);\n}\n\n.description {\n  font-size: var(--text-micro);\n  color: var(--ink-muted);\n}\n"
+    },
+    {
+      "path": "components/ui/Stepper/Stepper.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Stepper/Stepper.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconCheck } from \"../Icon/Icon\";\nimport styles from \"./Stepper.module.css\";\n\nexport type StepState = \"complete\" | \"current\" | \"upcoming\" | \"error\";\n\nexport type StepperStep = {\n  id: string;\n  label: ReactNode;\n  /** Short marker text; defaults to the step number. The wizard uses \"A\"–\"F\". */\n  marker?: string;\n  description?: ReactNode;\n  state: StepState;\n};\n\nexport type StepperProps = {\n  steps: ReadonlyArray<StepperStep>;\n  /** Makes complete, error and current steps clickable. Upcoming steps never are. */\n  onStepClick?: (id: string) => void;\n  \"aria-label\"?: string;\n  className?: string;\n};\n\nconst STATE_TEXT: Record<StepState, string> = {\n  complete: \"completed\",\n  current: \"current step\",\n  upcoming: \"not started\",\n  error: \"needs attention\",\n};\n\n/**\n * Horizontal progress for a multi-part form. Markers are rounded squares on\n * the radius scale, not circles, so they sit with the buttons and chips.\n */\nexport function Stepper({ steps, onStepClick, \"aria-label\": ariaLabel = \"Progress\", className }: StepperProps) {\n  return (\n    <nav data-slot=\"stepper\" aria-label={ariaLabel} className={cx(styles.stepper, className)}>\n      <ol className={styles.list}>\n        {steps.map((step, i) => {\n          const clickable = Boolean(onStepClick) && step.state !== \"upcoming\";\n          const marker =\n            step.state === \"complete\" ? <IconCheck size={14} strokeWidth={2.8} /> : step.state === \"error\" ? \"!\" : (step.marker ?? String(i + 1));\n          const inner = (\n            <>\n              <span className={styles.marker} aria-hidden=\"true\">\n                {marker}\n              </span>\n              <span className={styles.text}>\n                <span className={styles.label}>{step.label}</span>\n                {step.description ? <span className={styles.description}>{step.description}</span> : null}\n                <span className=\"sr-only\">, {STATE_TEXT[step.state]}</span>\n              </span>\n            </>\n          );\n          return (\n            <li\n              key={step.id}\n              className={cx(styles.step, styles[step.state], i < steps.length - 1 && styles.hasNext)}\n              aria-current={step.state === \"current\" ? \"step\" : undefined}\n            >\n              {clickable ? (\n                <button type=\"button\" className={styles.hit} onClick={() => onStepClick?.(step.id)}>\n                  {inner}\n                </button>\n              ) : (\n                <span className={styles.hit}>{inner}</span>\n              )}\n            </li>\n          );\n        })}\n      </ol>\n    </nav>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "meta": {
+    "import": "import { Stepper } from \"@/components/ui/Stepper/Stepper\";",
+    "docs": "https://rime.mjsons.net/md/stepper.md",
+    "page": "https://rime.mjsons.net/components/stepper"
+  }
+}

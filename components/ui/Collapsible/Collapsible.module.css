@@ -1,0 +1,73 @@
+/* Collapsible: a title row with a small square toggle, an always-visible
+   summary and a region that opens beneath it on a grid-row transition. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: var(--collapsible-width, min(380px, 100%));
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.toggle:hover {
+  background: var(--wash-subtle);
+  color: var(--ink-brand);
+}
+
+.toggle:active {
+  background: var(--wash-active);
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.region {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out);
+}
+
+.region[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.summary,
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

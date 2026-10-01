@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-demo",
+  "type": "registry:item",
+  "title": "Tooltip and Toggletip examples",
+  "description": "Usage examples for Tooltip and Toggletip.",
+  "files": [
+    {
+      "path": "registry/examples/tooltip.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/tooltip.md",
+      "content": "# Tooltip and Toggletip examples\n\nHover and focus tooltips (dark one-liners or light rich cards) and click-to-open toggletips for help.\n\n```tsx\nimport { Toggletip, Tooltip } from \"@/components/ui\";\n\n<Tooltip content=\"Print invoice\"><IconButton label=\"Print\" icon={<IconPrinter size={17} />} /></Tooltip>\n```\n\n## Open\n\ninline shows the bubble and the toggletip panel open beside their triggers, in place.\n\n```tsx\n<Tooltip inline content=\"Print invoice\" shortcut={[\"Ctrl\", \"P\"]}>…</Tooltip>\n<Toggletip inline label=\"About seats\" title=\"Seats\">Each plan includes five seats.</Toggletip>\n```\n\n## Tooltip and toggletip\n\n```tsx\n<Tooltip content=\"Copy reference\" shortcut={[\"Ctrl\", \"C\"]}>…</Tooltip>\n<Toggletip label=\"About seats\">Each plan includes five seats.</Toggletip>\n```\n\nDocs: https://rime.mjsons.net/components/tooltip\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/tooltip.json"
+  ]
+}

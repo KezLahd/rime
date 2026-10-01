@@ -1,0 +1,11 @@
+/* Rime's own brand colours, in one place. Rime Default (tokens.css) is
+   built from them: --brand is Frost, --brand-soft Ice, the field blooms Mist
+   and Ice. The docs site and the Rime artwork in public/rime/ use these
+   names. To rebrand the site, change them here and in tokens.css, and swap
+   the files in public/rime/ (see README, "Rime brand assets"). */
+
+:root {
+  --rime-frost: #468cfb; /* primary accent */
+  --rime-ice: #94c4fb; /* mid, and the wordmark */
+  --rime-mist: #c8ddf9; /* pale tints and washes */
+}

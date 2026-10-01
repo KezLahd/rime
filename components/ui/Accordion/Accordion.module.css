@@ -1,0 +1,117 @@
+/* Accordion. Sections stacked on one surface, split by hairlines. The panel
+   opens with a grid-row transition (0fr to 1fr), so the height animates
+   without measuring; reduced motion makes it instant (the global rule). */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: var(--accordion-width, min(560px, 100%));
+}
+
+.glass {
+  overflow: hidden;
+  border-radius: var(--accordion-radius, var(--r-lg));
+  background: var(--glass-fill-nested);
+  -webkit-backdrop-filter: var(--blur-panel-light);
+  backdrop-filter: var(--blur-panel-light);
+  border: var(--border-w) solid var(--glass-edge);
+  box-shadow: var(--shadow-specular), var(--shadow-hairline-card);
+}
+
+.item + .item {
+  border-top: var(--border-w) solid var(--line-glass);
+}
+
+.plain .item {
+  border-bottom: var(--border-w) solid var(--line);
+}
+
+.plain .item + .item {
+  border-top: 0;
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: var(--accordion-pad-y, calc(14px * var(--density))) var(--accordion-pad-x, calc(16px * var(--density)));
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: var(--text-body);
+  font-weight: 700;
+  color: var(--ink-heading);
+  transition: background-color var(--dur) var(--ease);
+}
+
+.plain .trigger {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.trigger:hover:not(:disabled) {
+  background: var(--wash-hover);
+}
+
+.plain .trigger:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink-brand);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: -2px;
+}
+
+.trigger:disabled {
+  color: var(--ink-disabled);
+  cursor: not-allowed;
+}
+
+.title {
+  min-width: 0;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+  transition: transform var(--dur-slow) var(--ease);
+}
+
+.item[data-state="open"] .chevron {
+  transform: rotate(180deg);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out);
+}
+
+.panel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content {
+  padding: 0 var(--accordion-pad-x, calc(16px * var(--density))) var(--accordion-pad-y, calc(14px * var(--density)));
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--ink-body);
+}
+
+.plain .content {
+  padding-left: 0;
+  padding-right: 0;
+}

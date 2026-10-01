@@ -1,0 +1,104 @@
+/* Radius and padding are tokens: --panel-radius-page (page, light),
+   --panel-radius-nested, --panel-pad-sm|md|lg. The panel publishes
+   --inner-radius (its radius minus its padding, floored at --r-2xs) so
+   anything flush inside it can be concentric. */
+.panel {
+  position: relative;
+  border-radius: var(--r-flat, var(--panel-radius));
+  padding: var(--panel-pad);
+  --inner-radius: max(var(--r-2xs), calc(var(--panel-radius) - var(--panel-pad)));
+  -webkit-backdrop-filter: var(--blur-panel);
+  backdrop-filter: var(--blur-panel);
+}
+
+/* The signature: 0.42 fill, lit white edge, top specular, wide deep lift
+   plus a tight contact shadow. One shadow alone reads as a sticker. */
+.page,
+.light {
+  --panel-radius: var(--panel-radius-page, var(--r-2xl));
+}
+
+.nested {
+  --panel-radius: var(--panel-radius-nested, var(--r-xl));
+}
+
+.pad_none {
+  --panel-pad: 0px;
+}
+
+.pad_sm {
+  --panel-pad: var(--panel-pad-sm, calc(12px * var(--density)));
+}
+
+.pad_md {
+  --panel-pad: var(--panel-pad-md, calc(20px * var(--density)));
+}
+
+.pad_lg {
+  --panel-pad: var(--panel-pad-lg, calc(24px * var(--density)));
+}
+
+.page {
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--shadow-panel), var(--shadow-specular);
+}
+
+.light {
+  background: var(--glass-fill-light);
+  -webkit-backdrop-filter: var(--blur-panel-light);
+  backdrop-filter: var(--blur-panel-light);
+  border: 1px solid rgba(var(--rgb-white), 0.5);
+  box-shadow: var(--shadow-panel-light), var(--shadow-specular);
+}
+
+.nested {
+  background: var(--glass-fill-nested);
+  -webkit-backdrop-filter: var(--blur-row);
+  backdrop-filter: var(--blur-row);
+  border: 1px solid rgba(var(--rgb-white), 0.7);
+  box-shadow: var(--shadow-specular), 0 1px 3px rgba(var(--rgb-contact), 0.05);
+}
+
+.tabbed {
+  border-top-left-radius: 0;
+}
+
+.bloom {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* A soft light falling in from off the top-right corner. Two lights: a wide bloom
+   haze and a small accent core, both on eased multi-stop falloffs so there
+   is no cone and no edge, sized in percent so a small tile and a full-width
+   panel get the same proportion of glow. The layer overhangs the panel by
+   64px and is blurred, which melts any banding; the panel clips it. It sits
+   under the content (z-index -1 inside the isolated panel), never over it,
+   and at its unblurred peak --ink-muted still holds 5.4:1 on it. Flat
+   sets --bloom-opacity: 0: the flat system has no glow. */
+.bloomLayer {
+  position: absolute;
+  inset: -64px;
+  background:
+    radial-gradient(
+      ellipse 34% 40% at calc(100% - 64px) 64px,
+      rgba(var(--rgb-brand), 0.09) 0%,
+      rgba(var(--rgb-brand), 0.05) 30%,
+      rgba(var(--rgb-brand), 0.015) 60%,
+      rgba(var(--rgb-brand), 0) 85%
+    ),
+    radial-gradient(
+      ellipse 68% 82% at calc(100% - 64px) 64px,
+      rgba(var(--rgb-bloom-a), 0.42) 0%,
+      rgba(var(--rgb-bloom-a), 0.32) 16%,
+      rgba(var(--rgb-bloom-a), 0.19) 34%,
+      rgba(var(--rgb-bloom-a), 0.08) 54%,
+      rgba(var(--rgb-bloom-a), 0.03) 74%,
+      rgba(var(--rgb-bloom-a), 0) 92%
+    );
+  filter: blur(28px);
+  opacity: var(--bloom-opacity, 1);
+  pointer-events: none;
+  z-index: -1;
+}

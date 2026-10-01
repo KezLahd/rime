@@ -1,0 +1,239 @@
+/* Sheet and Drawer: the modal glass (--modal-* tokens) flush to one edge of
+   the viewport. Only the inner corners round; the edge it slides from stays
+   square. The header keeps one left edge, close button at its right. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-scrim);
+  -webkit-backdrop-filter: var(--modal-scrim-blur);
+  backdrop-filter: var(--modal-scrim-blur);
+  animation: fade-in 240ms var(--ease);
+}
+
+.root[data-state="closed"] .scrim {
+  opacity: 0;
+  transition: opacity 240ms var(--ease);
+}
+
+.panel {
+  --sheet-r: var(--sheet-radius, var(--r-xl));
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  max-width: 100vw;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: var(--modal-surface);
+  -webkit-backdrop-filter: var(--modal-blur);
+  backdrop-filter: var(--modal-blur);
+  box-shadow: var(--modal-shadow);
+  color: var(--ink-body);
+  outline: none;
+  transition: transform 240ms var(--ease-out);
+}
+
+.right,
+.left {
+  top: 0;
+  bottom: 0;
+  width: min(var(--sheet-size, 420px), 100vw);
+}
+
+.right {
+  right: 0;
+  border-radius: var(--sheet-r) 0 0 var(--sheet-r);
+  animation: sheet-in-right 260ms var(--ease-out);
+}
+
+.left {
+  left: 0;
+  border-radius: 0 var(--sheet-r) var(--sheet-r) 0;
+  animation: sheet-in-left 260ms var(--ease-out);
+}
+
+.top,
+.bottom {
+  left: 0;
+  right: 0;
+  height: auto;
+  max-height: min(var(--sheet-size, 85dvh), 100dvh);
+}
+
+.top {
+  top: 0;
+  border-radius: 0 0 var(--sheet-r) var(--sheet-r);
+  animation: sheet-in-top 260ms var(--ease-out);
+}
+
+.bottom {
+  bottom: 0;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+  animation: sheet-in-bottom 260ms var(--ease-out);
+}
+
+.root[data-state="closed"] .right {
+  transform: translateX(100%);
+}
+
+.root[data-state="closed"] .left {
+  transform: translateX(-100%);
+}
+
+.root[data-state="closed"] .top {
+  transform: translateY(-100%);
+}
+
+.root[data-state="closed"] .bottom {
+  transform: translateY(100%);
+}
+
+/* Drawer: a bottom sheet centred to a readable width on wide screens. */
+.drawer.bottom {
+  left: 50%;
+  right: auto;
+  width: min(var(--drawer-width, 640px), 100vw);
+  margin-left: calc(min(var(--drawer-width, 640px), 100vw) / -2);
+}
+
+.handleArea {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 2px;
+  touch-action: none;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.handle {
+  width: 40px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: rgba(var(--rgb-brand-deep), 0.18);
+}
+
+/* Inline: the panel standing in the page flow, every corner rounded. */
+.inline {
+  position: relative;
+  inset: auto;
+  margin: 0;
+  max-height: none;
+  border-radius: var(--sheet-r);
+  animation: none;
+}
+
+.inline.right,
+.inline.left {
+  width: var(--sheet-size, 380px);
+}
+
+.inline.top,
+.inline.bottom,
+.inline.drawer.bottom {
+  left: auto;
+  width: var(--sheet-size, 420px);
+  margin-left: 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(20px * var(--density)) calc(16px * var(--density)) calc(14px * var(--density)) calc(24px * var(--density));
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.drawer .header {
+  padding-top: calc(8px * var(--density));
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--sheet-title-size, 18px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-heading);
+}
+
+.description {
+  font-size: var(--text-small);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.close {
+  flex-shrink: 0;
+  margin-top: -4px;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: calc(18px * var(--density)) calc(24px * var(--density));
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: calc(14px * var(--density)) calc(24px * var(--density));
+  border-top: var(--border-w) solid var(--line-glass);
+}
+
+@keyframes sheet-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes sheet-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes sheet-in-top {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes sheet-in-bottom {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: fade-in var(--dur) linear;
+    transition: none;
+  }
+
+  .inline {
+    animation: none;
+  }
+}

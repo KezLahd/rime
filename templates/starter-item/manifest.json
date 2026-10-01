@@ -1,0 +1,15 @@
+{
+  "$comment": "Files for the `starter` universal registry item: drops Rime's root layout, globals, no-flash theme script, providers and font setup into an existing create-next-app project (App Router, no src/, @/* alias). The font file is binary, so it is not in the item: the docs line tells the user to download app/fonts/inter-latin-100-900-normal.woff2 or switch fonts.ts to next/font/google. Overwrites app/layout.tsx and app/globals.css.",
+  "name": "starter",
+  "title": "Rime starter: layout, globals and theme setup",
+  "description": "Root layout with Inter, the no-flash preset and dark-mode script and ToastProvider; globals importing Rime's styles and an empty theme.css.",
+  "registryDependencies": ["base", "toast"],
+  "docs": "Put Inter at app/fonts/inter-latin-100-900-normal.woff2 (from the Rime repo, or use next/font/google in app/fonts.ts). Then make your theme in Rime Studio (https://rime.mjsons.net/themes) and paste it into app/styles/theme.css.",
+  "files": [
+    { "path": "templates/starter-item/app/layout.tsx", "target": "~/app/layout.tsx" },
+    { "path": "templates/starter-item/app/ThemeScript.tsx", "target": "~/app/ThemeScript.tsx" },
+    { "path": "templates/starter-item/app/fonts.ts", "target": "~/app/fonts.ts" },
+    { "path": "templates/starter-item/app/globals.css", "target": "~/app/globals.css" },
+    { "path": "templates/starter-item/app/styles/theme.css", "target": "~/app/styles/theme.css" }
+  ]
+}

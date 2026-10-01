@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon-button-demo",
+  "type": "registry:item",
+  "title": "IconButton examples",
+  "description": "Usage examples for IconButton.",
+  "files": [
+    {
+      "path": "registry/examples/icon-button.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/icon-button.md",
+      "content": "# IconButton examples\n\nA square action with only an icon, a required accessible label and a tooltip-friendly hit area.\n\n```tsx\nimport { IconButton, IconX } from \"@/components/ui\";\n\n<IconButton label=\"Close\" icon={<IconX size={18} />} onClick={onClose} />\n```\n\n## Variants and states\n\n```tsx\n<IconButton label=\"More actions\" icon={<IconMoreHorizontal size={18} />} />\n<IconButton label=\"Print invoice\" icon={<IconPrinter size={17} />} variant=\"secondary\" />\n<IconButton label=\"Add project\" icon={<IconPlus size={17} />} variant=\"primary\" />\n<IconButton label=\"Filter\" icon={<IconFilter size={16} />} pressed />\n<IconButton label=\"Loading\" icon={<IconMail size={16} />} loading />\n```\n\nDocs: https://rime.mjsons.net/components/icon-button\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/icon-button.json"
+  ]
+}

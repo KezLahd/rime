@@ -1,0 +1,66 @@
+/* ContextMenu: a region that answers a right-click, and the shared menu list
+   (MenuList.module.css) opened where the pointer is. */
+
+.region {
+  display: grid;
+  place-items: center;
+  min-width: var(--context-region-width, 300px);
+  min-height: var(--context-region-height, 150px);
+  padding: 16px;
+  border: var(--border-w) dashed var(--line-input);
+  border-radius: var(--context-region-radius, var(--r-lg));
+  background: rgba(var(--rgb-white), 0.3);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  text-align: center;
+  -webkit-touch-callout: none;
+}
+
+.live {
+  outline: none;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.live:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.live[aria-expanded="true"] {
+  background: var(--wash-subtle);
+}
+
+.floating {
+  position: fixed;
+  z-index: var(--z-popover);
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+/* Inline: the region and the open menu share one grid cell, the menu
+   dropped in from where a pointer would have pressed. Both stay in the page
+   flow, so the specimen measures as one block. */
+.inlineStage {
+  display: grid;
+  grid-template-areas: "stack";
+}
+
+.inlineStage > * {
+  grid-area: stack;
+}
+
+.inlineStage .region {
+  align-self: start;
+  justify-self: start;
+  place-items: start;
+}
+
+.inlineMenu {
+  align-self: start;
+  justify-self: start;
+  margin: 56px 0 0 140px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating {
+    animation: fade-in var(--dur) linear;
+  }
+}

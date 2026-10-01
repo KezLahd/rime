@@ -1,0 +1,354 @@
+/* Tooltips and toggletips. Two tones: dark (a solid label, the default for a
+   one-liner) and light (a white card, the default for rich content). Portal:
+   deep solid / white on the float shadow, small radius. Flat: the same
+   tokens repoint to near-black and a hairline, and radii fall to 0. */
+
+.tooltip {
+  --tip-fill: var(--tooltip-bg, var(--brand-deep));
+  --tip-edge: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-tooltip);
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  padding: calc(6px * var(--density)) calc(10px * var(--density)) calc(7px * var(--density));
+  border: var(--border-w) solid var(--tip-edge);
+  border-radius: var(--tooltip-radius, var(--r-sm));
+  background: var(--tip-fill);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+  overflow-wrap: break-word;
+  animation: tip-in var(--dur-fast) var(--ease-out);
+}
+
+/* White on deep 13.1:1 (public: white on #1a1a1a 17.4:1). */
+.dark {
+  --tip-fill: var(--tooltip-bg, var(--brand-deep));
+  color: var(--ink-inverse);
+  box-shadow:
+    0 8px 22px -6px rgba(var(--rgb-contact), 0.4),
+    0 1px 3px rgba(var(--rgb-contact), 0.18),
+    var(--shadow-specular-dark);
+}
+
+.light {
+  --tip-fill: var(--surface-solid);
+  --tip-edge: var(--line-brand);
+  color: var(--ink-body);
+  box-shadow: var(--shadow-float);
+}
+
+.rich {
+  gap: 3px;
+  padding: calc(10px * var(--density)) calc(12px * var(--density)) calc(11px * var(--density));
+}
+
+/* ── Arrow: a rotated square in the fill, its two outer edges in the
+   border colour, positioned on the anchor's centre by --arrow. ───────── */
+
+.arrow {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--tip-fill);
+  border: 1px solid transparent;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.tooltip[data-side="top"] .arrow {
+  bottom: -5.5px;
+  left: calc(var(--arrow, 50%) - 5.5px);
+  border-right-color: var(--tip-edge);
+  border-bottom-color: var(--tip-edge);
+}
+
+.tooltip[data-side="bottom"] .arrow {
+  top: -5.5px;
+  left: calc(var(--arrow, 50%) - 5.5px);
+  border-top-color: var(--tip-edge);
+  border-left-color: var(--tip-edge);
+}
+
+.tooltip[data-side="left"] .arrow {
+  right: -5.5px;
+  top: calc(var(--arrow, 50%) - 5.5px);
+  border-top-color: var(--tip-edge);
+  border-right-color: var(--tip-edge);
+}
+
+.tooltip[data-side="right"] .arrow {
+  left: -5.5px;
+  top: calc(var(--arrow, 50%) - 5.5px);
+  border-bottom-color: var(--tip-edge);
+  border-left-color: var(--tip-edge);
+}
+
+/* ── Entrance: fade, a 4% scale and a 3px travel away from the anchor,
+   grown from the arrow. 120 ms; none under reduced motion. ───────────── */
+
+.tooltip[data-side="top"] {
+  --tip-dx: 0px;
+  --tip-dy: 3px;
+  transform-origin: var(--arrow, 50%) 100%;
+}
+
+.tooltip[data-side="bottom"] {
+  --tip-dx: 0px;
+  --tip-dy: -3px;
+  transform-origin: var(--arrow, 50%) 0%;
+}
+
+.tooltip[data-side="left"] {
+  --tip-dx: 3px;
+  --tip-dy: 0px;
+  transform-origin: 100% var(--arrow, 50%);
+}
+
+.tooltip[data-side="right"] {
+  --tip-dx: -3px;
+  --tip-dy: 0px;
+  transform-origin: 0% var(--arrow, 50%);
+}
+
+@keyframes tip-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--tip-dx, 0px), var(--tip-dy, 0px)) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    animation: none;
+  }
+}
+
+/* ── Content ───────────────────────────────────────────────────────────── */
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.light .title {
+  color: var(--ink-heading);
+}
+
+.body {
+  display: block;
+}
+
+.light.rich .body {
+  color: var(--ink-secondary);
+}
+
+.footer {
+  display: block;
+  margin-top: 6px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(var(--rgb-white), 0.18);
+  font-size: var(--text-caption);
+  line-height: 1.45;
+}
+
+.dark .footer {
+  color: rgba(var(--rgb-white), 0.86);
+}
+
+.light .footer {
+  border-top-color: var(--line);
+  color: var(--ink-muted);
+}
+
+.footer a {
+  color: var(--ink-brand);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-radius: var(--r-flat, 2px);
+}
+
+.footer a:hover {
+  color: var(--ink-heading);
+}
+
+.footer a:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* ── Keyboard shortcut ─────────────────────────────────────────────────── */
+
+.withKeys {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.keys {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 3px;
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: var(--r-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* White on deep at 12% white: 9.9:1. */
+.dark .kbd {
+  background: rgba(var(--rgb-white), 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--rgb-white), 0.22),
+    inset 0 -1px 0 rgba(var(--rgb-white), 0.12);
+  color: var(--ink-inverse);
+}
+
+.light .kbd {
+  background: var(--surface-sunken);
+  box-shadow:
+    inset 0 0 0 1px var(--line-input),
+    inset 0 -1px 0 var(--line-input);
+  color: var(--ink-body);
+}
+
+/* ── TooltipTarget: the tab stop a disabled control gave up ───────────── */
+
+.target {
+  display: inline-flex;
+  max-width: 100%;
+  border-radius: var(--r-md);
+  outline: none;
+}
+
+.target:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Chrome dispatches no pointer events on a disabled control, not even to
+   its ancestors, so let them fall through to the wrapper. */
+.target > :disabled,
+.target > [aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.target:has(> :disabled, > [aria-disabled="true"]) {
+  cursor: not-allowed;
+}
+
+/* A pill or other inline status: a light ring on focus, a help cursor on
+   hover, so it reads as "there is more here" without looking like a button. */
+.target:not(:has(> :disabled, > [aria-disabled="true"])) {
+  cursor: help;
+  border-radius: var(--r-full);
+}
+
+/* ── Toggletip trigger: the (i) button ─────────────────────────────────── */
+
+.info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.info:hover {
+  background: var(--wash-hover);
+  color: var(--ink-brand);
+}
+
+.info:active {
+  background: var(--wash-strong);
+}
+
+.info[aria-expanded="true"] {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.info:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.info:disabled {
+  color: var(--ink-disabled);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.toggletip {
+  box-shadow: var(--shadow-menu);
+}
+
+@media (forced-colors: active) {
+  .tooltip {
+    border: 1px solid CanvasText;
+  }
+
+  .arrow {
+    display: none;
+  }
+}
+
+/* Inline: the bubble shown open beside its trigger, in flow, for docs and
+   thumbnails. The bubble comes first in the DOM; the side sets the order. */
+.inlineWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.inlineWrap[data-side="bottom"] {
+  flex-direction: column-reverse;
+}
+
+.inlineWrap[data-side="left"] {
+  flex-direction: row;
+}
+
+.inlineWrap[data-side="right"] {
+  flex-direction: row-reverse;
+}
+
+.inlineTip {
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: auto;
+  animation: none;
+}

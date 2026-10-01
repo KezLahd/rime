@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "type": "registry:item",
+  "title": "Textarea",
+  "description": "Multi-line text in the TextInput box, resizable vertically, with an optional character count.",
+  "categories": [
+    "forms"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Textarea/Textarea.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Textarea/Textarea.module.css",
+      "content": ".wrap {\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n\n.box {\n  align-items: stretch;\n}\n\n.textarea {\n  flex: 1;\n  min-width: 0;\n  min-height: 88px;\n  padding: calc(11px * var(--density)) var(--input-pad-x, calc(14px * var(--density)));\n  border: 0;\n  outline: none;\n  background: transparent;\n  resize: vertical;\n  font-family: var(--font-body);\n  font-size: var(--input-font-size, var(--text-input));\n  line-height: 1.55;\n  color: var(--ink-body);\n  border-radius: inherit;\n}\n\n/* Focus is drawn on the whole box (TextInput's .box:focus-within). (0,2,0)\n   outranks globals.css's :focus-visible fallback in any load order. */\n.textarea:focus,\n.textarea:focus-visible {\n  outline: none;\n}\n\n.textarea::placeholder {\n  color: var(--ink-placeholder);\n  opacity: 1;\n}\n\n.textarea:disabled {\n  cursor: not-allowed;\n  resize: none;\n  color: var(--ink-disabled);\n}\n\n.count {\n  align-self: flex-end;\n  font-size: var(--text-caption);\n  font-variant-numeric: tabular-nums;\n  color: var(--ink-muted);\n}\n\n.countNear {\n  color: var(--warning-ink);\n  font-weight: 700;\n}\n"
+    },
+    {
+      "path": "components/ui/Textarea/Textarea.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Textarea/Textarea.tsx",
+      "content": "\"use client\";\n\nimport type { ComponentPropsWithRef } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { mergeDescribedBy, useField } from \"../Field/Field\";\nimport boxStyles from \"../TextInput/TextInput.module.css\";\nimport styles from \"./Textarea.module.css\";\n\nexport type TextareaProps = ComponentPropsWithRef<\"textarea\"> & {\n  invalid?: boolean;\n  /** Shows \"n / max\" under the box. Requires maxLength and a controlled value. */\n  showCount?: boolean;\n};\n\nexport function Textarea({\n  invalid: invalidProp,\n  showCount,\n  className,\n  id: idProp,\n  rows = 4,\n  required,\n  disabled,\n  readOnly,\n  maxLength,\n  value,\n  \"aria-describedby\": describedByProp,\n  ...rest\n}: TextareaProps) {\n  const field = useField();\n  const invalid = invalidProp ?? field?.invalid ?? false;\n  const id = idProp ?? field?.id;\n  const countId = showCount && maxLength ? `${id}-count` : undefined;\n  const length = typeof value === \"string\" ? value.length : 0;\n  const nearLimit = maxLength ? length >= maxLength * 0.9 : false;\n\n  return (\n    <div data-slot=\"textarea\" className={styles.wrap}>\n      <div\n        className={cx(\n          boxStyles.box,\n          styles.box,\n          invalid && boxStyles.invalid,\n          disabled && boxStyles.disabled,\n          readOnly && boxStyles.readOnly,\n        )}\n      >\n        <textarea\n          id={id}\n          rows={rows}\n          className={cx(styles.textarea, className)}\n          aria-invalid={invalid || undefined}\n          aria-describedby={mergeDescribedBy(describedByProp, field?.describedBy, countId)}\n          required={required ?? field?.required}\n          disabled={disabled}\n          readOnly={readOnly}\n          maxLength={maxLength}\n          value={value}\n          {...rest}\n        />\n      </div>\n      {countId ? (\n        <p id={countId} className={cx(styles.count, nearLimit && styles.countNear)} aria-live=\"polite\">\n          {length} / {maxLength}\n        </p>\n      ) : null}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/field.json",
+    "https://rime.mjsons.net/r/text-input.json"
+  ],
+  "meta": {
+    "import": "import { Textarea } from \"@/components/ui/Textarea/Textarea\";",
+    "docs": "https://rime.mjsons.net/md/textarea.md",
+    "page": "https://rime.mjsons.net/components/textarea"
+  }
+}

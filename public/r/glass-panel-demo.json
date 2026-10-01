@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "glass-panel-demo",
+  "type": "registry:item",
+  "title": "GlassPanel examples",
+  "description": "Usage examples for GlassPanel.",
+  "files": [
+    {
+      "path": "registry/examples/glass-panel.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/glass-panel.md",
+      "content": "# GlassPanel examples\n\nFrosted glass over the page field: page, light and nested variants, padding steps and an optional bloom.\n\n```tsx\nimport { GlassPanel } from \"@/components/ui\";\n\n<GlassPanel padding=\"lg\">…</GlassPanel>\n```\n\n## Variants\n\n```tsx\n<GlassPanel>Page</GlassPanel>\n<GlassPanel variant=\"light\">Light</GlassPanel>\n<GlassPanel variant=\"nested\" padding=\"sm\">Nested</GlassPanel>\n<GlassPanel bloom>With bloom</GlassPanel>\n```\n\nDocs: https://rime.mjsons.net/components/glass-panel\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/glass-panel.json"
+  ]
+}

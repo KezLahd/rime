@@ -1,0 +1,114 @@
+/* Danger zone: one solid panel, a softly tinted header, hairline rows.
+   The card's own shape (radius, contact shadow) so it sits in a settings
+   column beside Cards; only the edge and the header carry the tone. */
+
+.zone {
+  /* Halfway between the danger line and the neutral hairline: present,
+     not alarming. Resolves per mode, since both inputs are tokens. */
+  --zone-line: color-mix(in srgb, var(--danger-line) 60%, var(--line));
+  overflow: hidden;
+  border: 1px solid var(--zone-line);
+  border-radius: var(--r-xl);
+  background: var(--surface-solid);
+  /* --shadow-input, not --shadow-hairline-card: the public value of the
+     latter is a grey ring that would double the tinted edge. */
+  box-shadow: var(--shadow-input);
+}
+
+/* Flat tint, not a gradient: it reads the same in the flat public system. */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 20px 13px;
+  background: var(--danger-fill);
+  border-bottom: 1px solid var(--zone-line);
+}
+
+.title {
+  font-family: var(--font-body);
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--danger-ink);
+}
+
+.description {
+  font-size: var(--text-small);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--line-soft);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-size: var(--text-body);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink-heading);
+}
+
+.rowDescription {
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+/* Disabled: the copy stays readable (it explains the action); only the
+   title steps back, and the reason says what would enable it. */
+.rowDisabled .rowTitle {
+  color: var(--ink-secondary);
+}
+
+.reason {
+  margin-top: 2px;
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.rowAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .header,
+  .row {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .rowAction {
+    justify-content: flex-start;
+  }
+}

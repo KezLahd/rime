@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "registry:item",
+  "title": "separator (Rime divider)",
+  "description": "The shadcn name \"separator\": installs Rime's divider.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/divider.json"
+  ],
+  "meta": {
+    "aliasOf": "divider"
+  }
+}

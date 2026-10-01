@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp",
+  "type": "registry:item",
+  "title": "input-otp (Rime otp-input)",
+  "description": "The shadcn name \"input-otp\": installs Rime's otp-input.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/otp-input.json"
+  ],
+  "meta": {
+    "aliasOf": "otp-input"
+  }
+}

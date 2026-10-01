@@ -1,0 +1,44 @@
+/* shadcn variable names, aliased to Rime's tokens. One way only: edit the
+   Rime tokens (or theme.css from Rime Studio), never these. They are var()
+   references, so they follow the preset and the mode; they are declared on
+   every scope that sets a preset or a mode, so a nested
+   <div data-theme="flat" class="dark"> recomputes them too.
+   What this buys: CSS written against shadcn names (var(--muted-foreground),
+   var(--radius)) gets Rime's theme, and real shadcn components in a Tailwind
+   v4 project pick it up through the optional tailwind bridge. */
+
+:root,
+[data-theme],
+[data-mode],
+.dark {
+  --background: var(--page-base);
+  --foreground: var(--ink-body);
+  --card: var(--surface-solid);
+  --card-foreground: var(--ink-body);
+  --popover: var(--popover-surface);
+  --popover-foreground: var(--ink-body);
+  --primary: var(--brand-action);
+  --primary-foreground: var(--ink-inverse);
+  --secondary: var(--surface-sunken);
+  --secondary-foreground: var(--ink-heading);
+  --muted: var(--surface-sunken);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--wash-hover);
+  --accent-foreground: var(--ink-heading);
+  --destructive: var(--danger-base-solid);
+  --destructive-foreground: var(--ink-inverse);
+  --border: var(--line);
+  --input: var(--line-input);
+  --ring: var(--focus-color);
+  --radius: var(--r-md);
+  --sidebar: var(--chrome-sidebar);
+  --sidebar-foreground: var(--ink-secondary);
+  --sidebar-primary: var(--brand-action);
+  --sidebar-primary-foreground: var(--ink-inverse);
+  --sidebar-accent: var(--wash-active);
+  --sidebar-accent-foreground: var(--ink-heading);
+  --sidebar-border: var(--line-soft);
+  --sidebar-ring: var(--focus-color);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
+}

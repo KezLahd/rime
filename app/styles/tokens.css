@@ -1,0 +1,638 @@
+/* Rime design tokens.
+   Rime Default: neutral greys for surfaces and ink, the Rime frost blues
+   (Frost #468CFB, Ice #94C4FB, Mist #C8DDF9) as the accent, frosted glass
+   over a softly lit field. Every primitive reads these names, so a brand is dialled
+   in by changing values, never by editing a component. The Rime Studio
+   (/studio) reads this file live.
+
+   Theme = preset x mode. The preset is data-theme on <html> (or a wrapper):
+   none for Rime Default, "flat" for Rime Flat. The mode is light (the
+   default) or dark: data-mode="dark" or the .dark class (next-themes and
+   shadcn use the class). Every pairing works: Default light, Default dark,
+   Flat light, Flat dark. data-theme="dark" is kept as an alias for
+   Default dark. Contrast for every text pair is checked live in the Studio's
+   Contrast tab; re-check there after changing an ink. */
+
+:root {
+  /* ── Palette ─────────────────────────────────────────────────────────────
+     --brand is the one accent (Frost): focus, the selected day, the ticked
+     box, fills. It is under 4.5:1 with white, so text never sits on it:
+     --brand-action is the deeper shade the primary gradient starts from
+     (white text 4.92:1), --brand-strong is the gradient's dark stop, and
+     --ink-brand the link and accent ink (6.27:1 on white). --brand-deep is
+     the deepest tone: strong ink, the dark tooltip, tinted shadows.
+     --brand-soft is a quiet second tone (info tints, meters). --support is
+     the neutral used for table header sweeps and sunken boxes.
+     --danger-base is the alarm hue for rules and invalid borders, never text. */
+  --brand: #468cfb;
+  --brand-action: #2b6cdb;
+  --brand-strong: #1d52b5;
+  --brand-deep: #16213a;
+  --brand-soft: #94c4fb;
+  --support: #e4e6eb;
+  --danger-base: #dc3d3d;
+  --danger-base-text: #b42323;
+  --danger-base-solid: #c52f2f;
+  --night: #14161d;
+
+  /* ── Ink ───────────────────────────────────────────────────────────────
+     Neutral greys with the faintest cool cast. Nothing lighter than
+     --ink-muted carries text. */
+  --ink-heading: #16181f;
+  --ink-body: #2a2d36;
+  --ink-secondary: #474b56;
+  --ink-muted: #5a5f6b;
+  --ink-brand: #1f5bc4;
+  --ink-placeholder: #6c717d;
+  --ink-disabled: #9ca0a9;
+  --ink-inverse: #ffffff;
+
+  /* ── Accent gesture ────────────────────────────────────────────────────
+     One per view: the primary action. */
+  --brand-gradient: linear-gradient(135deg, var(--brand-action) 0%, var(--brand-strong) 100%);
+  /* Shell chrome: the logo corner of SidebarShell and the optional
+     full-width context strip above it. */
+  /* Only used when SidebarShell has logoCorner="fill"; the default corner is glass. */
+  --logo-corner-bg: linear-gradient(135deg, var(--brand-action) 0%, var(--brand-strong) 100%);
+  --logo-corner-ink: var(--ink-inverse);
+  --admin-strip-bg: linear-gradient(90deg, var(--night) 0%, var(--brand-deep) 100%);
+  /* Optional artwork bleeding off the sidebar's foot: a url(), or none. */
+  --sidebar-art: none;
+  --sidebar-art-opacity: 0.12;
+  --gradient-brand-deep: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%);
+  --brand-gradient-soft: linear-gradient(135deg, rgba(var(--rgb-brand), 0.12), rgba(var(--rgb-brand), 0.06));
+  --brand-gradient-wash: linear-gradient(135deg, rgba(var(--rgb-brand), 0.07), rgba(var(--rgb-brand), 0.03));
+  --danger-gradient: linear-gradient(135deg, var(--danger-base-solid) 0%, #9f2222 100%);
+
+  /* ── Tint channels, for rgba(var(--x), a) ───────────────────────────── */
+  --rgb-brand-deep: 22, 33, 58;
+  --rgb-brand: 70, 140, 251;
+  --rgb-support: 228, 230, 235;
+  /* The field's two soft blooms. Background only, never text. */
+  --rgb-bloom-a: 200, 221, 249;
+  --rgb-bloom-b: 148, 196, 251;
+  --rgb-brand-soft: 148, 196, 251;
+  --rgb-danger: 220, 61, 61;
+  /* The tight contact shadow. */
+  --rgb-contact: 18, 20, 28;
+  /* The light channel: glass fills, specular edges, highlights. White on a
+     light theme; the dark layer points it at its lightest surface. */
+  --rgb-white: 255, 255, 255;
+  /* The press shade laid over fills on :active and while loading. */
+  --rgb-shade: 14, 16, 30;
+  /* Rule weight for borders on support fills. */
+  --rgb-support-deep: 120, 126, 140;
+
+  /* Accent washes: hover, rows, selection. */
+  --wash-hover: rgba(var(--rgb-brand), 0.05);
+  --wash-row: rgba(var(--rgb-brand), 0.03);
+  --wash-subtle: rgba(var(--rgb-brand), 0.07);
+  --wash-active: rgba(var(--rgb-brand), 0.12);
+  --wash-strong: rgba(var(--rgb-brand), 0.16);
+  /* Active filter chips read at a glance against the grey recess. */
+  --chip-active-fill: rgba(var(--rgb-brand), 0.16);
+  --chip-active-fill-hover: rgba(var(--rgb-brand), 0.22);
+  --chip-active-shadow:
+    inset 0 0 0 1px rgba(var(--rgb-brand), 0.45), inset 0 1px 0 rgba(var(--rgb-white), 0.5),
+    0 1px 3px rgba(var(--rgb-brand), 0.18);
+  --line-brand: rgba(var(--rgb-brand), 0.24);
+  --line-brand-strong: rgba(var(--rgb-brand), 0.45);
+
+  /* ── Semantic ───────────────────────────────────────────────────────── */
+  --success-ink: #1f6a45;
+  --success-fill: rgba(31, 106, 69, 0.08);
+  --success-line: rgba(31, 106, 69, 0.24);
+  --success-solid: #1f6a45;
+
+  --warning-ink: #7a5306;
+  --warning-fill: rgba(196, 140, 20, 0.12);
+  --warning-line: rgba(196, 140, 20, 0.34);
+  --warning-solid: #8a5d08;
+
+  --danger-ink: #a12424;
+  --danger-fill: rgba(var(--rgb-danger), 0.08);
+  --danger-line: rgba(var(--rgb-danger), 0.32);
+  --danger-solid: var(--danger-base-solid);
+
+  --info-ink: var(--ink-brand);
+  --info-fill: rgba(var(--rgb-brand), 0.08);
+  --info-line: rgba(var(--rgb-brand), 0.26);
+
+  --neutral-ink: var(--ink-secondary);
+  --neutral-fill: rgba(60, 64, 76, 0.07);
+  --neutral-line: rgba(60, 64, 76, 0.18);
+
+  --brand-ink: var(--ink-brand);
+  --brand-fill: rgba(var(--rgb-brand), 0.08);
+  --brand-line: rgba(var(--rgb-brand), 0.2);
+
+  /* ── Surfaces ─────────────────────────────────────────────────────────
+     The field is never flat white: a pale grey base with two soft blooms, so
+     white glass reads as panels floating over it. */
+  --page-base: #eef0f4;
+  --page-background:
+    radial-gradient(ellipse 110% 110% at -10% -10%, rgba(var(--rgb-bloom-a), 0.6) 0%, transparent 62%),
+    radial-gradient(ellipse 110% 110% at 110% 110%, rgba(var(--rgb-bloom-b), 0.32) 0%, transparent 65%),
+    linear-gradient(135deg, rgba(var(--rgb-bloom-a), 0.12) 0%, rgba(var(--rgb-bloom-a), 0.03) 50%, rgba(var(--rgb-bloom-b), 0.14) 100%),
+    var(--page-base);
+
+  /* App chrome (sidebar and top bar): white frosted glass over the field,
+     dense enough (0.76 to 0.82 with a 32px blur) to read as a solid frosted
+     bar while content scrolls under it. The docs chrome uses the same. */
+  --chrome-sidebar: rgba(var(--rgb-white), 0.76);
+  --chrome-topbar: rgba(var(--rgb-white), 0.82);
+  --chrome-shadow: 0 8px 28px rgba(var(--rgb-brand-deep), 0.12), 0 1px 3px rgba(var(--rgb-contact), 0.06);
+
+  /* AuthCard backdrop: a deep field under a solid card. */
+  --auth-background: linear-gradient(135deg, #2c3150 0%, #1f2233 60%, #14161d 100%);
+  --auth-floor: linear-gradient(to top, rgba(8, 9, 14, 0.38) 0%, rgba(8, 9, 14, 0.1) 30%, transparent 55%);
+  --auth-sky: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 20%, transparent 45%);
+
+  --glass-fill: rgba(var(--rgb-white), 0.5);
+  --glass-fill-light: rgba(var(--rgb-white), 0.42);
+  --glass-fill-nested: rgba(var(--rgb-white), 0.58);
+  --glass-fill-chrome: rgba(var(--rgb-white), 0.76);
+  --glass-edge: rgba(var(--rgb-white), 0.65);
+  --glass-edge-strong: rgba(var(--rgb-white), 0.8);
+  --surface-solid: #ffffff;
+  --surface-sunken: #f5f6f8;
+  --surface-sunken-2: #eceef2;
+  --recess-fill: rgba(var(--rgb-brand-deep), 0.07);
+  --recess-fill-hover: rgba(var(--rgb-brand-deep), 0.1);
+
+  --line: rgba(var(--rgb-brand-deep), 0.1);
+  --line-soft: rgba(var(--rgb-brand-deep), 0.06);
+  --line-glass: rgba(var(--rgb-contact), 0.07);
+  --line-input: rgba(var(--rgb-brand-deep), 0.18);
+  /* Resting edge of a checkbox or radio (3:1 on white, WCAG 1.4.11). */
+  --neutral-border: #858a96;
+  --danger-field-fill: #fffafa;
+
+  --scrim: rgba(14, 16, 24, 0.5);
+
+  /* ── Scrolling ──────────────────────────────────────────────────────────
+     Thin native scrollbars, and the edge shadows a header or footer casts
+     once content has scrolled under it. */
+  --scrollbar-width: thin;
+  --scrollbar-thumb: rgba(var(--rgb-brand-deep), 0.22);
+  --scrollbar-track: transparent;
+  --scroll-edge-top: 0 1px 0 var(--line-glass), 0 12px 18px -16px rgba(var(--rgb-brand-deep), 0.28);
+  --scroll-edge-bottom: 0 -1px 0 var(--line-glass), 0 -12px 18px -16px rgba(var(--rgb-brand-deep), 0.28);
+  --scroll-edge-left: 1px 0 0 var(--line-glass), 12px 0 18px -16px rgba(var(--rgb-brand-deep), 0.28);
+  --scroll-edge-right: -1px 0 0 var(--line-glass), -12px 0 18px -16px rgba(var(--rgb-brand-deep), 0.28);
+
+  /* ── Blur ─────────────────────────────────────────────────────────────── */
+  --blur-chrome: blur(32px);
+  --blur-panel: blur(32px);
+  --blur-panel-light: blur(20px);
+  --blur-pill: blur(20px) saturate(180%);
+  --blur-row: blur(12px);
+  --blur-callout: blur(8px);
+  --blur-scrim: blur(3px);
+  --blur-recess: blur(12px) saturate(140%);
+
+  /* ── Radius ───────────────────────────────────────────────────────────
+     One scale. Nested surfaces are concentric. */
+  --r-2xs: 4px;
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-2xl: 20px;
+  --r-full: 999px;
+
+  /* ── Shape and space scales ───────────────────────────────────────────
+     --density multiplies the padding of every primitive that reads a
+     per-component padding token: 0.85 is compact, 1.15 is roomy. */
+  --density: 1;
+  --control-h-sm: 32px;
+  --control-h-md: 40px;
+  --control-h-lg: 48px;
+  --field-h-sm: 36px;
+  --field-h-md: 44px;
+  --border-w: 1px;
+  --border-w-field: 1.5px;
+
+  /* ── Shadow: two layers, softly tinted ─────────────────────────────── */
+  --shadow-recess:
+    inset 0 1px 0 rgba(var(--rgb-white), 0.9), inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.1),
+    0 1px 2px rgba(var(--rgb-contact), 0.05);
+  --shadow-input: 0 1px 2px rgba(var(--rgb-brand-deep), 0.05);
+  --shadow-hairline-card: 0 1px 4px rgba(var(--rgb-contact), 0.05);
+  --shadow-control:
+    0 1px 3px rgba(var(--rgb-contact), 0.1), inset 0 0 0 1px rgba(var(--rgb-brand), 0.2);
+  --shadow-chrome: 0 4px 16px rgba(var(--rgb-brand-deep), 0.08);
+  --shadow-chrome-open: 0 4px 16px rgba(var(--rgb-brand-deep), 0.13);
+  --shadow-panel-light: 0 8px 32px rgba(var(--rgb-brand-deep), 0.08);
+  --shadow-panel:
+    0 12px 48px rgba(var(--rgb-brand-deep), 0.12), 0 2px 8px rgba(var(--rgb-contact), 0.06);
+  --shadow-float:
+    0 8px 32px rgba(var(--rgb-brand-deep), 0.13), 0 2px 8px rgba(var(--rgb-contact), 0.07);
+  --shadow-menu:
+    0 12px 40px rgba(var(--rgb-brand-deep), 0.14), 0 0 0 1px rgba(var(--rgb-brand-deep), 0.06);
+  --shadow-modal: 0 30px 80px rgba(14, 16, 24, 0.3), 0 2px 8px rgba(var(--rgb-contact), 0.1);
+  --shadow-auth-card: 0 8px 40px rgba(8, 9, 14, 0.42), 0 2px 8px rgba(8, 9, 14, 0.25);
+  --shadow-specular: inset 0 1px 0 rgba(var(--rgb-white), 0.9);
+  --shadow-specular-dark: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --glow-sm: 0 2px 6px rgba(var(--rgb-brand), 0.28);
+  --glow-md: 0 3px 10px rgba(var(--rgb-brand), 0.26);
+  --glow-md-hover: 0 5px 16px rgba(var(--rgb-brand), 0.36);
+  --glow-lg: 0 4px 16px rgba(var(--rgb-brand), 0.32);
+  --glow-danger: 0 3px 10px rgba(var(--rgb-danger), 0.28);
+  --glow-danger-hover: 0 5px 16px rgba(var(--rgb-danger), 0.38);
+
+  /* Focus: the accent ring with a gap so it separates from fills. */
+  /* The deeper accent: Frost itself is under 3:1 on the page field. */
+  --focus-color: var(--brand-action);
+  --focus-gap: #ffffff;
+  --focus-ring: 0 0 0 2px var(--focus-gap), 0 0 0 4px var(--focus-color);
+  --focus-halo: 0 0 0 4px rgba(var(--rgb-brand), 0.16);
+
+  /* ── Type ─────────────────────────────────────────────────────────────
+     One sans for everything: Inter, self-hosted by next/font in layout.tsx.
+     Display type carries weight through size and tight tracking. */
+  --font-display: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-body: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --text-display: 34px;
+  --text-page-title: 30px;
+  --text-auth-title: 26px;
+  --text-section: 20px;
+  --text-card-title: 15px;
+  --text-body: 14px;
+  --text-input: 15px;
+  --text-small: 13px;
+  --text-caption: 12px;
+  --text-micro: 11px;
+
+  --tracking-tight: -0.02em;
+  --tracking-display: -0.02em;
+  --tracking-label: 0.06em;
+  --tracking-eyebrow: 0.1em;
+
+  /* ── Motion ─────────────────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur: 150ms;
+  --dur-slow: 200ms;
+
+  /* ── Layout ─────────────────────────────────────────────────────────── */
+  --content-max: 1180px;
+  --content-narrow: 780px;
+  --topbar-height: 64px;
+  --z-topbar: 50;
+  --z-popover: 1000;
+  --z-modal: 200;
+  --z-toast: 1100;
+  --z-tooltip: 1200;
+
+  /* ── Popovers, tables, lift and highlight ──────────────────────────────
+     Frosted popovers (menus, lists): translucent white, strong blur, depth
+     from shadows above and below, no outline. */
+  --popover-surface: rgba(var(--rgb-white), 0.78);
+  --popover-blur: blur(28px) saturate(180%);
+  --popover-border: transparent;
+  --popover-shadow:
+    0 -8px 20px -10px rgba(var(--rgb-brand-deep), 0.14),
+    0 20px 44px -14px rgba(var(--rgb-brand-deep), 0.28),
+    0 4px 10px -3px rgba(var(--rgb-contact), 0.08),
+    inset 0 1px 0 rgba(var(--rgb-white), 0.9),
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.05);
+  /* Tables: a light neutral header row, and the Table primitive's rhythm.
+     A sortable header is the whole cell: hover and press wash it edge to edge. */
+  --table-head-fill: linear-gradient(to right, rgba(var(--rgb-support), 0.7), rgba(var(--rgb-support), 0.4));
+  --table-head-ink: var(--ink-heading);
+  --table-head-rule: 1px solid var(--line);
+  --table-head-pad: 9px 14px;
+  --table-cell-pad: 12px 14px;
+  --table-row-line: 1px solid var(--line-glass);
+  --table-row-hover: var(--wash-row);
+  --table-head-hover: var(--wash-subtle);
+  --table-head-press: var(--wash-active);
+  --shadow-lift:
+    0 18px 44px -14px rgba(var(--rgb-brand-deep), 0.24), 0 3px 8px -2px rgba(var(--rgb-contact), 0.07);
+  /* Card tone="highlight": a crisp accent hairline, a faint accent rule along
+     the top edge that fades before the corners, and a soft glow under it. */
+  --highlight-line: rgba(var(--rgb-brand), 0.2);
+  --highlight-edge: linear-gradient(90deg, rgba(var(--rgb-brand), 0) 4%, rgba(var(--rgb-brand), 0.5) 32%, rgba(var(--rgb-brand), 0.42) 68%, rgba(var(--rgb-brand), 0) 96%);
+  --highlight-glow: radial-gradient(120% 70% at 50% 0%, rgba(var(--rgb-bloom-a), 0.24) 0%, rgba(var(--rgb-bloom-a), 0.08) 45%, transparent 75%);
+  /* GlassPanel bloom strength. 0 switches the bloom off. */
+  --bloom-opacity: 1;
+  --success-gradient: linear-gradient(135deg, #2f8a5d 0%, var(--success-solid) 100%);
+  --glow-success: 0 3px 10px rgba(31, 106, 69, 0.28);
+
+  /* ── Modal ────────────────────────────────────────────────────────────
+     The popover glass at reading weight, because a modal holds a whole
+     form. The scrim is a soft veil with enough blur that the page recedes. */
+  --modal-surface: rgba(var(--rgb-white), 0.88);
+  --modal-blur: blur(32px) saturate(180%);
+  --modal-shadow:
+    0 -10px 28px -14px rgba(var(--rgb-brand-deep), 0.18),
+    0 32px 72px -20px rgba(14, 16, 24, 0.42),
+    0 8px 22px -8px rgba(var(--rgb-contact), 0.14),
+    inset 0 1px 0 rgba(var(--rgb-white), 0.95),
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.05);
+  --modal-scrim: radial-gradient(120% 120% at 50% 45%, rgba(14, 16, 24, 0.22) 0%, rgba(14, 16, 24, 0.42) 100%);
+  --modal-scrim-blur: blur(10px) saturate(120%);
+  --modal-wash-opacity: 1;
+
+  /* ── Charts ────────────────────────────────────────────────────────────
+     Categorical order is the colour-blind safety mechanism: assign in
+     sequence, never re-rank. Every slot clears 3:1 on white. The ordinal
+     ramp is Frost, light to dark. Status hues carry meaning only, always
+     with an icon and a label. Mirrored in components/charts/palette.ts. */
+  --chart-1: #468cfb;
+  --chart-2: #b7770f;
+  --chart-3: #0f8a84;
+  --chart-4: #c2416b;
+  --chart-5: #7656e0;
+  --chart-6: #5b6475;
+  --chart-other: #a3a8b3;
+  --chart-seq-1: #9fc6fb;
+  --chart-seq-2: #6fa9fb;
+  --chart-seq-3: #468cfb;
+  --chart-seq-4: #2b6cdb;
+  --chart-seq-5: #1d52b5;
+  --chart-good: #1f7d57;
+  --chart-warning: #a8770f;
+  --chart-danger: #b42323;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+    --dur-slow: 0ms;
+  }
+}
+
+/* ── Flat ──────────────────────────────────────────────────────────────────
+   The same system with the glass switched off: opaque white planes on a
+   light grey field, small radii, solid accent fills, no glow and no blur.
+   Applied by data-theme="flat" on <html> or any wrapper; the :has() form
+   carries it to <html> so portalled overlays follow. */
+:root:has([data-theme="flat"]),
+[data-theme="flat"] {
+  --brand-gradient: linear-gradient(var(--brand-action), var(--brand-action));
+  --logo-corner-bg: var(--brand-action);
+  --brand-gradient-soft: linear-gradient(rgba(var(--rgb-brand), 0.08), rgba(var(--rgb-brand), 0.08));
+  --brand-gradient-wash: linear-gradient(rgba(var(--rgb-brand), 0.04), rgba(var(--rgb-brand), 0.04));
+  --danger-gradient: linear-gradient(var(--danger-base-solid), var(--danger-base-solid));
+  --success-gradient: linear-gradient(var(--success-solid), var(--success-solid));
+
+  --r-2xs: 2px;
+  --r-xs: 4px;
+  --r-sm: 5px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
+  --r-2xl: 12px;
+
+  --page-base: #f4f5f7;
+  --page-background: var(--page-base);
+  --chrome-sidebar: var(--surface-solid);
+  --chrome-topbar: var(--surface-solid);
+  --glass-fill: var(--surface-solid);
+  --glass-fill-light: var(--surface-solid);
+  --glass-fill-nested: var(--surface-solid);
+  --glass-fill-chrome: var(--surface-solid);
+  --glass-edge: var(--line);
+  --glass-edge-strong: rgba(var(--rgb-brand-deep), 0.16);
+  --recess-fill: rgba(var(--rgb-contact), 0.04);
+  --recess-fill-hover: rgba(var(--rgb-contact), 0.07);
+  --line: #e2e4e9;
+  --line-soft: #eceef1;
+  --line-glass: #e6e8ec;
+  --line-input: #c9ccd4;
+  --table-head-fill: var(--surface-sunken);
+  --table-head-rule: 1px solid var(--line);
+
+  --blur-chrome: none;
+  --blur-panel: none;
+  --blur-panel-light: none;
+  --blur-pill: none;
+  --blur-row: none;
+  --blur-callout: none;
+  --blur-scrim: none;
+  --blur-recess: none;
+
+  --popover-surface: var(--surface-solid);
+  --popover-blur: none;
+  --popover-border: var(--line);
+  --popover-shadow: 0 0 0 1px var(--line), 0 8px 24px rgba(var(--rgb-contact), 0.1);
+  --toast-surface: var(--surface-solid);
+  --toast-blur: none;
+
+  --shadow-recess: inset 0 1px 2px rgba(var(--rgb-contact), 0.05);
+  --shadow-input: 0 1px 1px rgba(var(--rgb-contact), 0.04);
+  --shadow-hairline-card: 0 0 0 1px var(--line);
+  --shadow-control: inset 0 0 0 1px var(--line-input);
+  --shadow-chrome: 0 1px 0 var(--line);
+  --chrome-shadow: 0 1px 0 var(--line);
+  --shadow-chrome-open: 0 1px 0 var(--line), 0 4px 12px rgba(var(--rgb-contact), 0.06);
+  --shadow-panel-light: 0 0 0 1px var(--line);
+  --shadow-panel: 0 1px 2px rgba(var(--rgb-contact), 0.04), 0 8px 24px -14px rgba(var(--rgb-contact), 0.12);
+  --shadow-float: 0 0 0 1px var(--line), 0 4px 12px rgba(var(--rgb-contact), 0.08);
+  --shadow-menu: 0 0 0 1px var(--line), 0 8px 24px rgba(var(--rgb-contact), 0.1);
+  --shadow-modal: 0 0 0 1px var(--line), 0 16px 48px rgba(var(--rgb-contact), 0.16);
+  --shadow-lift: 0 4px 14px rgba(var(--rgb-contact), 0.08);
+  --shadow-specular: 0 0 #0000;
+  --shadow-specular-dark: 0 0 #0000;
+  --glow-sm: 0 0 #0000;
+  --glow-md: 0 0 #0000;
+  --glow-md-hover: 0 0 #0000;
+  --glow-lg: 0 0 #0000;
+  --glow-danger: 0 0 #0000;
+  --glow-danger-hover: 0 0 #0000;
+  --glow-success: 0 0 #0000;
+  --button-lift: 0px;
+
+  --highlight-edge: linear-gradient(var(--brand), var(--brand));
+  --highlight-glow: none;
+  --bloom-opacity: 0;
+
+  --modal-surface: var(--surface-solid);
+  --modal-blur: none;
+  --modal-shadow: var(--shadow-modal);
+  --modal-scrim: rgba(14, 16, 24, 0.42);
+  --modal-scrim-blur: none;
+  --modal-wash-opacity: 0;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────────────────
+   Glass over a near-black field. The light channel (--rgb-white) points at
+   the raised surface colour, so every translucent fill and edge darkens with
+   it; inks flip to light greys and the accent lifts for contrast. Applied by
+   data-mode="dark" or the .dark class (on <html> or a wrapper), with or
+   without a preset. data-theme="dark" stays as an alias. */
+:root:has([data-mode="dark"]),
+[data-mode="dark"],
+.dark,
+:root:has([data-theme="dark"]),
+[data-theme="dark"] {
+  color-scheme: dark;
+  --brand: #6ba6fc;
+  --focus-color: var(--brand);
+  --brand-action: #2b6cdb;
+  --brand-strong: #1d52b5;
+  --brand-deep: #e6eefb;
+  --brand-soft: #94c4fb;
+  --support: #2a2e3a;
+  --danger-base: #f26464;
+  --danger-base-text: #ff8a8a;
+  --danger-base-solid: #c93a3a;
+  --night: #07080b;
+
+  --ink-heading: #f4f5f8;
+  --ink-body: #dcdee5;
+  --ink-secondary: #b9bdc8;
+  --ink-muted: #b4b9c4;
+  --ink-brand: #a9ccfd;
+  --ink-placeholder: #8a8f9b;
+  --ink-disabled: #5e636e;
+  --ink-inverse: #ffffff;
+
+  --rgb-brand-deep: 0, 0, 0;
+  --rgb-brand: 107, 166, 252;
+  --rgb-support: 42, 46, 58;
+  --rgb-bloom-a: 70, 140, 251;
+  --rgb-bloom-b: 40, 80, 140;
+  --rgb-brand-soft: 148, 196, 251;
+  --rgb-danger: 242, 100, 100;
+  --rgb-contact: 0, 0, 0;
+  --rgb-white: 40, 44, 56;
+  --rgb-shade: 0, 0, 0;
+  --rgb-support-deep: 150, 156, 170;
+
+  --wash-hover: rgba(var(--rgb-brand), 0.1);
+  --wash-row: rgba(255, 255, 255, 0.03);
+  --wash-subtle: rgba(var(--rgb-brand), 0.12);
+  --wash-active: rgba(var(--rgb-brand), 0.2);
+  --wash-strong: rgba(var(--rgb-brand), 0.26);
+  --chip-active-fill: rgba(var(--rgb-brand), 0.24);
+  --chip-active-fill-hover: rgba(var(--rgb-brand), 0.3);
+  --chip-active-shadow: inset 0 0 0 1px rgba(var(--rgb-brand), 0.6);
+
+  --success-ink: #6fd3a0;
+  --success-fill: rgba(111, 211, 160, 0.1);
+  --success-line: rgba(111, 211, 160, 0.3);
+  --success-solid: #2a8a5c;
+  --warning-ink: #f2c46b;
+  --warning-fill: rgba(242, 196, 107, 0.1);
+  --warning-line: rgba(242, 196, 107, 0.3);
+  --warning-solid: #a87414;
+  --danger-ink: #ff9a9a;
+  --danger-fill: rgba(var(--rgb-danger), 0.12);
+  --danger-line: rgba(var(--rgb-danger), 0.4);
+  --info-fill: rgba(var(--rgb-brand), 0.14);
+  --info-line: rgba(var(--rgb-brand), 0.36);
+  --neutral-fill: rgba(255, 255, 255, 0.06);
+  --neutral-line: rgba(255, 255, 255, 0.14);
+  --brand-fill: rgba(var(--rgb-brand), 0.14);
+  --brand-line: rgba(var(--rgb-brand), 0.34);
+
+  --page-base: #0e1015;
+  --page-background:
+    radial-gradient(ellipse 110% 110% at -10% -10%, rgba(var(--rgb-bloom-a), 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 110% 110% at 110% 110%, rgba(var(--rgb-bloom-b), 0.28) 0%, transparent 65%),
+    var(--page-base);
+  --chrome-sidebar: rgba(var(--rgb-white), 0.76);
+  --chrome-topbar: rgba(var(--rgb-white), 0.8);
+  --chrome-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --glass-fill: rgba(var(--rgb-white), 0.55);
+  --glass-fill-light: rgba(var(--rgb-white), 0.45);
+  --glass-fill-nested: rgba(var(--rgb-white), 0.7);
+  --glass-fill-chrome: rgba(var(--rgb-white), 0.78);
+  --glass-edge: rgba(255, 255, 255, 0.08);
+  --glass-edge-strong: rgba(255, 255, 255, 0.14);
+  --surface-solid: #1b1e26;
+  --surface-sunken: #15171d;
+  --surface-sunken-2: #111318;
+  --recess-fill: rgba(255, 255, 255, 0.05);
+  --recess-fill-hover: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-glass: rgba(255, 255, 255, 0.07);
+  --line-input: rgba(255, 255, 255, 0.18);
+  --neutral-border: #7d8290;
+  --danger-field-fill: #221719;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+
+  --shadow-recess: inset 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-specular: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-specular-dark: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-control: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(var(--rgb-brand), 0.35);
+  --popover-surface: rgba(32, 35, 45, 0.86);
+  --popover-shadow: 0 20px 44px -14px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --toast-surface: rgba(32, 35, 45, 0.9);
+  --table-head-fill: rgba(255, 255, 255, 0.04);
+  --tooltip-bg: #2b2f3b;
+  --focus-gap: #0e1015;
+  --highlight-glow: radial-gradient(120% 70% at 50% 0%, rgba(var(--rgb-bloom-a), 0.16) 0%, transparent 70%);
+
+  --modal-surface: rgba(30, 33, 42, 0.92);
+  --modal-shadow: 0 32px 72px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --modal-scrim: radial-gradient(120% 120% at 50% 45%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.62) 100%);
+
+  --chart-1: #6ba6fc;
+  --chart-2: #e0a640;
+  --chart-3: #3fbfb6;
+  --chart-4: #ec7aa0;
+  --chart-5: #a28cf5;
+  --chart-6: #9aa3b5;
+  --chart-other: #5e636e;
+  --chart-seq-1: #1d52b5;
+  --chart-seq-2: #2b6cdb;
+  --chart-seq-3: #468cfb;
+  --chart-seq-4: #6fa9fb;
+  --chart-seq-5: #9fc6fb;
+  --chart-good: #4cc58a;
+  --chart-warning: #e0a640;
+  --chart-danger: #f27272;
+}
+
+/* ── Flat in dark mode ────────────────────────────────────────────────────
+   Dark mode repaints the colours; Flat keeps every surface opaque with no
+   glass, glow or bloom. Declared after both so it wins where they overlap. */
+:root:has([data-theme="flat"]):has([data-mode="dark"]),
+:root.dark:has([data-theme="flat"]),
+[data-theme="flat"][data-mode="dark"],
+[data-theme="flat"].dark,
+[data-mode="dark"] [data-theme="flat"],
+.dark [data-theme="flat"] {
+  --page-base: #111318;
+  --page-background: var(--page-base);
+  --surface-solid: #1a1d24;
+  --surface-sunken: #15171d;
+  --chrome-sidebar: var(--surface-solid);
+  --chrome-topbar: var(--surface-solid);
+  --glass-fill: var(--surface-solid);
+  --glass-fill-light: var(--surface-solid);
+  --glass-fill-nested: var(--surface-solid);
+  --glass-fill-chrome: var(--surface-solid);
+  --glass-edge: rgba(255, 255, 255, 0.08);
+  --glass-edge-strong: rgba(255, 255, 255, 0.14);
+  --popover-surface: var(--surface-solid);
+  --popover-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.5);
+  --toast-surface: var(--surface-solid);
+  --modal-surface: var(--surface-solid);
+  --modal-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 16px 48px rgba(0, 0, 0, 0.55);
+  --modal-scrim: rgba(0, 0, 0, 0.6);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-glass: rgba(255, 255, 255, 0.07);
+  --line-input: rgba(255, 255, 255, 0.2);
+  --table-head-fill: rgba(255, 255, 255, 0.04);
+  --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -14px rgba(0, 0, 0, 0.5);
+  --shadow-panel-light: 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-hairline-card: 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-chrome: 0 1px 0 rgba(255, 255, 255, 0.08);
+  --chrome-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-specular: 0 0 #0000;
+  --highlight-glow: none;
+  --bloom-opacity: 0;
+}

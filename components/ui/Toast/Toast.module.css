@@ -1,0 +1,361 @@
+/* the reference left toasts stock (Sonner defaults), so these are built to its
+   floating-card craft instead.
+   A white float on the soft two-layer lift, a hairline and a specular top
+   edge; the tone carried by a small gradient tile with the brand gesture's
+   glow; a timer rule for toasts that leave on their own; and a deck that
+   fans out under the pointer. Every colour is a token, so the flat preset
+   turns the tile flat, the glow off and the corners square. */
+
+.region {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: var(--z-toast);
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+/* Rendered in place for the styleguide: same stack, in the page flow. */
+.preview {
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+}
+
+/* Pinned open, the preview lays its toasts out in normal flow: same
+   surfaces, no measuring, no motion, so it sizes itself the moment it
+   renders (thumbnails measure it to fit). */
+.preview .expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: auto !important;
+  transition: none;
+}
+
+.preview .expanded .toast {
+  position: relative;
+  height: auto;
+  transform: none;
+  transition: none;
+  animation: none;
+}
+
+/* The stack's box. Its height is set inline (front toast plus the peeking
+   edges, or every toast when fanned out) so the hover target matches what
+   is drawn and the gaps between fanned toasts do not collapse it. */
+.list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: auto;
+  transition: height 380ms var(--ease-out);
+}
+
+/* ── The toast ───────────────────────────────────────────────────────────
+   Collapsed, a toast behind the front one is clamped to the front's height,
+   scaled back from its top edge and raised by 9px per step, so exactly 9px
+   of each shows above the front: a deck, not a pile. Fanned out, each sits
+   at its offset (the heights of the newer toasts plus gaps). Motion is
+   transform only; the entrance uses `translate`, a separate property, so it
+   composes with the stack transform instead of fighting it. */
+.toast {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: calc(20 - var(--index));
+  /* Always an explicit length (measured), so clamping and unclamping
+     animate instead of jumping between a px value and auto. */
+  height: var(--own-height);
+  overflow: hidden;
+  border-radius: var(--toast-radius, var(--r-lg));
+  /* Frosted glass, not flat white: translucent white
+     with a strong blur, a faint tone tint washed in from the icon side, and
+     depth from shadows above and below instead of an outline. */
+  /* The colour is the toast's own tone as a full-surface gradient (green for
+     success…), over glass opaque enough that the page gradient doesn't show
+     through as the dominant colour. */
+  background:
+    linear-gradient(135deg, rgba(var(--toast-rgb), 0.13) 0%, rgba(var(--toast-rgb), 0.04) 100%),
+    var(--toast-surface, rgba(var(--rgb-white), 0.82));
+  -webkit-backdrop-filter: var(--toast-blur, blur(28px) saturate(180%));
+  backdrop-filter: var(--toast-blur, blur(28px) saturate(180%));
+  box-shadow: var(--toast-shadow);
+  transform-origin: top center;
+  transform: translateY(calc(var(--index) * -9px)) scale(calc(1 - var(--index) * 0.05));
+  transition:
+    transform 380ms var(--ease-out),
+    height 380ms var(--ease-out),
+    opacity 200ms var(--ease),
+    box-shadow var(--dur) var(--ease);
+  animation: toast-in 420ms var(--ease-out) both;
+}
+
+.expanded .toast {
+  transform: translateY(calc(var(--offset) * -1));
+}
+
+.toast {
+  --toast-shadow:
+    0 -8px 20px -10px rgba(var(--rgb-brand-deep), 0.2),
+    0 20px 44px -14px rgba(var(--rgb-brand-deep), 0.36),
+    0 4px 10px -3px rgba(var(--rgb-contact), 0.1),
+    inset 0 1px 0 rgba(var(--rgb-white), 0.9),
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.06);
+}
+
+/* Tone colour for the surface gradient. Default (info, loading) is accent. */
+.toast {
+  --toast-rgb: var(--toast-rgb-info, 110, 84, 153);
+}
+
+.success {
+  --toast-rgb: var(--toast-rgb-success, 52, 168, 112);
+}
+
+.error {
+  --toast-rgb: var(--toast-rgb-error, 237, 93, 87);
+}
+
+.clamped {
+  height: var(--front-height);
+}
+
+/* The toasts behind show only their edge: content fades out so two layers
+   of text never overlap, and comes back as the stack fans out. */
+.behind .body,
+.behind .timer {
+  opacity: 0;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.leaving {
+  pointer-events: none;
+  animation: toast-out 220ms var(--ease) forwards;
+}
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: calc(14px * var(--density)) calc(12px * var(--density)) calc(14px * var(--density)) calc(14px * var(--density));
+  transition: opacity 200ms var(--ease);
+}
+
+/* ── Tone tile: the primary gesture in miniature ─────────────────────────
+   Gradient fill, tone-coloured glow, dark specular edge, white glyph.
+   Radius 8 inside a 12px toast: one rung down the ladder. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--toast-icon-radius, var(--r-sm));
+  /* Soft tile:
+     a light wash of the tone with the icon drawn in the tone's ink. */
+  color: var(--ink-brand);
+  background: rgba(var(--toast-rgb), 0.16);
+  box-shadow: inset 0 1px 0 rgba(var(--rgb-white), 0.7), inset 0 0 0 1px rgba(var(--toast-rgb), 0.18);
+}
+
+.success .icon {
+  color: var(--success-ink);
+}
+
+.error .icon {
+  color: var(--danger-ink);
+}
+
+/* info and loading keep the brand gesture from .icon. */
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.title {
+  font-size: var(--text-body);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--ink-heading);
+  overflow-wrap: anywhere;
+}
+
+.description {
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* Action: a compact washed button with a brand edge, so it reads as a
+   control and not as a link in the copy. Flat keeps its tracked caps. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  margin-top: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: var(--wash-subtle);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  font-family: var(--font-body);
+  font-size: var(--button-size-sm, 12.5px);
+  font-weight: 700;
+  letter-spacing: var(--button-tracking, 0);
+  text-transform: var(--button-case, none);
+  color: var(--ink-brand);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.action:hover {
+  background: var(--wash-active);
+  box-shadow: inset 0 0 0 1px var(--line-brand-strong);
+}
+
+.action:active {
+  background: var(--wash-strong);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  margin: -2px -2px 0 0;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.close:hover {
+  background: var(--wash-subtle);
+  color: var(--ink-brand);
+}
+
+.close:active {
+  background: var(--wash-active);
+}
+
+.action:focus-visible,
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Timer: 2px rule along the bottom edge, draining left to right ───────
+   Only on toasts that leave on their own. Paused with the timer (hover or
+   focus anywhere in the stack), so what it shows is what is left. */
+.timer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--brand-gradient);
+  opacity: 0.55;
+  transform-origin: left center;
+  animation: toast-timer var(--toast-duration) linear forwards;
+  transition: opacity 200ms var(--ease);
+}
+
+.success .timer {
+  background: var(--success-gradient);
+}
+
+.timerPaused {
+  animation-play-state: paused;
+}
+
+/* Styleguide preview: drawn part-way down and held. */
+.timerStill {
+  animation-delay: calc(var(--toast-duration) * -0.38);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(100% + 16px);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    translate: 40px 0;
+  }
+}
+
+@keyframes toast-timer {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes toast-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes toast-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: toasts fade in and out in place, the stack re-lays out
+   without travel, and the draining rule is dropped (the timer still runs
+   and still pauses on hover or focus). */
+@media (prefers-reduced-motion: reduce) {
+  .list {
+    transition: none;
+  }
+
+  .toast {
+    transition:
+      opacity 200ms linear,
+      box-shadow var(--dur) var(--ease);
+    animation: toast-fade 200ms linear both;
+  }
+
+  .leaving {
+    animation: toast-fade-out 200ms linear forwards;
+  }
+
+  .timer {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .region {
+    right: 16px;
+    bottom: 16px;
+  }
+}

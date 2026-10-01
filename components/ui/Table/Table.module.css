@@ -1,0 +1,290 @@
+.wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Glass: the chart data table's contained surface: a nested frosted pane, inset hairline, rounded and clipped so
+   the neutral header row follows the corners. */
+.glass {
+  overflow-x: auto; /* still scrolls on narrow screens; clips to the radius */
+  border-radius: var(--r-flat, var(--table-radius, var(--r-md)));
+  background: var(--glass-fill-nested);
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+/* White inset table inside a glass panel. Radius follows the panel. */
+.white {
+  background: var(--surface-solid);
+  border-radius: var(--r-flat, var(--table-radius, var(--inner-radius, var(--r-lg))));
+  box-shadow: inset 0 0 0 1px var(--line-soft), 0 1px 3px rgba(var(--rgb-contact), 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-small);
+}
+
+.table thead tr {
+  border-bottom: var(--table-head-rule);
+}
+
+/* The neutral sweep is painted per header cell, as in the chart data tables:
+   each column gets its own soft left-to-right gradient. */
+.table thead th {
+  background: var(--table-head-fill);
+}
+
+/* Sentence case, never uppercase, for column headers. */
+.table th {
+  padding: var(--table-head-pad);
+  text-align: left;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--table-head-ink);
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.table td {
+  padding: var(--table-cell-pad);
+  color: var(--ink-body);
+  border-bottom: var(--table-row-line);
+  vertical-align: middle;
+}
+
+.white td {
+  border-bottom-color: var(--line-soft);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr {
+  transition: background-color var(--dur) var(--ease);
+}
+
+.table tbody tr:not(.skeletonRow):hover {
+  background: var(--table-row-hover);
+}
+
+.highlighted {
+  background: var(--wash-subtle);
+}
+
+.table .right {
+  text-align: right;
+}
+
+.table .center {
+  text-align: center;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.table th.sorted {
+  color: var(--ink-brand);
+}
+
+/* A sortable header is the whole cell. The th gives
+   up its padding and the button takes it, filling the cell edge to edge, so
+   hover and press wash the full cell over the neutral sweep and the focus ring
+   is drawn inset, inside the cell's own edges (the wrap clips anything
+   outside). Non-sortable headers keep the same padding, so every label
+   shares one baseline. */
+.table th.sortable {
+  padding: 0;
+  vertical-align: bottom;
+}
+
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: var(--table-head-pad);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  text-align: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.right .sortButton {
+  flex-direction: row-reverse;
+}
+
+.center .sortButton {
+  justify-content: center;
+}
+
+.sortButton:hover {
+  color: var(--ink-brand);
+  background: var(--table-head-hover);
+}
+
+.sortButton:active {
+  background: var(--table-head-press);
+}
+
+.sorted .sortButton:hover {
+  color: var(--brand-deep);
+}
+
+.sortButton:focus-visible {
+  outline: none;
+  background: var(--table-head-hover);
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}
+
+/* The chevron always occupies its slot so labels never shift. */
+.sortIcon {
+  display: inline-flex;
+  opacity: 0.4;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.sortButton:hover .sortIcon {
+  opacity: 0.7;
+}
+
+.sorted .sortIcon {
+  opacity: 0.9;
+}
+
+.slot {
+  padding: 0;
+}
+
+.skeletonRow td {
+  height: var(--table-row-height, 46px);
+}
+
+@media (max-width: 860px) {
+  .hideMd {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .hideSm {
+    display: none;
+  }
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────── */
+
+.pagination {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 16px;
+  padding-top: 14px;
+}
+
+.pagination .summary {
+  grid-column: 1;
+}
+
+.pagination .pages {
+  grid-column: 2;
+}
+
+/* Narrow: the buttons stay centred and the summary drops under them. */
+@media (max-width: 600px) {
+  .pagination {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .pagination .summary {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .pagination .pages {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+.summary {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page,
+.pageNav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--button-radius, var(--r-sm));
+  background: transparent;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.page:hover:not(.pageActive),
+.pageNav:hover:not(:disabled) {
+  background: var(--wash-subtle);
+  color: var(--ink-brand);
+}
+
+.pageActive {
+  background: var(--button-primary-bg, var(--brand-gradient));
+  color: var(--ink-inverse);
+  box-shadow: var(--glow-sm);
+}
+
+.page:focus-visible,
+.pageNav:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.pageNav:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  opacity: 0.6;
+}
+
+.gap {
+  min-width: 20px;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+/* A row-action column: as narrow as its content, so the other columns share
+   the table's full width. */
+.table .shrink {
+  width: 1%;
+  white-space: nowrap;
+}

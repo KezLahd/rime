@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible-demo",
+  "type": "registry:item",
+  "title": "Collapsible examples",
+  "description": "Usage examples for Collapsible.",
+  "files": [
+    {
+      "path": "registry/examples/collapsible.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/collapsible.md",
+      "content": "# Collapsible examples\n\nOne disclosure: a title row with a toggle, an always-visible summary and a region that opens beneath it.\n\n```tsx\nimport { Collapsible } from \"@/components/ui\";\n\n<Collapsible title=\"Jane Cooper starred 3 projects\" summary={<Row>north-office/website</Row>}>\n  <Row>north-office/brand-refresh</Row>\n  <Row>north-office/quarterly-report</Row>\n</Collapsible>\n```\n\n## Open, with a summary\n\n```tsx\n<Collapsible title=\"Jane Cooper starred 3 projects\" summary={<Row>north-office/website</Row>} defaultOpen>\n  …\n</Collapsible>\n```\n\nDocs: https://rime.mjsons.net/components/collapsible\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/collapsible.json"
+  ]
+}

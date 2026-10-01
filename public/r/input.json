@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:item",
+  "title": "input (Rime text-input)",
+  "description": "The shadcn name \"input\": installs Rime's text-input.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/text-input.json"
+  ],
+  "meta": {
+    "aliasOf": "text-input"
+  }
+}

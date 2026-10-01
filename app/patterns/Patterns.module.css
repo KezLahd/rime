@@ -1,0 +1,114 @@
+/* The summary card's cells: one surface, hairlines between, never a bento. */
+
+.cells {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .cells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 18px;
+  border-left: var(--border-w) solid var(--line-soft);
+}
+
+.cell:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* Sentence case, never a small uppercase label over the figure. */
+.cellLabel {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.cellValue {
+  margin: 0;
+  font-size: var(--text-display);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink-heading);
+}
+
+.cellNote {
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.meter {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: var(--border-w) solid var(--line-soft);
+}
+
+/* A pattern at its real width, straight on the page. */
+.preview {
+  min-width: 0;
+}
+
+/* Patterns that are a block of a page (the list, the summary card) sit on
+   the page field with a page gutter, as they would in an app. Full-page
+   patterns (shells, sign-in, dialogs) bleed to the frame edge. */
+.onField {
+  padding: 24px;
+  background: var(--page-background);
+}
+
+.preview > * {
+  width: 100%;
+}
+
+.pair {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.caption {
+  margin-bottom: 8px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* The page the modal sits over: the field, a soft veil, the dialog centred
+   at its own width. */
+.modalField {
+  display: grid;
+  place-items: center;
+  padding: 36px 16px;
+  background: var(--modal-scrim), var(--page-background);
+}
+
+.modalPanel[class] {
+  width: min(100%, var(--modal-width-lg, 880px));
+  max-height: 440px;
+}
+
+.example {
+  margin-top: 0;
+}
+
+.summary {
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.desc {
+  margin-top: 8px;
+  font-size: var(--text-body);
+  line-height: 1.65;
+  color: var(--ink-body);
+}

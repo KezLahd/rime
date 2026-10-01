@@ -1,0 +1,96 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 240px;
+}
+
+.input {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.open {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  box-shadow: var(--field-focus-ring, var(--focus-halo));
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.toggle:hover:not(:disabled),
+.toggle[aria-expanded="true"] {
+  color: var(--ink-brand);
+  background: var(--wash-subtle);
+}
+
+/* Inside the focused box: an inset ring, clear of the box's own edge. */
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--field-focus-border, var(--focus-color));
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+}
+
+.problem {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--danger-ink);
+}
+
+.problem svg {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.popup {
+  position: fixed;
+  z-index: var(--z-popover);
+  padding: 14px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-float);
+  animation: pop-in var(--dur) var(--ease-out);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Inline: the calendar shown open under the field, in flow, for docs and
+   thumbnails. */
+.rootInline {
+  display: inline-flex;
+  max-width: none;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popupInline[class] {
+  position: static;
+  animation: none;
+}

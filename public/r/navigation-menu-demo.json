@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "navigation-menu-demo",
+  "type": "registry:item",
+  "title": "NavigationMenu examples",
+  "description": "Usage examples for NavigationMenu.",
+  "files": [
+    {
+      "path": "registry/examples/navigation-menu.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/navigation-menu.md",
+      "content": "# NavigationMenu examples\n\nTop-level site navigation with frosted dropdown panels of described links, built as disclosure navigation.\n\n```tsx\nimport { NavigationMenu } from \"@/components/ui\";\n\n<NavigationMenu\n  aria-label=\"Main\"\n  items={[\n    { id: \"product\", label: \"Product\", links: [{ href: \"/projects\", title: \"Projects\", description: \"Plan work and track every order.\" }] },\n    { id: \"pricing\", label: \"Pricing\", href: \"/pricing\" },\n  ]}\n/>\n```\n\n## Open panel with a feature block\n\nRendered inline and open, so the panel shows in place.\n\n```tsx\n<NavigationMenu aria-label=\"Main\" items={NAV} inline defaultValue=\"product\" />\n```\n\n## Floating panels\n\nThe default: panels float over the page under their item.\n\n```tsx\n<NavigationMenu aria-label=\"Site\" items={NAV} />\n```\n\nDocs: https://rime.mjsons.net/components/navigation-menu\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/navigation-menu.json"
+  ]
+}

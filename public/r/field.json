@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "type": "registry:item",
+  "title": "TextInput",
+  "description": "The text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal.",
+  "categories": [
+    "forms"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Field/Field.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Field/Field.module.css",
+      "content": ".field {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  min-width: 0;\n}\n\n.fieldset {\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n\n.labelRow {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: 12px;\n}\n\n.label {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 3px;\n  padding: 0;\n  color: var(--ink-secondary);\n}\n\n.sentence {\n  font-size: var(--text-small);\n  font-weight: 700;\n  letter-spacing: -0.003em;\n}\n\n/* the reference auth label: 11.5px / 600 / 0.04em / uppercase. the body face's caps sit\n   lighter than Jakarta's, so this runs at 700. */\n.caps {\n  font-size: 11.5px;\n  font-weight: 700;\n  letter-spacing: 0.05em;\n  text-transform: uppercase;\n}\n\n.required {\n  color: var(--danger-ink);\n  font-weight: 700;\n}\n\n.optional {\n  margin-left: 4px;\n  font-weight: 400;\n  font-size: var(--text-caption);\n  color: var(--ink-muted);\n  text-transform: none;\n  letter-spacing: 0;\n}\n\n.hint {\n  margin-top: -2px;\n  font-size: var(--text-caption);\n  line-height: 1.5;\n  color: var(--ink-muted);\n}\n\n.error {\n  display: flex;\n  align-items: flex-start;\n  gap: 6px;\n  margin-top: 1px;\n  font-size: 12.5px;\n  font-weight: 700;\n  line-height: 1.4;\n  color: var(--danger-ink);\n}\n\n.error svg {\n  margin-top: 1px;\n}\n"
+    },
+    {
+      "path": "components/ui/Field/Field.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Field/Field.tsx",
+      "content": "\"use client\";\n\nimport { createContext, useContext, useId, type ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { IconAlertCircle } from \"../Icon/Icon\";\nimport styles from \"./Field.module.css\";\n\ntype FieldContextValue = {\n  id: string;\n  /** id of the visible label or legend, for popups that need aria-labelledby. */\n  labelId: string;\n  describedBy: string | undefined;\n  invalid: boolean;\n  required: boolean;\n};\n\nconst FieldContext = createContext<FieldContextValue | null>(null);\n\n/** Read by every control, so a control inside a Field needs no id or aria wiring. */\nexport function useField(): FieldContextValue | null {\n  return useContext(FieldContext);\n}\n\n/** Merges a control's own aria-describedby with the Field's hint and error ids. */\nexport function mergeDescribedBy(...ids: Array<string | undefined>): string | undefined {\n  const joined = ids.filter(Boolean).join(\" \");\n  return joined || undefined;\n}\n\nexport type FieldProps = {\n  label: ReactNode;\n  hint?: ReactNode;\n  /** Presence marks the control invalid. Say what to do, not just what is wrong. */\n  error?: ReactNode;\n  required?: boolean;\n  /** Shows \"(optional)\". Use on forms where most fields are required. */\n  optional?: boolean;\n  /** Pass to link a field to an ErrorSummary entry. Generated otherwise. */\n  id?: string;\n  /** fieldset + legend, for RadioGroup, a checkbox list, OtpInput, DateField. */\n  group?: boolean;\n  /** sentence = 13px bold (default, reads well for long labels).\n      caps = the reference 11.5px uppercase micro-label, for short auth/admin forms. */\n  labelStyle?: \"sentence\" | \"caps\";\n  /** Something on the label's right edge, e.g. a \"Forgot password?\" link. */\n  labelAction?: ReactNode;\n  hideLabel?: boolean;\n  className?: string;\n  children: ReactNode;\n};\n\nexport function Field({\n  label,\n  hint,\n  error,\n  required = false,\n  optional,\n  id: idProp,\n  group,\n  labelStyle = \"sentence\",\n  labelAction,\n  hideLabel,\n  className,\n  children,\n}: FieldProps) {\n  const autoId = useId();\n  const id = idProp ?? `field-${autoId}`;\n  const hintId = hint ? `${id}-hint` : undefined;\n  const errorId = error ? `${id}-error` : undefined;\n  const invalid = Boolean(error);\n  const describedBy = mergeDescribedBy(hintId, errorId);\n\n  const labelContent = (\n    <>\n      {label}\n      {required ? (\n        <>\n          <span className={styles.required} aria-hidden=\"true\">\n            *\n          </span>\n          {group ? <span className=\"sr-only\"> (required)</span> : null}\n        </>\n      ) : null}\n      {optional && !required ? <span className={styles.optional}>(optional)</span> : null}\n    </>\n  );\n\n  const labelCls = cx(styles.label, styles[labelStyle], hideLabel && \"sr-only\");\n\n  const meta = (\n    <>\n      {hint ? (\n        <p id={hintId} className={styles.hint}>\n          {hint}\n        </p>\n      ) : null}\n    </>\n  );\n\n  const errorNode = error ? (\n    <p id={errorId} className={styles.error}>\n      <IconAlertCircle size={14} />\n      <span>{error}</span>\n    </p>\n  ) : null;\n\n  const labelId = `${id}-label`;\n  const ctx: FieldContextValue = { id, labelId, describedBy, invalid, required };\n\n  if (group) {\n    return (\n      <FieldContext.Provider value={ctx}>\n        <fieldset data-slot=\"field\"\n          className={cx(styles.field, styles.fieldset, invalid && styles.invalid, className)}\n          aria-describedby={describedBy}\n          id={id}\n        >\n          <div className={styles.labelRow}>\n            <legend id={labelId} className={labelCls}>{labelContent}</legend>\n            {labelAction}\n          </div>\n          {meta}\n          {children}\n          {errorNode}\n        </fieldset>\n      </FieldContext.Provider>\n    );\n  }\n\n  return (\n    <FieldContext.Provider value={ctx}>\n      <div data-slot=\"field\" className={cx(styles.field, invalid && styles.invalid, className)}>\n        <div className={styles.labelRow}>\n          <label id={labelId} htmlFor={id} className={labelCls}>\n            {labelContent}\n          </label>\n          {labelAction}\n        </div>\n        {meta}\n        {children}\n        {errorNode}\n      </div>\n    </FieldContext.Provider>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/icon.json"
+  ],
+  "meta": {
+    "import": "import { Field } from \"@/components/ui/Field/Field\";",
+    "docs": "https://rime.mjsons.net/md/text-input.md",
+    "page": "https://rime.mjsons.net/components/text-input"
+  }
+}

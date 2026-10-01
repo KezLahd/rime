@@ -1,0 +1,125 @@
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.iconButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.sm {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--icon-button-radius, var(--r-xs));
+}
+
+.md {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--icon-button-radius, var(--r-sm));
+}
+
+.lg {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--icon-button-radius, var(--r-md));
+}
+
+/* Ghost: the reference bell / close button. Muted ink, accent on hover. */
+.ghost {
+  color: var(--ink-muted);
+  background: transparent;
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--ink-brand);
+  background: var(--wash-subtle);
+}
+
+.ghost:active:not(:disabled),
+.ghost[aria-pressed="true"] {
+  color: var(--ink-brand);
+  background: var(--wash-active);
+}
+
+.secondary {
+  color: var(--ink-heading);
+  background: rgba(var(--rgb-white), 0.5);
+  -webkit-backdrop-filter: var(--blur-callout);
+  backdrop-filter: var(--blur-callout);
+  box-shadow: inset 0 0 0 1px var(--glass-edge-strong), var(--shadow-specular), 0 1px 3px rgba(var(--rgb-contact), 0.08);
+}
+
+.secondary:hover:not(:disabled) {
+  background: rgba(var(--rgb-white), 0.72);
+  transform: translateY(-1px);
+}
+
+.secondary:active:not(:disabled) {
+  transform: translateY(0);
+  background: rgba(var(--rgb-white), 0.58);
+}
+
+:global([data-surface="solid"]) .secondary {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--shadow-control);
+}
+
+.primary {
+  color: var(--ink-inverse);
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-md), var(--shadow-specular-dark);
+}
+
+.primary:hover:not(:disabled) {
+  box-shadow: var(--glow-md-hover), var(--shadow-specular-dark);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--glow-sm);
+}
+
+.danger {
+  color: var(--danger-ink);
+  background: transparent;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--danger-fill);
+}
+
+.danger:active:not(:disabled) {
+  background: rgba(var(--rgb-danger), 0.14);
+}
+
+.iconButton:disabled:not(.loading) {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.primary:disabled:not(.loading),
+.secondary:disabled:not(.loading) {
+  background: rgba(var(--rgb-brand-deep), 0.06);
+}
+
+.loading {
+  cursor: progress;
+}

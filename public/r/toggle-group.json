@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group",
+  "type": "registry:item",
+  "title": "toggle-group (Rime toggle)",
+  "description": "The shadcn name \"toggle-group\": installs Rime's toggle.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/toggle.json"
+  ],
+  "meta": {
+    "aliasOf": "toggle"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "divider-demo",
+  "type": "registry:item",
+  "title": "Divider examples",
+  "description": "Usage examples for Divider.",
+  "files": [
+    {
+      "path": "registry/examples/divider.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/divider.md",
+      "content": "# Divider examples\n\nA hairline rule, horizontal or vertical, optionally labelled, with spacing steps.\n\n```tsx\nimport { Divider } from \"@/components/ui\";\n\n<Divider spacing=\"sm\" />\n```\n\n## Default and labelled\n\n```tsx\n<Divider />\n<Divider label=\"or\" />\n```\n\nDocs: https://rime.mjsons.net/components/divider\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/divider.json"
+  ]
+}

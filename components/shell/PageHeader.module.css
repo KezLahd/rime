@@ -1,0 +1,87 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: 0 0 6px -6px;
+  padding: 4px 6px;
+  border-radius: var(--r-xs);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-brand);
+  text-decoration: none;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.back:hover {
+  background: var(--wash-subtle);
+  color: var(--brand-deep);
+}
+
+.back:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-page-title);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.1;
+  color: var(--ink-heading);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.description {
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 620px) {
+  .title {
+    font-size: 26px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group-demo",
+  "type": "registry:item",
+  "title": "RadioGroup examples",
+  "description": "Usage examples for RadioGroup.",
+  "files": [
+    {
+      "path": "registry/examples/radio-group.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/radio-group.md",
+      "content": "# RadioGroup examples\n\nOne choice from a few: a list, inline, or cards in 1 to 3 columns.\n\n```tsx\nimport { RadioGroup } from \"@/components/ui\";\n\n<RadioGroup aria-label=\"Billing period\" value={period} onChange={setPeriod} options={[{ value: \"monthly\", label: \"Monthly\" }, { value: \"yearly\", label: \"Yearly\" }]} />\n```\n\n## Cards\n\n```tsx\n<RadioGroup variant=\"cards\" columns={3} value={v} onChange={setV} options={PERIODS} aria-label=\"Billing period\" />\n```\n\nDocs: https://rime.mjsons.net/components/radio-group\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/radio-group.json"
+  ]
+}

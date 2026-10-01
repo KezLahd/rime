@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-input-demo",
+  "type": "registry:item",
+  "title": "TextInput examples",
+  "description": "Usage examples for TextInput.",
+  "files": [
+    {
+      "path": "registry/examples/text-input.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/text-input.md",
+      "content": "# TextInput examples\n\nThe text field: a white box with a tinted edge, a brand halo on focus, adornments and a password reveal.\n\n```tsx\nimport { Field, TextInput } from \"@/components/ui\";\n\n<Field label=\"Email\" hint=\"We send the sign-in link here.\">\n  <TextInput type=\"email\" autoComplete=\"email\" value={email} onChange={(e) => setEmail(e.target.value)} />\n</Field>\n```\n\n## In a Field\n\nLabel, hint and error come from Field; the input reads them from context.\n\n```tsx\n<Field label=\"Project name\" hint=\"Shown to everyone on the team.\">\n  <TextInput placeholder=\"e.g. Atlas redesign\" />\n</Field>\n```\n\n## Adornments and reveal\n\n```tsx\n<TextInput leadingIcon={<IconSearch size={16} />} placeholder=\"Search\" />\n<TextInput trailing=\"kg\" inputMode=\"decimal\" />\n<TextInput type=\"password\" revealable autoComplete=\"current-password\" />\n```\n\n## States\n\n```tsx\n<Field label=\"Postcode\" error=\"Enter a 4-digit postcode.\">\n  <TextInput invalid defaultValue=\"20\" />\n</Field>\n<TextInput readOnly defaultValue=\"INV-1042\" mono />\n<TextInput disabled placeholder=\"Disabled\" />\n<TextInput size=\"sm\" placeholder=\"Small\" />\n```\n\nDocs: https://rime.mjsons.net/components/text-input\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/field.json"
+  ]
+}

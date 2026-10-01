@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-dialog-demo",
+  "type": "registry:item",
+  "title": "AlertDialog examples",
+  "description": "Usage examples for AlertDialog.",
+  "files": [
+    {
+      "path": "registry/examples/alert-dialog.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/alert-dialog.md",
+      "content": "# AlertDialog examples\n\nA short interrupting confirm with Cancel and one action; focus starts on Cancel and the scrim never dismisses it.\n\n```tsx\nimport { AlertDialog } from \"@/components/ui\";\n\n<AlertDialog\n  open={open}\n  tone=\"danger\"\n  title=\"Delete Project Atlas?\"\n  description=\"Its 12 tasks and 48 files are deleted with it.\"\n  actionLabel=\"Delete project\"\n  onCancel={() => setOpen(false)}\n  onAction={remove}\n  busy={pending}\n/>\n```\n\n## Open\n\n```tsx\n<AlertDialog inline open tone=\"danger\" title=\"Delete Project Atlas?\" description=\"…\" actionLabel=\"Delete project\" onCancel={…} onAction={…} />\n```\n\n## Danger, with a busy state\n\n```tsx\n<AlertDialog open={open} tone=\"danger\" … busy={pending} busyLabel=\"Deleting…\" />\n```\n\n## Default tone\n\n```tsx\n<AlertDialog open={open} title=\"Discard this draft?\" actionLabel=\"Discard draft\" cancelLabel=\"Keep editing\" … />\n```\n\nDocs: https://rime.mjsons.net/components/alert-dialog\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/alert-dialog.json"
+  ]
+}

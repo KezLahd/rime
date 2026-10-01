@@ -1,0 +1,8 @@
+/* Dashboard block layout. Every visual comes from the components and tokens. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 24px;
+}

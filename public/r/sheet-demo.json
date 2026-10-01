@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet-demo",
+  "type": "registry:item",
+  "title": "Sheet and Drawer examples",
+  "description": "Usage examples for Sheet and Drawer.",
+  "files": [
+    {
+      "path": "registry/examples/sheet.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/sheet.md",
+      "content": "# Sheet and Drawer examples\n\nA panel that slides in from an edge over a scrim, and a bottom Drawer with a drag handle.\n\n```tsx\nimport { Button, Drawer, Sheet } from \"@/components/ui\";\n\n<Sheet\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Edit team member\"\n  footer={<Button onClick={save}>Save changes</Button>}\n>\n  …fields…\n</Sheet>\n```\n\n## Open\n\nThe panel itself, drawn inline.\n\n```tsx\n<Sheet inline open onClose={close} title=\"Edit team member\" description=\"Changes apply as soon as you save.\" footer={…}>\n  …fields…\n</Sheet>\n```\n\n## From each edge\n\n```tsx\n<Sheet open={open} side=\"left\" onClose={close} title=\"Filters\">…</Sheet>\n```\n\n## Drawer, open\n\n```tsx\n<Drawer inline open onClose={close} title=\"Order ORD-2041\" footer={<Button>Mark as shipped</Button>}>…</Drawer>\n```\n\n## Drawer with drag to close\n\nDrag the handle down to dismiss.\n\n```tsx\n<Drawer open={open} onClose={() => setOpen(false)} title=\"Order ORD-2041\">…</Drawer>\n```\n\nDocs: https://rime.mjsons.net/components/sheet\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/sheet.json"
+  ]
+}

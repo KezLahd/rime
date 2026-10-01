@@ -1,0 +1,57 @@
+/* A deep-tinted shape with a slow light sweep, rather than a grey pulse:
+   on the tinted page a neutral grey reads as dirt. */
+.skeleton {
+  display: block;
+  flex-shrink: 0;
+  background:
+    linear-gradient(
+      100deg,
+      transparent 20%,
+      rgba(var(--rgb-white), 0.55) 45%,
+      rgba(var(--rgb-white), 0.55) 55%,
+      transparent 80%
+    ),
+    rgba(var(--rgb-brand-deep), 0.075);
+  background-size: 220% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 120% 0, 0 0;
+  animation: sweep 1.6s var(--ease) infinite;
+}
+
+.block {
+  border-radius: var(--r-xs);
+}
+
+.text {
+  border-radius: var(--r-2xs);
+}
+
+.circle {
+  border-radius: var(--r-circle, 50%);
+}
+
+/* A caller-set radius (the radius prop) arrives as --skeleton-radius, not an
+   inline border-radius, so a brand layer that sets --r-flat (the public
+   layer: 0) can still square it. Declared after the variants so it wins. */
+.custom {
+  border-radius: var(--r-flat, var(--skeleton-radius));
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+}
+
+@keyframes sweep {
+  to {
+    background-position: -120% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

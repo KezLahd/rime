@@ -1,0 +1,187 @@
+/* Navigation menu: a row of quiet top-level items; a frosted popover panel
+   of described links drops beneath the open one. inline puts the panel in
+   normal flow under the bar (docs and previews). */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slot {
+  position: relative;
+}
+
+.inline .slot {
+  position: static;
+}
+
+.top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--control-h-sm);
+  padding: 0 calc(12px * var(--density));
+  border: 0;
+  border-radius: var(--navmenu-item-radius, var(--r-sm));
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.top:hover,
+.top[aria-expanded="true"] {
+  background: var(--wash-subtle);
+  color: var(--ink-brand);
+}
+
+.top:active {
+  background: var(--wash-active);
+}
+
+.top[aria-current="page"] {
+  color: var(--ink-brand);
+}
+
+.top:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.chevron {
+  color: var(--ink-muted);
+  transition: transform var(--dur) var(--ease);
+}
+
+.top[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+  color: inherit;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: var(--z-popover);
+  display: grid;
+  gap: 8px;
+  width: max-content;
+  max-width: min(var(--navmenu-panel-max, 600px), calc(100vw - 32px));
+  padding: 8px;
+  border-radius: var(--navmenu-radius, var(--r-lg));
+  background: var(--popover-surface);
+  -webkit-backdrop-filter: var(--popover-blur);
+  backdrop-filter: var(--popover-blur);
+  border: var(--border-w) solid var(--popover-border);
+  box-shadow: var(--popover-shadow);
+  animation: pop-in var(--dur-slow) var(--ease-out);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.inline .panel {
+  position: relative;
+  top: auto;
+  margin-top: 8px;
+  animation: none;
+}
+
+.withFeature {
+  grid-template-columns: minmax(160px, 200px) minmax(0, 1fr);
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--r-sm);
+  background: var(--brand-gradient-soft);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-body);
+  font-size: var(--text-small);
+}
+
+.links {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: var(--navmenu-link-width, 230px);
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.link:hover {
+  background: var(--wash-hover);
+  color: inherit;
+}
+
+.link:active {
+  background: var(--wash-active);
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.link[aria-current="page"] .linkTitle {
+  color: var(--ink-brand);
+}
+
+.linkTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.linkIcon {
+  display: inline-flex;
+  color: var(--ink-muted);
+}
+
+.linkDescription {
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 640px) {
+  .withFeature {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

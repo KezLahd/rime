@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chart-demo",
+  "type": "registry:item",
+  "title": "Chart examples",
+  "description": "Usage examples for Chart.",
+  "files": [
+    {
+      "path": "registry/examples/chart.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/chart.md",
+      "content": "# Chart examples\n\nThemed charts on Recharts: line, area, bar and donut in one frame with a table view, plus sparklines and a stat strip.\n\n```tsx\nimport { AreaChart, BarChart, ChartContainer, ChartTooltip, ChartTooltipContent, DonutChart, LineChart, Sparkline, StatStrip, type ChartConfig } from \"@/components/charts\";\n\n<LineChart\n  title=\"Orders per month\"\n  summary=\"Online orders rose from 182 in January to 344 in August.\"\n  data={rows}\n  x=\"month\"\n  series={[{ key: \"online\", label: \"Online\" }]}\n/>\n```\n\n## Area, two series\n\n```tsx\n<AreaChart\n  title=\"Orders per month\"\n  summary=\"Online orders rose every month, from 182 to 344.\"\n  data={ORDERS}\n  x=\"month\"\n  series={[{ key: \"online\", label: \"Online\" }, { key: \"retail\", label: \"Retail\" }]}\n  formatX={formatMonthTick}\n  formatXLong={formatMonth}\n/>\n```\n\n## Line with a reference\n\n```tsx\n<LineChart title=\"Online orders\" summary=\"…\" data={ORDERS} x=\"month\" series={[{ key: \"online\", label: \"Online\" }]} reference={{ value: 300, label: \"Target\" }} />\n```\n\n## Bars, labelled\n\n```tsx\n<BarChart title=\"Revenue by region\" summary=\"North leads with 48,200.\" data={REVENUE} category=\"region\" series={[{ key: \"revenue\", label: \"Revenue\" }]} orientation=\"bars\" valueLabels />\n```\n\n## Donut\n\n```tsx\n<DonutChart title=\"Projects by status\" summary=\"Of 40 projects, 22 are on track.\" centreLabel=\"Projects\" data={STATUS_SPLIT} />\n```\n\n## Stat strip with sparklines\n\n```tsx\n<StatStrip aria-label=\"This month\" stats={[{ label: \"Orders\", value: 505, delta: { value: 32, period: \"vs last month\" }, trend: [302, 323, 362, 375, 416, 453, 471, 505] }]} />\n```\n\n## The shadcn primitives\n\nChartContainer with a ChartConfig, Recharts marks reading var(--color-<key>), and ChartTooltipContent. See /charts for every tooltip variant.\n\n```tsx\nconst chartConfig = {\n  online: { label: \"Online\", color: \"var(--chart-1)\" },\n  retail: { label: \"Retail\", color: \"var(--chart-3)\" },\n} satisfies ChartConfig;\n\n<ChartContainer config={chartConfig} style={{ aspectRatio: \"auto\", height: 220 }}>\n  <BarChart accessibilityLayer data={rows}>\n    <CartesianGrid vertical={false} />\n    <XAxis dataKey=\"month\" tickLine={false} axisLine={false} />\n    <ChartTooltip {...TOOLTIP_MOTION} content={<ChartTooltipContent indicator=\"dot\" />} />\n    <Bar dataKey=\"online\" fill=\"var(--color-online)\" radius={4} />\n    <Bar dataKey=\"retail\" fill=\"var(--color-retail)\" radius={4} />\n  </BarChart>\n</ChartContainer>\n```\n\nDocs: https://rime.mjsons.net/components/chart\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/charts.json"
+  ]
+}

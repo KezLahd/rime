@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "error-summary-demo",
+  "type": "registry:item",
+  "title": "ErrorSummary examples",
+  "description": "Usage examples for ErrorSummary.",
+  "files": [
+    {
+      "path": "registry/examples/error-summary.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/error-summary.md",
+      "content": "# ErrorSummary examples\n\nThe list of form errors at the top of a form, focused on submit, each linking to its field.\n\n```tsx\nimport { ErrorSummary } from \"@/components/ui\";\n\n<ErrorSummary errors={[{ id: \"email\", message: \"Enter an email address\" }]} focusKey={submitCount} />\n```\n\n## Default\n\n```tsx\n<ErrorSummary errors={errors} focusKey={attempt} />\n```\n\nDocs: https://rime.mjsons.net/components/error-summary\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/error-summary.json"
+  ]
+}

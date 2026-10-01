@@ -1,0 +1,120 @@
+/* Padding and radius are tokens (--card-pad-sm|md|lg, --card-radius). The
+   card publishes --card-pad to its children and --inner-radius (its radius
+   minus its padding, floored at --r-2xs) so anything flush inside it can be
+   concentric. */
+.card {
+  position: relative;
+  border-radius: var(--card-radius, var(--r-xl));
+  overflow: hidden;
+  isolation: isolate;
+  --inner-radius: max(var(--r-2xs), calc(var(--card-radius, var(--r-xl)) - var(--card-pad)));
+}
+
+.pad_sm {
+  --card-pad: var(--card-pad-sm, calc(14px * var(--density)));
+}
+
+.pad_md {
+  --card-pad: var(--card-pad-md, calc(20px * var(--density)));
+}
+
+.pad_lg {
+  --card-pad: var(--card-pad-lg, calc(24px * var(--density)));
+}
+
+/* the reference white admin card: deep hairline, near-flat contact shadow. */
+.default {
+  background: var(--card-bg, var(--surface-solid));
+  border: var(--border-w) solid var(--card-border, var(--line));
+  box-shadow: var(--card-shadow, var(--shadow-hairline-card));
+}
+
+.default .header {
+  background: var(--card-header-bg, linear-gradient(to right, var(--surface-sunken), var(--surface-sunken-2)));
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* The one block on a screen that needs the user's action. It stands out by
+   being lifted, not tinted. Solid white, a crisp accent hairline, a soft
+   two-layer lift, and light only at the top: a faint brand rule that fades
+   before the corners over a very soft bloom glow. Against the default card
+   (white, hairline, near-flat) it is the lift and the top light; against
+   glass, the solid white. */
+.highlight {
+  background: var(--highlight-glow), var(--surface-solid);
+  border: 1px solid var(--highlight-line);
+  box-shadow: var(--shadow-lift);
+}
+
+.highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--highlight-edge);
+  pointer-events: none;
+}
+
+.muted {
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: calc(var(--card-pad) - 4px) var(--card-pad);
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-body);
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-heading);
+}
+
+.description {
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.body {
+  padding: var(--card-pad);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px var(--card-pad);
+  border-top: 1px solid var(--line-soft);
+}
+
+.highlight .footer {
+  border-top-color: var(--line-soft);
+}
+
+.muted .footer {
+  border-top-color: var(--line-glass);
+}

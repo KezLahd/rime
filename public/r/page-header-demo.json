@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header-demo",
+  "type": "registry:item",
+  "title": "PageHeader examples",
+  "description": "Usage examples for PageHeader.",
+  "files": [
+    {
+      "path": "registry/examples/page-header.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/page-header.md",
+      "content": "# PageHeader examples\n\nA page's h1 with a back link, a meta line, a description and actions.\n\n```tsx\nimport { PageHeader } from \"@/components/shell/PageHeader\";\n\n<PageHeader title=\"Atlas redesign\" back={{ href: \"/projects\", label: \"Projects\" }} actions={<Button variant=\"secondary\">Share</Button>} />\n```\n\n## Back link, meta and actions\n\n```tsx\n<PageHeader\n  title=\"Atlas redesign\"\n  description=\"Started 12 Oct 2026 · 4 members\"\n  back={{ href: \"/projects\", label: \"Projects\" }}\n  meta={<StatusPill tone=\"success\">Active</StatusPill>}\n  actions={<Button variant=\"secondary\">Share</Button>}\n/>\n```\n\nDocs: https://rime.mjsons.net/components/page-header\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/page-header.json"
+  ]
+}

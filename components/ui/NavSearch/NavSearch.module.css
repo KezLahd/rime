@@ -1,0 +1,294 @@
+/* the reference nav-search , recoloured.
+   Closed, the bar is chrome: white frosted glass over the frame gradient,
+   the same material as the top bar it sits in, with a lit edge and the
+   tinted chrome shadow. Open, it whitens and squares its lower corners, and
+   a solid white results panel attaches flush beneath it, so bar and panel
+   read as one sheet. */
+
+.root {
+  position: relative;
+  max-width: 100%;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 8px 0 14px;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill-chrome);
+  -webkit-backdrop-filter: var(--blur-chrome);
+  backdrop-filter: var(--blur-chrome);
+  box-shadow:
+    var(--shadow-chrome),
+    inset 0 0 0 1px var(--glass-edge);
+  color: var(--ink-muted);
+  cursor: text;
+  transition:
+    background-color var(--dur) ease,
+    border-radius var(--dur) ease,
+    box-shadow var(--dur) ease,
+    color var(--dur) ease;
+}
+
+.bar:hover {
+  background: rgba(var(--rgb-white), 0.58);
+}
+
+/* Focused but closed (after Esc): the halo shows where focus is. */
+.bar:focus-within {
+  color: var(--ink-brand);
+  background: rgba(var(--rgb-white), 0.78);
+  box-shadow:
+    var(--shadow-chrome),
+    inset 0 0 0 1px var(--line-brand-strong),
+    var(--focus-halo);
+}
+
+.barOpen,
+.barOpen:hover,
+.barOpen:focus-within {
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: rgba(var(--rgb-white), 0.96);
+  box-shadow:
+    var(--shadow-chrome-open),
+    inset 0 -1px 0 var(--line-brand);
+  color: var(--ink-brand);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--ink-body);
+}
+
+/* The bar draws focus (.bar:focus-within). (0,2,0) drops globals.css's
+   :focus-visible outline in any load order. */
+.input:focus-visible {
+  outline: none;
+}
+
+/* Muted ink holds 5.2:1 on worst-case chrome glass; placeholder ink doesn't. */
+.input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+  font-weight: 400;
+}
+
+/* The key hint: a small raised key, the reference esc badge. */
+.kbd {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: var(--r-2xs);
+  background: rgba(var(--rgb-white), 0.8);
+  box-shadow:
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.14),
+    0 0 0 1px rgba(var(--rgb-brand-deep), 0.1);
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* ── Results panel ──────────────────────────────────────────────────────── */
+
+.panel {
+  position: fixed;
+  z-index: var(--z-popover);
+  display: flex;
+  flex-direction: column;
+  max-height: min(440px, calc(100vh - 96px));
+  overflow: hidden;
+  background: var(--surface-solid);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  box-shadow: 0 12px 40px rgba(var(--rgb-brand-deep), 0.18), 0 0 0 1px rgba(var(--rgb-brand-deep), 0.05);
+  animation: drop var(--dur) var(--ease-out);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 0;
+}
+
+.group + .group {
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.groupLabel {
+  padding: 8px 14px 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  color: var(--ink-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) ease;
+}
+
+.optionActive {
+  background: var(--brand-gradient-soft);
+}
+
+/* Icon tile: a pale wash at rest, the brand gradient with a white icon when
+   highlighted. the reference secondary-nav tile. */
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: var(--wash-subtle);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-brand);
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+}
+
+.optionActive .tile {
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-sm);
+  color: var(--ink-inverse);
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.go {
+  flex-shrink: 0;
+  color: var(--ink-brand);
+  opacity: 0;
+  transform: translateX(-3px);
+  transition:
+    opacity var(--dur-fast) ease,
+    transform var(--dur-fast) ease;
+}
+
+.optionActive .go {
+  opacity: 1;
+  transform: none;
+}
+
+.match {
+  padding: 0 1px;
+  margin: 0 -1px;
+  border-radius: 2px;
+  background: var(--wash-strong);
+  color: inherit;
+}
+
+.empty {
+  padding: 22px 18px 20px;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-body);
+  overflow-wrap: anywhere;
+}
+
+.emptyHint {
+  margin-top: 4px;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line-soft);
+  background: linear-gradient(var(--wash-row), var(--wash-row)), var(--surface-solid);
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+.footKey {
+  display: inline-block;
+  min-width: 18px;
+  margin-right: 3px;
+  padding: 0 4px;
+  border-radius: var(--r-2xs);
+  background: var(--surface-solid);
+  box-shadow:
+    inset 0 -1px 0 rgba(var(--rgb-brand-deep), 0.14),
+    0 0 0 1px rgba(var(--rgb-brand-deep), 0.1);
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  color: var(--ink-secondary);
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Inline: the results shown open under the bar, in flow, for docs and
+   thumbnails. */
+.panelInline[class] {
+  position: static;
+  width: 100%;
+  max-height: none;
+  animation: none;
+}

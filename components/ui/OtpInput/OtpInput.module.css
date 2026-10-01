@@ -1,0 +1,76 @@
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cell {
+  width: 46px;
+  height: 56px;
+  padding: 0;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--line-input);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-input);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink-heading);
+  caret-color: var(--brand);
+  outline: none;
+  transition:
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.cell:hover:not(:disabled) {
+  border-color: var(--field-hover-border, rgba(var(--rgb-brand-deep), 0.3));
+}
+
+.filled {
+  border-color: rgba(var(--rgb-brand), 0.4);
+}
+
+/* Each cell is its own whole field, so it carries the focus edge itself.
+   (0,2,0) drops globals.css's :focus-visible outline in any load order. */
+.cell:focus-visible {
+  outline: none;
+}
+
+.cell:focus {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.75));
+  box-shadow: var(--field-focus-ring, var(--focus-halo));
+}
+
+.invalid,
+.invalid:hover:not(:disabled) {
+  background: rgba(var(--rgb-danger), 0.05);
+  border-color: rgba(var(--rgb-danger), 0.7);
+  box-shadow: none;
+}
+
+.invalid:focus {
+  border-color: var(--danger-base);
+  box-shadow: var(--field-focus-ring-invalid, 0 0 0 4px rgba(var(--rgb-danger), 0.14));
+}
+
+.cell:disabled {
+  cursor: not-allowed;
+  background: var(--surface-sunken);
+  color: var(--ink-disabled);
+  box-shadow: none;
+}
+
+@media (max-width: 380px) {
+  .row {
+    gap: 6px;
+  }
+
+  .cell {
+    width: 40px;
+    height: 50px;
+    font-size: 21px;
+  }
+}

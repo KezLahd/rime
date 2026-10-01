@@ -1,0 +1,137 @@
+/* A recessed track, the accent gradient for the chosen span, and a solid
+   thumb with a hairline ring. Focus draws the system ring round the thumb. */
+.slider {
+  --slider-thumb: var(--slider-thumb-size, 18px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 200px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.value {
+  font-size: var(--text-small);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-heading);
+}
+
+/* The hit area is taller than the track so it is easy to grab. */
+.hit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: calc(var(--slider-thumb) + 8px);
+  margin: 0 calc(var(--slider-thumb) / 2);
+  touch-action: none;
+  cursor: pointer;
+}
+
+.track {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--slider-thumb) / -2);
+  right: calc(var(--slider-thumb) / -2);
+  height: var(--slider-track-h, 6px);
+  transform: translateY(-50%);
+  border-radius: var(--r-full);
+  background: var(--slider-track-bg, var(--recess-fill-hover));
+  box-shadow: inset 0 1px 2px rgba(var(--rgb-contact), 0.12);
+}
+
+.fill {
+  position: absolute;
+  top: 50%;
+  height: var(--slider-track-h, 6px);
+  transform: translateY(-50%);
+  border-radius: var(--r-full);
+  background: var(--slider-fill, var(--brand-gradient));
+  pointer-events: none;
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: var(--slider-thumb);
+  height: var(--slider-thumb);
+  margin-left: calc(var(--slider-thumb) / -2);
+  margin-top: calc(var(--slider-thumb) / -2);
+  border-radius: var(--r-full);
+  background: var(--slider-thumb-bg, var(--surface-solid));
+  box-shadow:
+    inset 0 0 0 2px var(--brand),
+    0 1px 4px rgba(var(--rgb-contact), 0.18);
+  cursor: grab;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.thumb:active {
+  cursor: grabbing;
+}
+
+.thumb:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 2px var(--brand),
+    var(--focus-ring);
+}
+
+.marks {
+  position: relative;
+  height: 18px;
+  margin: -2px calc(var(--slider-thumb) / 2) 0;
+}
+
+.mark {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transform: translateX(-50%);
+}
+
+.tick {
+  width: 1px;
+  height: 5px;
+  background: var(--line-input);
+}
+
+.markLabel {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.disabled .hit {
+  cursor: not-allowed;
+}
+
+.disabled .fill {
+  background: var(--ink-disabled);
+}
+
+.disabled .thumb {
+  cursor: not-allowed;
+  box-shadow: inset 0 0 0 2px var(--ink-disabled);
+}
+
+.disabled .label,
+.disabled .value {
+  color: var(--ink-disabled);
+}

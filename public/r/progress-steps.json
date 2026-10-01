@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-steps",
+  "type": "registry:item",
+  "title": "ProgressSteps",
+  "description": "A horizontal track of steps with detail and meta lines, or a compact dot track for table cells.",
+  "categories": [
+    "datadisplay"
+  ],
+  "files": [
+    {
+      "path": "components/ui/ProgressSteps/ProgressSteps.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/ProgressSteps/ProgressSteps.module.css",
+      "content": ".root {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n}\n\n.list {\n  display: grid;\n  grid-auto-flow: column;\n  grid-auto-columns: minmax(0, 1fr);\n  gap: 6px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.step {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  min-width: 0;\n}\n\n.segment {\n  display: block;\n  height: 6px;\n  border-radius: var(--r-flat, 3px);\n  background: rgba(var(--rgb-brand-deep), 0.08);\n  box-shadow: inset 0 1px 1px rgba(var(--rgb-contact), 0.12);\n}\n\n.compact .segment {\n  height: 5px;\n}\n\n.done .segment {\n  background: var(--brand-gradient);\n  box-shadow: 0 1px 3px rgba(var(--rgb-brand), 0.3);\n}\n\n/* In flight: the gradient at half strength, with a solid accent leading edge\n   to say \"this one is moving\". */\n.current .segment {\n  background:\n    linear-gradient(90deg, rgba(var(--rgb-brand), 0.55) 0 55%, rgba(var(--rgb-brand-deep), 0.08) 55%);\n  box-shadow: inset 0 0 0 1px rgba(var(--rgb-brand), 0.35);\n}\n\n.issue .segment {\n  background: var(--danger-base);\n  box-shadow: 0 1px 3px rgba(var(--rgb-danger), 0.35);\n}\n\n.text {\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n}\n\n.label {\n  font-size: var(--text-caption);\n  font-weight: 700;\n  color: var(--ink-secondary);\n}\n\n.current .label {\n  color: var(--ink-brand);\n}\n\n.issue .label {\n  color: var(--danger-ink);\n}\n\n.upcoming .label {\n  font-weight: 400;\n  color: var(--ink-muted);\n}\n\n.detail {\n  font-size: var(--text-caption);\n  color: var(--ink-muted);\n}\n\n.meta {\n  font-size: var(--text-micro);\n  font-variant-numeric: tabular-nums;\n  color: var(--ink-muted);\n}\n\n.caption {\n  font-size: var(--text-caption);\n  color: var(--ink-muted);\n}\n"
+    },
+    {
+      "path": "components/ui/ProgressSteps/ProgressSteps.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/ProgressSteps/ProgressSteps.tsx",
+      "content": "import type { ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./ProgressSteps.module.css\";\n\nexport type ProgressStepState = \"done\" | \"current\" | \"upcoming\" | \"issue\";\n\nexport type ProgressStep = {\n  label: ReactNode;\n  /** e.g. \"2 items · express\". */\n  detail?: ReactNode;\n  /** Shown under the detail in full mode, e.g. \"Delivered 12 Oct\" or \"Due 9 Nov\". */\n  meta?: ReactNode;\n  state: ProgressStepState;\n};\n\nexport type ProgressStepsProps = {\n  steps: ReadonlyArray<ProgressStep>;\n  \"aria-label\"?: string;\n  /** compact = segments plus a one-line caption, for customer cards. */\n  compact?: boolean;\n  /** Compact caption, e.g. \"Delivery 2 of 3 dispatched\". Required in compact mode for meaning. */\n  caption?: ReactNode;\n  className?: string;\n};\n\nconst STATE_TEXT: Record<ProgressStepState, string> = {\n  done: \"done\",\n  current: \"in progress\",\n  upcoming: \"not yet\",\n  issue: \"needs attention\",\n};\n\n/**\n * The three program deliveries (2 + 1 + 1 pens) as segments. Unlike Meter,\n * each segment has its own state, so an in-flight or failed delivery shows\n * where it sits in the sequence.\n */\nexport function ProgressSteps({ steps, \"aria-label\": ariaLabel = \"Delivery progress\", compact, caption, className }: ProgressStepsProps) {\n  return (\n    <div data-slot=\"progress-steps\" className={cx(styles.root, compact && styles.compact, className)}>\n      <ol className={styles.list} aria-label={ariaLabel}>\n        {steps.map((step, i) => (\n          <li key={i} className={cx(styles.step, styles[step.state])}>\n            <span className={styles.segment} aria-hidden=\"true\" />\n            {compact ? (\n              <span className=\"sr-only\">\n                {step.label}: {STATE_TEXT[step.state]}\n              </span>\n            ) : (\n              <span className={styles.text}>\n                <span className={styles.label}>\n                  {step.label}\n                  <span className=\"sr-only\">, {STATE_TEXT[step.state]}</span>\n                </span>\n                {step.detail ? <span className={styles.detail}>{step.detail}</span> : null}\n                {step.meta ? <span className={styles.meta}>{step.meta}</span> : null}\n              </span>\n            )}\n          </li>\n        ))}\n      </ol>\n      {compact && caption ? (\n        <p className={styles.caption} aria-hidden=\"true\">\n          {caption}\n        </p>\n      ) : null}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { ProgressSteps } from \"@/components/ui/ProgressSteps/ProgressSteps\";",
+    "docs": "https://rime.mjsons.net/md/progress-steps.md",
+    "page": "https://rime.mjsons.net/components/progress-steps"
+  }
+}

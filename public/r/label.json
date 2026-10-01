@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "type": "registry:item",
+  "title": "Label",
+  "description": "A standalone form label with required and optional markers, for controls outside a Field.",
+  "categories": [
+    "forms"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Label/Label.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Label/Label.module.css",
+      "content": ".label {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 3px;\n  color: var(--label-ink, var(--ink-secondary));\n  cursor: default;\n}\n\n.sentence {\n  font-size: var(--label-size, var(--text-small));\n  font-weight: 700;\n  letter-spacing: -0.003em;\n}\n\n.caps {\n  font-size: 11.5px;\n  font-weight: 700;\n  letter-spacing: 0.05em;\n  text-transform: uppercase;\n}\n\n.required {\n  color: var(--danger-ink);\n  font-weight: 700;\n}\n\n.optional {\n  margin-left: 4px;\n  font-size: var(--text-caption);\n  font-weight: 400;\n  letter-spacing: 0;\n  text-transform: none;\n  color: var(--ink-muted);\n}\n\n.disabled {\n  color: var(--ink-disabled);\n}\n"
+    },
+    {
+      "path": "components/ui/Label/Label.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Label/Label.tsx",
+      "content": "import type { LabelHTMLAttributes, ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./Label.module.css\";\n\nexport type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {\n  children: ReactNode;\n  /** Adds a red asterisk after the text. Pair it with required on the control. */\n  required?: boolean;\n  /** Adds a muted \"(optional)\" after the text. Use it when most fields are required. */\n  optional?: boolean;\n  /** Dims the label to match a disabled control. */\n  disabled?: boolean;\n  /** sentence = 13px bold (default). caps = the compact uppercase micro-label. */\n  labelStyle?: \"sentence\" | \"caps\";\n};\n\n/**\n * A standalone form label, for controls that are not inside a Field (a\n * Switch row, a Slider, a custom group). Field renders its own label, so\n * reach for this only when Field does not fit.\n */\nexport function Label({ children, required, optional, disabled, labelStyle = \"sentence\", className, ...rest }: LabelProps) {\n  return (\n    <label data-slot=\"label\" className={cx(styles.label, styles[labelStyle], disabled && styles.disabled, className)} {...rest}>\n      {children}\n      {required ? (\n        <span className={styles.required} aria-hidden=\"true\">\n          *\n        </span>\n      ) : null}\n      {optional && !required ? <span className={styles.optional}>(optional)</span> : null}\n    </label>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Label } from \"@/components/ui/Label/Label\";",
+    "docs": "https://rime.mjsons.net/md/label.md",
+    "page": "https://rime.mjsons.net/components/label"
+  }
+}

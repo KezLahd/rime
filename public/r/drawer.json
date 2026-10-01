@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer",
+  "type": "registry:item",
+  "title": "drawer (Rime sheet)",
+  "description": "The shadcn name \"drawer\": installs Rime's sheet.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/sheet.json"
+  ],
+  "meta": {
+    "aliasOf": "sheet"
+  }
+}

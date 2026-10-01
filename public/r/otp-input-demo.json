@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "otp-input-demo",
+  "type": "registry:item",
+  "title": "OtpInput examples",
+  "description": "Usage examples for OtpInput.",
+  "files": [
+    {
+      "path": "registry/examples/otp-input.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/otp-input.md",
+      "content": "# OtpInput examples\n\nA six-cell one-time code entry with paste, auto-advance and onComplete.\n\n```tsx\nimport { OtpInput } from \"@/components/ui\";\n\n<OtpInput aria-label=\"Authenticator code\" value={code} onChange={setCode} onComplete={verify} />\n```\n\n## Default\n\n```tsx\n<OtpInput value={code} onChange={setCode} aria-label=\"Authenticator code\" />\n```\n\nDocs: https://rime.mjsons.net/components/otp-input\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/otp-input.json"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth-mfa-setup",
+  "type": "registry:item",
+  "title": "Set up an authenticator",
+  "description": "Scan a QR code or type the key, then confirm with the first code.",
+  "categories": [
+    "blocks",
+    "auth"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/auth-mfa-setup/Auth.module.css",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-mfa-setup/Auth.module.css",
+      "content": "/* Auth block layout. Visuals come from AuthLayout, AuthCard and the tokens. */\n\n.frame {\n  width: 100%;\n  height: 100%;\n}\n\n.mark {\n  display: inline-flex;\n  align-items: center;\n  gap: 9px;\n  font-family: var(--font-display);\n  font-size: 18px;\n  font-weight: 700;\n  letter-spacing: var(--tracking-display);\n  color: inherit;\n}\n\n.glyph {\n  display: inline-grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  border-radius: var(--r-sm);\n  background: var(--brand-gradient);\n  box-shadow: var(--glow-sm);\n  font-size: 14px;\n  color: var(--ink-inverse);\n}\n\n.help {\n  font-size: var(--text-small);\n  font-weight: 700;\n  color: inherit;\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.otp {\n  display: flex;\n  justify-content: center;\n}\n\n.alt {\n  font-size: var(--text-small);\n  color: var(--ink-muted);\n  text-align: center;\n}\n\n.link {\n  padding: 0;\n  border: 0;\n  background: none;\n  font-weight: 700;\n  color: var(--ink-brand);\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.link:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n  border-radius: var(--r-2xs);\n}\n\n.setup {\n  display: grid;\n  grid-template-columns: 148px minmax(0, 1fr);\n  gap: 18px;\n  align-items: center;\n}\n\n@media (max-width: 480px) {\n  .setup {\n    grid-template-columns: minmax(0, 1fr);\n    justify-items: center;\n  }\n}\n\n.qr {\n  display: block;\n  width: 148px;\n  height: 148px;\n  border-radius: var(--r-md);\n  box-shadow: inset 0 0 0 1px var(--line);\n}\n\n.steps {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  font-size: var(--text-small);\n  color: var(--ink-body);\n}\n\n.secret {\n  align-self: flex-start;\n  padding: 6px 10px;\n  border-radius: var(--r-sm);\n  background: var(--surface-sunken);\n  box-shadow: inset 0 0 0 1px var(--line);\n  font-family: var(--font-mono);\n  font-size: 13px;\n  letter-spacing: 0.08em;\n  color: var(--ink-heading);\n}\n\n.row {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 12px;\n}\n\n@media (max-width: 480px) {\n  .row {\n    grid-template-columns: minmax(0, 1fr);\n  }\n}\n\n.between {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n"
+    },
+    {
+      "path": "components/blocks/auth-mfa-setup/index.tsx",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-mfa-setup/index.tsx",
+      "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport { AuthCard, AuthLayout } from \"@/components/shell/AuthCard\";\nimport { Button } from \"@/components/ui/Button/Button\";\nimport { IconShield } from \"@/components/ui/Icon/Icon\";\nimport { OtpInput } from \"@/components/ui/OtpInput/OtpInput\";\nimport styles from \"./Auth.module.css\";\n\nexport type AuthMfaSetupProps = {\n  /** Fill the parent instead of the viewport. */\n  contained?: boolean;\n};\n\n/** A stand-in QR code: a fixed pattern, never scannable. Render your otpauth:// URL with a QR library. */\nfunction QrPlaceholder() {\n  const n = 21;\n  const cells: Array<[number, number]> = [];\n  for (let y = 0; y < n; y++)\n    for (let x = 0; x < n; x++) {\n      const finder = (x < 7 && y < 7) || (x >= n - 7 && y < 7) || (x < 7 && y >= n - 7);\n      if (finder) {\n        const fx = x >= n - 7 ? x - (n - 7) : x;\n        const fy = y >= n - 7 ? y - (n - 7) : y;\n        if (fx === 0 || fx === 6 || fy === 0 || fy === 6 || (fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4)) cells.push([x, y]);\n      } else if ((x * 7 + y * 13 + x * y) % 5 < 2) cells.push([x, y]);\n    }\n  return (\n    <svg viewBox={`-2 -2 ${n + 4} ${n + 4}`} className={styles.qr} role=\"img\" aria-label=\"QR code for your authenticator app\">\n      <rect x=\"-2\" y=\"-2\" width={n + 4} height={n + 4} fill=\"#ffffff\" />\n      {cells.map(([x, y]) => (\n        <rect key={`${x}-${y}`} x={x} y={y} width=\"1\" height=\"1\" fill=\"#14161d\" />\n      ))}\n    </svg>\n  );\n}\n\n/**\n * Turn on two-step sign-in: scan a TOTP QR code (or type the key), then\n * confirm with the first code. Drop it at app/security/mfa.\n */\nexport default function AuthMfaSetup({ contained }: AuthMfaSetupProps) {\n  const [code, setCode] = useState(\"\");\n  return (\n    <div className={contained ? styles.frame : undefined}>\n      <AuthLayout\n        contained={contained}\n        header={\n          <span className={styles.mark}>\n            <span className={styles.glyph} aria-hidden=\"true\">\n              A\n            </span>\n            Acme\n          </span>\n        }\n        footer={\n          <>\n            <IconShield size={14} />\n            Protected by multi-factor authentication.\n          </>\n        }\n      >\n        <AuthCard width=\"md\" icon={<IconShield size={22} />} title=\"Set up your authenticator\" subtitle=\"Scan the code with an authenticator app, then enter the 6-digit code it shows.\">\n          <div className={styles.setup}>\n            <QrPlaceholder />\n            <div className={styles.steps}>\n              <p>\n                <strong>1.</strong> Install an authenticator app on your phone.\n              </p>\n              <p>\n                <strong>2.</strong> Scan the QR code, or enter this key:\n              </p>\n              <code className={styles.secret}>JBSW Y3DP EHPK 3PXP</code>\n              <p>\n                <strong>3.</strong> Enter the code from the app.\n              </p>\n            </div>\n          </div>\n          <div className={styles.otp}>\n            <OtpInput aria-label=\"Code from your authenticator app\" value={code} onChange={setCode} />\n          </div>\n          <Button size=\"lg\" fullWidth disabled={code.length < 6}>\n            Turn on two-step sign-in\n          </Button>\n        </AuthCard>\n      </AuthLayout>\n    </div>\n  );\n}\n"
+    },
+    {
+      "path": "registry/pages/auth-mfa-setup.tsx",
+      "type": "registry:file",
+      "target": "~/app/security/mfa/page.tsx",
+      "content": "import AuthMfaSetup from \"@/components/blocks/auth-mfa-setup\";\n\nexport default function Page() {\n  return <AuthMfaSetup />;\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/auth-card.json",
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/button.json",
+    "https://rime.mjsons.net/r/icon.json",
+    "https://rime.mjsons.net/r/otp-input.json"
+  ],
+  "docs": "Open /security/mfa to see it. The page is app/security/mfa/page.tsx; gate access inside it if the screen needs a signed-in user.",
+  "meta": {
+    "page": "https://rime.mjsons.net/blocks#auth-mfa-setup",
+    "route": "/security/mfa"
+  }
+}

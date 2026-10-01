@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "type": "registry:item",
+  "title": "ButtonGroup",
+  "description": "Joins Buttons and IconButtons into one segmented row or column with shared outer corners.",
+  "categories": [
+    "actions"
+  ],
+  "files": [
+    {
+      "path": "components/ui/ButtonGroup/ButtonGroup.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/ButtonGroup/ButtonGroup.module.css",
+      "content": "/* The group squares the joins between its buttons; the outer corners keep\n   the buttons' own radius. A 1px overlap lets neighbouring edges share one\n   hairline. Two class selectors outrank a button's own radius rule. */\n.group {\n  display: inline-flex;\n  isolation: isolate;\n}\n\n.vertical {\n  flex-direction: column;\n}\n\n.group > * {\n  position: relative;\n}\n\n/* Focus or hover lifts a button over its neighbours, so its ring is whole. */\n.group > *:hover,\n.group > *:focus-visible {\n  z-index: 1;\n}\n\n.horizontal > *:not(:last-child) {\n  border-top-right-radius: var(--button-group-join, 0);\n  border-bottom-right-radius: var(--button-group-join, 0);\n}\n\n.horizontal > *:not(:first-child) {\n  margin-left: -1px;\n  border-top-left-radius: var(--button-group-join, 0);\n  border-bottom-left-radius: var(--button-group-join, 0);\n}\n\n.vertical > *:not(:last-child) {\n  border-bottom-left-radius: var(--button-group-join, 0);\n  border-bottom-right-radius: var(--button-group-join, 0);\n}\n\n.vertical > *:not(:first-child) {\n  margin-top: -1px;\n  border-top-left-radius: var(--button-group-join, 0);\n  border-top-right-radius: var(--button-group-join, 0);\n}\n\n.vertical > * {\n  justify-content: flex-start;\n}\n"
+    },
+    {
+      "path": "components/ui/ButtonGroup/ButtonGroup.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/ButtonGroup/ButtonGroup.tsx",
+      "content": "import type { HTMLAttributes, ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./ButtonGroup.module.css\";\n\nexport type ButtonGroupProps = HTMLAttributes<HTMLDivElement> & {\n  children: ReactNode;\n  /** Names the group for assistive tech: \"Text alignment\", \"Pagination\". Required in practice. */\n  \"aria-label\"?: string;\n  /** horizontal (default) joins left to right; vertical stacks top to bottom. */\n  orientation?: \"horizontal\" | \"vertical\";\n};\n\n/**\n * Joins Buttons and IconButtons into one segmented control: shared outer\n * corners, square inner joins and a hairline between neighbours. The\n * buttons keep their own variants and states; the group only shapes them.\n */\nexport function ButtonGroup({ children, orientation = \"horizontal\", className, ...rest }: ButtonGroupProps) {\n  return (\n    <div data-slot=\"button-group\" role=\"group\" aria-orientation={orientation} className={cx(styles.group, styles[orientation], className)} {...rest}>\n      {children}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { ButtonGroup } from \"@/components/ui/ButtonGroup/ButtonGroup\";",
+    "docs": "https://rime.mjsons.net/md/button-group.md",
+    "page": "https://rime.mjsons.net/components/button-group"
+  }
+}

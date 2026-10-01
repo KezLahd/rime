@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sonner",
+  "type": "registry:item",
+  "title": "sonner (Rime toast)",
+  "description": "The shadcn name \"sonner\": installs Rime's toast.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/toast.json"
+  ],
+  "meta": {
+    "aliasOf": "toast"
+  }
+}

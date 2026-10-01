@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-range-filter-demo",
+  "type": "registry:item",
+  "title": "DateRangeFilter examples",
+  "description": "Usage examples for DateRangeFilter.",
+  "files": [
+    {
+      "path": "registry/examples/date-range-filter.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/date-range-filter.md",
+      "content": "# DateRangeFilter examples\n\nA date-range chip for filter rows: presets plus a two-month range calendar.\n\n```tsx\nimport { DateRangeFilter } from \"@/components/ui\";\n\n<DateRangeFilter aria-label=\"Issued\" value={range} onChange={setRange} />\n```\n\n## Open\n\ninline shows the presets and calendars open under the chip, in place.\n\n```tsx\n<DateRangeFilter inline aria-label=\"Issued\" value={range} onChange={setRange} />\n```\n\n## Chip\n\n```tsx\n<DateRangeFilter value={range} onChange={setRange} aria-label=\"Date\" />\n```\n\nDocs: https://rime.mjsons.net/components/date-range-filter\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/date-range-filter.json"
+  ]
+}

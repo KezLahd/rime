@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label-demo",
+  "type": "registry:item",
+  "title": "Label examples",
+  "description": "Usage examples for Label.",
+  "files": [
+    {
+      "path": "registry/examples/label.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/label.md",
+      "content": "# Label examples\n\nA standalone form label with required and optional markers, for controls outside a Field.\n\n```tsx\nimport { Label } from \"@/components/ui\";\n\n<Label htmlFor=\"project-name\" required>Project name</Label>\n<TextInput id=\"project-name\" required />\n```\n\n## Required and optional\n\n```tsx\n<Label htmlFor=\"name\" required>Project name</Label>\n<TextInput id=\"name\" required />\n<Label htmlFor=\"po\" optional>Purchase order</Label>\n<TextInput id=\"po\" />\n```\n\n## Styles\n\n```tsx\n<Label>Sentence label</Label>\n<Label labelStyle=\"caps\">Caps label</Label>\n<Label disabled>Disabled label</Label>\n```\n\nDocs: https://rime.mjsons.net/components/label\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/label.json"
+  ]
+}

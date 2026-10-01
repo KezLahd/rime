@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "type": "registry:item",
+  "title": "dialog (Rime modal)",
+  "description": "The shadcn name \"dialog\": installs Rime's modal.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/modal.json"
+  ],
+  "meta": {
+    "aliasOf": "modal"
+  }
+}

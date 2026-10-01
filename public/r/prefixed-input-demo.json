@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prefixed-input-demo",
+  "type": "registry:item",
+  "title": "PrefixedInput examples",
+  "description": "Usage examples for PrefixedInput.",
+  "files": [
+    {
+      "path": "registry/examples/prefixed-input.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/prefixed-input.md",
+      "content": "# PrefixedInput examples\n\nA fixed-format code with a set prefix: an invoice number, an account code, a membership number.\n\n```tsx\nimport { Field, PrefixedInput } from \"@/components/ui\";\n\n<Field label=\"Invoice number\">\n  <PrefixedInput prefix=\"INV\" length={6} value={code} onValueChange={(full) => setCode(full)} />\n</Field>\n```\n\n## Digits\n\n```tsx\n<PrefixedInput prefix=\"INV\" length={6} value={v} onValueChange={(code) => setV(code)} />\n```\n\n## Letters and numbers\n\n```tsx\n<PrefixedInput prefix=\"ACC-\" length={8} charset=\"alphanumeric\" value={v} onValueChange={(code) => setV(code)} />\n```\n\nDocs: https://rime.mjsons.net/components/prefixed-input\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/prefixed-input.json"
+  ]
+}

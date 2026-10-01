@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sidebar",
+  "type": "registry:item",
+  "title": "sidebar (Rime sidebar-shell)",
+  "description": "The shadcn name \"sidebar\": installs Rime's sidebar-shell.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/sidebar-shell.json"
+  ],
+  "meta": {
+    "aliasOf": "sidebar-shell"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-demo",
+  "type": "registry:item",
+  "title": "FolderTabs and SegmentedControl examples",
+  "description": "Usage examples for FolderTabs and SegmentedControl.",
+  "files": [
+    {
+      "path": "registry/examples/tabs.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/tabs.md",
+      "content": "# FolderTabs and SegmentedControl examples\n\nFolder tabs that sit on a glass panel with always-visible counts, and a segmented control for views.\n\n```tsx\nimport { FolderTabs, SegmentedControl } from \"@/components/ui\";\n\n<SegmentedControl aria-label=\"View\" value={view} onChange={setView} options={[{ value: \"chart\", label: \"Chart\" }, { value: \"table\", label: \"Table\" }]} />\n```\n\n## Folder tabs\n\n```tsx\n<FolderTabs aria-label=\"Orders\" tabs={[{ id: \"open\", label: \"Open\", count: 12 }, { id: \"review\", label: \"In review\", count: 4, colour: \"amber\" }]} value={tab} onChange={setTab}>…</FolderTabs>\n```\n\n## Segmented control\n\n```tsx\n<SegmentedControl aria-label=\"View\" value={view} onChange={setView} options={VIEWS} />\n```\n\nDocs: https://rime.mjsons.net/components/tabs\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/tabs.json"
+  ]
+}

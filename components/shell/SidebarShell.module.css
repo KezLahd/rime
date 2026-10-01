@@ -1,0 +1,595 @@
+/* The dashboard frame: a frosted sidebar and top bar over the page field.
+
+   Chrome hooks: every chrome colour reads a custom property. The corner and
+   strip are tokens in tokens.css (--logo-corner-bg, --admin-strip-bg); the
+   rest fall back to the default theme, so setting none changes nothing.
+   Set any of them on a wrapper to try options:
+   --logo-corner-bg, --admin-strip-bg, --sidebar-bg, --topbar-bg,
+   --page-background, and for dark sidebars --sidebar-ink, --sidebar-ink-hover,
+   --sidebar-hover-bg, --sidebar-active-bg, --sidebar-active-ink,
+   --sidebar-active-shadow, --sidebar-active-badge-bg, --sidebar-rule.
+
+   The gradient is painted once on the whole frame; sidebar and top bar are
+   white frosted glass over it, so the chrome shares the field's colour and
+   the whole screen reads as one surface. */
+
+.frame {
+  --sidebar-width: var(--shell-sidebar-width, 212px);
+  --strip-height: 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--page-background);
+}
+
+/* Sidebar and column side by side under the (optional) full-width strip. */
+.body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Docs preview: fill a fixed-height parent instead of the viewport. */
+.contained {
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────── */
+
+.sidebar {
+  position: relative;
+  z-index: 2;
+  transition: width var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--sidebar-width);
+  height: 100%;
+  padding: 20px 12px;
+  background: var(--sidebar-bg, var(--chrome-sidebar));
+  -webkit-backdrop-filter: var(--chrome-backdrop, var(--blur-chrome) saturate(160%));
+  backdrop-filter: var(--chrome-backdrop, var(--blur-chrome) saturate(160%));
+  /* No border: the tinted side shadow is the edge. */
+}
+
+/* Shadows are cast by the full chrome shapes (a 1px strip blurs to nothing).
+   The sidebar's edge shadow starts below the top bar, so it falls on the
+   content only and never darkens the header. */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: var(--topbar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: var(--sidebar-shadow, 8px 0 28px rgba(var(--rgb-brand-deep), 0.12), 1px 0 3px rgba(var(--rgb-contact), 0.06));
+  /* Clip the blur's upward bleed so none of it reaches the header. */
+  clip-path: inset(0 -60px 0 0);
+  pointer-events: none;
+}
+
+/* The logo corner: flush, square, edge to edge and exactly the top bar's
+   height, so it meets the header as one corner piece. By default it is the
+   same frosted glass as the sidebar and top bar (one continuous L), with the
+   same hairline under it as the top bar. logoCorner="fill" opts in to a set
+   colour behind the logo (--logo-corner-bg, ink --logo-corner-ink), for
+   brands whose guidelines require one. With a context strip the strip runs
+   straight across its top edge: a deliberate cap, not a seam. */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--brand-height, var(--topbar-height));
+  margin: -20px -12px 20px;
+  padding: 0 18px;
+  background: transparent;
+  border-bottom: 1px solid rgba(var(--rgb-white), 0.4);
+  color: var(--ink-heading);
+}
+
+.brandFill {
+  background: var(--logo-corner-bg);
+  border-bottom-color: transparent;
+  color: var(--logo-corner-ink, var(--ink-inverse));
+}
+
+/* An image logo: up to 176px wide, never taller than the bar allows. */
+.logo {
+  display: block;
+  width: var(--shell-logo-width, 176px);
+  max-width: 100%;
+  height: auto;
+  max-height: calc(var(--topbar-height) - 16px);
+  object-fit: contain;
+  /* Rime Studio hook: a theme can swap the artwork from CSS alone
+     (--shell-logo: url(...)). Unset, the <img> renders its own src. */
+  content: var(--shell-logo, normal);
+}
+
+/* The default mark when no logo is given: a square glyph and a wordmark in
+   inverse ink on the corner. */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+  color: inherit;
+  white-space: nowrap;
+}
+
+.glyph {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-sm);
+  font-size: 14px;
+  color: var(--ink-inverse);
+}
+
+.brandFill .glyph {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  color: inherit;
+}
+
+.nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bottom {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--sidebar-rule, rgba(var(--rgb-brand-deep), 0.08));
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(10px * var(--density)) calc(12px * var(--density));
+  border-radius: var(--sidebar-item-radius, var(--r-lg));
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--sidebar-ink, var(--ink-muted));
+  text-decoration: none;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.item:hover {
+  background: var(--sidebar-hover-bg, rgba(var(--rgb-white), 0.65));
+  color: var(--sidebar-ink-hover, var(--ink-heading));
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* The primary-nav gesture: the solid gradient pill with brand glow.
+   In the sidebar frame this is the one gradient on the chrome; page actions
+   still carry their own. */
+.active,
+.active:hover {
+  background: var(--sidebar-active-bg, var(--brand-gradient));
+  color: var(--sidebar-active-ink, var(--ink-inverse));
+  box-shadow: var(--sidebar-active-shadow, var(--glow-md), inset 0 1px 0 rgba(var(--rgb-white), 0.18));
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.icon :global(svg) {
+  width: 16px;
+  height: 16px;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--danger-base-solid);
+  color: var(--ink-inverse);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.active .badge {
+  background: var(--sidebar-active-badge-bg, rgba(var(--rgb-white), 0.25));
+}
+
+/* ── Column: strip, top bar, scrolling main ───────────────────────────── */
+
+.column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* The context strip (an admin session, a staging site), night to deep, across the
+   top of the frame, logo corner included. The text starts on the top bar's
+   left edge, so it lines up with the page rather than the logo. */
+.strip {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: var(--strip-height);
+  padding: 0 24px 0 calc(var(--sidebar-width) + 24px);
+  background: var(--admin-strip-bg);
+  color: var(--ink-inverse);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.topbar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: var(--topbar-height);
+  padding: 10px 24px;
+  background: var(--topbar-bg, var(--chrome-topbar));
+  -webkit-backdrop-filter: var(--chrome-backdrop, var(--blur-chrome) saturate(160%));
+  backdrop-filter: var(--chrome-backdrop, var(--blur-chrome) saturate(160%));
+  /* Near-invisible edge: the bar melts into the content. */
+  border-bottom: 1px solid rgba(var(--rgb-white), 0.4);
+}
+
+/* The header casts the same soft shadow as the sidebar, downward onto
+   the content. Clipped on the left, right and top so none of it lands on the
+   sidebar or bleeds upward. */
+.topbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: var(--topbar-shadow, var(--chrome-shadow));
+  clip-path: inset(0 0 -60px 0);
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--shell-title-size, 26px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink-heading);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 24px 8px;
+}
+
+.content {
+  flex: 1;
+}
+
+.skip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-float);
+  font-weight: 700;
+  color: var(--ink-brand);
+  transform: translateY(-160%);
+  transition: transform var(--dur) var(--ease);
+}
+
+.skip:focus {
+  transform: none;
+  outline: none;
+  box-shadow: var(--shadow-float), var(--focus-ring);
+}
+
+/* ── Artwork hooks ─────────────────────────────────────────────────────
+   Optional artwork, off by default: set --sidebar-art, --logo-corner-art or
+   --page-art (a url()) with its -opacity partner. Painted by
+   pseudo-elements, so they are never in the accessibility tree and never
+   take a click; static, no motion. Each sits under its surface's content. */
+
+.brand {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--logo-corner-art, none) no-repeat right -46px bottom -70px / auto 170px;
+  opacity: var(--logo-corner-art-opacity, 0);
+  pointer-events: none;
+}
+
+.nav {
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sidebar-art, none) no-repeat center bottom -96px / 236px auto;
+  opacity: var(--sidebar-art-opacity, 0);
+  pointer-events: none;
+}
+
+/* The icon rail is too narrow to carry it (see .rail below). */
+
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--page-art, none) no-repeat right -150px bottom -210px / 560px auto;
+  opacity: var(--page-art-opacity, 0);
+  pointer-events: none;
+}
+
+/* Above the page artwork; the strip already stacks at 3. */
+.body {
+  z-index: 1;
+}
+
+/* ── Top bar, left cluster: the collapse toggle or menu button, then the title ── */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.toggle {
+  flex-shrink: 0;
+  margin-left: -8px;
+}
+
+/* ── Rail: the sidebar collapsed to icons ─────────────────────────────────
+   Labels hide (each item keeps its title for a tooltip), the logo corner
+   shows the compact mark, and counts sit on the icon. */
+.rail {
+  --sidebar-width: var(--shell-rail-width, 68px);
+}
+
+.rail .sidebar {
+  padding: 20px 10px;
+}
+
+.rail .brand {
+  margin: -20px -10px 20px;
+  padding: 0;
+}
+
+.rail .label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.rail .item {
+  position: relative;
+  justify-content: center;
+  padding: 12px;
+}
+
+.rail .badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.rail .sidebar::before {
+  display: none;
+}
+
+/* ── Drawer: the sidebar off canvas on narrow frames ──────────────────────
+   Positioned inside the frame (not the viewport), so a contained preview
+   works the same as the page. A scrim covers the column while it is open. */
+.drawerMode .sidebar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  width: var(--shell-drawer-width, 264px);
+  max-width: 85%;
+  transform: translateX(-105%);
+  visibility: hidden;
+  background: var(--sidebar-drawer-bg, var(--modal-surface));
+  -webkit-backdrop-filter: var(--modal-blur);
+  backdrop-filter: var(--modal-blur);
+  box-shadow: var(--shadow-modal);
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    visibility 0s linear var(--dur-slow);
+}
+
+.drawerMode .sidebar::after {
+  display: none;
+}
+
+.drawerOpen .sidebar {
+  transform: none;
+  visibility: visible;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--scrim);
+  -webkit-backdrop-filter: var(--blur-scrim);
+  backdrop-filter: var(--blur-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+.drawerOpen .scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawerMode .topbar,
+.drawerMode .main {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.drawerMode .strip {
+  padding-left: 16px;
+}
+
+/* ── Header only: no sidebar, one frosted top bar with the nav in it ───── */
+.headerColumn {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.topnav {
+  justify-content: flex-start;
+  gap: 24px;
+  box-shadow: var(--topbar-shadow, var(--chrome-shadow));
+}
+
+.topnav::after {
+  display: none;
+}
+
+.headerBrand {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--ink-heading);
+}
+
+.headerBrand.brandFill {
+  height: calc(var(--topbar-height) - 16px);
+  padding: 0 14px;
+  border-radius: var(--r-md);
+}
+
+.headerBrand .logo {
+  max-height: calc(var(--topbar-height) - 24px);
+}
+
+.topnavNav {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.topnavNav::-webkit-scrollbar {
+  display: none;
+}
+
+.topnavList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.topnav .item {
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.headerLayout .strip {
+  padding-left: 24px;
+}
+
+.headerLayout .main {
+  padding-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .topnav {
+    gap: 12px;
+    padding: 10px 16px;
+  }
+
+  .headerLayout .main {
+    padding: 16px 16px 8px;
+  }
+}

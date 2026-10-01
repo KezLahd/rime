@@ -1,0 +1,191 @@
+/* The home page. Values are tokens, so presets and modes re-theme it. */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 64px 16px 36px;
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: clamp(32px, 4.6vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink-heading);
+}
+
+.heroLede {
+  max-width: 720px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  text-wrap: balance;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  height: var(--control-h-md);
+  padding: 0 18px;
+  border-radius: var(--r-md);
+  font-size: var(--text-body);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ctaPrimary {
+  background: var(--brand-gradient);
+  box-shadow: var(--glow-md), var(--shadow-specular-dark);
+  color: var(--ink-inverse);
+}
+
+.ctaPrimary:hover {
+  color: var(--ink-inverse);
+  box-shadow: var(--glow-md-hover), var(--shadow-specular-dark);
+}
+
+.ctaSecondary {
+  background: rgba(var(--rgb-white), 0.55);
+  box-shadow: inset 0 0 0 1px var(--glass-edge-strong), var(--shadow-specular), var(--shadow-input);
+  color: var(--ink-heading);
+}
+
+.ctaSecondary:hover {
+  color: var(--ink-heading);
+  background: rgba(var(--rgb-white), 0.8);
+}
+
+.ctaPrimary:focus-visible,
+.ctaSecondary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.heroInstall {
+  width: min(560px, 100%);
+  text-align: left;
+}
+
+/* ── Showcase ──────────────────────────────────────────────────────── */
+
+.showcase {
+  margin-top: 8px;
+}
+
+.showTabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.showTab {
+  height: var(--control-h-sm);
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--r-full);
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.showTab:hover {
+  color: var(--ink-heading);
+  background: var(--wash-subtle);
+}
+
+.showTab[aria-selected="true"] {
+  color: var(--ink-heading);
+  background: rgba(var(--rgb-white), 0.75);
+  box-shadow: inset 0 0 0 1px var(--glass-edge-strong), var(--shadow-input);
+}
+
+.showTab:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.showLink {
+  margin-left: auto;
+  font-size: var(--text-small);
+  font-weight: 700;
+}
+
+/* A fixed-height window onto each app: they fill it (contained). */
+.showFrame {
+  position: relative;
+  height: 720px;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-panel), inset 0 0 0 1px var(--glass-edge);
+  background: var(--page-background);
+}
+
+/* ── Features ──────────────────────────────────────────────────────── */
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 48px 0 24px;
+  border-radius: var(--r-xl);
+  background: var(--glass-fill);
+  border: var(--border-w) solid var(--glass-edge);
+  box-shadow: var(--shadow-panel-light), var(--shadow-specular);
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 24px;
+}
+
+.feature + .feature {
+  border-left: var(--border-w) solid var(--line-glass);
+}
+
+.feature h2 {
+  margin: 0;
+}
+
+.featureBody {
+  flex: 1;
+  font-size: var(--text-small);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.featureLink {
+  font-size: var(--text-small);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .feature + .feature {
+    border-left: 0;
+    border-top: var(--border-w) solid var(--line-glass);
+  }
+
+  .showFrame {
+    height: 640px;
+  }
+}

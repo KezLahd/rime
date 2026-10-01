@@ -1,0 +1,137 @@
+/* The block viewer: tabs, viewport switch and an iframe stage. */
+
+.install {
+  margin-top: 10px;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding-right: 12px;
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.bar > [role="tablist"] {
+  border-bottom: 0;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--control-h-sm);
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.open:hover {
+  background: var(--wash-hover);
+  color: var(--ink-heading);
+}
+
+.open:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* The stage the frame sits on: the page field, so narrow viewports read as
+   a device in front of it. */
+.stage {
+  display: flex;
+  justify-content: center;
+  background: var(--page-background);
+}
+
+.viewport {
+  overflow: hidden;
+}
+
+.viewport[data-viewport="tablet"],
+.viewport[data-viewport="mobile"] {
+  border-inline: var(--border-w) solid var(--line);
+}
+
+.frame {
+  display: block;
+  border: 0;
+  transform-origin: top left;
+}
+
+.code {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  min-height: 420px;
+}
+
+@media (max-width: 760px) {
+  .code {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.files {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border-right: var(--border-w) solid var(--line-glass);
+}
+
+.file {
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: left;
+  color: var(--ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+.file:hover {
+  background: var(--wash-hover);
+}
+
+.file[aria-current="true"] {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+  font-weight: 700;
+}
+
+.file:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.source {
+  min-width: 0;
+  max-height: 720px;
+  overflow: auto;
+}
+
+.path {
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  border-bottom: var(--border-w) solid var(--line-glass);
+}
+
+.route code {
+  font-family: var(--font-mono);
+}

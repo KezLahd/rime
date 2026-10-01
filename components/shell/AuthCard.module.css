@@ -1,0 +1,234 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+}
+
+.bgBase,
+.bgFloor,
+.bgSky {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bgBase {
+  background: var(--auth-background);
+}
+
+.bgFloor {
+  background: var(--auth-floor);
+}
+
+.bgSky {
+  background: var(--auth-sky);
+}
+
+.column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 16px 0;
+}
+
+.page > footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Docs preview: fill a fixed-height parent; the layers stay inside it. */
+.contained {
+  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.contained .bgBase,
+.contained .bgFloor,
+.contained .bgSky {
+  position: absolute;
+}
+
+/* The brand bar and the footer strip sit on the field, in inverse ink, so
+   the card in the middle is the only solid object on the page. */
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 24px;
+  color: var(--auth-ink, var(--ink-inverse));
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 40px;
+  padding: 16px 24px 20px;
+  font-size: var(--text-caption);
+  color: var(--auth-ink-muted, rgba(255, 255, 255, 0.78));
+}
+
+@media (min-width: 640px) {
+  .column {
+    padding: 24px 32px 0;
+  }
+}
+
+/* An object on the deep field: solid, a contact shadow and a soft fall
+   (--shadow-auth-card). */
+.card {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow-auth-card);
+}
+
+.sm {
+  max-width: 440px;
+}
+
+.md {
+  max-width: 520px;
+}
+
+.lg {
+  max-width: 720px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 36px 36px 30px;
+}
+
+@media (max-width: 480px) {
+  .body {
+    padding: 28px 22px 24px;
+  }
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.logo > span {
+  align-items: center;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.iconTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  border-radius: var(--r-lg);
+  background: var(--brand-gradient-soft);
+  box-shadow: inset 0 0 0 1px var(--line-brand);
+  color: var(--ink-brand);
+}
+
+/* Inline with the title, never stacked over it. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  padding: 2px 8px;
+  vertical-align: 4px;
+  border-radius: var(--r-full);
+  background: var(--brand-fill);
+  box-shadow: inset 0 0 0 1px var(--brand-line);
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--brand-ink);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-auth-title);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--heading-tracking, var(--tracking-display));
+  text-transform: var(--heading-case, none);
+  text-wrap: balance;
+  color: var(--ink-heading);
+}
+
+.subtitle {
+  max-width: 42ch;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.backRow {
+  margin-top: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-brand);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--brand-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.back:focus-visible {
+  outline: 2px solid var(--ink-heading);
+  outline-offset: 2px;
+}
+
+.strip {
+  padding: 13px 28px;
+  background: var(--surface-sunken);
+  border-top: 1px solid var(--line-soft);
+  text-align: center;
+}
+
+.trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}

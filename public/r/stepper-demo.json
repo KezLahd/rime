@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stepper-demo",
+  "type": "registry:item",
+  "title": "Stepper examples",
+  "description": "Usage examples for Stepper.",
+  "files": [
+    {
+      "path": "registry/examples/stepper.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/stepper.md",
+      "content": "# Stepper examples\n\nThe wizard's step list: lettered markers, states, and optional navigation back to finished steps.\n\n```tsx\nimport { Stepper } from \"@/components/ui\";\n\n<Stepper aria-label=\"Checkout\" steps={steps} onStepClick={goTo} />\n```\n\n## Default\n\n```tsx\n<Stepper steps={steps} aria-label=\"Checkout\" />\n```\n\nDocs: https://rime.mjsons.net/components/stepper\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/stepper.json"
+  ]
+}

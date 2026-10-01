@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-drop-demo",
+  "type": "registry:item",
+  "title": "FileDrop examples",
+  "description": "Usage examples for FileDrop.",
+  "files": [
+    {
+      "path": "registry/examples/file-drop.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/file-drop.md",
+      "content": "# FileDrop examples\n\nA drop zone and file picker with type and size checks and per-file status chips.\n\n```tsx\nimport { FileDrop } from \"@/components/ui\";\n\n<FileDrop files={files} onFilesChange={setFiles} accept={[\".pdf\"]} multiple={false} />\n```\n\n## Default\n\n```tsx\n<FileDrop files={files} onFilesChange={setFiles} />\n```\n\nDocs: https://rime.mjsons.net/components/file-drop\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/file-drop.json"
+  ]
+}

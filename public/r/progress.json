@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:item",
+  "title": "progress (Rime meter)",
+  "description": "The shadcn name \"progress\": installs Rime's meter.",
+  "files": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/meter.json"
+  ],
+  "meta": {
+    "aliasOf": "meter"
+  }
+}

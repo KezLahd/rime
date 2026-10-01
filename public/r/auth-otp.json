@@ -1,0 +1,44 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth-otp",
+  "type": "registry:item",
+  "title": "Email code",
+  "description": "A six-digit code sent by email, with resend.",
+  "categories": [
+    "blocks",
+    "auth"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/auth-otp/Auth.module.css",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-otp/Auth.module.css",
+      "content": "/* Auth block layout. Visuals come from AuthLayout, AuthCard and the tokens. */\n\n.frame {\n  width: 100%;\n  height: 100%;\n}\n\n.mark {\n  display: inline-flex;\n  align-items: center;\n  gap: 9px;\n  font-family: var(--font-display);\n  font-size: 18px;\n  font-weight: 700;\n  letter-spacing: var(--tracking-display);\n  color: inherit;\n}\n\n.glyph {\n  display: inline-grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  border-radius: var(--r-sm);\n  background: var(--brand-gradient);\n  box-shadow: var(--glow-sm);\n  font-size: 14px;\n  color: var(--ink-inverse);\n}\n\n.help {\n  font-size: var(--text-small);\n  font-weight: 700;\n  color: inherit;\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.otp {\n  display: flex;\n  justify-content: center;\n}\n\n.alt {\n  font-size: var(--text-small);\n  color: var(--ink-muted);\n  text-align: center;\n}\n\n.link {\n  padding: 0;\n  border: 0;\n  background: none;\n  font-weight: 700;\n  color: var(--ink-brand);\n  text-decoration: underline;\n  text-underline-offset: 3px;\n}\n\n.link:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n  border-radius: var(--r-2xs);\n}\n\n.setup {\n  display: grid;\n  grid-template-columns: 148px minmax(0, 1fr);\n  gap: 18px;\n  align-items: center;\n}\n\n@media (max-width: 480px) {\n  .setup {\n    grid-template-columns: minmax(0, 1fr);\n    justify-items: center;\n  }\n}\n\n.qr {\n  display: block;\n  width: 148px;\n  height: 148px;\n  border-radius: var(--r-md);\n  box-shadow: inset 0 0 0 1px var(--line);\n}\n\n.steps {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  font-size: var(--text-small);\n  color: var(--ink-body);\n}\n\n.secret {\n  align-self: flex-start;\n  padding: 6px 10px;\n  border-radius: var(--r-sm);\n  background: var(--surface-sunken);\n  box-shadow: inset 0 0 0 1px var(--line);\n  font-family: var(--font-mono);\n  font-size: 13px;\n  letter-spacing: 0.08em;\n  color: var(--ink-heading);\n}\n\n.row {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 12px;\n}\n\n@media (max-width: 480px) {\n  .row {\n    grid-template-columns: minmax(0, 1fr);\n  }\n}\n\n.between {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n"
+    },
+    {
+      "path": "components/blocks/auth-otp/index.tsx",
+      "type": "registry:file",
+      "target": "~/components/blocks/auth-otp/index.tsx",
+      "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport { AuthCard, AuthLayout } from \"@/components/shell/AuthCard\";\nimport { Button } from \"@/components/ui/Button/Button\";\nimport { IconMail, IconShield } from \"@/components/ui/Icon/Icon\";\nimport { OtpInput } from \"@/components/ui/OtpInput/OtpInput\";\nimport styles from \"./Auth.module.css\";\n\nexport type AuthOtpProps = {\n  /** Fill the parent instead of the viewport. */\n  contained?: boolean;\n};\n\n/** A one-time code sent by email: six boxes, auto-verify on the last digit, resend. Drop it at app/verify. */\nexport default function AuthOtp({ contained }: AuthOtpProps) {\n  const [code, setCode] = useState(\"\");\n  const [sent, setSent] = useState(false);\n  return (\n    <div className={contained ? styles.frame : undefined}>\n      <AuthLayout\n        contained={contained}\n        header={\n          <span className={styles.mark}>\n            <span className={styles.glyph} aria-hidden=\"true\">\n              A\n            </span>\n            Acme\n          </span>\n        }\n        footer={\n          <>\n            <IconShield size={14} />\n            Codes expire after 10 minutes and work once.\n          </>\n        }\n      >\n        <AuthCard icon={<IconMail size={22} />} title=\"Check your email for a code\" subtitle=\"We sent a 6-digit code to jane@acme.example.\">\n          <div className={styles.otp}>\n            <OtpInput aria-label=\"Code from your email\" value={code} onChange={setCode} />\n          </div>\n          <Button size=\"lg\" fullWidth disabled={code.length < 6}>\n            Verify\n          </Button>\n          <p className={styles.alt} role=\"status\">\n            {sent ? (\n              \"A new code is on its way.\"\n            ) : (\n              <>\n                No email?{\" \"}\n                <button type=\"button\" className={styles.link} onClick={() => setSent(true)}>\n                  Send a new code\n                </button>\n              </>\n            )}\n          </p>\n        </AuthCard>\n      </AuthLayout>\n    </div>\n  );\n}\n"
+    },
+    {
+      "path": "registry/pages/auth-otp.tsx",
+      "type": "registry:file",
+      "target": "~/app/verify/page.tsx",
+      "content": "import AuthOtp from \"@/components/blocks/auth-otp\";\n\nexport default function Page() {\n  return <AuthOtp />;\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/auth-card.json",
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/button.json",
+    "https://rime.mjsons.net/r/icon.json",
+    "https://rime.mjsons.net/r/otp-input.json"
+  ],
+  "docs": "Open /verify to see it. The page is app/verify/page.tsx; gate access inside it if the screen needs a signed-in user.",
+  "meta": {
+    "page": "https://rime.mjsons.net/blocks#auth-otp",
+    "route": "/verify"
+  }
+}

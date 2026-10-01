@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menu-demo",
+  "type": "registry:item",
+  "title": "Menu examples",
+  "description": "Usage examples for Menu.",
+  "files": [
+    {
+      "path": "registry/examples/menu.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/menu.md",
+      "content": "# Menu examples\n\nAn action menu from a button: groups, headings, separators, icons, links and danger items, in a frosted popover.\n\n```tsx\nimport { Menu } from \"@/components/ui\";\n\n<Menu label=\"Actions\" items={[{ id: \"edit\", label: \"Edit\", onSelect: edit }, { id: \"sep\", separator: true }, { id: \"void\", label: \"Void invoice\", tone: \"danger\", onSelect: confirm }]} />\n```\n\n## Open\n\ninline renders the menu open under its trigger, in place.\n\n```tsx\n<Menu inline label=\"Actions\" items={ITEMS} />\n```\n\n## Default\n\n```tsx\n<Menu label=\"Actions\" items={ITEMS} />\n```\n\nDocs: https://rime.mjsons.net/components/menu\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/menu.json"
+  ]
+}

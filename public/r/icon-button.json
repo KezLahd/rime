@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon-button",
+  "type": "registry:item",
+  "title": "IconButton",
+  "description": "A square action with only an icon, a required accessible label and a tooltip-friendly hit area.",
+  "categories": [
+    "actions"
+  ],
+  "files": [
+    {
+      "path": "components/ui/IconButton/IconButton.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/IconButton/IconButton.module.css",
+      "content": ".iconButton {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  border: 0;\n  padding: 0;\n  cursor: pointer;\n  transition:\n    background-color var(--dur) var(--ease),\n    color var(--dur) var(--ease),\n    box-shadow var(--dur) var(--ease),\n    transform var(--dur) var(--ease);\n}\n\n.iconButton:focus-visible {\n  outline: none;\n  box-shadow: var(--focus-ring);\n}\n\n.sm {\n  width: 28px;\n  height: 28px;\n  border-radius: var(--icon-button-radius, var(--r-xs));\n}\n\n.md {\n  width: 36px;\n  height: 36px;\n  border-radius: var(--icon-button-radius, var(--r-sm));\n}\n\n.lg {\n  width: 44px;\n  height: 44px;\n  border-radius: var(--icon-button-radius, var(--r-md));\n}\n\n/* Ghost: the reference bell / close button. Muted ink, accent on hover. */\n.ghost {\n  color: var(--ink-muted);\n  background: transparent;\n}\n\n.ghost:hover:not(:disabled) {\n  color: var(--ink-brand);\n  background: var(--wash-subtle);\n}\n\n.ghost:active:not(:disabled),\n.ghost[aria-pressed=\"true\"] {\n  color: var(--ink-brand);\n  background: var(--wash-active);\n}\n\n.secondary {\n  color: var(--ink-heading);\n  background: rgba(var(--rgb-white), 0.5);\n  -webkit-backdrop-filter: var(--blur-callout);\n  backdrop-filter: var(--blur-callout);\n  box-shadow: inset 0 0 0 1px var(--glass-edge-strong), var(--shadow-specular), 0 1px 3px rgba(var(--rgb-contact), 0.08);\n}\n\n.secondary:hover:not(:disabled) {\n  background: rgba(var(--rgb-white), 0.72);\n  transform: translateY(-1px);\n}\n\n.secondary:active:not(:disabled) {\n  transform: translateY(0);\n  background: rgba(var(--rgb-white), 0.58);\n}\n\n:global([data-surface=\"solid\"]) .secondary {\n  background: var(--surface-solid);\n  -webkit-backdrop-filter: none;\n  backdrop-filter: none;\n  box-shadow: var(--shadow-control);\n}\n\n.primary {\n  color: var(--ink-inverse);\n  background: var(--brand-gradient);\n  box-shadow: var(--glow-md), var(--shadow-specular-dark);\n}\n\n.primary:hover:not(:disabled) {\n  box-shadow: var(--glow-md-hover), var(--shadow-specular-dark);\n  transform: translateY(-1px);\n}\n\n.primary:active:not(:disabled) {\n  transform: translateY(0);\n  box-shadow: var(--glow-sm);\n}\n\n.danger {\n  color: var(--danger-ink);\n  background: transparent;\n}\n\n.danger:hover:not(:disabled) {\n  background: var(--danger-fill);\n}\n\n.danger:active:not(:disabled) {\n  background: rgba(var(--rgb-danger), 0.14);\n}\n\n.iconButton:disabled:not(.loading) {\n  cursor: not-allowed;\n  color: var(--ink-disabled);\n  background: transparent;\n  box-shadow: none;\n  transform: none;\n}\n\n.primary:disabled:not(.loading),\n.secondary:disabled:not(.loading) {\n  background: rgba(var(--rgb-brand-deep), 0.06);\n}\n\n.loading {\n  cursor: progress;\n}\n"
+    },
+    {
+      "path": "components/ui/IconButton/IconButton.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/IconButton/IconButton.tsx",
+      "content": "import type { ComponentPropsWithRef, ReactNode } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport { Slot } from \"../_internal/slot\";\nimport { Spinner } from \"../Spinner/Spinner\";\nimport styles from \"./IconButton.module.css\";\n\nexport type IconButtonProps = Omit<ComponentPropsWithRef<\"button\">, \"aria-label\"> & {\n  /** Required: an icon-only control has no other accessible name. */\n  label: string;\n  icon: ReactNode;\n  variant?: \"ghost\" | \"secondary\" | \"primary\" | \"danger\";\n  size?: \"sm\" | \"md\" | \"lg\";\n  loading?: boolean;\n  /** Makes it a toggle button (aria-pressed). */\n  pressed?: boolean;\n  /** Render the single child element (a Next <Link>, an <a>) with the icon button's look; pass the icon inside the child. */\n  asChild?: boolean;\n  children?: ReactNode;\n};\n\nexport function IconButton({\n  label,\n  icon,\n  variant = \"ghost\",\n  size = \"md\",\n  loading,\n  pressed,\n  disabled,\n  className,\n  type = \"button\",\n  title,\n  asChild,\n  children,\n  ...rest\n}: IconButtonProps) {\n  const cls = cx(styles.iconButton, styles[variant], styles[size], loading && styles.loading, className);\n  if (asChild) {\n    return (\n      <Slot aria-label={label} title={title ?? label} className={cls} data-slot=\"icon-button\" data-variant={variant} data-size={size} {...(rest as Record<string, unknown>)}>\n        {children}\n      </Slot>\n    );\n  }\n  return (\n    <button\n      type={type}\n      aria-label={label}\n      title={title ?? label}\n      aria-pressed={pressed}\n      aria-busy={loading || undefined}\n      disabled={disabled || loading}\n      className={cls}\n      data-slot=\"icon-button\"\n      data-variant={variant}\n      data-size={size}\n      {...rest}\n    >\n      {loading ? <Spinner size={size === \"sm\" ? 13 : 15} tone=\"current\" /> : icon}\n    </button>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json",
+    "https://rime.mjsons.net/r/spinner.json"
+  ],
+  "meta": {
+    "import": "import { IconButton } from \"@/components/ui/IconButton/IconButton\";",
+    "docs": "https://rime.mjsons.net/md/icon-button.md",
+    "page": "https://rime.mjsons.net/components/icon-button"
+  }
+}

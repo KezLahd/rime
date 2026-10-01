@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:item",
+  "title": "Skeleton",
+  "description": "Loading placeholders shaped like the content they stand in for, with a soft shimmer.",
+  "categories": [
+    "feedback"
+  ],
+  "files": [
+    {
+      "path": "components/ui/Skeleton/Skeleton.module.css",
+      "type": "registry:file",
+      "target": "~/components/ui/Skeleton/Skeleton.module.css",
+      "content": "/* A deep-tinted shape with a slow light sweep, rather than a grey pulse:\n   on the tinted page a neutral grey reads as dirt. */\n.skeleton {\n  display: block;\n  flex-shrink: 0;\n  background:\n    linear-gradient(\n      100deg,\n      transparent 20%,\n      rgba(var(--rgb-white), 0.55) 45%,\n      rgba(var(--rgb-white), 0.55) 55%,\n      transparent 80%\n    ),\n    rgba(var(--rgb-brand-deep), 0.075);\n  background-size: 220% 100%, 100% 100%;\n  background-repeat: no-repeat;\n  background-position: 120% 0, 0 0;\n  animation: sweep 1.6s var(--ease) infinite;\n}\n\n.block {\n  border-radius: var(--r-xs);\n}\n\n.text {\n  border-radius: var(--r-2xs);\n}\n\n.circle {\n  border-radius: var(--r-circle, 50%);\n}\n\n/* A caller-set radius (the radius prop) arrives as --skeleton-radius, not an\n   inline border-radius, so a brand layer that sets --r-flat (the public\n   layer: 0) can still square it. Declared after the variants so it wins. */\n.custom {\n  border-radius: var(--r-flat, var(--skeleton-radius));\n}\n\n.lines {\n  display: flex;\n  flex-direction: column;\n  gap: 9px;\n  width: 100%;\n}\n\n@keyframes sweep {\n  to {\n    background-position: -120% 0, 0 0;\n  }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .skeleton {\n    animation: none;\n  }\n}\n"
+    },
+    {
+      "path": "components/ui/Skeleton/Skeleton.tsx",
+      "type": "registry:file",
+      "target": "~/components/ui/Skeleton/Skeleton.tsx",
+      "content": "import type { CSSProperties } from \"react\";\nimport { cx } from \"../_internal/cx\";\nimport styles from \"./Skeleton.module.css\";\n\nexport type SkeletonProps = {\n  /** Size to the real content it stands in for, not a generic block. */\n  width?: number | string;\n  height?: number | string;\n  /** text = a line of text at the given font size's height; circle = avatar. */\n  variant?: \"text\" | \"block\" | \"circle\";\n  radius?: number | string;\n  className?: string;\n  style?: CSSProperties;\n};\n\n/** A placeholder shape. Decorative: wrap loading regions in aria-busy and give them a label. */\nexport function Skeleton({ width = \"100%\", height, variant = \"block\", radius, className, style }: SkeletonProps) {\n  const h = height ?? (variant === \"text\" ? \"0.9em\" : variant === \"circle\" ? width : 16);\n  return (\n    <span data-slot=\"skeleton\"\n      aria-hidden=\"true\"\n      className={cx(styles.skeleton, styles[variant], radius !== undefined && styles.custom, className)}\n      style={{\n        width,\n        height: h,\n        ...(radius !== undefined\n          ? ({ \"--skeleton-radius\": typeof radius === \"number\" ? `${radius}px` : radius } as CSSProperties)\n          : null),\n        ...style,\n      }}\n    />\n  );\n}\n\nexport type SkeletonTextProps = {\n  lines?: number;\n  /** Last line is shorter, as real paragraphs are. */\n  lastLineWidth?: string;\n  lineHeight?: number;\n  className?: string;\n};\n\nexport function SkeletonText({ lines = 3, lastLineWidth = \"62%\", lineHeight = 14, className }: SkeletonTextProps) {\n  return (\n    <span data-slot=\"skeleton-text\" className={cx(styles.lines, className)} aria-hidden=\"true\">\n      {Array.from({ length: lines }, (_, i) => (\n        <Skeleton key={i} variant=\"text\" height={lineHeight * 0.72} width={i === lines - 1 && lines > 1 ? lastLineWidth : \"100%\"} />\n      ))}\n    </span>\n  );\n}\n"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/base.json"
+  ],
+  "meta": {
+    "import": "import { Skeleton } from \"@/components/ui/Skeleton/Skeleton\";",
+    "docs": "https://rime.mjsons.net/md/skeleton.md",
+    "page": "https://rime.mjsons.net/components/skeleton"
+  }
+}
