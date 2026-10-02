@@ -456,9 +456,89 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
 function ShapeShowcase() {
   return (
     <div className={styles.shapeShowcase}>
-      {/* Roundness: every size of card, chip, badge, button at once */}
+      {/* ── One composed "Team settings" card ──────────────────────────
+          Hairline, field border, control height, roundness and density
+          are all demonstrated inside a single realistic settings pane:
+          header (hairline below), form fields (field border + roundness
+          on inputs), stacked member rows (hairline between rows), and
+          footer actions (buttons at every size + badges). Updating any
+          slider on the left changes this entire card at once, so the
+          user sees how the tokens interact rather than reading them in
+          isolated bento boxes. */}
       <GlassPanel padding="lg" className={styles.shapeCard}>
-        <ShapeHead title="Corner roundness" help="One slider scales every --r-* step. Watch the cards' corners, the chips, the buttons and the input corners move together." />
+        <div className={styles.shapeHeader}>
+          <div>
+            <ShapeEyebrow>Team settings</ShapeEyebrow>
+            <h3 className={styles.shapeTitle}>Acme workspace</h3>
+            <p className={styles.shapeMuted}>Everything in one card: inputs, buttons, chips and row dividers all respond together.</p>
+          </div>
+          <div className={styles.shapeChipsRow}>
+            <Badge tone="brand">Draft</Badge>
+            <Badge tone="success" variant="solid">Live</Badge>
+            <Badge tone="warning">Pending</Badge>
+          </div>
+        </div>
+
+        <div className={styles.shapeHeaderRule} />
+
+        <div className={styles.shapeFormGrid}>
+          <Field label="Workspace name">
+            <TextInput defaultValue="Acme Inc" />
+          </Field>
+          <Field label="Billing email">
+            <TextInput defaultValue="billing@acme.co" />
+          </Field>
+          <Field label="Note" className={styles.shapeFormGridWide}>
+            <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
+          </Field>
+        </div>
+
+        <div className={styles.shapeMembersCaption}>
+          <ShapeEyebrow>Members</ShapeEyebrow>
+          <p className={styles.shapeMuted}>Each divider between rows uses --border-w. Each input box above uses --border-w-field.</p>
+        </div>
+
+        <div className={styles.shapeHairlineStack}>
+          {[
+            ["Jane Cooper", "Admin"],
+            ["Marco Silva", "Editor"],
+            ["Priya Shah", "Viewer"],
+            ["Noah Kim", "Viewer"],
+          ].map(([name, role]) => (
+            <div key={name} className={styles.shapeHairlineRow}>
+              <span>{name}</span>
+              <span className={styles.shapeMuted}>{role}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.shapeHeaderRule} />
+
+        <div className={styles.shapeActionsRow}>
+          <div className={styles.shapeButtonsLine}>
+            <Button size="sm" variant="secondary">Small</Button>
+            <Button variant="secondary">Medium</Button>
+            <Button size="lg" variant="secondary">Large</Button>
+          </div>
+          <div className={styles.shapeButtonsLine}>
+            <Button variant="ghost" onClick={() => undefined}>Cancel</Button>
+            <Button iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Save changes</Button>
+          </div>
+        </div>
+      </GlassPanel>
+
+      {/* ── Radius scale (the one tile row kept) ───────────────────────
+          Six tiles labelled with their --r-* token. Scaling the roundness
+          slider ripples all six at once; useful as a reference even
+          when the composed card above shows the applied effect. */}
+      <GlassPanel padding="lg" className={styles.shapeCard}>
+        <div className={styles.shapeHeader}>
+          <div>
+            <ShapeEyebrow>Radius scale</ShapeEyebrow>
+            <h3 className={styles.shapeTitle}>--r-xs through --r-2xl</h3>
+            <p className={styles.shapeMuted}>Six corner tokens, moved together by the Corner roundness slider.</p>
+          </div>
+        </div>
         <div className={styles.shapeRadiiRow}>
           {["xs", "sm", "md", "lg", "xl", "2xl"].map((step) => (
             <div key={step} className={styles.shapeRadiusTile} style={{ borderRadius: `var(--r-${step})` }}>
@@ -466,117 +546,25 @@ function ShapeShowcase() {
             </div>
           ))}
         </div>
-        <div className={styles.shapeChipsRow}>
-          <Badge tone="brand">Draft</Badge>
-          <Badge tone="success" variant="solid">Paid</Badge>
-          <Badge tone="warning">Pending</Badge>
-          <Badge tone="danger" variant="solid">Overdue</Badge>
-          <Badge tone="neutral">Archived</Badge>
-        </div>
       </GlassPanel>
 
-      {/* Density + control height: shows side-by-side button sizes and
-          form fields so the user sees how the kit's density + scale
-          change together. */}
-      <section className={styles.shapeRow}>
-        <GlassPanel padding="lg" className={styles.shapeCard}>
-          <ShapeHead title="Control height" help="Scales the sm / md / lg heights for buttons, icon buttons and chips together as a percentage. 100% is the preset default." />
-          <div className={styles.shapeButtonsCol}>
-            <div className={styles.shapeButtonsLine}>
-              <Button size="sm">Small</Button>
-              <Button size="sm" variant="secondary">Secondary</Button>
-              <Button size="sm" variant="ghost">Ghost</Button>
-            </div>
-            <div className={styles.shapeButtonsLine}>
-              <Button>Medium</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="ghost">Ghost</Button>
-            </div>
-            <div className={styles.shapeButtonsLine}>
-              <Button size="lg">Large</Button>
-              <Button size="lg" variant="secondary">Secondary</Button>
-              <Button size="lg" variant="ghost">Ghost</Button>
-            </div>
-          </div>
-        </GlassPanel>
-
-        <GlassPanel padding="lg" className={styles.shapeCard}>
-          <ShapeHead title="Density" help="Multiplies the internal padding of every component. Below 1 is compact; above 1 is roomy. Only padding moves — radius, type and borders stay the same." />
-          <Field label="Full name">
-            <TextInput defaultValue="Jane Cooper" />
-          </Field>
-          <Field label="Email">
-            <TextInput defaultValue="jane@acme.co" />
-          </Field>
-          <div className={styles.shapeButtonsLine}>
-            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Add teammate</Button>
-            <Button variant="secondary">Cancel</Button>
-          </div>
-        </GlassPanel>
-      </section>
-
-      {/* Hairline weight + field border weight: a row with a hairline
-          divider stack and a labelled input field so the two different
-          border widths are visible at once. */}
-      <section className={styles.shapeRow}>
-        <GlassPanel padding="lg" className={styles.shapeCard}>
-          <ShapeHead title="Hairline weight" help="Width of the thin dividers between rows, under card headers and around panels. 1 px by default; 0 removes them, 3 reads as a drawn separator." />
-          <div className={styles.shapeHairlineStack}>
-            <div className={styles.shapeHairlineRow}>
-              <span>Jane Cooper</span>
-              <span className={styles.shapeMuted}>Admin</span>
-            </div>
-            <div className={styles.shapeHairlineRow}>
-              <span>Marco Silva</span>
-              <span className={styles.shapeMuted}>Editor</span>
-            </div>
-            <div className={styles.shapeHairlineRow}>
-              <span>Priya Shah</span>
-              <span className={styles.shapeMuted}>Viewer</span>
-            </div>
-            <div className={styles.shapeHairlineRow}>
-              <span>Noah Kim</span>
-              <span className={styles.shapeMuted}>Viewer</span>
-            </div>
-          </div>
-        </GlassPanel>
-
-        <GlassPanel padding="lg" className={styles.shapeCard}>
-          <ShapeHead title="Field border weight" help="Width of the box around inputs. 1.5 px by default — a tangible edge. Thinner reads cleaner, thicker reads bolder." />
-          <Field label="Invoice number">
-            <TextInput defaultValue="INV-10428" />
-          </Field>
-          <Field label="Project note">
-            <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
-          </Field>
-        </GlassPanel>
-      </section>
-
-      {/* Pill-shaped controls: shows the same buttons / fields with pill
-          rounding so the user sees the effect. */}
+      {/* ── Dialogs: the three sizes you can pop open live ─────────── */}
       <GlassPanel padding="lg" className={styles.shapeCard}>
-        <ShapeHead title="Pill controls" help="Toggles full rounding on top of the roundness scale: buttons, chips and fields become fully pill-shaped." />
-        <p className={styles.shapeMuted}>Watch the buttons, chips and the input below round fully when the pill checkbox is on.</p>
-        <div className={styles.shapeButtonsLine}>
-          <Button>Save project</Button>
-          <Button variant="secondary">Preview</Button>
-          <Badge tone="brand">Draft</Badge>
-          <Badge tone="success" variant="solid">Live</Badge>
+        <div className={styles.shapeHeader}>
+          <div>
+            <ShapeEyebrow>Dialogs</ShapeEyebrow>
+            <h3 className={styles.shapeTitle}>Modal widths</h3>
+            <p className={styles.shapeMuted}>Click a button to pop a real dialog. Drag the matching slider on the left while it is open and the dialog resizes live.</p>
+          </div>
         </div>
-        <Field label="Search invoices">
-          <TextInput leadingIcon={<Search size={14} aria-hidden="true" />} placeholder="e.g. Acme" />
-        </Field>
-      </GlassPanel>
-
-      {/* Dialog widths: click any button to pop a real Modal at that
-          size. The sliders on the left adjust --modal-width-* live, so
-          the open dialog resizes under the cursor as the slider drags. */}
-      <GlassPanel padding="lg" className={styles.shapeCard}>
-        <ShapeHead title="Dialog widths" help="Max widths used by Modal / AlertDialog at the small, medium and large sizes. Click a button to pop a real dialog — adjust the slider on the left while it's open and watch it resize live." />
         <ShapeDialogButtons />
       </GlassPanel>
     </div>
   );
+}
+
+function ShapeEyebrow({ children }: { children: ReactNode }) {
+  return <p className={styles.shapeEyebrow}>{children}</p>;
 }
 
 function ShapeDialogButtons() {
@@ -620,16 +608,6 @@ function ShapeDialogButtons() {
         </div>
       </Modal>
     </>
-  );
-}
-
-/** Small heading + info toggletip pair used in each ShapeShowcase card. */
-function ShapeHead({ title, help }: { title: string; help: string }) {
-  return (
-    <header className={styles.shapeCardHead}>
-      <h3 className={styles.shapeCardTitle}>{title}</h3>
-      <p className={styles.shapeCardHelp}>{help}</p>
-    </header>
   );
 }
 
