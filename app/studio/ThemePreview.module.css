@@ -605,16 +605,24 @@
 
 /* ── Per-category Colour showcases ────────────────────────────────── */
 
+/* Centred vertically and horizontally so a small showcase (just a row
+   of buttons, say) sits in the middle of the viewport rather than being
+   pinned to the top-left. max-width keeps the card from stretching
+   edge-to-edge on a wide preview column. */
 .catShowcase {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: center;
+  justify-content: center;
   padding: 40px 32px;
   min-height: 100%;
 }
 
 .catIntro {
   max-width: 560px;
+  width: 100%;
+  text-align: center;
 }
 
 .catEyebrow {
@@ -654,6 +662,25 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Neutral strip inside the Brand showcase: a sunken bar that reads
+   --support directly so dragging Neutral paints the strip. Also used
+   for the table-head demo. */
+.catNeutralStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  padding: 10px 14px;
+  background: var(--table-head-fill);
+  border-radius: var(--r-sm);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
 }
 
 /* Brand card: button row + chip + progress */

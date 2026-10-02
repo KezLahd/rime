@@ -199,13 +199,22 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   const [inspectorWidth, setInspectorWidth] = useState<number>(INSPECTOR_DEFAULT_PX);
   const [collapsed, setCollapsed] = useState(false);
   const resizeStartRef = useRef<{ x: number; w: number } | null>(null);
+  // Live width during a drag: setInspectorWidth is async + batched, so the
+  // onResizeEnd closure would otherwise commit the pre-drag width into
+  // localStorage and the next render would snap the sidebar back. The ref
+  // tracks the real-time value the pointermove handler wrote, and
+  // onResizeEnd reads from it on release.
+  const latestWidthRef = useRef<number>(INSPECTOR_DEFAULT_PX);
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(INSPECTOR_STORAGE_KEY);
       if (saved) {
         const n = Number.parseInt(saved, 10);
-        if (Number.isFinite(n) && n >= INSPECTOR_MIN_PX) setInspectorWidth(n);
+        if (Number.isFinite(n) && n >= INSPECTOR_MIN_PX) {
+          setInspectorWidth(n);
+          latestWidthRef.current = n;
+        }
       }
     } catch {
       // Storage blocked; the default stands.
@@ -214,6 +223,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
 
   const commitInspectorWidth = useCallback((w: number) => {
     setInspectorWidth(w);
+    latestWidthRef.current = w;
     try {
       window.localStorage.setItem(INSPECTOR_STORAGE_KEY, String(w));
     } catch {
@@ -226,6 +236,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     if (!start) return;
     const max = Math.max(INSPECTOR_MIN_PX, Math.floor(window.innerWidth * 0.72));
     const next = Math.max(INSPECTOR_MIN_PX, Math.min(max, start.w + (e.clientX - start.x)));
+    latestWidthRef.current = next;
     setInspectorWidth(next);
   }, []);
 
@@ -236,17 +247,19 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     document.body.style.userSelect = "";
     window.removeEventListener("pointermove", onResizeMove);
     window.removeEventListener("pointerup", onResizeEnd);
-    if (start) commitInspectorWidth(inspectorWidth);
-  }, [onResizeMove, inspectorWidth, commitInspectorWidth]);
+    // Commit the LIVE width captured during the drag, not the stale
+    // closure value, so the sidebar stays where the user dropped it.
+    if (start) commitInspectorWidth(latestWidthRef.current);
+  }, [onResizeMove, commitInspectorWidth]);
 
   const startResize = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (collapsed) return;
-    resizeStartRef.current = { x: e.clientX, w: inspectorWidth };
+    resizeStartRef.current = { x: e.clientX, w: latestWidthRef.current };
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
     window.addEventListener("pointermove", onResizeMove);
     window.addEventListener("pointerup", onResizeEnd);
-  }, [collapsed, inspectorWidth, onResizeMove, onResizeEnd]);
+  }, [collapsed, onResizeMove, onResizeEnd]);
 
   const toggleCollapsed = useCallback(() => {
     setCollapsed((v) => !v);

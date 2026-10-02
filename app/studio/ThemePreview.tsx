@@ -572,6 +572,22 @@ function ColourBrandShowcase({ peek, brand }: { peek: string | null; brand: Bran
         <Spot as="div" tokens="--brand-soft --brand-deep" peek={peek}>
           <ProgressBar value={64} max={100} label="Collected this quarter" valueText="64%" />
         </Spot>
+        {/* Neutral demo: a table-header-styled strip reads --table-head-fill,
+            which is built from --rgb-support, so dragging Neutral in the
+            controls tints this row immediately. Plus a neutral badge for
+            the chip surface. */}
+        <Spot as="div" tokens="--support --rgb-support" peek={peek}>
+          <div className={styles.catNeutralStrip}>
+            <span>Client</span>
+            <span>Status</span>
+            <span>Amount</span>
+            <span>Due</span>
+          </div>
+        </Spot>
+        <Spot as="div" className={styles.catRow} tokens="--support --ink-muted" peek={peek}>
+          <Badge tone="neutral">Archived</Badge>
+          <Badge tone="neutral" variant="soft">24 total</Badge>
+        </Spot>
       </GlassPanel>
       <p className={styles.catFootnote}>{brand.full} · Brand colours power the main confirm button, active nav pills, the brand chip and every brand-tinted gradient.</p>
     </div>
