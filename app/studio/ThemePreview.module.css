@@ -473,6 +473,44 @@
   text-align: center;
 }
 
+/* Background step preview: the full page bg with a single floating card
+   centred on it. The point is to show the paint itself with just enough
+   surface to see how blooms sit behind a real card. */
+.backgroundStage {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 48px 32px;
+}
+
+.backgroundCard {
+  width: min(100%, 420px);
+  text-align: center;
+}
+
+.backgroundEyebrow {
+  margin: 0 0 6px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.backgroundTitle {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.backgroundLede {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
 .gradientSpecimenCaption {
   display: flex;
   flex-direction: column;

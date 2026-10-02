@@ -31,7 +31,7 @@ import styles from "./ThemePreview.module.css";
  *  The shell is only shown when the step is actually about the shell
  *  (layout, final export) or inherently needs the chrome (components,
  *  contrast, tokens, image). */
-const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "glass", "shadows"];
+const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "background", "glass", "shadows"];
 
 /**
  * Derives three stand-in strings from the business name typed on step 1:
@@ -146,6 +146,13 @@ export const ThemePreview = memo(function ThemePreview({
   // tokens so every one is visible at once.
   if (focus === "gradients") {
     return <GradientShowcase selection={gradientSelection ?? null} brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} />;
+  }
+
+  // Background step: the full page bg with a single floating card so the
+  // user can see what the blooms look like behind real surfaces. No
+  // dashboard clutter — just the paint.
+  if (focus === "background") {
+    return <BackgroundShowcase brand={brandText} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -621,6 +628,26 @@ function GradientShowcase({ selection, brand, logoSrc, logoAlt }: { selection: s
   return (
     <div className={styles.gradientStage}>
       <GradientSpecimen token={token} brand={brand} logoSrc={logoSrc} logoAlt={logoAlt} />
+    </div>
+  );
+}
+
+/**
+ * Background step: the full page bg with a single lifted glass card so
+ * the user sees the blooms interacting with a real surface, not just
+ * the paint in isolation. Keeps the preview quiet so changes to bloom
+ * position / size / strength are easy to spot.
+ */
+function BackgroundShowcase({ brand }: { brand: BrandNames }) {
+  return (
+    <div className={styles.backgroundStage}>
+      <GlassPanel padding="lg" className={styles.backgroundCard}>
+        <p className={styles.backgroundEyebrow}>{brand.full}</p>
+        <h3 className={styles.backgroundTitle}>The page you&rsquo;re painting</h3>
+        <p className={styles.backgroundLede}>
+          Everything behind the dashboard: the base colour plus the two soft blooms. Flatten on the left for a solid field; drag the blooms to move them around.
+        </p>
+      </GlassPanel>
     </div>
   );
 }

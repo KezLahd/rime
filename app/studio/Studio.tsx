@@ -10,6 +10,7 @@ import {
   Droplets,
   GripVertical,
   Image as ImageIcon,
+  Layers,
   LayoutDashboard,
   ListTree,
   MousePointer2,
@@ -59,6 +60,7 @@ import {
 import { BrandPanel, ColourPanel, TypePanel } from "./panels/BrandPanel";
 import { LogoPanel } from "./panels/LogoPanel";
 import { ComponentsPanel, ExportPanel, TokensPanel } from "./panels/DataPanels";
+import { BackgroundPanel } from "./panels/BackgroundPanel";
 import { GradientPanel } from "./panels/GradientPanel";
 import { ContrastPanel, ImagePanel } from "./panels/GuardPanels";
 import { LayoutPanel, layoutOf, logoCornerOf } from "./panels/LayoutPanel";
@@ -74,6 +76,7 @@ type Section =
   | "glass"
   | "shadows"
   | "gradients"
+  | "background"
   | "hover"
   | "layout"
   | "components"
@@ -97,6 +100,7 @@ export type PreviewFocus =
   | "type"
   | "shape"
   | "gradients"
+  | "background"
   | "glass"
   | "shadows"
   | "layout"
@@ -113,7 +117,8 @@ const STEPS: ReadonlyArray<Step> = [
   { id: "colour", label: "Colours", icon: Palette, lede: "Pick the brand, text, status and page colours.", previewFocus: "colour" },
   { id: "type", label: "Fonts", icon: Type, lede: "Choose the body and heading families.", previewFocus: "type" },
   { id: "shape", label: "Shape", icon: Shapes, lede: "Corner radius, density and control sizes.", previewFocus: "shape" },
-  { id: "gradients", label: "Gradients", icon: Blend, lede: "Brand, danger and success gradients plus the page blooms.", previewFocus: "gradients" },
+  { id: "gradients", label: "Gradients", icon: Blend, lede: "Brand, danger and success gradients plus the sign-in and admin surfaces.", previewFocus: "gradients" },
+  { id: "background", label: "Background", icon: Layers, lede: "The page backdrop: two soft blooms over a base colour. Flatten to a single colour, or move the blooms around.", previewFocus: "background" },
   { id: "glass", label: "Glass", icon: SunMedium, lede: "Frosted surfaces: tint, opacity and blur per surface.", previewFocus: "glass" },
   { id: "shadows", label: "Shadows", icon: SquareStack, lede: "Depth at every elevation, from cards to dialogs.", previewFocus: "shadows" },
   { id: "hover", label: "Hover", icon: MousePointer2, lede: "Hover, press, washes and motion.", previewFocus: "shadows" },
@@ -745,6 +750,8 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ShapePanel api={api} />
             ) : section === "gradients" ? (
               <GradientPanel api={api} resolveColour={resolveColour} />
+            ) : section === "background" ? (
+              <BackgroundPanel api={api} resolveColour={resolveColour} />
             ) : section === "glass" ? (
               <GlassTab api={api} />
             ) : section === "shadows" ? (
