@@ -101,15 +101,21 @@ export function previewCss(theme: StudioTheme, active: Record<string, string>): 
 /**
  * Pins the Studio's own control panel to the base preset, so it stays
  * readable whatever the edited theme does: every base token is re-declared
- * on [data-studio-panel] (so composites recompute from the base primitives
- * there), and any token the theme sets that the base does not declare (a
- * component hook such as --button-radius) is un-declared with "initial", so
- * the components fall back to their defaults inside the panel.
+ * on [data-studio-panel] AND on every descendant inside it, so the edited
+ * theme can't leak in via CSS inheritance from an ancestor like :root
+ * (which the first arm of PREVIEW_SELECTOR writes to). Any token the
+ * theme sets that the base does not declare (a component hook such as
+ * --button-radius) is un-declared with "initial", so the components fall
+ * back to their defaults inside the panel. Same for --shell-logo if the
+ * user has uploaded one.
  *
- * The theme is passed in so we can also un-declare --shell-logo on the
- * studio chrome — the uploaded logo is not part of `active` (it's injected
- * directly by previewCss) but it would otherwise cascade onto the kit's
- * own top-bar logo via the `:root:root:has(...)` arm of PREVIEW_SELECTOR.
+ * The descendant selector is required because the preview CSS writes
+ * tokens to :root. Inheritance normally picks the nearest ancestor, so
+ * [data-studio-panel] on its own should be enough — but if any Studio
+ * subtree has a direct declaration (CSS Module scoped class, or an
+ * inline style) between the panel and the leaf, inheritance can snap
+ * back to :root. Setting the pinned tokens on the subtree directly
+ * means the Studio chrome can never see the edited values.
  */
 export function pinCss(active: Record<string, string>, base: ReadonlyMap<string, string>, theme?: StudioTheme): string {
   const keys = Object.keys(active);
@@ -119,8 +125,10 @@ export function pinCss(active: Record<string, string>, base: ReadonlyMap<string,
   const entries: Array<[string, string]> = [...base];
   for (const k of keys) if (!base.has(k)) entries.push([k, "initial"]);
   if (hasLogo && !base.has("--shell-logo")) entries.push(["--shell-logo", "initial"]);
-  return `[data-studio-panel][data-studio-panel] {
-${decls(entries)}
+  const block = decls(entries);
+  return `[data-studio-panel][data-studio-panel],
+[data-studio-panel][data-studio-panel] * {
+${block}
 }`;
 }
 
