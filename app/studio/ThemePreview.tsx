@@ -841,30 +841,10 @@ function ShapeShowcase({ brand }: { brand: BrandNames }) {
         </div>
       </GlassPanel>
 
-      {/* ── Radius scale (the one tile row kept) ───────────────────────
-          Six tiles labelled with their --r-* token. Scaling the roundness
-          slider ripples all six at once; useful as a reference even
-          when the composed card above shows the applied effect. */}
-      <GlassPanel padding="lg" className={styles.shapeCard}>
-        <div className={styles.shapeHeader}>
-          <div>
-            <ShapeEyebrow>Radius scale</ShapeEyebrow>
-            <h3 className={styles.shapeTitle}>--r-xs through --r-2xl</h3>
-            <p className={styles.shapeMuted}>Six corner tokens, moved together by the Corner roundness slider.</p>
-          </div>
-        </div>
-        <div className={styles.shapeRadiiRow}>
-          {["xs", "sm", "md", "lg", "xl", "2xl"].map((step) => (
-            <div key={step} className={styles.shapeRadiusTile} style={{ borderRadius: `var(--r-${step})` }}>
-              <span className={styles.shapeRadiusLabel}>--r-{step}</span>
-            </div>
-          ))}
-        </div>
-      </GlassPanel>
-
-      {/* Dialog widths section was removed from the Shape controls, so
-          the live-resizing modal preview on the right went with it —
-          nothing was editing those widths from this step any more. */}
+      {/* The composed workspace card above already shows every radius
+          in use (inputs, chips, buttons, cards, divider rules), so the
+          separate Radius scale tile row was redundant and gave the
+          Shape step a second heading. Dropped. */}
     </div>
   );
 }
@@ -1317,23 +1297,12 @@ function TypeShowcase({ brand }: { brand: BrandNames }) {
         <Button variant="secondary">Export CSV</Button>
         <Button variant="ghost">Skip for now</Button>
       </TypeSample>
-      <TypeSample
-        className={styles.typeMono}
-        info="Mono · var(--font-mono). Code blocks, hex values, API samples. Separate token from body/display."
-        tag="pre"
-      >
-        <code>{`npx shadcn@latest add KezLahd/rime/kit\nconst theme = loadWorking() ?? presetTheme();\nreturn <Button onClick={save}>Save</Button>;`}</code>
-      </TypeSample>
-      <TypeSample
-        className={styles.typeAlphabet}
-        info="Alphabet specimen — every letter, every numeral in the display font so you can scan the full character set."
-      >
-        ABCDEFGHIJKLMNOPQRSTUVWXYZ
-        <br />
-        abcdefghijklmnopqrstuvwxyz
-        <br />
-        0123456789 &amp; ! ? @ # $ % &lt; = &gt;
-      </TypeSample>
+      {/* Mono code block and the alphabet specimen were removed from
+          this specimen: both read as "every character the font has",
+          not "what my body / display font looks like in the real
+          components", which is what the Fonts step is actually
+          deciding. Both are still shipping tokens; a dedicated type
+          specimen page can carry them later. */}
     </div>
   );
 }

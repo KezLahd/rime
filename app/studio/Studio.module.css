@@ -523,6 +523,15 @@
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
+/* Steps with a sticky surface strip at the top (Shadows, Gradients,
+   Colours) override the vertical centring: the strip must sit against
+   the panelBody's top edge so position:sticky has somewhere to land,
+   and so the strip's negative margins break out of the padding
+   correctly. */
+.panelBody:has(.stripHeader) {
+  justify-content: flex-start;
+}
+
 .panelBody:focus-visible {
   outline: none;
 }

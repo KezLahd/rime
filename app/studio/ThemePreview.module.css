@@ -1298,9 +1298,9 @@
 .shapeShowcase {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 32px;
-  max-width: 1200px;
+  gap: 16px;
+  padding: 24px;
+  max-width: 1100px;
   margin-inline: auto;
   width: 100%;
 }
@@ -1308,7 +1308,7 @@
 .shapeCard {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .shapeRow {
@@ -1366,7 +1366,7 @@
 .shapeFormGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 14px 20px;
+  gap: 10px 16px;
 }
 
 .shapeFormGridWide {
