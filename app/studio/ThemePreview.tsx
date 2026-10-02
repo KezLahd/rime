@@ -155,6 +155,14 @@ export const ThemePreview = memo(function ThemePreview({
     return <BackgroundShowcase brand={brandText} />;
   }
 
+  // Glass step: a floating glass card centred on a visibly textured
+  // field so the user actually sees the blur and tint at work. Without
+  // something behind it a glass card over a flat page just reads as a
+  // solid card — the whole point of the step is lost.
+  if (focus === "glass") {
+    return <GlassShowcase brand={brandText} />;
+  }
+
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
   const groups = entriesByCategory().filter(([category]) => !whitelist || whitelist.includes(category));
   const unshelled = focus ? UNSHELLED.includes(focus) : false;
@@ -647,6 +655,38 @@ function BackgroundShowcase({ brand }: { brand: BrandNames }) {
         <p className={styles.backgroundLede}>
           Everything behind the dashboard: the base colour plus the two soft blooms. Flatten on the left for a solid field; drag the blooms to move them around.
         </p>
+      </GlassPanel>
+    </div>
+  );
+}
+
+/**
+ * Glass step preview: a stage with a chunky colourful pattern behind
+ * one floating glass card. The pattern is what sells the frosted
+ * effect — tint, opacity, blur, boost all show up as the card lets
+ * more or less of the pattern through. Without something behind it a
+ * glass card over a flat page reads as a solid card and the user
+ * can't tell their changes are landing.
+ */
+function GlassShowcase({ brand }: { brand: BrandNames }) {
+  return (
+    <div className={styles.glassStage}>
+      <div className={styles.glassBackdrop} aria-hidden="true" />
+      <GlassPanel padding="lg" className={styles.glassCard}>
+        <div className={styles.glassCardHead}>
+          <div>
+            <p className={styles.glassEyebrow}>{brand.full}</p>
+            <h3 className={styles.glassTitle}>Frosted at work</h3>
+          </div>
+          <Badge tone="success" variant="solid">Live</Badge>
+        </div>
+        <p className={styles.glassLede}>
+          Drag the Glass opacity down and watch the pattern behind this card bleed through. Boost adds saturation; blur is how soft the pattern reads under the frost.
+        </p>
+        <div className={styles.glassActions}>
+          <Button size="sm" iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Save changes</Button>
+          <Button size="sm" variant="secondary">Cancel</Button>
+        </div>
       </GlassPanel>
     </div>
   );

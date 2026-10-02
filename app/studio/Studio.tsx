@@ -305,43 +305,22 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     const frame = requestAnimationFrame(() => {
       setSources(readSources());
       setSaved(loadSaved());
-      const docBase = baseOfDocument();
-      const docMode = modeOfDocument();
+      // Preview defaults to Light; the kit's dark toggle in the top bar
+      // controls the chrome, not the preview. Base defaults to Default
+      // too — the user picks Frosted / Flat on the Glass step.
       const working = loadWorking();
-      const start = working ? { ...working, base: docBase, mode: docMode } : presetTheme(docBase, docMode);
+      const start = working ? { ...working, base: working.base ?? "default", mode: working.mode ?? "light" } : presetTheme("default", "light");
       themeRef.current = start;
       setTheme(start);
     });
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  // The top bar's Default / Flat and Light / Dark buttons set `data-theme`
-  // and `.dark` on <html>. The Studio preview is independent of those
-  // now (previewCss writes the full base tokens into [data-theme-studio]
-  // itself), so changes to <html> no longer have to propagate into the
-  // Studio's theme state. We leave the kit's top bar working for the
-  // rest of the site; the Studio's preview tracks its own theme.base /
-  // theme.mode which the user controls via the Studio's own panels
-  // (Default / Flat on the Glass step).
-  //
-  // We DO still watch for mode changes so a user flipping the top bar
-  // to Dark mid-session gets a dark preview on next render — otherwise
-  // the Light tokens injected by previewCss would stay stale.
-  useEffect(() => {
-    const html = document.documentElement;
-    const mo = new MutationObserver(() => {
-      const m = modeOfDocument();
-      const t0 = themeRef.current;
-      if (m !== t0.mode) {
-        const n = { ...t0, mode: m };
-        themeRef.current = n;
-        setTheme(n);
-        setStatus(`Editing ${lookName(t0.base, m)}`);
-      }
-    });
-    mo.observe(html, { attributes: true, attributeFilter: ["data-mode", "class"] });
-    return () => mo.disconnect();
-  }, []);
+  // The preview is now fully isolated from the kit's top bar. Preset and
+  // mode changes on <html> flow into the chrome via chromePreset /
+  // chromeMode state above; the preview reads theme.base / theme.mode
+  // which only the Studio's own controls change (Frosted / Flat on the
+  // Glass step; mode toggle lives in the chrome, not yet in the preview).
 
   // Keep the working theme across reloads (debounced: a logo's data URL makes
   // every write large), and tell the docs' logo slot when the logo changes.
@@ -355,6 +334,25 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     }, 400);
     return () => window.clearTimeout(t);
   }, [theme]);
+
+  // The kit's top-bar + chrome tracks whatever `<html>` says (Default
+  // / Flat and Light / Dark). The preview tracks the Studio's own
+  // theme.base / theme.mode. Keeping these two separate lets the top
+  // bar control the site (and the Studio chrome) without reaching into
+  // the preview, and the Glass step's Frosted / Flat toggle to control
+  // the preview without flipping the site.
+  const [chromePreset, setChromePreset] = useState<Preset>("default");
+  const [chromeMode, setChromeMode] = useState<Mode>("light");
+  useEffect(() => {
+    const read = () => {
+      setChromePreset(baseOfDocument());
+      setChromeMode(modeOfDocument());
+    };
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-mode", "class"] });
+    return () => mo.disconnect();
+  }, []);
 
   // `base` is the preview's base: tokens for the Studio's chosen preset
   // + mode. Drives previewCss (the preview reads these) and the Studio's
@@ -456,14 +454,14 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     [resolveExpr, resolveColour],
   );
 
-  // `chromeBase` is Rime Default + Light: the fixed look the Studio's
-  // own panel and top-bar chrome always wear. Independent of what the
-  // user has chosen for the preview, so switching the preview to Flat
-  // on the Glass step doesn't drag the Studio UI itself to Flat. Falls
-  // back to `base` only until the stylesheets have been read.
+  // `chromeBase` tracks the kit's own preset + mode (whatever the
+  // top-bar is set to). The chrome inherits those tokens, so clicking
+  // Flat up top makes the Studio shell itself look Flat (matching the
+  // rest of the kit site), while the preview stays on whatever
+  // theme.base the user picked.
   const chromeBase = useMemo(
-    () => (sources ? baseTokens(sources, "default", "light") : base),
-    [sources, base],
+    () => (sources ? baseTokens(sources, chromePreset, chromeMode) : base),
+    [sources, chromePreset, chromeMode, base],
   );
   const css = previewCss(theme, active, base);
   const pin = pinCss(active, chromeBase, theme);

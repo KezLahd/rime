@@ -511,6 +511,84 @@
   line-height: 1.5;
 }
 
+/* Glass step preview: a loud, patterned backdrop + one centred glass
+   card. The pattern is what makes the frost visible — without
+   something behind it, a glass card over a flat page just reads as a
+   solid card. Four radial blobs + a diagonal stripe for texture. */
+.glassStage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 48px 32px;
+  overflow: hidden;
+}
+
+.glassBackdrop {
+  position: absolute;
+  inset: -5%;
+  background:
+    radial-gradient(circle at 15% 20%, #f87171 0%, transparent 32%),
+    radial-gradient(circle at 85% 10%, #fbbf24 0%, transparent 30%),
+    radial-gradient(circle at 20% 85%, #34d399 0%, transparent 34%),
+    radial-gradient(circle at 80% 80%, #60a5fa 0%, transparent 32%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0) 0 24px, rgba(0, 0, 0, 0.06) 24px 25px);
+  background-color: #fdfdfd;
+  pointer-events: none;
+}
+
+:global(.dark) .glassBackdrop {
+  background:
+    radial-gradient(circle at 15% 20%, #be185d 0%, transparent 32%),
+    radial-gradient(circle at 85% 10%, #a16207 0%, transparent 30%),
+    radial-gradient(circle at 20% 85%, #047857 0%, transparent 34%),
+    radial-gradient(circle at 80% 80%, #1d4ed8 0%, transparent 32%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0) 0 24px, rgba(255, 255, 255, 0.05) 24px 25px);
+  background-color: #141822;
+}
+
+.glassCard {
+  position: relative;
+  width: min(100%, 440px);
+  z-index: 1;
+}
+
+.glassCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.glassEyebrow {
+  margin: 0 0 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.glassTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.glassLede {
+  margin: 0 0 16px;
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+.glassActions {
+  display: flex;
+  gap: 8px;
+}
+
 .gradientSpecimenCaption {
   display: flex;
   flex-direction: column;

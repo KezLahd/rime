@@ -165,16 +165,14 @@ const ALL_GLASS = [
 ];
 
 export function GlassTab({ api }: { api: StudioApi }) {
-  const off = api.theme.controls.glassOff === true;
   const base = api.theme.base;
   return (
     <>
       {/* The preview preset: Frosted (Rime Default — translucent panels,
           soft glows) vs Flat (Rime Flat — opaque surfaces, sharp
           corners, no blur). This drives ONLY the preview on the right;
-          the Studio's own chrome stays Frosted/Default always, and the
-          kit's top-bar Default / Flat buttons control the rest of the
-          site but not the preview. */}
+          the kit's top-bar Default / Flat buttons control the rest of
+          the site + the Studio chrome, but can't reach into the preview. */}
       <Group title="Preset" help="Frosted is Rime's translucent default — glass panels, rounder radii, soft glows. Flat drops the blur, flattens the corners and loses the glow for a crisper, document-y look. All your edits so far stay; only the untouched tokens follow the new base.">
         <Row label="Style">
           <ToggleGroup
@@ -189,14 +187,6 @@ export function GlassTab({ api }: { api: StudioApi }) {
             ]}
           />
         </Row>
-      </Group>
-      <Group title="On or off">
-        <CheckRow
-          label="Frosted glass"
-          note="On: translucent surfaces with blur over the page field. Off: every surface solid, as the Flat preset."
-          checked={!off}
-          onChange={(on) => (on ? api.reset(ALL_GLASS, ["glassOff"]) : api.set(glassOff(), { glassOff: true }))}
-        />
       </Group>
       {GLASS_SURFACES.map((s) => (
         <SurfaceEditor key={s.id} api={api} surfaceId={s.id} />
