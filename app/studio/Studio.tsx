@@ -34,7 +34,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { BrandPaletteProvider, ColourCategoryProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type ColourCategory, type FontHoverState } from "./controls";
+import { BrandPaletteProvider, ColourCategoryProvider, FontHoverProvider, GradientSelectionProvider, HoverCategoryProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type ColourCategory, type FontHoverState, type HoverCategory } from "./controls";
 import { toHex } from "./engine/colour";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
@@ -103,6 +103,7 @@ export type PreviewFocus =
   | "background"
   | "glass"
   | "shadows"
+  | "hover"
   | "layout"
   | "image"
   | "contrast"
@@ -121,7 +122,7 @@ const STEPS: ReadonlyArray<Step> = [
   { id: "background", label: "Background", icon: Layers, lede: "The page backdrop: two soft blooms over a base colour. Flatten to a single colour, or move the blooms around.", previewFocus: "background" },
   { id: "glass", label: "Glass", icon: SunMedium, lede: "Frosted surfaces: tint, opacity and blur per surface.", previewFocus: "glass" },
   { id: "shadows", label: "Shadows", icon: SquareStack, lede: "Depth at every elevation, from cards to dialogs.", previewFocus: "shadows" },
-  { id: "hover", label: "Hover", icon: MousePointer2, lede: "Hover, press, washes and motion.", previewFocus: "shadows" },
+  { id: "hover", label: "Hover", icon: MousePointer2, lede: "Hover, press, washes and motion.", previewFocus: "hover" },
   { id: "layout", label: "Layout", icon: LayoutDashboard, lede: "Sidebar, collapsed rail or header-only, and the logo corner.", previewFocus: "layout" },
   { id: "contrast", label: "Contrast", icon: Contrast, lede: "Every text and control pair, measured live, with a fix for each failure.", previewFocus: "contrast" },
   { id: "export", label: "Export", icon: Code, lede: "theme.css and theme.json, ready for another project.", previewFocus: "export" },
@@ -286,6 +287,10 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   /** Which category is open on the Colours step; the preview spotlights
    *  only the components that read that category's tokens. */
   const [colourCategory, setColourCategory] = useState<ColourCategory | null>(null);
+
+  /** Which category is open on the Hover step; the preview shows only
+   *  the components whose hover behaviour reads those tokens. */
+  const [hoverCategory, setHoverCategory] = useState<HoverCategory | null>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -834,6 +839,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <GradientSelectionProvider onSelect={setGradientSelection}>
             <ShadowSelectionProvider onSelect={setShadowSelection}>
             <ColourCategoryProvider onSelect={setColourCategory}>
+            <HoverCategoryProvider onSelect={setHoverCategory}>
             <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
@@ -869,6 +875,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
             </BrandPaletteProvider>
+            </HoverCategoryProvider>
             </ColourCategoryProvider>
             </ShadowSelectionProvider>
             </GradientSelectionProvider>
@@ -960,7 +967,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             }
           >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} shadowSelection={shadowSelection} colourCategory={colourCategory} />
+            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} shadowSelection={shadowSelection} colourCategory={colourCategory} hoverCategory={hoverCategory} />
           </div>
         </section>
       </div>

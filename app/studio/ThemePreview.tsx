@@ -31,7 +31,7 @@ import styles from "./ThemePreview.module.css";
  *  The shell is only shown when the step is actually about the shell
  *  (layout, final export) or inherently needs the chrome (components,
  *  contrast, tokens, image). */
-const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "background", "glass", "shadows"];
+const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "background", "glass", "shadows", "hover"];
 
 /**
  * Derives three stand-in strings from the business name typed on step 1:
@@ -92,6 +92,7 @@ export const ThemePreview = memo(function ThemePreview({
   gradientSelection,
   shadowSelection,
   colourCategory,
+  hoverCategory,
 }: {
   /** The business name typed on step 1. Fills every "Acme Inc" placeholder
    *  across the showcases; falls back to "Acme Inc" when empty. */
@@ -114,6 +115,9 @@ export const ThemePreview = memo(function ThemePreview({
   /** The colour category currently open on the Colours step. When set,
    *  the showcase renders only components that read that category. */
   colourCategory?: "brand" | "text" | "signals" | "field" | "charts" | "ramp" | null;
+  /** The hover category currently open on the Hover step. Spotlights
+   *  the components whose hover behaviour reads those tokens. */
+  hoverCategory?: "buttons" | "washes" | "motion" | null;
 }) {
   const brandText = brandNames(brand);
 
@@ -178,6 +182,14 @@ export const ThemePreview = memo(function ThemePreview({
   // token in the Shadows panel.
   if (focus === "shadows") {
     return <ShadowShowcase selection={shadowSelection ?? null} brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} />;
+  }
+
+  // Hover step: interactive specimens the user can actually hover over.
+  // Each category spotlights only the components whose hover tokens
+  // the user is tuning: Buttons shows real buttons; Washes shows a
+  // table, sidebar and menu to hover; Motion shows timing demos.
+  if (focus === "hover") {
+    return <HoverShowcase category={hoverCategory ?? "buttons"} brand={brandText} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -756,6 +768,138 @@ function ColourRampShowcase({ peek }: { peek: string | null }) {
           ))}
         </Spot>
         <p className={styles.catRampLabel}>Stacked example (bars)</p>
+      </GlassPanel>
+    </div>
+  );
+}
+
+/**
+ * Hover step preview: one focused specimen per category. Buttons shows
+ * the three button variants + their press state live; Washes shows a
+ * table, a mini sidebar and a popover menu — all hoverable so the user
+ * sees the washes land in real time; Motion shows a timed box transition
+ * running against each duration token.
+ */
+function HoverShowcase({ category, brand }: { category: "buttons" | "washes" | "motion"; brand: BrandNames }) {
+  if (category === "buttons") {
+    return (
+      <div className={styles.catShowcase}>
+        <div className={styles.catIntro}>
+          <p className={styles.catEyebrow}>Buttons</p>
+          <h3 className={styles.catTitle}>Hover and press</h3>
+          <p className={styles.catLede}>Point at a button to see the hover lift, lighten and glow. Hold the mouse down to see the press darken.</p>
+        </div>
+        <GlassPanel padding="lg" className={styles.hoverCard}>
+          <div className={styles.hoverRow}>
+            <span className={styles.hoverRowLabel}>Primary</span>
+            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+          </div>
+          <div className={styles.hoverRow}>
+            <span className={styles.hoverRowLabel}>Secondary</span>
+            <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export CSV</Button>
+          </div>
+          <div className={styles.hoverRow}>
+            <span className={styles.hoverRowLabel}>Ghost</span>
+            <Button variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>Skip for now</Button>
+          </div>
+          <div className={styles.hoverRow}>
+            <span className={styles.hoverRowLabel}>Danger</span>
+            <Button variant="danger">Delete project</Button>
+          </div>
+          <div className={styles.hoverRow}>
+            <span className={styles.hoverRowLabel}>Disabled</span>
+            <Button disabled>Not available</Button>
+          </div>
+        </GlassPanel>
+        <p className={styles.catFootnote}>{brand.full} · Press and hold any button to see the press-darken overlay.</p>
+      </div>
+    );
+  }
+
+  if (category === "washes") {
+    return (
+      <div className={styles.catShowcase}>
+        <div className={styles.catIntro}>
+          <p className={styles.catEyebrow}>Washes</p>
+          <h3 className={styles.catTitle}>Surface hover tints</h3>
+          <p className={styles.catLede}>Hover any row below. Each surface takes its own tint — a table row picks up brand wash, a sidebar item lights up, a menu row paints a brand gradient.</p>
+        </div>
+        <section className={styles.hoverWashesGrid}>
+          <GlassPanel padding="md" className={styles.hoverWashCard}>
+            <p className={styles.hoverWashTitle}>Table row</p>
+            <div className={styles.hoverTable}>
+              <div className={styles.hoverTableHead}>
+                <span>Client</span>
+                <span>Amount</span>
+                <span>Status</span>
+              </div>
+              {[[brand.full, "$2,400.00", "Paid"], ["Globex", "$880.00", "Pending"], ["Initech", "$1,120.00", "Overdue"]].map(([a, b, c]) => (
+                <div key={a} className={styles.hoverTableRow}>
+                  <span>{a}</span>
+                  <span>{b}</span>
+                  <span>{c}</span>
+                </div>
+              ))}
+            </div>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.hoverWashCard}>
+            <p className={styles.hoverWashTitle}>Sidebar item</p>
+            <nav className={styles.hoverSidebar}>
+              {["Dashboard", "Invoices", "Clients", "Reports", "Settings"].map((label) => (
+                <button type="button" key={label} className={styles.hoverSidebarItem}>
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.hoverWashCard}>
+            <p className={styles.hoverWashTitle}>Menu item</p>
+            <ul className={styles.hoverMenu}>
+              {["Rename", "Duplicate", "Share", "Archive"].map((label) => (
+                <li key={label} className={styles.hoverMenuItem}>{label}</li>
+              ))}
+            </ul>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.hoverWashCard}>
+            <p className={styles.hoverWashTitle}>Grey control</p>
+            <div className={styles.hoverRecessRow}>
+              <button type="button" className={styles.hoverRecessChip}>7 days</button>
+              <button type="button" className={styles.hoverRecessChip}>30 days</button>
+              <button type="button" className={styles.hoverRecessChip}>Quarter</button>
+              <button type="button" className={styles.hoverRecessChip}>Year</button>
+            </div>
+          </GlassPanel>
+        </section>
+      </div>
+    );
+  }
+
+  // Motion: one timed box per duration token so the user sees Fast vs Standard vs Slow run against each other.
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Motion</p>
+        <h3 className={styles.catTitle}>Transition timings</h3>
+        <p className={styles.catLede}>Each row runs its box across the stage at the matching duration. Hover any row to replay. Reset the sliders to compare lengths side-by-side.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.hoverMotionCard}>
+        {[
+          { label: "Fast", varName: "--dur-fast" },
+          { label: "Standard", varName: "--dur" },
+          { label: "Slow", varName: "--dur-slow" },
+        ].map((row) => (
+          <div key={row.varName} className={styles.hoverMotionRow}>
+            <span className={styles.hoverMotionLabel}>{row.label}</span>
+            <div className={styles.hoverMotionTrack}>
+              <span
+                className={styles.hoverMotionBall}
+                style={{ transitionDuration: `var(${row.varName})`, transitionTimingFunction: "var(--ease, cubic-bezier(0.4, 0, 0.2, 1))" }}
+                aria-label={`${row.label} transition demo`}
+              />
+            </div>
+          </div>
+        ))}
+        <p className={styles.catFootnote}>Hover the track to swap the ball to the far end; move the pointer off to run it back. The ball reads the duration token live.</p>
       </GlassPanel>
     </div>
   );

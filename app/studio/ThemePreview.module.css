@@ -871,6 +871,219 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Hover showcases ───────────────────────────────────────────────── */
+
+/* Buttons: five rows of a labelled real-component button. User hovers
+   each to see lift / lighten / glow; press to see darken. */
+.hoverCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 560px);
+}
+
+.hoverRow {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.hoverRowLabel {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Washes: four stacked cards each demonstrating a different wash
+   token in its real surface context. */
+.hoverWashesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  width: min(100%, 720px);
+}
+
+@media (max-width: 720px) {
+  .hoverWashesGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hoverWashCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hoverWashTitle {
+  margin: 0;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.hoverTable {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-md);
+}
+
+.hoverTableHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  padding: 10px 14px;
+  background: var(--table-head-fill);
+  color: var(--ink-muted);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+.hoverTableRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  padding: 12px 14px;
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  border-top: var(--border-w) solid var(--line-soft);
+  transition: background-color var(--dur, 150ms) var(--ease, ease-out);
+  cursor: default;
+}
+
+.hoverTableRow:hover {
+  background: var(--table-row-hover, rgba(var(--rgb-brand), 0.035));
+}
+
+.hoverSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: var(--chrome-sidebar, var(--surface-solid));
+  border-radius: var(--r-md);
+}
+
+.hoverSidebarItem {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur, 150ms) var(--ease, ease-out);
+}
+
+.hoverSidebarItem:hover {
+  background: var(--sidebar-hover-bg, rgba(var(--rgb-white), 0.65));
+}
+
+.hoverMenu {
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: var(--surface-solid);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-hairline-card);
+}
+
+.hoverMenuItem {
+  padding: 10px 16px;
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  cursor: default;
+  transition: background var(--dur, 150ms) var(--ease, ease-out), color var(--dur, 150ms) var(--ease, ease-out);
+}
+
+.hoverMenuItem:hover {
+  background: var(--popover-item-active-bg, linear-gradient(to right, rgba(var(--rgb-brand), 0.14), rgba(var(--rgb-brand-deep), 0.07)));
+  color: var(--ink-heading);
+}
+
+.hoverRecessRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hoverRecessChip {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--recess-fill);
+  color: var(--ink-body);
+  font-size: var(--text-small);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  transition: background var(--dur, 150ms) var(--ease, ease-out);
+}
+
+.hoverRecessChip:hover {
+  background: var(--recess-fill-hover);
+}
+
+/* Motion: three rows, each a track with a ball that transitions
+   across on hover using the matching duration token. */
+.hoverMotionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(100%, 560px);
+}
+
+.hoverMotionRow {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.hoverMotionLabel {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.hoverMotionTrack {
+  position: relative;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--recess-fill);
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  cursor: pointer;
+}
+
+.hoverMotionBall {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  border-radius: 50%;
+  background: var(--brand);
+  box-shadow: var(--glow-md);
+  transition-property: left;
+}
+
+.hoverMotionTrack:hover .hoverMotionBall {
+  left: calc(100% - 28px);
+}
+
 /* ── Shadows showcase ───────────────────────────────────────────────── */
 
 .shadowStage {

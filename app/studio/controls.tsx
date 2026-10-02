@@ -133,6 +133,30 @@ export function ColourCategoryProvider({
 export function useColourCategory() {
   return useContext(ColourCategoryContext);
 }
+
+/**
+ * Hover-category context: the Hover step broadcasts which group is
+ * being edited (buttons, washes, motion); the HoverShowcase on the
+ * right renders only the components whose hover behaviour reads
+ * those tokens.
+ */
+export type HoverCategory = "buttons" | "washes" | "motion";
+const HoverCategoryContext = createContext<(cat: HoverCategory | null) => void>(() => {});
+
+export function HoverCategoryProvider({
+  onSelect,
+  children,
+}: {
+  onSelect: (cat: HoverCategory | null) => void;
+  children: ReactNode;
+}) {
+  const stable = useCallback(onSelect, [onSelect]);
+  return <HoverCategoryContext.Provider value={stable}>{children}</HoverCategoryContext.Provider>;
+}
+
+export function useHoverCategory() {
+  return useContext(HoverCategoryContext);
+}
 import {
   Alert,
   IconButton,

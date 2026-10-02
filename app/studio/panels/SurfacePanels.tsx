@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, Select, Toggletip, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useShadowSelection } from "../controls";
+import { AngleRow, CheckRow, ColourRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useHoverCategory, useShadowSelection, type HoverCategory } from "../controls";
 import { parseColour, toCss, toHex, type Rgb } from "../engine/colour";
 import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
@@ -596,67 +596,267 @@ const EASES = [
 
 const alphaOf = (v: string | undefined, fallback: number) => num(v?.match(/,\s*([\d.]+)\)\s*\)?\s*$/)?.[1], fallback);
 
+const HOVER_SECTIONS: ReadonlyArray<{ id: HoverCategory; label: string; tokens: string[] }> = [
+  { id: "buttons", label: "Buttons", tokens: ["--button-lift", "--button-hover-overlay", "--button-press-overlay", "--button-hover-glow", "--button-secondary-hover-bg", "--button-dur", "--button-ease"] },
+  { id: "washes", label: "Washes", tokens: ["--table-row-hover", "--sidebar-hover-bg", "--recess-fill-hover", "--popover-item-active-bg"] },
+  { id: "motion", label: "Motion", tokens: ["--dur-fast", "--dur", "--dur-slow", "--ease"] },
+];
+
+/**
+ * Hover step: three categories (Buttons / Washes / Motion) picked from
+ * a sticky strip header, matching the Colours and Shadows pattern.
+ * Every slider carries a help toggletip explaining what the token
+ * actually affects — the terms (hover lighten, press darken, washes,
+ * curves) read as design jargon on their own, so the (i) is where the
+ * plain-English explanation lives. The preview on the right spotlights
+ * only the components whose hover behaviour the user is tuning.
+ */
 export function HoverPanel({ api }: { api: StudioApi }) {
   const glowK = ctl(api, "buttonGlow", 1);
+  const [active, setActive] = useState<HoverCategory>("buttons");
+  const current = HOVER_SECTIONS.find((s) => s.id === active) ?? HOVER_SECTIONS[0];
+  const sectionDone = (s: typeof HOVER_SECTIONS[number]) => s.tokens.some((t) => api.changed(t));
+
+  const broadcast = useHoverCategory();
+  useEffect(() => {
+    broadcast(active);
+    return () => broadcast(null);
+  }, [active, broadcast]);
+
   return (
     <>
-      <Group title="Buttons" help="Nothing scales on hover and nothing lifts by default: buttons deepen their glow. A theme can add a small lift or change the washes here.">
-        <SliderRow label="Hover lift" token="--button-lift" value={num(api.value("--button-lift"), 0)} min={-4} max={0} step={0.5} unit="px" changed={api.changed("--button-lift")} onChange={(v) => api.set({ "--button-lift": `${v}px` })} onReset={() => api.reset(["--button-lift"])} />
-        <SliderRow label="Hover lighten" format={(v) => `${Math.round(v * 100)}%`} token="--button-hover-overlay" value={alphaOf(api.value("--button-hover-overlay"), 0.07)} min={0} max={0.3} step={0.01} changed={api.changed("--button-hover-overlay")} onChange={(a) => api.set({ "--button-hover-overlay": `rgba(var(--rgb-white), ${a})` })} onReset={() => api.reset(["--button-hover-overlay"])} />
-        <SliderRow label="Press darken" format={(v) => `${Math.round(v * 100)}%`} token="--button-press-overlay" value={alphaOf(api.value("--button-press-overlay"), 0.14)} min={0} max={0.4} step={0.01} changed={api.changed("--button-press-overlay")} onChange={(a) => api.set({ "--button-press-overlay": `rgba(var(--rgb-shade), ${a})` })} onReset={() => api.reset(["--button-press-overlay"])} />
-        <SliderRow
-          label="Hover glow"
-          format={(v) => `${Math.round(v * 100)}%`}
-          token="--button-hover-glow"
-          value={glowK}
-          min={0}
-          max={2}
-          step={0.05}
-          changed={api.changed("--button-hover-glow")}
-          onChange={(k) => api.set({ "--button-hover-glow": scaleAlphas(api.base.get("--glow-md-hover") ?? "0 5px 16px rgba(var(--rgb-brand), 0.42)", k) }, { buttonGlow: k })}
-          onReset={() => api.reset(["--button-hover-glow"], ["buttonGlow"])}
-        />
-        <SliderRow label="Secondary hover fill" format={(v) => `${Math.round(v * 100)}%`} token="--button-secondary-hover-bg" value={alphaOf(api.value("--button-secondary-hover-bg"), 0.68)} min={0.3} max={1} step={0.01} changed={api.changed("--button-secondary-hover-bg")} onChange={(a) => api.set({ "--button-secondary-hover-bg": `rgba(var(--rgb-white), ${a})` })} onReset={() => api.reset(["--button-secondary-hover-bg"])} />
-        <SliderRow label="Hover speed" token="--button-dur" value={num(api.value("--button-dur"), 150)} min={0} max={500} step={10} unit="ms" changed={api.changed("--button-dur")} onChange={(v) => api.set({ "--button-dur": `${v}ms` })} onReset={() => api.reset(["--button-dur"])} />
-        <SelectRow label="Hover curve" token="--button-ease" value={api.value("--button-ease") ?? "preset"} options={EASES} changed={api.changed("--button-ease")} onChange={(v) => (v === "preset" ? api.reset(["--button-ease"]) : api.set({ "--button-ease": v }))} onReset={() => api.reset(["--button-ease"])} />
-      </Group>
-      <Group title="Washes" help="The tint a hovered or active surface takes.">
-        <SliderRow label="Table row" token="--table-row-hover" value={alphaOf(api.value("--table-row-hover") === "var(--wash-row)" ? undefined : api.value("--table-row-hover"), 0.035)} min={0} max={0.15} step={0.005} changed={api.changed("--table-row-hover")} onChange={(a) => api.set({ "--table-row-hover": `rgba(var(--rgb-brand), ${a})` })} onReset={() => api.reset(["--table-row-hover"])} />
-        <SliderRow label="Sidebar item" format={(v) => `${Math.round(v * 100)}%`} token="--sidebar-hover-bg" value={alphaOf(api.value("--sidebar-hover-bg"), 0.65)} min={0} max={1} step={0.01} changed={api.changed("--sidebar-hover-bg")} onChange={(a) => api.set({ "--sidebar-hover-bg": `rgba(var(--rgb-white), ${a})` })} onReset={() => api.reset(["--sidebar-hover-bg"])} />
-        <SliderRow label="Grey controls" format={(v) => `${Math.round(v * 100)}%`} token="--recess-fill-hover" value={alphaOf(api.value("--recess-fill-hover"), 0.13)} min={0} max={0.3} step={0.01} changed={api.changed("--recess-fill-hover")} onChange={(a) => api.set({ "--recess-fill-hover": `rgba(var(--rgb-brand-deep), ${a})` })} onReset={() => api.reset(["--recess-fill-hover"])} />
-        <SliderRow
-          label="Menu item"
-          format={(v) => `${Math.round(v * 100)}%`}
-          token="--popover-item-active-bg"
-          value={ctl(api, "itemWash", 1)}
-          min={0}
-          max={2.5}
-          step={0.05}
-          changed={api.changed("--popover-item-active-bg")}
-          onChange={(k) =>
-            api.set(
-              { "--popover-item-active-bg": `linear-gradient(to right, rgba(var(--rgb-brand), ${(0.14 * k).toFixed(3)}), rgba(var(--rgb-brand-deep), ${(0.07 * k).toFixed(3)}))` },
-              { itemWash: k },
-            )
-          }
-          onReset={() => api.reset(["--popover-item-active-bg"], ["itemWash"])}
-        />
-      </Group>
-      <Group title="Motion" help="Reduced motion still zeroes these for people who ask for it.">
-        {(
-          [
-            ["--dur-fast", "Quick transitions", 120],
-            ["--dur", "Standard transitions", 150],
-            ["--dur-slow", "Slow transitions", 200],
-          ] as const
-        ).map(([n, label, d]) => (
-          <SliderRow key={n} label={label} token={n} value={num(api.value(n), d)} min={0} max={600} step={10} unit="ms" changed={api.changed(n)} onChange={(v) => api.set({ [n]: `${v}ms` })} onReset={() => api.reset([n])} />
-        ))}
-        <SelectRow label="Motion curve" token="--ease" value={api.changed("--ease") ? (api.value("--ease") ?? "preset") : "preset"} options={EASES} changed={api.changed("--ease")} onChange={(v) => (v === "preset" ? api.reset(["--ease"]) : api.set({ "--ease": v }))} onReset={() => api.reset(["--ease"])} />
-      </Group>
+      <SurfaceStrip
+        variant="header"
+        label="Hover"
+        value={active}
+        options={HOVER_SECTIONS.map((s) => ({ value: s.id, label: s.label }))}
+        onChange={setActive}
+        isComplete={(cat) => {
+          const s = HOVER_SECTIONS.find((x) => x.id === cat);
+          return !!s && sectionDone(s);
+        }}
+      />
+
+      {active === "buttons" ? (
+        <Group title="Buttons" help="Every effect a button has when the pointer sits on it: a tiny lift, a lighten layer, the brand glow deepening, and the colour of the press shadow.">
+          <SliderRow
+            label="Lift on hover"
+            help="How many pixels a button rises off its resting position when hovered. 0 = flat (Rime default; buttons rely on the glow instead). Negative values push down for a press-y feel."
+            token="--button-lift"
+            value={num(api.value("--button-lift"), 0)}
+            min={-4}
+            max={0}
+            step={0.5}
+            unit="px"
+            changed={api.changed("--button-lift")}
+            onChange={(v) => api.set({ "--button-lift": `${v}px` })}
+            onReset={() => api.reset(["--button-lift"])}
+          />
+          <SliderRow
+            label="Lighten on hover"
+            help="A white film layered over the button's base colour on hover. 0% means no change (brighter brands look weird under too much white); 7% is the Rime default."
+            displayScale={100}
+            unit="%"
+            token="--button-hover-overlay"
+            value={alphaOf(api.value("--button-hover-overlay"), 0.07)}
+            min={0}
+            max={0.3}
+            step={0.01}
+            changed={api.changed("--button-hover-overlay")}
+            onChange={(a) => api.set({ "--button-hover-overlay": `rgba(var(--rgb-white), ${a})` })}
+            onReset={() => api.reset(["--button-hover-overlay"])}
+          />
+          <SliderRow
+            label="Darken on press"
+            help="A dark film layered over the button while the mouse is held down. Reads as 'pressed in'. 14% is default."
+            displayScale={100}
+            unit="%"
+            token="--button-press-overlay"
+            value={alphaOf(api.value("--button-press-overlay"), 0.14)}
+            min={0}
+            max={0.4}
+            step={0.01}
+            changed={api.changed("--button-press-overlay")}
+            onChange={(a) => api.set({ "--button-press-overlay": `rgba(var(--rgb-shade), ${a})` })}
+            onReset={() => api.reset(["--button-press-overlay"])}
+          />
+          <SliderRow
+            label="Hover glow"
+            help="How much deeper the brand-coloured halo under a primary button becomes on hover. 100% = preset; 0% kills the glow entirely; 200% doubles it."
+            displayScale={100}
+            unit="%"
+            token="--button-hover-glow"
+            value={glowK}
+            min={0}
+            max={2}
+            step={0.05}
+            changed={api.changed("--button-hover-glow")}
+            onChange={(k) => api.set({ "--button-hover-glow": scaleAlphas(api.base.get("--glow-md-hover") ?? "0 5px 16px rgba(var(--rgb-brand), 0.42)", k) }, { buttonGlow: k })}
+            onReset={() => api.reset(["--button-hover-glow"], ["buttonGlow"])}
+          />
+          <SliderRow
+            label="Secondary fill on hover"
+            help="How solid the secondary (frosted glass) button's background becomes on hover. 100% is fully opaque white; 68% is default — enough to feel pressed but keeps the glass tint."
+            displayScale={100}
+            unit="%"
+            token="--button-secondary-hover-bg"
+            value={alphaOf(api.value("--button-secondary-hover-bg"), 0.68)}
+            min={0.3}
+            max={1}
+            step={0.01}
+            changed={api.changed("--button-secondary-hover-bg")}
+            onChange={(a) => api.set({ "--button-secondary-hover-bg": `rgba(var(--rgb-white), ${a})` })}
+            onReset={() => api.reset(["--button-secondary-hover-bg"])}
+          />
+          <SliderRow
+            label="Transition speed"
+            help="How long the hover / press transitions take. Shorter = snappier; longer = more fluid. Reduced-motion users see 0 regardless."
+            token="--button-dur"
+            value={num(api.value("--button-dur"), 150)}
+            min={0}
+            max={500}
+            step={10}
+            unit="ms"
+            changed={api.changed("--button-dur")}
+            onChange={(v) => api.set({ "--button-dur": `${v}ms` })}
+            onReset={() => api.reset(["--button-dur"])}
+          />
+          <SelectRow
+            label="Transition curve"
+            help="The easing function the button's hover transitions use. Standard matches most of the kit; Out, long settle feels springier; Linear is strict and quick."
+            token="--button-ease"
+            value={api.value("--button-ease") ?? "preset"}
+            options={EASES}
+            changed={api.changed("--button-ease")}
+            onChange={(v) => (v === "preset" ? api.reset(["--button-ease"]) : api.set({ "--button-ease": v }))}
+            onReset={() => api.reset(["--button-ease"])}
+          />
+        </Group>
+      ) : null}
+
+      {active === "washes" ? (
+        <Group title="Washes" help="A wash is the tint a surface takes when the pointer hovers over it. One per surface so hover reads differently on a table row vs a sidebar item.">
+          <SliderRow
+            label="Table row"
+            help="How much brand tint a table row picks up when hovered. 0.5% is barely-there, 3.5% is default, 15% is loud."
+            displayScale={100}
+            unit="%"
+            token="--table-row-hover"
+            value={alphaOf(api.value("--table-row-hover") === "var(--wash-row)" ? undefined : api.value("--table-row-hover"), 0.035)}
+            min={0}
+            max={0.15}
+            step={0.005}
+            changed={api.changed("--table-row-hover")}
+            onChange={(a) => api.set({ "--table-row-hover": `rgba(var(--rgb-brand), ${a})` })}
+            onReset={() => api.reset(["--table-row-hover"])}
+          />
+          <SliderRow
+            label="Sidebar item"
+            help="How opaque the white wash on a sidebar nav row becomes on hover. 65% is default — a lit-up chip that still shows the glass behind."
+            displayScale={100}
+            unit="%"
+            token="--sidebar-hover-bg"
+            value={alphaOf(api.value("--sidebar-hover-bg"), 0.65)}
+            min={0}
+            max={1}
+            step={0.01}
+            changed={api.changed("--sidebar-hover-bg")}
+            onChange={(a) => api.set({ "--sidebar-hover-bg": `rgba(var(--rgb-white), ${a})` })}
+            onReset={() => api.reset(["--sidebar-hover-bg"])}
+          />
+          <SliderRow
+            label="Grey controls"
+            help="The hover state of grey recessed controls: date-range pickers, filter chips, number inputs. Darkens with a brand-deep tint."
+            displayScale={100}
+            unit="%"
+            token="--recess-fill-hover"
+            value={alphaOf(api.value("--recess-fill-hover"), 0.13)}
+            min={0}
+            max={0.3}
+            step={0.01}
+            changed={api.changed("--recess-fill-hover")}
+            onChange={(a) => api.set({ "--recess-fill-hover": `rgba(var(--rgb-brand-deep), ${a})` })}
+            onReset={() => api.reset(["--recess-fill-hover"])}
+          />
+          <SliderRow
+            label="Menu item"
+            help="The brand gradient painted behind an active popover / dropdown row. 100% is the preset; 0% makes it transparent; 250% is a bold brand-ink background."
+            displayScale={100}
+            unit="%"
+            token="--popover-item-active-bg"
+            value={ctl(api, "itemWash", 1)}
+            min={0}
+            max={2.5}
+            step={0.05}
+            changed={api.changed("--popover-item-active-bg")}
+            onChange={(k) =>
+              api.set(
+                { "--popover-item-active-bg": `linear-gradient(to right, rgba(var(--rgb-brand), ${(0.14 * k).toFixed(3)}), rgba(var(--rgb-brand-deep), ${(0.07 * k).toFixed(3)}))` },
+                { itemWash: k },
+              )
+            }
+            onReset={() => api.reset(["--popover-item-active-bg"], ["itemWash"])}
+          />
+        </Group>
+      ) : null}
+
+      {active === "motion" ? (
+        <Group title="Motion" help="How long non-button transitions take and the curve they follow. Reduced-motion users still see 0 regardless.">
+          <SliderRow
+            label="Fast"
+            help="Micro transitions: hover highlights, focus rings, caret moves. Default 120 ms. Shorter feels snappy, longer feels luxurious."
+            token="--dur-fast"
+            value={num(api.value("--dur-fast"), 120)}
+            min={0}
+            max={600}
+            step={10}
+            unit="ms"
+            changed={api.changed("--dur-fast")}
+            onChange={(v) => api.set({ "--dur-fast": `${v}ms` })}
+            onReset={() => api.reset(["--dur-fast"])}
+          />
+          <SliderRow
+            label="Standard"
+            help="The default transition for most hover washes and open / close states. 150 ms is the Rime default."
+            token="--dur"
+            value={num(api.value("--dur"), 150)}
+            min={0}
+            max={600}
+            step={10}
+            unit="ms"
+            changed={api.changed("--dur")}
+            onChange={(v) => api.set({ "--dur": `${v}ms` })}
+            onReset={() => api.reset(["--dur"])}
+          />
+          <SliderRow
+            label="Slow"
+            help="Longer transitions: modal fades, page-level shifts. 200 ms by default."
+            token="--dur-slow"
+            value={num(api.value("--dur-slow"), 200)}
+            min={0}
+            max={600}
+            step={10}
+            unit="ms"
+            changed={api.changed("--dur-slow")}
+            onChange={(v) => api.set({ "--dur-slow": `${v}ms` })}
+            onReset={() => api.reset(["--dur-slow"])}
+          />
+          <SelectRow
+            label="Easing curve"
+            help="The default easing function for every non-button transition. Standard = ease-out-ish; Out, long settle = springy with a slow finish."
+            token="--ease"
+            value={api.changed("--ease") ? (api.value("--ease") ?? "preset") : "preset"}
+            options={EASES}
+            changed={api.changed("--ease")}
+            onChange={(v) => (v === "preset" ? api.reset(["--ease"]) : api.set({ "--ease": v }))}
+            onReset={() => api.reset(["--ease"])}
+          />
+        </Group>
+      ) : null}
+
       <Advanced
         api={api}
-        tokens={["--button-lift", "--button-hover-overlay", "--button-press-overlay", "--button-hover-glow", "--button-secondary-hover-bg", "--button-dur", "--button-ease", "--table-row-hover", "--sidebar-hover-bg", "--recess-fill-hover", "--popover-item-active-bg", "--dur-fast", "--dur", "--dur-slow", "--ease"]}
+        tokens={current.tokens}
       />
     </>
   );
