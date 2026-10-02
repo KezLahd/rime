@@ -5,11 +5,24 @@
    pinCss pins to the base preset, so they stay readable whatever the edited
    theme does; the preview and the top bar show the edited theme. */
 
+/* The Studio root paints its own solid background using Rime Default's
+   --page-base so the themed body background behind it can't bleed
+   through the transparent chrome areas (inspector gaps, handle, top
+   bar when its frosted glass sits over empty space). Hard-coded to a
+   base value — if we used var(--page-base) it would track the edited
+   theme and reintroduce the exact leak this is meant to block. The
+   preview region inside .studio has its own themed bg via the
+   previewScroll children, so this doesn't affect the live preview. */
 .studio {
   display: flex;
   flex-direction: column;
   height: 100dvh;
   overflow: hidden;
+  background: #eef0f4;
+}
+
+:global(.dark) .studio {
+  background: #0e1015;
 }
 
 /* Two columns, Atlas doc-crafter style: an inspector unit on the left
@@ -1199,14 +1212,21 @@
 /* Wrap has the same horizontal padding as the end-stop radius so the
    square anchors line up with the inner edges of the panel's rows
    instead of overshooting into the Group's padding. */
+/* Wrap pads 12 px on each side — the exact half-width of a 24 px marker
+   — so the end-stop squares sit symmetrically inside the Group's content
+   edge on BOTH sides. */
 .stopsBarWrap {
   position: relative;
-  padding: 10px 14px 26px;
+  padding: 10px 12px 26px;
   margin-top: 4px;
 }
 
+/* The gradient bar fills the wrap's content box. End markers at 0% and
+   100% then centre on the two bar edges and overhang by exactly 12 px,
+   which matches the wrap's padding so the entire specimen is symmetric. */
 .stopsBar {
   position: relative;
+  width: 100%;
   height: 28px;
   border-radius: var(--r-sm);
   box-shadow:
@@ -1438,6 +1458,10 @@
 .previewScroll {
   height: 100%;
   overflow: auto;
+  /* The preview region paints the EDITED theme's --page-background so
+     the brand blooms, gradients and surface tints all live inside this
+     region — not under the Studio chrome. */
+  background: var(--page-background);
 }
 
 .srOnly {
