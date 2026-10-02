@@ -1,6 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
+import { Check, Copy, Download, Terminal } from "lucide-react";
 import { useMemo, useState } from "react";
 import { REGISTRY, tokenRows } from "@/components/ui/_registry";
 import { inferKind, tokenMeta, TOKEN_GROUPS, type TokenGroup } from "@/components/ui/_registry/tokens";
@@ -151,15 +151,98 @@ export function TokensPanel({ api }: { api: StudioApi }) {
 
 // ── Export ────────────────────────────────────────────────────────────────
 
+/**
+ * Export step: three actions and that's it. The point is "I'm done
+ * tweaking, give me the file" — not another nested set of controls.
+ * Advanced users can tune scope / contents in the Options group below
+ * but the defaults (:root, overrides-only) are what 95% of callers
+ * actually want.
+ */
 export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources | null }) {
   const [opts, setOpts] = useState<ExportOptions>({ scope: "root", content: "overrides" });
+  const [copied, setCopied] = useState<"css" | "cmd" | null>(null);
   if (!sources) return <p className={styles.empty}>Reading the stylesheets…</p>;
   const css = exportCss(api.source, sources, opts);
   const slug = slugify(api.theme.name);
   const count = Object.keys(api.source.overrides).length + Object.keys(api.source.overridesDark).length + (api.source.logo ? 1 : 0);
+  const cssFilename = `${slug}.theme.css`;
+  const jsonFilename = `${slug}.theme.json`;
+  // Pipe-the-CSS-into-your-project one-liner: downloads the file as a
+  // base64 blob and pipes it into app/styles/theme.css. Works in any
+  // POSIX shell; the Studio only has access to the generated string
+  // locally, so inlining it keeps the command self-contained.
+  const b64 = typeof window !== "undefined" ? window.btoa(unescape(encodeURIComponent(css))) : "";
+  const command = `mkdir -p app/styles && echo "${b64}" | base64 -d > app/styles/theme.css`;
+
+  const download = (text: string, filename: string, mime: string) => {
+    const url = URL.createObjectURL(new Blob([text], { type: mime }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const copy = async (text: string, which: "css" | "cmd") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(which);
+      window.setTimeout(() => setCopied((c) => (c === which ? null : c)), 1800);
+    } catch {
+      // Clipboard blocked; nothing we can do silently.
+    }
+  };
+
   return (
     <>
-      <Group title="theme.css" note={`${count} token${count === 1 ? "" : "s"} changed from ${presetName(api.theme.base)}, across light and dark.`}>
+      <Group title="theme.css" note={`${count} token${count === 1 ? "" : "s"} changed from ${presetName(api.theme.base)}, across light and dark. Pick one of the three ways to grab it:`}>
+        <div className={styles.exportActions}>
+          <Button
+            iconStart={<Download size={14} aria-hidden="true" />}
+            onClick={() => download(css, cssFilename, "text/css")}
+          >
+            Download {cssFilename}
+          </Button>
+          <Button
+            variant="secondary"
+            iconStart={copied === "css" ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+            onClick={() => copy(css, "css")}
+          >
+            {copied === "css" ? "Copied" : "Copy CSS to clipboard"}
+          </Button>
+        </div>
+
+        <div className={styles.exportCommand}>
+          <div className={styles.exportCommandHead}>
+            <span className={styles.exportCommandLabel}>
+              <Terminal size={13} aria-hidden="true" /> Pipe into an existing project
+            </span>
+            <button
+              type="button"
+              className={styles.exportCommandCopy}
+              onClick={() => copy(command, "cmd")}
+            >
+              {copied === "cmd" ? "Copied" : "Copy"}
+            </button>
+          </div>
+          <p className={styles.exportCommandHint}>Run this at the root of a Next.js / Vite project to drop the file into <code>app/styles/theme.css</code>, then import it after your tokens.css.</p>
+          <pre className={styles.exportCommandBox}><code>{command}</code></pre>
+        </div>
+      </Group>
+
+      <Group title="theme.json" note="The theme as data. Import it back into this editor later, or keep it in the repo beside the CSS.">
+        <div className={styles.exportActions}>
+          <Button
+            variant="secondary"
+            iconStart={<Download size={14} aria-hidden="true" />}
+            onClick={() => download(exportJson(api.source), jsonFilename, "application/json")}
+          >
+            Download {jsonFilename}
+          </Button>
+        </div>
+      </Group>
+
+      <Group title="Options" help="Defaults suit most projects. Scope the CSS to a subtree, or dump every token instead of just the ones you changed, if you need to.">
         <SelectRow
           stacked
           label="Scope"
@@ -185,31 +268,6 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
             Scoped and partial: composites like --wash-hover were computed on :root and will not follow a scoped --rgb-brand. Export every token for a scoped theme.
           </Notice>
         ) : null}
-        <CopyBlock text={css} label="theme.css" filename={`${slug}.theme.css`} mime="text/css" />
-      </Group>
-      <Group title="theme.json" note="The theme as data: import it back here, or keep it in the repo beside theme.css.">
-        <CopyBlock text={exportJson(api.source)} label="theme.json" filename={`${slug}.theme.json`} mime="application/json" />
-      </Group>
-      <Group title="Use it in another site">
-        <ol className={styles.howto}>
-          <li>
-            Copy <code>components/ui</code> (and <code>components/shell</code> if you want the frames), <code>app/styles/tokens.css</code> and the
-            base rules in <code>app/globals.css</code>. components/ui imports nothing app-specific.
-          </li>
-          <li>
-            Save this as <code>app/styles/theme.css</code> and import it after tokens.css in <code>globals.css</code>.
-          </li>
-          <li>
-            Fonts: load them with next/font in the root layout and keep the family names in --font-body and --font-display.
-            {api.theme.controls.fontBodyName ? ` This theme uses ${String(api.theme.controls.fontBodyName)}.` : ""}
-          </li>
-          <li>
-            Shell: pass <code>layout="{String(api.theme.controls.layout ?? "sidebar")}"</code> and <code>logoCorner="{api.theme.controls.logoCorner === "fill" ? "fill" : "glass"}"</code> to SidebarShell, and your logo as <code>logo</code> or <code>logoSrc</code> (with <code>logoAlt</code>).
-          </li>
-          <li>
-            Check it: read the Contrast tab here, and keep the rules in /llms.txt next to the code.
-          </li>
-        </ol>
       </Group>
     </>
   );

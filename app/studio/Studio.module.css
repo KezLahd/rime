@@ -2090,6 +2090,93 @@
   font-size: 0.9em;
 }
 
+/* ── Export step: three ways to grab the theme ─────────────────── */
+
+.exportActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Terminal command card: a dark pre with a header strip carrying the
+   "Pipe into an existing project" label and a Copy chip. Sits below
+   the download / copy buttons so the user can pick whichever route
+   lands them in their project. */
+.exportCommand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--night);
+  color: var(--ink-inverse);
+  border-radius: var(--r-md);
+}
+
+.exportCommandHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.exportCommandLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.exportCommandCopy {
+  padding: 3px 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+
+.exportCommandCopy:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.exportCommandHint {
+  margin: 0;
+  font-size: var(--text-small);
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.5;
+}
+
+.exportCommandHint code {
+  padding: 1px 5px;
+  border-radius: var(--r-xs);
+  background: rgba(255, 255, 255, 0.14);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.exportCommandBox {
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-sm);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}
+
 /* ── Preview ─────────────────────────────────────────────────────────── */
 
 .preview {
