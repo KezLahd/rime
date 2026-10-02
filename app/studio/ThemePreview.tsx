@@ -128,7 +128,7 @@ export const ThemePreview = memo(function ThemePreview({
   // body, small, caption, button, mono) so the user watches the whole
   // typographic hierarchy change as they pick a family.
   if (focus === "type") {
-    return <TypeShowcase />;
+    return <TypeShowcase brand={brandText} />;
   }
 
   // Shape step: a dedicated showcase of radius, density, control height,
@@ -242,22 +242,26 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
   const peek = peekToken;
   return (
     <div className={styles.colourShowcase}>
-      {/* Hero: brand ink + action + secondary + ghost */}
+      {/* Hero: brand ink + action + secondary + ghost. Every string that
+          used to read as a demo for an invented product (This month,
+          Good morning Jane, invoices awaiting approval…) is now coded
+          to the business name typed on step 1 so the preview reads as
+          the user's own dashboard, not a generic SaaS stand-in. */}
       <GlassPanel padding="lg" className={styles.colourHero}>
         <div className={styles.colourHeroText}>
           <Spot as="div" tokens="--ink-brand" peek={peek}>
-            <p className={styles.colourEyebrow}>This month</p>
+            <p className={styles.colourEyebrow}>{brand.full}</p>
           </Spot>
           <Spot as="div" tokens="--ink-heading" peek={peek}>
-            <h2 className={styles.colourTitle}>Good morning, Jane</h2>
+            <h2 className={styles.colourTitle}>Welcome to {brand.full}</h2>
           </Spot>
           <Spot as="div" tokens="--ink-secondary --ink-body" peek={peek}>
             <p className={styles.colourLede}>
-              Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
+              Everything the {brand.full} team ships lives here — invoices, briefs, the whole brand kit. Three items are waiting on you this week.
             </p>
           </Spot>
           <Spot as="div" tokens="--ink-muted" peek={peek}>
-            <p className={styles.colourMuted}>Last synced 2 minutes ago.</p>
+            <p className={styles.colourMuted}>Last synced from {brand.domain} two minutes ago.</p>
           </Spot>
           <div className={styles.colourActions}>
             <Spot tokens="--brand --brand-action --brand-strong" peek={peek}>
@@ -758,14 +762,25 @@ function SpecimenCaption({ token, note }: { token: string; note: string }) {
 }
 
 function ShapeDialogButtons() {
-  const [size, setSize] = useState<"sm" | "md" | "lg" | null>(null);
+  // Keep `size` separate from `open` so closing a Small or Large dialog
+  // doesn't briefly collapse it to Medium during the dismiss animation.
+  // Previously, `size={size ?? "md"}` snapped to Medium the instant
+  // `setSize(null)` ran, which the Modal's exit transition visibly
+  // picked up for ~150 ms before unmounting.
+  const [size, setSize] = useState<"sm" | "md" | "lg">("md");
+  const [open, setOpen] = useState(false);
+  const openWith = (next: "sm" | "md" | "lg") => {
+    setSize(next);
+    setOpen(true);
+  };
+  const close = () => setOpen(false);
   const label = size === "sm" ? "Small" : size === "md" ? "Medium" : "Large";
   return (
     <>
       <div className={styles.shapeButtonsLine}>
-        <Button onClick={() => setSize("sm")}>Open small dialog</Button>
-        <Button onClick={() => setSize("md")}>Open medium dialog</Button>
-        <Button onClick={() => setSize("lg")}>Open large dialog</Button>
+        <Button onClick={() => openWith("sm")}>Open small dialog</Button>
+        <Button onClick={() => openWith("md")}>Open medium dialog</Button>
+        <Button onClick={() => openWith("lg")}>Open large dialog</Button>
       </div>
       <p className={styles.shapeMuted}>
         Sized by <code className={styles.shapeToken}>--modal-width-sm</code>,{" "}
@@ -773,15 +788,15 @@ function ShapeDialogButtons() {
         <code className={styles.shapeToken}>--modal-width-lg</code>. Below 640 px every size becomes a bottom sheet.
       </p>
       <Modal
-        open={size !== null}
-        onClose={() => setSize(null)}
+        open={open}
+        onClose={close}
         title={`${label} dialog preview`}
         description="Drag the matching slider on the left while this is open — the dialog resizes live."
-        size={size ?? "md"}
+        size={size}
         footer={
           <>
-            <Button variant="secondary" onClick={() => setSize(null)}>Cancel</Button>
-            <Button onClick={() => setSize(null)}>Save changes</Button>
+            <Button variant="secondary" onClick={close}>Cancel</Button>
+            <Button onClick={close}>Save changes</Button>
           </>
         }
       >
@@ -793,7 +808,7 @@ function ShapeDialogButtons() {
             <Textarea rows={3} defaultValue="Clean, calm, carries the brand." />
           </Field>
           <p className={styles.shapeMuted}>
-            Max width in use: <code className={styles.shapeToken}>--modal-width-{size ?? "md"}</code>.
+            Max width in use: <code className={styles.shapeToken}>--modal-width-{size}</code>.
           </p>
         </div>
       </Modal>
@@ -807,28 +822,28 @@ function ShapeDialogButtons() {
  * body font is immediately visible across the whole typographic
  * hierarchy. Headings use the display font, everything else uses body.
  */
-function TypeShowcase() {
+function TypeShowcase({ brand }: { brand: BrandNames }) {
   return (
     <div className={styles.typeShowcase}>
       <TypeSample
         className={styles.typeDisplay}
         info="Display · var(--text-display). Hero slogans, the biggest page-opening type. One per view."
       >
-        Carry the weight of your brand.
+        {brand.full} looks sharp in {brand.word}.
       </TypeSample>
       <TypeSample
         className={styles.typeSection}
         info="Section heading · var(--text-section). The h2 under a page title; the start of each major block."
         tag="h2"
       >
-        Good morning, Jane
+        Welcome to {brand.full}
       </TypeSample>
       <TypeSample
         className={styles.typeCardTitle}
         info="Card title · var(--text-card-title). The h3 that labels an individual card or panel."
         tag="h3"
       >
-        Revenue by product
+        {brand.full} revenue by product
       </TypeSample>
       <TypeSample
         className={styles.typeHero}
@@ -840,14 +855,14 @@ function TypeShowcase() {
         className={styles.typeBody}
         info="Body · 16px, --font-body. Paragraphs, labels, controls, table cells. 1.6 line-height."
       >
-        Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
+        Everything the {brand.full} team ships lives here — invoices, briefs, the whole brand kit. Three items are waiting on you this week.
         The pangram goes: the quick brown fox jumps over the lazy dog.
       </TypeSample>
       <TypeSample
         className={styles.typeSmall}
         info="Small · var(--text-small). Secondary rows, filter chips, assistive copy under inputs."
       >
-        Last synced 2 minutes ago. 24 invoices across 8 clients, 3 overdue, 7 pending, 14 paid.
+        Last synced from {brand.domain} two minutes ago. 24 items across 8 clients, 3 overdue, 7 pending, 14 shipped.
       </TypeSample>
       <TypeSample
         className={styles.typeCaption}
