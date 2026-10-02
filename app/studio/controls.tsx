@@ -265,6 +265,7 @@ export function SliderRow({
   changed,
   onChange,
   onReset,
+  disabled,
 }: {
   label: string;
   token?: string;
@@ -279,6 +280,8 @@ export function SliderRow({
   changed?: boolean;
   onChange: (v: number) => void;
   onReset?: () => void;
+  /** Greys the track, label and value but keeps the (i) tooltip interactive. */
+  disabled?: boolean;
 }) {
   const decimals = step < 1 ? Math.min(3, String(step).split(".")[1]?.length ?? 2) : 0;
   const fmt = format ?? ((v: number) => `${Number(v.toFixed(decimals))}${unit ? (unit === "%" || unit === "°" ? unit : ` ${unit}`) : ""}`);
@@ -288,9 +291,9 @@ export function SliderRow({
   // instead of floating in the right-hand reset/value zone (where it
   // overlapped longer values like "100%").
   return (
-    <div className={cx(styles.sliderRow, changed && styles.rowChanged)}>
+    <div className={cx(styles.sliderRow, changed && styles.rowChanged, disabled && styles.sliderRowDisabled)}>
       <div className={styles.sliderBody}>
-        <Slider aria-label={label} showValue min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} formatValue={fmt} onValueChange={onChange} />
+        <Slider aria-label={label} showValue disabled={disabled} min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} formatValue={fmt} onValueChange={onChange} />
         <span className={styles.sliderLabel}>
           <span className={styles.rowName}>{label}</span>
           {help ? (

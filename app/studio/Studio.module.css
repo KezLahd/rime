@@ -694,6 +694,14 @@
   pointer-events: auto;
 }
 
+/* Disabled slider rows: the overlaid label greys out to match the
+   track and value colour (Slider's own .disabled rule handles those),
+   but the (i) toggletip stays interactive so the user can read why
+   the slider is unavailable. */
+.sliderRowDisabled .sliderLabel .rowName {
+  color: var(--ink-disabled);
+}
+
 .switchRow {
   padding: 2px 0;
 }
