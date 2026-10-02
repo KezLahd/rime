@@ -913,95 +913,268 @@ function HoverShowcase({ category, brand }: { category: "buttons" | "washes" | "
   );
 }
 
+type LayoutPage = "dashboard" | "projects" | "team" | "docs";
+const HREF_TO_PAGE: Record<string, LayoutPage> = {
+  "#preview-top": "dashboard",
+  "#preview-forms": "projects",
+  "#preview-data": "team",
+  "#preview-docs": "docs",
+};
+const PAGE_TO_HREF: Record<LayoutPage, string> = {
+  dashboard: "#preview-top",
+  projects: "#preview-forms",
+  team: "#preview-data",
+  docs: "#preview-docs",
+};
+
 /**
- * Layout step preview: the real SidebarShell with a focused mock
- * dashboard page inside — not the kit's full component grid. Shows
- * exactly how the user's chosen layout (full sidebar / collapsed rail
- * / header-only) looks when running against actual page content.
+ * Layout step preview: the real SidebarShell with navigable pages
+ * inside. Clicking a nav item swaps the content on the right, so the
+ * user sees how their chosen layout handles different page shapes
+ * (dashboard, projects, team, docs).
  */
 function LayoutShowcase({ brand, logoSrc, logoAlt, logoCorner, layout }: { brand: BrandNames; logoSrc?: string; logoAlt?: string; logoCorner: "glass" | "fill"; layout: "sidebar" | "rail" | "header" }) {
+  const [page, setPage] = useState<LayoutPage>("dashboard");
+
+  // Intercept nav link clicks inside the shell. The SidebarShell uses
+  // Next.js <Link>, which would try to actually navigate; we want
+  // click → swap the preview content instead. Any <a href="#…"> in the
+  // nav gets its href matched against our known pages.
+  const handleNavClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const anchor = (e.target as HTMLElement).closest("a[href]") as HTMLAnchorElement | null;
+    if (!anchor) return;
+    const href = anchor.getAttribute("href") || "";
+    const next = HREF_TO_PAGE[href];
+    if (!next) return;
+    e.preventDefault();
+    setPage(next);
+  };
+
+  const title = page === "dashboard" ? "Dashboard" : page === "projects" ? "Projects" : page === "team" ? "Team" : "Docs";
+
   return (
-    <SidebarShell
-      contained
-      navLabel="Preview nav"
-      nav={NAV}
-      activeHref="#preview-top"
-      title="Projects"
-      logoSrc={logoSrc}
-      logoAlt={logoAlt}
-      logoCorner={logoCorner}
-      layout={layout}
-    >
-      <div id="preview-top" className={styles.layoutPage}>
-        <section className={styles.layoutHero}>
-          <div>
-            <p className={styles.layoutEyebrow}>{brand.full}</p>
-            <h2 className={styles.layoutTitle}>Projects</h2>
-            <p className={styles.layoutLede}>Everything the team is shipping — invoices, briefs and the whole brand kit. Three items are waiting on you this week.</p>
-          </div>
-          <div className={styles.layoutHeroActions}>
-            <Button variant="secondary" iconStart={<Filter size={14} aria-hidden="true" />}>Filter</Button>
-            <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
-          </div>
-        </section>
+    <div onClick={handleNavClick} className={styles.layoutShowcaseWrap}>
+      <SidebarShell
+        contained
+        navLabel="Preview nav"
+        nav={NAV}
+        activeHref={PAGE_TO_HREF[page]}
+        title={title}
+        logoSrc={logoSrc}
+        logoAlt={logoAlt}
+        logoCorner={logoCorner}
+        layout={layout}
+      >
+        {page === "dashboard" ? <LayoutDashboardPage brand={brand} /> : null}
+        {page === "projects" ? <LayoutProjectsPage brand={brand} /> : null}
+        {page === "team" ? <LayoutTeamPage brand={brand} /> : null}
+        {page === "docs" ? <LayoutDocsPage brand={brand} /> : null}
+      </SidebarShell>
+    </div>
+  );
+}
 
-        <section className={styles.layoutStats}>
-          <GlassPanel padding="md" className={styles.layoutStatCard}>
-            <p className={styles.layoutStatLabel}>Active</p>
-            <p className={styles.layoutStatValue}>12</p>
-            <p className={styles.layoutStatDelta}>+3 this week</p>
-          </GlassPanel>
-          <GlassPanel padding="md" className={styles.layoutStatCard}>
-            <p className={styles.layoutStatLabel}>In review</p>
-            <p className={styles.layoutStatValue}>5</p>
-            <p className={styles.layoutStatDelta}>2 need you</p>
-          </GlassPanel>
-          <GlassPanel padding="md" className={styles.layoutStatCard}>
-            <p className={styles.layoutStatLabel}>Shipped</p>
-            <p className={styles.layoutStatValue}>48</p>
-            <p className={styles.layoutStatDelta}>Last 30 days</p>
-          </GlassPanel>
-          <GlassPanel padding="md" className={styles.layoutStatCard}>
-            <p className={styles.layoutStatLabel}>Members</p>
-            <p className={styles.layoutStatValue}>8</p>
-            <p className={styles.layoutStatDelta}>Across 4 teams</p>
-          </GlassPanel>
-        </section>
+/** Dashboard page: a focused summary panel + a bar chart with built-in
+ *  tooltips + a recent-activity feed. No stat-card row — those get
+ *  stripped on sight. */
+function LayoutDashboardPage({ brand }: { brand: BrandNames }) {
+  return (
+    <div className={styles.layoutPage}>
+      <section className={styles.layoutHero}>
+        <div>
+          <p className={styles.layoutEyebrow}>This week</p>
+          <h2 className={styles.layoutTitle}>Good morning, Jane</h2>
+          <p className={styles.layoutLede}>Three projects need you before Friday. Revenue trending 12% ahead of last month across every product line.</p>
+        </div>
+        <div className={styles.layoutHeroActions}>
+          <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export</Button>
+          <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
+        </div>
+      </section>
 
-        <GlassPanel padding="lg" className={styles.layoutTableCard}>
+      <section className={styles.layoutDashGrid}>
+        <GlassPanel padding="lg" className={styles.layoutChartCard}>
           <header className={styles.layoutTableHead}>
             <div>
-              <h3 className={styles.layoutCardTitle}>Recent projects</h3>
-              <p className={styles.layoutCardLede}>Last fifteen items updated across {brand.full}.</p>
+              <h3 className={styles.layoutCardTitle}>Revenue by product</h3>
+              <p className={styles.layoutCardLede}>Six-month totals across six product lines. Hover a bar for the breakdown.</p>
             </div>
-            <Button size="sm" variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>View all</Button>
+            <Badge tone="brand">+12%</Badge>
           </header>
-          <div className={styles.layoutTable}>
-            <div className={styles.layoutTableRow + " " + styles.layoutTableRowHead}>
-              <span>Name</span>
-              <span>Owner</span>
-              <span>Status</span>
-              <span>Updated</span>
-            </div>
-            {[
-              ["Atlas redesign", "Jane Cooper", "Active", "4 h ago"],
-              ["Spring collection launch", "Marco Silva", "In review", "yesterday"],
-              ["Brand kit refresh", "Priya Shah", "Draft", "3 d ago"],
-              ["Checkout rebuild", "Noah Kim", "Shipped", "5 d ago"],
-            ].map(([name, owner, status, when]) => (
-              <div key={name} className={styles.layoutTableRow}>
-                <span className={styles.layoutProjectName}>{name}</span>
-                <span className={styles.layoutMuted}>{owner}</span>
-                <span>
-                  <Badge tone={status === "Active" ? "brand" : status === "Shipped" ? "success" : status === "In review" ? "warning" : "neutral"} variant={status === "Shipped" ? "solid" : "soft"}>{status}</Badge>
-                </span>
-                <span className={styles.layoutMuted}>{when}</span>
-              </div>
-            ))}
+          <BarChart
+            title="Revenue by product"
+            summary="Six-month totals across six product lines."
+            hideTitle
+            data={CHART_DATA}
+            category="month"
+            series={[
+              { key: "a", label: "Hardware" },
+              { key: "b", label: "Software" },
+              { key: "c", label: "Services" },
+              { key: "d", label: "Support" },
+              { key: "e", label: "Training" },
+              { key: "f", label: "Licensing" },
+            ]}
+            height={260}
+          />
+        </GlassPanel>
+
+        <GlassPanel padding="lg" className={styles.layoutSummaryPanel}>
+          <p className={styles.layoutEyebrow}>Collected this quarter</p>
+          <h3 className={styles.layoutBigNumber}>$482K</h3>
+          <p className={styles.layoutLede}>Up {brand.word.length > 0 ? "19%" : "19%"} on last quarter. {brand.full} invoices clear in 11 days on average — four faster than the industry median.</p>
+          <div style={{ marginTop: 16 }}>
+            <ProgressBar value={72} max={100} label="Quarter target" valueText="72% of goal" />
           </div>
+          <ul className={styles.layoutActivity}>
+            <li>
+              <span className={styles.layoutActivityDot} data-tone="success" />
+              <span><strong>Atlas redesign</strong> shipped · 2 h ago</span>
+            </li>
+            <li>
+              <span className={styles.layoutActivityDot} data-tone="brand" />
+              <span><strong>Spring launch</strong> moved to review · 5 h ago</span>
+            </li>
+            <li>
+              <span className={styles.layoutActivityDot} data-tone="warning" />
+              <span><strong>Brand kit refresh</strong> waiting on you · yesterday</span>
+            </li>
+          </ul>
+        </GlassPanel>
+      </section>
+    </div>
+  );
+}
+
+function LayoutProjectsPage({ brand }: { brand: BrandNames }) {
+  return (
+    <div className={styles.layoutPage}>
+      <section className={styles.layoutHero}>
+        <div>
+          <p className={styles.layoutEyebrow}>{brand.full}</p>
+          <h2 className={styles.layoutTitle}>Projects</h2>
+          <p className={styles.layoutLede}>Everything the team is shipping — invoices, briefs and the whole brand kit.</p>
+        </div>
+        <div className={styles.layoutHeroActions}>
+          <Button variant="secondary" iconStart={<Filter size={14} aria-hidden="true" />}>Filter</Button>
+          <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
+        </div>
+      </section>
+
+      <GlassPanel padding="lg" className={styles.layoutTableCard}>
+        <header className={styles.layoutTableHead}>
+          <div>
+            <h3 className={styles.layoutCardTitle}>Recent projects</h3>
+            <p className={styles.layoutCardLede}>Last fifteen items updated across {brand.full}.</p>
+          </div>
+          <Button size="sm" variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>View all</Button>
+        </header>
+        <div className={styles.layoutTable}>
+          <div className={cx(styles.layoutTableRow, styles.layoutTableRowHead)}>
+            <span>Name</span>
+            <span>Owner</span>
+            <span>Status</span>
+            <span>Updated</span>
+          </div>
+          {[
+            ["Atlas redesign", "Jane Cooper", "Active", "4 h ago"],
+            ["Spring collection launch", "Marco Silva", "In review", "yesterday"],
+            ["Brand kit refresh", "Priya Shah", "Draft", "3 d ago"],
+            ["Checkout rebuild", "Noah Kim", "Shipped", "5 d ago"],
+            ["Partner portal v2", "Jane Cooper", "Active", "6 d ago"],
+          ].map(([name, owner, status, when]) => (
+            <div key={name} className={styles.layoutTableRow}>
+              <span className={styles.layoutProjectName}>{name}</span>
+              <span className={styles.layoutMuted}>{owner}</span>
+              <span>
+                <Badge tone={status === "Active" ? "brand" : status === "Shipped" ? "success" : status === "In review" ? "warning" : "neutral"} variant={status === "Shipped" ? "solid" : "soft"}>{status}</Badge>
+              </span>
+              <span className={styles.layoutMuted}>{when}</span>
+            </div>
+          ))}
+        </div>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function LayoutTeamPage({ brand }: { brand: BrandNames }) {
+  const members: Array<{ name: string; role: string; status: "online" | "away" | "offline" }> = [
+    { name: "Jane Cooper", role: "Design lead", status: "online" },
+    { name: "Marco Silva", role: "Senior engineer", status: "online" },
+    { name: "Priya Shah", role: "Brand designer", status: "away" },
+    { name: "Noah Kim", role: "Product manager", status: "online" },
+    { name: "Elena Russo", role: "Operations", status: "offline" },
+    { name: "Daniel Brooks", role: "Junior engineer", status: "online" },
+  ];
+  return (
+    <div className={styles.layoutPage}>
+      <section className={styles.layoutHero}>
+        <div>
+          <p className={styles.layoutEyebrow}>{brand.full}</p>
+          <h2 className={styles.layoutTitle}>Team</h2>
+          <p className={styles.layoutLede}>Six people shipping across four roles. Hover a row to see their open work.</p>
+        </div>
+        <div className={styles.layoutHeroActions}>
+          <Button iconStart={<Plus size={14} aria-hidden="true" />}>Invite member</Button>
+        </div>
+      </section>
+      <GlassPanel padding="lg" className={styles.layoutTeamCard}>
+        <ul className={styles.layoutTeamList}>
+          {members.map((m) => (
+            <li key={m.name} className={styles.layoutTeamRow}>
+              <Avatar name={m.name} size="md" tone={m.status === "online" ? "brand" : "neutral"} />
+              <div className={styles.layoutTeamText}>
+                <p className={styles.layoutProjectName}>{m.name}</p>
+                <p className={styles.layoutMuted}>{m.role}</p>
+              </div>
+              <Badge tone={m.status === "online" ? "success" : m.status === "away" ? "warning" : "neutral"} variant="soft">
+                {m.status === "online" ? "Online" : m.status === "away" ? "Away" : "Offline"}
+              </Badge>
+              <Button size="sm" variant="ghost">View</Button>
+            </li>
+          ))}
+        </ul>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function LayoutDocsPage({ brand }: { brand: BrandNames }) {
+  return (
+    <div className={styles.layoutPage}>
+      <section className={styles.layoutHero}>
+        <div>
+          <p className={styles.layoutEyebrow}>{brand.full} · Docs</p>
+          <h2 className={styles.layoutTitle}>Getting started</h2>
+          <p className={styles.layoutLede}>Four short pages. Fifteen minutes end-to-end. By the end you&apos;ll have your first project live.</p>
+        </div>
+      </section>
+      <div className={styles.layoutDocsLayout}>
+        <aside className={styles.layoutDocsToc}>
+          <p className={styles.layoutEyebrow}>Contents</p>
+          <ul>
+            <li><span className={styles.layoutDocsLinkActive}>1 · Install</span></li>
+            <li>2 · First project</li>
+            <li>3 · Deploy</li>
+            <li>4 · Invite your team</li>
+          </ul>
+        </aside>
+        <GlassPanel padding="lg" className={styles.layoutDocsBody}>
+          <h3 className={styles.layoutDocsHeading}>Install the CLI</h3>
+          <p className={styles.layoutDocsPara}>Run the one-line installer. It drops the binary into <code className={styles.layoutDocsCode}>~/.local/bin</code> and adds it to your PATH.</p>
+          <pre className={styles.layoutDocsPre}>
+            <code>{`curl -fsSL https://${brand.domain}/install.sh | sh`}</code>
+          </pre>
+          <h3 className={styles.layoutDocsHeading}>Verify</h3>
+          <p className={styles.layoutDocsPara}>Open a new shell and check the version:</p>
+          <pre className={styles.layoutDocsPre}>
+            <code>{`${brand.word.toLowerCase()} --version\n→ 1.4.0`}</code>
+          </pre>
+          <p className={styles.layoutDocsPara}>You&apos;re done. On to the next page: your first project.</p>
         </GlassPanel>
       </div>
-    </SidebarShell>
+    </div>
   );
 }
 

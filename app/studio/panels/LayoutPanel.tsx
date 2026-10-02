@@ -3,7 +3,7 @@
 import { SegmentedControl, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Row, SliderRow, SurfaceStrip, TextRow } from "../controls";
+import { AngleRow, ColourRow, Group, Row, SliderRow, SurfaceStrip, TextRow } from "../controls";
 import type { Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer } from "../engine/gradient";
 import { colourOf, setColour } from "../engine/macros";
@@ -34,7 +34,6 @@ const num = (v: string | undefined, fallback: number) => {
 export function LayoutPanel({ api, resolveColour }: { api: StudioApi; resolveColour: (expr: string) => Rgb | null }) {
   const layout = layoutOf(api);
   const corner = logoCornerOf(api);
-  const collapsible = collapsibleOf(api);
   return (
     <>
       {/* Layout picker as the sticky header strip. Three options
@@ -61,14 +60,11 @@ export function LayoutPanel({ api, resolveColour }: { api: StudioApi; resolveCol
           </>
         }
       >
-        {layout === "sidebar" ? (
-          <CheckRow
-            label="User can collapse it"
-            note="Shows a chevron on the sidebar that collapses it down to the icon rail. Off: sidebar is always full-width."
-            checked={collapsible}
-            onChange={(v) => api.setControls({ sidebarCollapsible: v })}
-          />
-        ) : null}
+        {/* "User can collapse it" toggle removed from this step: the
+            Layout step is about picking a visual look, not wiring the
+            SidebarShell's runtime behaviour. The `collapsible` prop is
+            still exposed in the exported theme / docs for anyone who
+            wants the chevron behaviour in code. */}
         <SliderRow
           label="Top bar height"
           value={num(api.value("--topbar-height"), 64)}
