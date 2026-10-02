@@ -71,6 +71,18 @@ export function BackgroundPanel({ api, resolveColour }: { api: StudioApi; resolv
     api.set({ [PAGE_BG_TOKEN]: literal });
   };
 
+  // Base colour: the solid underlying colour the blooms sit on top of.
+  // Editable directly from this step so the user doesn't have to go
+  // back to Colours just to shift the page tone under their blooms.
+  const baseRgb = resolveColour("var(--page-base)") ?? { r: 255, g: 255, b: 255, a: 1 };
+  const setBase = (next: Rgb) => {
+    const a = typeof next.a === "number" ? next.a : 1;
+    const literal = a < 1
+      ? `rgba(${next.r}, ${next.g}, ${next.b}, ${a.toFixed(3)})`
+      : toHex(next);
+    api.set({ "--page-base": literal });
+  };
+
   const editLayer = (i: number, patch: Partial<Layer>) => {
     if (!layers) return;
     const next = layers.map((l, j) => (j === i ? ({ ...l, ...patch } as Layer) : l));
@@ -110,13 +122,24 @@ export function BackgroundPanel({ api, resolveColour }: { api: StudioApi; resolv
       </Group>
 
       {!isFlat && radials.length > 0 ? (
-        <Group title="Blooms" help="Pick a bloom at the top, then drag its position on the stage, resize, dial strength and fade. Each slider has its own reset.">
-          <BloomsEditor
-            radials={radials}
-            resolve={resolveColour}
-            onBloomChange={(bi, patch) => editLayer(radials[bi].index, patch)}
-          />
-        </Group>
+        <>
+          <Group title="Base colour" help="The solid colour the blooms sit on top of. Shared with every other page surface that reads --page-base (sign-in, docs field, the preview). Edits here are the fastest way to shift the whole page tone without touching the blooms themselves.">
+            <Row
+              label="Fill"
+              changed={api.changed("--page-base")}
+              onReset={api.changed("--page-base") ? () => api.reset(["--page-base"]) : undefined}
+            >
+              <ColourSwatch label="Base colour" colour={baseRgb} onChange={setBase} />
+            </Row>
+          </Group>
+          <Group title="Blooms" help="Pick a bloom at the top, then drag its position on the stage, resize, dial strength and fade. Each slider has its own reset.">
+            <BloomsEditor
+              radials={radials}
+              resolve={resolveColour}
+              onBloomChange={(bi, patch) => editLayer(radials[bi].index, patch)}
+            />
+          </Group>
+        </>
       ) : null}
 
       {isFlat ? (
