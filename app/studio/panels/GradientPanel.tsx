@@ -50,8 +50,25 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
   const [token, setToken] = useState(GRADIENTS[0].token);
   const value = api.value(token) ?? "";
   const layers = parseGradient(value);
-  const softness = typeof api.theme.controls[`soft${token}`] === "number" ? (api.theme.controls[`soft${token}`] as number) : 1;
   const currentHelp = GRADIENTS.find((g) => g.token === token)?.help ?? "";
+
+  // Softness is DERIVED from the current end-stop spread, not stored
+  // separately. That makes the two controls genuinely bidirectional:
+  // drag the bar's end stops and the slider follows; drag the slider
+  // and the stops move. Reads the preset's end stops to know what "full
+  // softness" should look like for this specific token (not every
+  // gradient's full spread is 0 → 100). */
+  const baseLayers = parseGradient(api.base.get(token) ?? value);
+  const baseLinear = baseLayers && baseLayers[0]?.kind === "linear" ? baseLayers[0] : null;
+  const basePositioned = baseLinear ? positioned(baseLinear.stops) : null;
+  const baseFirst = basePositioned?.[0]?.pos ?? 0;
+  const baseLast = basePositioned?.[basePositioned.length - 1]?.pos ?? 100;
+  const baseSpread = Math.max(0.0001, baseLast - baseFirst);
+  const currentLinear = layers && layers[0]?.kind === "linear" ? layers[0] : null;
+  const currentPositioned = currentLinear ? positioned(currentLinear.stops) : null;
+  const currentFirst = currentPositioned?.[0]?.pos ?? baseFirst;
+  const currentLast = currentPositioned?.[currentPositioned.length - 1]?.pos ?? baseLast;
+  const softness = Math.max(0, Math.min(1, (currentLast - currentFirst) / baseSpread));
 
   // Broadcast which gradient is being edited; the preview on the right
   // renders only the specimen that uses it. Cleared on unmount so the
@@ -100,15 +117,23 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
                 {layers.length === 1 ? (
                   <SliderRow
                     label="Softness"
+                    help="How much of the length the colours spend blending. 1 keeps the end stops at the preset's spread; 0 pulls them to the midpoint so the colours meet hard-edged. Dragging the end markers on the bar below moves this slider in step."
                     value={softness}
                     min={0}
                     max={1}
                     step={0.05}
                     onChange={(s) => {
-                      // Softness re-spreads the original stops, so it is reversible.
-                      const original = parseGradient(api.base.get(token) ?? value);
-                      const src = original && original[0].kind === "linear" ? original[0].stops : layer.stops;
-                      write([{ ...layer, stops: applySoftness(src.length === layer.stops.length ? src.map((s, k) => ({ ...s, color: layer.stops[k].color })) : layer.stops, s) }], { [`soft${token}`]: s });
+                      // Softness re-spreads from the PRESET'S stop positions,
+                      // keeping the slider reversible: no matter where the
+                      // stops are now (bunched at the centre, asymmetric from
+                      // a manual drag), setting softness back to 1 restores
+                      // the preset's spread, and softness 0 meets at the
+                      // preset's midpoint. Colours stay as currently edited.
+                      const baseStops = baseLinear?.stops ?? layer.stops;
+                      const src = baseStops.length === layer.stops.length
+                        ? baseStops.map((bs, k) => ({ ...bs, color: layer.stops[k].color }))
+                        : layer.stops;
+                      write([{ ...layer, stops: applySoftness(src, s) }]);
                     }}
                   />
                 ) : null}
