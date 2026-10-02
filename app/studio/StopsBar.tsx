@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import { useRef, type PointerEvent as ReactPointerEvent } from "react";
-import { Popover } from "@/components/ui";
+import { Popover, Toggletip } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { ColorPicker } from "./ColorPicker";
 import { parseColour, toCss, toHex, type Rgb } from "./engine/colour";
@@ -38,10 +38,13 @@ export function StopsBar({
   stops,
   resolve,
   onChange,
+  hint,
 }: {
   stops: Stop[];
   resolve: (expr: string) => Rgb | null;
   onChange: (next: Stop[]) => void;
+  /** Optional one-liner shown behind an (i) toggletip above the bar. */
+  hint?: string;
 }) {
   const p = positioned(stops);
   const barRef = useRef<HTMLDivElement>(null);
@@ -136,6 +139,14 @@ export function StopsBar({
 
   return (
     <div className={styles.stopsBarWrap}>
+      {hint ? (
+        <div className={styles.stopsBarHintChip}>
+          <span className={styles.stopsBarHintLabel}>Stops</span>
+          <Toggletip label="How the stops bar works" side="left">
+            {hint}
+          </Toggletip>
+        </div>
+      ) : null}
       <div
         ref={barRef}
         className={styles.stopsBar}
@@ -205,7 +216,7 @@ export function StopsBar({
                     })}
                   </div>
                 </div>
-                <ColorPicker colour={rgb} onChange={(c) => updateStopColour(i, c)} />
+                <ColorPicker alpha colour={rgb} onChange={(c) => updateStopColour(i, c)} />
               </div>
             </Popover>
           );

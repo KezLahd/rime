@@ -241,8 +241,12 @@ export function ColorPicker({ colour, onChange, alpha }: { colour: Rgb; onChange
           colour without re-typing the hex. Pulls live values from the
           palette context (Studio.tsx derives it from --brand,
           --brand-deep, --brand-soft and --support), so edits to the
-          brand on step 2 are reflected here immediately. */}
-      {palette ? (
+          brand on step 2 are reflected here immediately. Hidden when
+          the picker shows an opacity strip: in those contexts the
+          caller already surfaces a palette-follow strip above the
+          picker (StopsBar, Bloom colour), so repeating the swatches
+          below would be redundant and make the popover tall. */}
+      {palette && !alpha ? (
         <div className={styles.swatches} role="group" aria-label="Brand palette">
           {([
             ["Brand", palette.brand],

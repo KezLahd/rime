@@ -110,7 +110,13 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
           <Group key={i} title={layer.kind === "linear" ? `Linear layer ${i + 1}` : layer.kind === "radial" ? `Bloom ${i + 1}` : "Base colour"}>
             {layer.kind === "linear" ? (
               <>
-                <AngleRow label="Gradient direction" value={((Math.round(layer.angle) % 360) + 360) % 360} onChange={(a) => editLayer(i, { angle: a })} />
+                <AngleRow
+                  label="Gradient direction"
+                  value={((Math.round(layer.angle) % 360) + 360) % 360}
+                  onChange={(a) => editLayer(i, { angle: a })}
+                  changed={baseLinear ? Math.round(layer.angle) !== Math.round(baseLinear.angle) : false}
+                  onReset={baseLinear ? () => editLayer(i, { angle: baseLinear.angle }) : undefined}
+                />
                 {layers.length === 1 ? (
                   <SliderRow
                     label="Softness"
@@ -137,9 +143,26 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
                         : layer.stops;
                       write([{ ...layer, stops: applySoftness(src, s) }]);
                     }}
+                    changed={Math.abs(softness - 1) > 0.001}
+                    onReset={() => {
+                      // Reset softness: restore the preset's end-stop spread
+                      // by writing the base stops at their original positions
+                      // with the current colours preserved.
+                      if (!baseLinear) return;
+                      const baseStops = baseLinear.stops;
+                      const src = baseStops.length === layer.stops.length
+                        ? baseStops.map((bs, k) => ({ ...bs, color: layer.stops[k].color }))
+                        : baseLinear.stops;
+                      write([{ ...layer, stops: applySoftness(src, 1) }]);
+                    }}
                   />
                 ) : null}
-                <StopsBar stops={layer.stops} resolve={resolveColour} onChange={(stops) => editLayer(i, { stops })} />
+                <StopsBar
+                  stops={layer.stops}
+                  resolve={resolveColour}
+                  onChange={(stops) => editLayer(i, { stops })}
+                  hint="Click an empty spot on the bar to add a stop · drag a marker to move it · click a marker to pick its colour or set it to a palette ref."
+                />
               </>
             ) : layer.kind === "radial" ? (
               <BloomEditor layer={layer} resolve={resolveColour} onChange={(l) => editLayer(i, l)} />

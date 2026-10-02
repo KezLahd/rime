@@ -1701,6 +1701,24 @@
   display: none;
 }
 
+/* "Stops · (i)" chip above the bar: a tiny label + info toggletip so
+   the instructions can be read when needed without a line of text
+   crowding the bar below it. */
+.stopsBarHintChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 6px 2px;
+}
+
+.stopsBarHintLabel {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
 /* The stop picker popover: palette-ref chips on top, ColorPicker below. */
 .stopPickerShell {
   display: flex;
