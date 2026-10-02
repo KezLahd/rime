@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useId, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ColorPicker } from "./ColorPicker";
 
 /**
@@ -120,7 +120,7 @@ import {
   Toggletip,
 } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
-import { RotateCcw } from "lucide-react";
+import { Check as CheckIcon, ChevronLeft as ChevL, ChevronRight as ChevR, RotateCcw } from "lucide-react";
 import { parseHex, toCss, toHex, type Rgb } from "./engine/colour";
 import styles from "./Studio.module.css";
 
@@ -442,6 +442,105 @@ export function SelectRow<V extends string>({
     <Row label={label} token={token} help={help} changed={changed} onReset={onReset} htmlFor={id} stacked={stacked}>
       <Select id={id} size="sm" className={styles.grow} value={value} onChange={onChange} options={options} searchable={searchable ?? options.length > 12} />
     </Row>
+  );
+}
+
+/**
+ * A horizontal strip of pill-chips for picking one item from an ordered
+ * list, with visible progress — each option that has already been
+ * touched (edited) shows a check icon so the user knows which surfaces
+ * they've completed, in order, without a dropdown that hides the whole
+ * list behind a click. Previous / next chevrons on each end advance the
+ * selection one step; the active chip is centred into view on change.
+ *
+ * Used anywhere a step edits a stack of related tokens (shadow
+ * elevations, gradient tokens, glass surfaces) so the editing loop
+ * feels like a guided progression — pick a surface, tweak it, move on
+ * — rather than a bag of unrelated dropdowns.
+ */
+export function SurfaceStrip<V extends string>({
+  label,
+  value,
+  options,
+  onChange,
+  isComplete,
+  help,
+}: {
+  label: string;
+  value: V;
+  options: ReadonlyArray<{ value: V; label: string }>;
+  onChange: (v: V) => void;
+  /** Returns true when the surface's state has been edited away from the preset. */
+  isComplete?: (v: V) => boolean;
+  help?: ReactNode;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const activeIndex = Math.max(0, options.findIndex((o) => o.value === value));
+  const go = (delta: number) => {
+    const next = options[activeIndex + delta];
+    if (next) onChange(next.value);
+  };
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const chip = el.children[activeIndex] as HTMLElement | undefined;
+    if (!chip) return;
+    chip.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [activeIndex]);
+  return (
+    <div className={styles.stripRow}>
+      <div className={styles.stripHead}>
+        <span className={styles.rowName}>{label}</span>
+        {help ? (
+          <Toggletip label={`About ${label}`} side="right">
+            {help}
+          </Toggletip>
+        ) : null}
+        <span className={styles.stripCount}>
+          {activeIndex + 1} / {options.length}
+        </span>
+      </div>
+      <div className={styles.stripShell}>
+        <button
+          type="button"
+          className={styles.stripNav}
+          aria-label={`Previous ${label.toLowerCase()}`}
+          onClick={() => go(-1)}
+          disabled={activeIndex <= 0}
+        >
+          <ChevL size={14} aria-hidden="true" />
+        </button>
+        <div ref={trackRef} className={styles.stripTrack} role="listbox" aria-label={label}>
+          {options.map((o) => {
+            const active = o.value === value;
+            const done = !!isComplete?.(o.value);
+            return (
+              <button
+                key={o.value}
+                type="button"
+                role="option"
+                aria-selected={active}
+                className={cx(styles.stripChip, active && styles.stripChipActive, done && styles.stripChipDone)}
+                onClick={() => onChange(o.value)}
+                title={o.label}
+              >
+                {done ? <CheckIcon size={11} aria-hidden="true" className={styles.stripChipCheck} /> : null}
+                <span>{o.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          className={styles.stripNav}
+          aria-label={`Next ${label.toLowerCase()}`}
+          onClick={() => go(1)}
+          disabled={activeIndex >= options.length - 1}
+        >
+          <ChevR size={14} aria-hidden="true" />
+        </button>
+      </div>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow, useShadowSelection } from "../controls";
+import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useShadowSelection } from "../controls";
 import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass, shadowDepth } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
 import styles from "../Studio.module.css";
@@ -310,21 +310,21 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
   }, [token, selectShadow]);
   return (
     <>
-      <Group title="Depth" help="Every shadow and glow at once: 0 is flat, 1 the preset, 2 twice as deep. Hairline rings keep their weight.">
-        <SliderRow
-          label="Shadow depth"
-          format={(v) => `${Math.round(v * 100)}%`}
-          value={depth}
-          min={0}
-          max={2}
-          step={0.05}
-          changed={depth !== 1}
-          onChange={(k) => api.set(shadowDepth(api.base, k), { depth: k })}
-          onReset={() => api.set(shadowDepth(api.base, 1), { depth: 1 })}
+      {/* Surface first: shadows aren't a global knob — each elevation
+          has its own shape, so the user picks WHICH surface they're
+          reshaping before touching any slider. The strip doubles as a
+          progress indicator: a check appears on every surface the user
+          has already edited. */}
+      <Group title="Surface" help="Pick the elevation you want to reshape. Each shadow is per-surface — the panel drop, the modal drop, a popover, a sidebar edge all have their own shape. The strip shows a check once a surface has been edited away from its preset.">
+        <SurfaceStrip
+          label="Surface"
+          value={token}
+          options={ELEVATIONS.map((e) => ({ value: e.token, label: e.label }))}
+          onChange={setToken}
+          isComplete={(t) => api.changed(t)}
         />
       </Group>
       <Group title="One elevation" help="Direction, distance, softness, spread, a tinted colour and one to three layers: a shade above, the fall, and a tight contact shadow.">
-        <SelectRow stacked label="Surface" value={token} options={ELEVATIONS.map((e) => ({ value: e.token, label: e.label }))} onChange={setToken} />
         <AngleRow label="Shadow direction" value={p.angle} onChange={(v) => update({ angle: v })} changed={api.changed(token)} onReset={() => api.reset([token])} />
         <SliderRow label="Distance" value={p.distance} min={0} max={48} step={1} unit="px" onChange={(v) => update({ distance: v })} />
         <SliderRow label="Softness" value={p.blur} min={0} max={96} step={1} unit="px" onChange={(v) => update({ blur: v })} />

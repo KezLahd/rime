@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button, IconButton, Select, Slider } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, TextRow, useGradientSelection } from "../controls";
+import { AngleRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, TextRow, useGradientSelection } from "../controls";
 import { parseColour, toHex, type Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer, type Stop } from "../engine/gradient";
 import { StopsBar } from "../StopsBar";
@@ -84,13 +84,13 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
   return (
     <>
       <Group title="Which gradient" help="Rime has one gradient per gesture: brand for primary, danger for destructive, success for confirms, plus a few scene-setters (page bloom, auth background, admin strip). Pick one here to edit it, then adjust its direction, stops and softness below.">
-        <SelectRow
-          stacked
+        <SurfaceStrip
           label="Gradient"
           help={currentHelp}
           value={token}
           options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))}
           onChange={setToken}
+          isComplete={(t) => api.changed(t)}
         />
         {api.changed(token) ? (
           <div className={styles.actions}>

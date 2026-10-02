@@ -775,19 +775,12 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
           />
 
           <div ref={bodyRef} className={styles.panelBody} role="region" aria-labelledby="studio-section-title" tabIndex={-1}>
-            {/* The Logo step's own groups already carry titles ("Business
-                name", "Drop your logo", "Suggested palette"), so a second
-                header right above them just doubled the vertical space
-                before the first interactive control. Hidden there; every
-                other step keeps the title + one-line lede. */}
-            {section !== "brand" ? (
-              <header className={styles.sectionHead}>
-                <h2 id="studio-section-title" className={styles.sectionTitle}>
-                  {current.label}
-                </h2>
-                <p className={styles.sectionLede}>{current.lede}</p>
-              </header>
-            ) : null}
+            {/* The section header (h2 + lede) is intentionally gone from
+                every step. The stepper on the left already shows which
+                step the user is on, every group below carries its own
+                title + help, and the lede was mostly restating the
+                step name. Removing it reclaims ~50 px of vertical
+                space at the top of every panel. */}
             {storageWarning ? <Notice tone="warn">{storageWarning}</Notice> : null}
             <PeekProvider onPeek={setPeekToken}>
             <FontHoverProvider onHover={setFontHover}>
