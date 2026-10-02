@@ -457,6 +457,308 @@
   }
 }
 
+/* ── Step 5: Gradients showcase ──────────────────────────────────────── */
+
+.gradientShowcase {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px;
+  max-width: 1200px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.gradientCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gradientRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 820px) {
+  .gradientRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.gradientHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.gradientEyebrow {
+  margin: 0 0 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.gradientTitle {
+  margin: 0 0 4px;
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.gradientMuted {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.gradientToken {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: var(--r-2xs);
+  background: var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-heading);
+}
+
+/* Gestures row: three buttons/toast specimens with their token caption. */
+.gradientButtonsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.gradientButtonTile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.gradientSuccessToast {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--control-h-md);
+  padding: 0 16px;
+  border-radius: var(--r-md);
+  background: var(--success-gradient);
+  color: var(--ink-inverse);
+  font-size: var(--text-small);
+  font-weight: 700;
+  box-shadow: var(--glow-sm);
+}
+
+/* Mini SidebarShell corner: strip at top, logo corner at bottom-left. */
+.gradientChromeMock {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--line);
+  min-height: 170px;
+}
+
+.gradientChromeStrip {
+  padding: 6px 14px;
+  background: var(--admin-strip-bg);
+  color: var(--ink-inverse);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gradientChromeBody {
+  display: flex;
+  flex: 1;
+  min-height: 130px;
+  background: var(--surface-solid);
+}
+
+.gradientLogoCorner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 180px;
+  padding: 16px;
+  background: var(--logo-corner-bg);
+  color: var(--logo-corner-ink, var(--ink-inverse));
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.gradientLogoGlyph {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  font-size: 14px;
+}
+
+.gradientLogoWord {
+  letter-spacing: var(--tracking-display);
+}
+
+.gradientChromeMain {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 8px;
+  padding: 16px;
+}
+
+/* Auth-field mock: card centered on the gradient backdrop. */
+.gradientAuthMock {
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  border-radius: var(--r-lg);
+  background: var(--auth-background);
+}
+
+.gradientAuthCard {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--r-lg);
+  background: var(--surface-solid);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.gradientAuthEyebrow {
+  margin: 0;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.gradientAuthTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+/* Table + edge surface row. */
+.gradientSurfaces {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 820px) {
+  .gradientSurfaces {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.gradientSurfaceCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gradientTableMock {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.gradientTableHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--table-head-fill);
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.gradientTableRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+  background: var(--surface-solid);
+}
+
+.gradientEdgeCard {
+  position: relative;
+  padding: 20px;
+  border-radius: var(--r-md);
+  background: var(--glass-fill);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge),
+    var(--shadow-panel-light);
+  overflow: hidden;
+}
+
+.gradientEdgeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--highlight-edge);
+}
+
+.gradientEdgeTitle {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+/* Reference grid: every raw gradient token as a labelled tile. */
+.gradientTileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.gradientTile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gradientTileSwatch {
+  height: 80px;
+  border-radius: var(--r-md);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.gradientTileLabel {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
 /* ── Step 4: Shape showcase ──────────────────────────────────────────── */
 
 .shapeShowcase {

@@ -10,17 +10,17 @@ import { parseColour, toHex, type Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer, type Stop } from "../engine/gradient";
 import styles from "../Studio.module.css";
 
-const GRADIENTS: ReadonlyArray<{ token: string; label: string }> = [
-  { token: "--brand-gradient", label: "Brand (primary button, active nav)" },
-  { token: "--danger-gradient", label: "Danger" },
-  { token: "--success-gradient", label: "Success" },
-  { token: "--logo-corner-bg", label: "Logo corner" },
-  { token: "--admin-strip-bg", label: "Context strip" },
-  { token: "--auth-background", label: "Sign-in field" },
-  { token: "--gradient-brand-deep", label: "Deep brand gradient" },
-  { token: "--highlight-edge", label: "Highlight card edge" },
-  { token: "--table-head-fill", label: "Table header sweep" },
-  { token: "--page-background", label: "Page field and blooms" },
+const GRADIENTS: ReadonlyArray<{ token: string; label: string; help: string }> = [
+  { token: "--brand-gradient", label: "Brand (primary button, active nav)", help: "The main gradient. Primary buttons, active nav pills, the brand chip in the sidebar corner. The one gradient per view that reads as the brand gesture." },
+  { token: "--danger-gradient", label: "Danger", help: "Destructive confirm buttons and the danger-filled badge. Needs 4.5:1 for white text at its lightest stop." },
+  { token: "--success-gradient", label: "Success", help: "The confirm-filled badge and the solid success button variant. Needs 4.5:1 for white text at its lightest stop." },
+  { token: "--logo-corner-bg", label: "Logo corner", help: "Fill behind the brand logo in the SidebarShell when logoCorner=\"fill\". Hidden if the shell uses the glass corner." },
+  { token: "--admin-strip-bg", label: "Context strip", help: "The full-width strip at the top of a SidebarShell when strip={...} is set (an admin session, a staging flag). Night-dark by default." },
+  { token: "--auth-background", label: "Sign-in field", help: "The gradient field behind the auth cards (templates/starter uses it). Reads as atmosphere, not a card." },
+  { token: "--gradient-brand-deep", label: "Deep brand gradient", help: "A darker variant used for selected rows and some chart tooltips. Not a primary gesture." },
+  { token: "--highlight-edge", label: "Highlight card edge", help: "The thin highlight at the top edge of a glass card. Looks like light catching the glass." },
+  { token: "--table-head-fill", label: "Table header sweep", help: "The horizontal sweep in table header cells. Reads as a tinted band, not a solid fill." },
+  { token: "--page-background", label: "Page field and blooms", help: "The whole-page backdrop plus the two soft brand blooms (top-left + bottom-right). Also seen behind the preview here." },
 ];
 
 /** Palette refs a stop can point at, so it keeps following the palette. */
@@ -50,14 +50,22 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
   const value = api.value(token) ?? "";
   const layers = parseGradient(value);
   const softness = typeof api.theme.controls[`soft${token}`] === "number" ? (api.theme.controls[`soft${token}`] as number) : 1;
+  const currentHelp = GRADIENTS.find((g) => g.token === token)?.help ?? "";
 
   const write = (next: Layer[], controls?: Record<string, number>) => api.set({ [token]: serializeGradient(next) }, controls);
   const editLayer = (i: number, patch: Partial<Layer>) => layers && write(layers.map((l, j) => (j === i ? ({ ...l, ...patch } as Layer) : l)));
 
   return (
     <>
-      <Group title="Gradient" help="Stops can follow a palette colour (they change when the palette does) or be a fixed colour.">
-        <SelectRow stacked label="Gradient" value={token} options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))} onChange={setToken} />
+      <Group title="Gradient" help="Rime has one gradient per gesture: brand for primary, danger for destructive, success for confirms, plus a few scene-setters (page bloom, auth background, admin strip). Pick one here to edit it, then adjust its direction, stops and softness below.">
+        <SelectRow
+          stacked
+          label="Gradient"
+          help={currentHelp}
+          value={token}
+          options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))}
+          onChange={setToken}
+        />
         <div className={styles.swatchBar} style={{ background: api.resolved(token) || value }} aria-hidden="true" />
         {api.changed(token) ? (
           <div className={styles.actions}>
