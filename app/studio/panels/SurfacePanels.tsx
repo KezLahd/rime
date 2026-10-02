@@ -310,20 +310,19 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
   }, [token, selectShadow]);
   return (
     <>
-      {/* Surface first: shadows aren't a global knob — each elevation
-          has its own shape, so the user picks WHICH surface they're
-          reshaping before touching any slider. The strip doubles as a
-          progress indicator: a check appears on every surface the user
-          has already edited. */}
-      <Group title="Surface" help="Pick the elevation you want to reshape. Each shadow is per-surface — the panel drop, the modal drop, a popover, a sidebar edge all have their own shape. The strip shows a check once a surface has been edited away from its preset.">
-        <SurfaceStrip
-          label="Surface"
-          value={token}
-          options={ELEVATIONS.map((e) => ({ value: e.token, label: e.label }))}
-          onChange={setToken}
-          isComplete={(t) => api.changed(t)}
-        />
-      </Group>
+      {/* Surface strip sits as a full-bleed sticky header above the
+          sliders. Each shadow is per-surface, so the user picks WHICH
+          surface they're reshaping before touching any slider; the
+          strip shows a check on every elevation that's been edited
+          away from the preset so progress is visible at a glance. */}
+      <SurfaceStrip
+        variant="header"
+        label="Surface"
+        value={token}
+        options={ELEVATIONS.map((e) => ({ value: e.token, label: e.label }))}
+        onChange={setToken}
+        isComplete={(t) => api.changed(t)}
+      />
       <Group title="One elevation" help="Direction, distance, softness, spread, a tinted colour and one to three layers: a shade above, the fall, and a tight contact shadow.">
         <AngleRow label="Shadow direction" value={p.angle} onChange={(v) => update({ angle: v })} changed={api.changed(token)} onReset={() => api.reset([token])} />
         <SliderRow label="Distance" value={p.distance} min={0} max={48} step={1} unit="px" onChange={(v) => update({ distance: v })} />

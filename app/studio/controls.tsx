@@ -465,6 +465,7 @@ export function SurfaceStrip<V extends string>({
   onChange,
   isComplete,
   help,
+  variant = "card",
 }: {
   label: string;
   value: V;
@@ -473,6 +474,9 @@ export function SurfaceStrip<V extends string>({
   /** Returns true when the surface's state has been edited away from the preset. */
   isComplete?: (v: V) => boolean;
   help?: ReactNode;
+  /** "card" sits inside a Group; "header" is a full-bleed sticky bar that
+   *  carries its own title (so you don't wrap it in a Group). */
+  variant?: "card" | "header";
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const activeIndex = Math.max(0, options.findIndex((o) => o.value === value));
@@ -488,9 +492,9 @@ export function SurfaceStrip<V extends string>({
     chip.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }, [activeIndex]);
   return (
-    <div className={styles.stripRow}>
+    <div className={cx(styles.stripRow, variant === "header" && styles.stripHeader)}>
       <div className={styles.stripHead}>
-        <span className={styles.rowName}>{label}</span>
+        <span className={cx(variant === "header" ? styles.groupTitle : styles.rowName)}>{label}</span>
         {help ? (
           <Toggletip label={`About ${label}`} side="right">
             {help}
@@ -508,27 +512,29 @@ export function SurfaceStrip<V extends string>({
           onClick={() => go(-1)}
           disabled={activeIndex <= 0}
         >
-          <ChevL size={14} aria-hidden="true" />
+          <ChevL size={16} aria-hidden="true" />
         </button>
-        <div ref={trackRef} className={styles.stripTrack} role="listbox" aria-label={label}>
-          {options.map((o) => {
-            const active = o.value === value;
-            const done = !!isComplete?.(o.value);
-            return (
-              <button
-                key={o.value}
-                type="button"
-                role="option"
-                aria-selected={active}
-                className={cx(styles.stripChip, active && styles.stripChipActive, done && styles.stripChipDone)}
-                onClick={() => onChange(o.value)}
-                title={o.label}
-              >
-                {done ? <CheckIcon size={11} aria-hidden="true" className={styles.stripChipCheck} /> : null}
-                <span>{o.label}</span>
-              </button>
-            );
-          })}
+        <div className={styles.stripFade}>
+          <div ref={trackRef} className={styles.stripTrack} role="listbox" aria-label={label}>
+            {options.map((o) => {
+              const active = o.value === value;
+              const done = !!isComplete?.(o.value);
+              return (
+                <button
+                  key={o.value}
+                  type="button"
+                  role="option"
+                  aria-selected={active}
+                  className={cx(styles.stripChip, active && styles.stripChipActive, done && styles.stripChipDone)}
+                  onClick={() => onChange(o.value)}
+                  title={o.label}
+                >
+                  {done ? <CheckIcon size={11} aria-hidden="true" className={styles.stripChipCheck} /> : null}
+                  <span>{o.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
         <button
           type="button"
@@ -537,7 +543,7 @@ export function SurfaceStrip<V extends string>({
           onClick={() => go(1)}
           disabled={activeIndex >= options.length - 1}
         >
-          <ChevR size={14} aria-hidden="true" />
+          <ChevR size={16} aria-hidden="true" />
         </button>
       </div>
     </div>

@@ -83,23 +83,22 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
 
   return (
     <>
-      <Group title="Which gradient" help="Rime has one gradient per gesture: brand for primary, danger for destructive, success for confirms, plus a few scene-setters (page bloom, auth background, admin strip). Pick one here to edit it, then adjust its direction, stops and softness below.">
-        <SurfaceStrip
-          label="Gradient"
-          help={currentHelp}
-          value={token}
-          options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))}
-          onChange={setToken}
-          isComplete={(t) => api.changed(t)}
-        />
-        {api.changed(token) ? (
-          <div className={styles.actions}>
-            <Button size="sm" variant="ghost" onClick={() => api.reset([token], [`soft${token}`])}>
-              Reset to the preset
-            </Button>
-          </div>
-        ) : null}
-      </Group>
+      <SurfaceStrip
+        variant="header"
+        label="Gradient"
+        help={currentHelp}
+        value={token}
+        options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))}
+        onChange={setToken}
+        isComplete={(t) => api.changed(t)}
+      />
+      {api.changed(token) ? (
+        <div className={styles.actions}>
+          <Button size="sm" variant="ghost" onClick={() => api.reset([token], [`soft${token}`])}>
+            Reset to the preset
+          </Button>
+        </div>
+      ) : null}
 
       {!layers ? (
         <Group title="As CSS">

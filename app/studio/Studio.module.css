@@ -722,7 +722,22 @@
 .stripRow {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+/* Header variant: full-bleed sticky top of the panelBody. Breaks out
+   of panelBody's padding (10 / 14 / 24), carries its own title + chevrons
+   + chip strip, and anchors to the top so the user can see which
+   surface they're reshaping while scrolling the slider stack below. */
+.stripHeader[class] {
+  position: sticky;
+  top: calc(-10px);
+  z-index: 2;
+  margin: -10px -14px 10px;
+  padding: 10px 14px;
+  background: var(--surface-solid);
+  border-bottom: var(--border-w) solid var(--line-soft);
+  gap: 10px;
 }
 
 .stripHead {
@@ -740,34 +755,60 @@
 
 .stripShell {
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) 24px;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
+/* Chevron buttons: chunkier than the previous 24 × 28, brand-tinted on
+   hover so they read as "take me to the next thing" rather than a plain
+   scroll affordance. */
 .stripNav {
   display: inline-grid;
   place-items: center;
-  width: 24px;
-  height: 28px;
+  width: 28px;
+  height: 32px;
   padding: 0;
   border: 0;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-md);
   background: var(--recess-fill);
   color: var(--ink-secondary);
   cursor: pointer;
   box-shadow: inset 0 0 0 1px var(--line-input);
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 
 .stripNav:hover:not(:disabled) {
-  background: var(--recess-fill-hover);
-  color: var(--ink-heading);
+  background: color-mix(in oklab, var(--brand) 10%, var(--surface-solid));
+  color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
 }
 
 .stripNav:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* Fade mask: opacity gradient on both ends of the track instead of the
+   hard clip the old overflow:hidden gave. The chips disappear softly
+   under the chevrons as they scroll off either side. */
+.stripFade {
+  position: relative;
+  min-width: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
 }
 
 /* The track holds the chips in a horizontally scrolling row. Scroll
@@ -780,9 +821,9 @@
   overflow-y: hidden;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  scroll-padding-inline: 16px;
+  scroll-padding-inline: 24px;
   scroll-snap-type: x proximity;
-  padding: 2px 0;
+  padding: 2px 24px;
 }
 
 .stripTrack::-webkit-scrollbar {
