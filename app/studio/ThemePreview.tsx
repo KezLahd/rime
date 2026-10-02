@@ -33,6 +33,23 @@ import styles from "./ThemePreview.module.css";
  *  contrast, tokens, image). */
 const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "glass", "shadows"];
 
+/**
+ * Derives three stand-in strings from the business name typed on step 1:
+ *   full    — the whole brand ("Acme Inc") for workspace titles and table rows
+ *   word    — the first word ("Acme") for the logo corner and quick labels
+ *   domain  — a lowercased slug with no spaces for emails and admin strips
+ * Falls back to the "Acme" placeholders when the field is empty so every
+ * preview reads naturally before the user has typed anything.
+ */
+type BrandNames = { full: string; word: string; domain: string };
+function brandNames(brand?: string): BrandNames {
+  const trimmed = (brand ?? "").trim();
+  if (!trimmed) return { full: "Acme Inc", word: "Acme", domain: "acme.co" };
+  const word = trimmed.split(/\s+/)[0] ?? trimmed;
+  const slug = trimmed.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 20) || "brand";
+  return { full: trimmed, word, domain: `${slug}.co` };
+}
+
 const NAV = [
   { href: "#preview-top", label: "Dashboard", icon: <IconHome size={16} />, exact: true },
   { href: "#preview-forms", label: "Projects", icon: <IconClipboard size={16} />, count: 2 },
@@ -65,6 +82,7 @@ const FOCUS_CATEGORIES: Partial<Record<PreviewFocus, ReadonlyArray<Category>>> =
  * shows the full set.
  */
 export const ThemePreview = memo(function ThemePreview({
+  brand,
   logoSrc,
   logoAlt,
   logoCorner,
@@ -73,6 +91,9 @@ export const ThemePreview = memo(function ThemePreview({
   peekToken,
   gradientSelection,
 }: {
+  /** The business name typed on step 1. Fills every "Acme Inc" placeholder
+   *  across the showcases; falls back to "Acme Inc" when empty. */
+  brand?: string;
   logoSrc?: string;
   logoAlt?: string;
   logoCorner: "glass" | "fill";
@@ -86,6 +107,8 @@ export const ThemePreview = memo(function ThemePreview({
    *  When set, the preview renders only that gradient's specimen. */
   gradientSelection?: string | null;
 }) {
+  const brandText = brandNames(brand);
+
   // Logo step: just the logo on a backdrop with the five brand chips
   // underneath, so the user watches it come to life as they drop a file.
   // No sidebar, no top bar, no dashboard.
@@ -98,7 +121,7 @@ export const ThemePreview = memo(function ThemePreview({
   // status) grouped as a single demo page, like shadcn's landing. No
   // sidebar, no dashboard, no uncomposed grid of category cards.
   if (focus === "colour") {
-    return <ColourShowcase peekToken={peekToken ?? null} />;
+    return <ColourShowcase peekToken={peekToken ?? null} brand={brandText} />;
   }
 
   // Fonts step: a type specimen with every scale (display, section, card,
@@ -112,7 +135,7 @@ export const ThemePreview = memo(function ThemePreview({
   // hairline weight and dialog widths — every shape token has a specimen
   // demonstrating what it does.
   if (focus === "shape") {
-    return <ShapeShowcase />;
+    return <ShapeShowcase brand={brandText} />;
   }
 
   // Gradients step: one card per gradient token, with the gradient
@@ -122,7 +145,7 @@ export const ThemePreview = memo(function ThemePreview({
   // a glass card, and a labelled swatch for each of the raw gradient
   // tokens so every one is visible at once.
   if (focus === "gradients") {
-    return <GradientShowcase selection={gradientSelection ?? null} />;
+    return <GradientShowcase selection={gradientSelection ?? null} brand={brandText} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -215,7 +238,7 @@ function Spot({
   );
 }
 
-function ColourShowcase({ peekToken }: { peekToken: string | null }) {
+function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand: BrandNames }) {
   const peek = peekToken;
   return (
     <div className={styles.colourShowcase}>
@@ -341,7 +364,7 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
               <span>Status</span>
             </div>
             <div className={styles.colourTableRow}>
-              <span className={styles.colourTableCell}>Acme Inc</span>
+              <span className={styles.colourTableCell}>{brand.full}</span>
               <span className={styles.colourTableCell}>$2,400.00</span>
               <span className={styles.colourTableCell}>12 Oct</span>
               <span className={styles.colourTableCell}><Badge tone="success" variant="solid">Paid</Badge></span>
@@ -467,7 +490,7 @@ function ColourShowcase({ peekToken }: { peekToken: string | null }) {
  * widths — has a dedicated row with a mini caption so the effect is
  * labelled, not just visible.
  */
-function ShapeShowcase() {
+function ShapeShowcase({ brand }: { brand: BrandNames }) {
   return (
     <div className={styles.shapeShowcase}>
       {/* ── One composed "Team settings" card ──────────────────────────
@@ -483,7 +506,7 @@ function ShapeShowcase() {
         <div className={styles.shapeHeader}>
           <div>
             <ShapeEyebrow>Team settings</ShapeEyebrow>
-            <h3 className={styles.shapeTitle}>Acme workspace</h3>
+            <h3 className={styles.shapeTitle}>{brand.full} workspace</h3>
             <p className={styles.shapeMuted}>Everything in one card: inputs, buttons, chips and row dividers all respond together.</p>
           </div>
           <div className={styles.shapeChipsRow}>
@@ -497,10 +520,10 @@ function ShapeShowcase() {
 
         <div className={styles.shapeFormGrid}>
           <Field label="Workspace name">
-            <TextInput defaultValue="Acme Inc" />
+            <TextInput key={brand.full} defaultValue={brand.full} />
           </Field>
           <Field label="Billing email">
-            <TextInput defaultValue="billing@acme.co" />
+            <TextInput key={brand.domain} defaultValue={`billing@${brand.domain}`} />
           </Field>
           <Field label="Note" className={styles.shapeFormGridWide}>
             <Textarea rows={2} defaultValue="Clean, calm, carries the brand." />
@@ -589,16 +612,16 @@ function ShapeEyebrow({ children }: { children: ReactNode }) {
  * gradient at once" catalogue. Picking a different gradient in the
  * dropdown swaps this view to that one's component.
  */
-function GradientShowcase({ selection }: { selection: string | null }) {
+function GradientShowcase({ selection, brand }: { selection: string | null; brand: BrandNames }) {
   const token = selection ?? "--brand-gradient";
   return (
     <div className={styles.gradientStage}>
-      <GradientSpecimen token={token} />
+      <GradientSpecimen token={token} brand={brand} />
     </div>
   );
 }
 
-function GradientSpecimen({ token }: { token: string }) {
+function GradientSpecimen({ token, brand }: { token: string; brand: BrandNames }) {
   switch (token) {
     case "--brand-gradient":
       // Primary button is the main carrier. Big + centred.
@@ -621,7 +644,7 @@ function GradientSpecimen({ token }: { token: string }) {
         <>
           <div className={styles.gradientSuccessToast}>
             <CheckCircle2 size={18} aria-hidden="true" />
-            <span>Invoice sent to jane@acme.co</span>
+            <span>Invoice sent to jane@{brand.domain}</span>
           </div>
           <SpecimenCaption token={token} note="Confirm toasts and the success-tone bar on Modal. No Button variant reads this directly." />
         </>
@@ -630,8 +653,8 @@ function GradientSpecimen({ token }: { token: string }) {
       return (
         <>
           <div className={styles.gradientLogoCornerBig}>
-            <span className={styles.gradientLogoGlyph}>A</span>
-            <span className={styles.gradientLogoWord}>Acme</span>
+            <span className={styles.gradientLogoGlyph}>{brand.word.charAt(0).toUpperCase() || "A"}</span>
+            <span className={styles.gradientLogoWord}>{brand.word}</span>
           </div>
           <SpecimenCaption token={token} note="Fills the SidebarShell's logo corner when logoCorner=&quot;fill&quot;. Shown here at the actual corner size." />
         </>
@@ -639,7 +662,7 @@ function GradientSpecimen({ token }: { token: string }) {
     case "--admin-strip-bg":
       return (
         <>
-          <div className={styles.gradientStripBig}>Admin session · dev.acme.co</div>
+          <div className={styles.gradientStripBig}>Admin session · dev.{brand.domain}</div>
           <SpecimenCaption token={token} note="Full-width context strip at the top of a SidebarShell when strip={} is set — an admin session, a staging flag." />
         </>
       );
@@ -652,7 +675,7 @@ function GradientSpecimen({ token }: { token: string }) {
               <p className={styles.gradientAuthEyebrow}>Sign in</p>
               <h4 className={styles.gradientAuthTitle}>Welcome back</h4>
               <Field label="Work email">
-                <TextInput defaultValue="jane@acme.co" />
+                <TextInput key={brand.domain} defaultValue={`jane@${brand.domain}`} />
               </Field>
               <Field label="Password">
                 <TextInput type="password" defaultValue="••••••••" />
@@ -674,7 +697,7 @@ function GradientSpecimen({ token }: { token: string }) {
               <span>Status</span>
             </div>
             {[
-              ["Acme Inc", "$2,400.00", "12 Oct", "Paid"],
+              [brand.full, "$2,400.00", "12 Oct", "Paid"],
               ["Globex", "$880.00", "18 Oct", "Pending"],
               ["Initech", "$1,120.00", "22 Sep", "Overdue"],
             ].map(([a, b, c, d]) => (

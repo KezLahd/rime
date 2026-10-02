@@ -22,6 +22,8 @@ export type StudioApi = {
   reset: (names: string[], controls?: string[]) => void;
   setControls: (controls: StudioTheme["controls"]) => void;
   setLogo: (logo: StudioTheme["logo"]) => void;
+  /** Set the business name shown in every preview placeholder (empty clears it). */
+  setBrand: (name: string) => void;
   /** Fonts the studio can load (self-hosted by next/font). */
   fonts: ReadonlyArray<StudioFont>;
 };

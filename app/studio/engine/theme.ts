@@ -28,6 +28,10 @@ export type StudioTheme = {
   overridesDark: Record<string, string>;
   /** Another site's logo for the shell corner: a URL or a data URL (preview only). */
   logo: { src: string; alt: string } | null;
+  /** The site's business name. Fills every "Acme Inc" placeholder in the
+   *  live preview (workspace names, logo words, invoice rows, email domains)
+   *  so the Studio stops reading as a generic demo once the user types it. */
+  brand?: string;
   /** Control positions that are not tokens themselves (slider states, font ids). */
   controls: Record<string, number | string | boolean>;
 };
@@ -224,7 +228,7 @@ const cleanMap = (raw: unknown): Record<string, string> => {
  */
 export function parseThemeJson(text: string): StudioTheme | null {
   try {
-    const raw = JSON.parse(text) as Record<string, unknown> & { logo?: { src?: unknown; alt?: unknown } | null };
+    const raw = JSON.parse(text) as Record<string, unknown> & { logo?: { src?: unknown; alt?: unknown } | null; brand?: unknown };
     if (raw.version !== 1 && raw.version !== 2) return null;
     const legacyDark = raw.version === 1 && raw.base === "dark";
     const base = legacyDark ? "default" : (raw.base as string);
@@ -242,6 +246,7 @@ export function parseThemeJson(text: string): StudioTheme | null {
       overrides: legacyDark ? {} : cleanMap(raw.overrides),
       overridesDark: legacyDark ? cleanMap(raw.overrides) : cleanMap(raw.overridesDark),
       logo,
+      brand: typeof raw.brand === "string" && raw.brand.trim() ? raw.brand.trim().slice(0, 60) : undefined,
       controls: typeof raw.controls === "object" && raw.controls ? (raw.controls as StudioTheme["controls"]) : {},
     };
   } catch {

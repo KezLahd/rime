@@ -388,6 +388,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         }),
       setControls: (controls) => commit((t) => ({ ...t, controls: { ...t.controls, ...controls } })),
       setLogo: (logo) => commit((t) => ({ ...t, logo })),
+      setBrand: (name) => commit((t) => ({ ...t, brand: name.trim().slice(0, 60) || undefined })),
       fonts,
     }),
     [view, theme, active, perMode, base, resolvedMap, commit, fonts],
@@ -811,7 +812,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             }
           >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} />
+            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} />
           </div>
         </section>
       </div>

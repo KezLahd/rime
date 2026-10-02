@@ -2,7 +2,7 @@
 
 import { Check, ImagePlus, Sparkles, Upload, X } from "lucide-react";
 import { useRef, useState, type DragEvent } from "react";
-import { Button, Popover } from "@/components/ui";
+import { Button, Popover, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import type { StudioApi } from "../api";
 import { Group, Notice } from "../controls";
@@ -176,6 +176,19 @@ export function LogoPanel({ api }: { api: StudioApi }) {
           />
         </div>
         {error ? <Notice tone="bad">{error}</Notice> : null}
+      </Group>
+
+      <Group
+        title="Business name"
+        note="Replaces every &lsquo;Acme Inc&rsquo; placeholder in the previews ahead (workspace titles, invoice rows, logo corners, email domains). Leave blank to keep the Acme stand-in."
+      >
+        <TextInput
+          aria-label="Business name"
+          placeholder="Acme Inc"
+          value={api.theme.brand ?? ""}
+          onChange={(e) => api.setBrand(e.target.value)}
+          maxLength={60}
+        />
       </Group>
 
       {swatches.length > 0 ? (
