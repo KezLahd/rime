@@ -595,7 +595,37 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   const choose = (id: Section) => {
     setSection(id);
     bodyRef.current?.scrollTo({ top: 0 });
+    // Reflect the current step in the URL hash so a reload / shared
+    // link lands on the same page instead of snapping back to Logo.
+    if (typeof window !== "undefined") {
+      const nextHash = `#${id}`;
+      if (window.location.hash !== nextHash) {
+        window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
+      }
+    }
   };
+
+  // On mount: read the URL hash and jump to that step. On back / forward:
+  // sync the section to whatever the browser is showing. Uses the
+  // setState callback form so the hashchange listener always compares
+  // against the current section without needing a dep on `section`
+  // (which would re-wire the listener on every step change).
+  useEffect(() => {
+    const sectionIds = new Set<string>(ALL.map((s) => s.id));
+    const sectionFromHash = (): Section | null => {
+      if (typeof window === "undefined") return null;
+      const slug = window.location.hash.replace(/^#/, "");
+      return sectionIds.has(slug) ? (slug as Section) : null;
+    };
+    const initial = sectionFromHash();
+    if (initial) setSection(initial);
+    const onHash = () => {
+      const next = sectionFromHash();
+      if (next) setSection((prev) => (prev === next ? prev : next));
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
 
   return (
     <div className={cx(styles.studio, fontClasses)}>
