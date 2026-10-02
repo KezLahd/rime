@@ -169,13 +169,14 @@ export function GlassTab({ api }: { api: StudioApi }) {
   const base = api.theme.base;
   return (
     <>
-      {/* Preset first: the choice between Rime Default (frosted glass +
-          brand accents) and Rime Flat (opaque surfaces, small radii, no
-          blur). Flipping this swaps the base tokens the preview reads,
-          independently of the kit's top-bar Default / Flat (which now
-          only affects the rest of the site, not the Studio preview). */}
-      <Group title="Preset" help="Default is Rime's frosted preset — translucent panels, rounder radii, soft glows. Flat drops the blur, flattens the corners and loses the glow for a crisper, document-y look. All your edits so far stay; only the untouched tokens follow the new base.">
-        <Row label="Base">
+      {/* The preview preset: Frosted (Rime Default — translucent panels,
+          soft glows) vs Flat (Rime Flat — opaque surfaces, sharp
+          corners, no blur). This drives ONLY the preview on the right;
+          the Studio's own chrome stays Frosted/Default always, and the
+          kit's top-bar Default / Flat buttons control the rest of the
+          site but not the preview. */}
+      <Group title="Preset" help="Frosted is Rime's translucent default — glass panels, rounder radii, soft glows. Flat drops the blur, flattens the corners and loses the glow for a crisper, document-y look. All your edits so far stay; only the untouched tokens follow the new base.">
+        <Row label="Style">
           <ToggleGroup
             type="single"
             size="sm"
@@ -183,7 +184,7 @@ export function GlassTab({ api }: { api: StudioApi }) {
             value={base}
             onValueChange={(v: string | null) => v && (v === "default" || v === "flat") && api.setBase(v)}
             items={[
-              { value: "default", label: "Default" },
+              { value: "default", label: "Frosted" },
               { value: "flat", label: "Flat" },
             ]}
           />

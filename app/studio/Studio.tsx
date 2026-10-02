@@ -356,6 +356,9 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     return () => window.clearTimeout(t);
   }, [theme]);
 
+  // `base` is the preview's base: tokens for the Studio's chosen preset
+  // + mode. Drives previewCss (the preview reads these) and the Studio's
+  // internal comparisons (changed, reset, etc.).
   const base = useMemo(
     () => (sources ? baseTokens(sources, theme.base, theme.mode) : new Map<string, string>()),
     [sources, theme.base, theme.mode],
@@ -453,8 +456,17 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     [resolveExpr, resolveColour],
   );
 
+  // `chromeBase` is Rime Default + Light: the fixed look the Studio's
+  // own panel and top-bar chrome always wear. Independent of what the
+  // user has chosen for the preview, so switching the preview to Flat
+  // on the Glass step doesn't drag the Studio UI itself to Flat. Falls
+  // back to `base` only until the stylesheets have been read.
+  const chromeBase = useMemo(
+    () => (sources ? baseTokens(sources, "default", "light") : base),
+    [sources, base],
+  );
   const css = previewCss(theme, active, base);
-  const pin = pinCss(active, base, theme);
+  const pin = pinCss(active, chromeBase, theme);
 
   // After each change has painted: re-read every token and re-run the guard.
   useEffect(() => {
