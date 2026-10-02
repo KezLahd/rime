@@ -26,6 +26,10 @@ export type StudioApi = {
   setBrand: (name: string) => void;
   /** Switch the preview between the Default and Flat preset base. */
   setBase: (base: StudioTheme["base"]) => void;
+  /** Snapshot the current token values as the "applied palette" baseline.
+   *  Called when the user presses Apply on step 1; later reset buttons
+   *  revert to this baseline instead of Rime Default. */
+  setBaseline: (overrides: Overrides) => void;
   /** Fonts the studio can load (self-hosted by next/font). */
   fonts: ReadonlyArray<StudioFont>;
 };

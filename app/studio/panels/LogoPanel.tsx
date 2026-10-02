@@ -126,6 +126,10 @@ export function LogoPanel({ api }: { api: StudioApi }) {
   const applyPalette = () => {
     const mapped = mapToTheme(swatches, roles);
     api.set(mapped.overrides);
+    // Snapshot the palette as the "reset to" baseline for every reset
+    // chip downstream. So "reset" on step 2's Brand row goes back to
+    // the colour we picked for your brand here, not Rime Default blue.
+    api.setBaseline(mapped.overrides);
     setApplied(true);
   };
 

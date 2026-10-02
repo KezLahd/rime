@@ -603,6 +603,232 @@
   gap: 8px;
 }
 
+/* ── Per-category Colour showcases ────────────────────────────────── */
+
+.catShowcase {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 40px 32px;
+  min-height: 100%;
+}
+
+.catIntro {
+  max-width: 560px;
+}
+
+.catEyebrow {
+  margin: 0 0 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.catTitle {
+  margin: 0 0 6px;
+  font-size: var(--text-section);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.catLede {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  max-width: 560px;
+}
+
+.catFootnote {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+.catRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Brand card: button row + chip + progress */
+.catBrandCard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 640px;
+}
+
+.catLink {
+  color: var(--ink-brand);
+  font-weight: 700;
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+/* Text ladder */
+.catTextCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 640px;
+}
+
+.catInkHeading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.catInkBody {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  line-height: 1.5;
+}
+
+.catInkSecondary {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+.catInkMuted {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.catInkBrand {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--ink-brand);
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* Signals: badges + alert + focus */
+.catSignalsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 640px;
+}
+
+.catFocusDemo {
+  padding: 4px;
+}
+
+/* Field: the real page bg with a card floating on it */
+.catFieldStage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 48px 24px;
+  border-radius: var(--r-xl);
+  background: var(--page-background);
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.catFieldCard {
+  width: min(100%, 420px);
+  text-align: center;
+}
+
+.catFieldTitle {
+  margin: 0 0 8px;
+  font-size: var(--text-section);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.catFieldLede {
+  margin: 0 0 10px;
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+.catFieldSmall {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.catAdminStrip {
+  padding: 10px 24px;
+  background: var(--admin-strip-bg);
+  color: var(--ink-inverse);
+  border-radius: var(--r-sm);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 640px;
+}
+
+/* Charts: just a bar chart */
+.catChartCard {
+  max-width: 720px;
+}
+
+/* Ramp: horizontal strip + stacked bars */
+.catRampCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+}
+
+.catRampStrip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.catRampStep {
+  position: relative;
+  height: 72px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+  font-size: var(--text-small);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.catRampLabel {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.catRampStackedRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  padding-top: 12px;
+}
+
+.catRampStackedBar {
+  flex: 1;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
 /* ── Shadows showcase ───────────────────────────────────────────────── */
 
 .shadowStage {

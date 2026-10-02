@@ -256,7 +256,7 @@ function Spot({
   peek: string | null;
   children: ReactNode;
   className?: string;
-  as?: "div" | "span" | "section";
+  as?: "div" | "span" | "section" | "p" | "h2" | "h3";
 }) {
   const hit = peek ? tokens.split(/\s+/).includes(peek) : false;
   const inline = Tag === "span";
@@ -272,10 +272,18 @@ function Spot({
 
 function ColourShowcase({ peekToken, brand, category }: { peekToken: string | null; brand: BrandNames; category: "brand" | "text" | "signals" | "field" | "charts" | "ramp" | null }) {
   const peek = peekToken;
-  // When a category is set, each section decides for itself whether to
-  // render. The map below documents which category each section exists
-  // to spotlight; a section is shown when category is null (fallback)
-  // OR included in its list.
+  // Category-focused showcases: one tight demo of ONLY the components
+  // that read the selected category's tokens. Falls through to the full
+  // composed layout when no category is set (e.g. when viewing from a
+  // step that reuses the Colours showcase).
+  if (category === "brand") return <ColourBrandShowcase peek={peek} brand={brand} />;
+  if (category === "text") return <ColourTextShowcase peek={peek} brand={brand} />;
+  if (category === "signals") return <ColourSignalsShowcase peek={peek} />;
+  if (category === "field") return <ColourFieldShowcase peek={peek} brand={brand} />;
+  if (category === "charts") return <ColourChartsShowcase peek={peek} />;
+  if (category === "ramp") return <ColourRampShowcase peek={peek} />;
+  // Full-composed fallback (category === null): used from focus=colour
+  // without a sub-category, if that ever happens.
   const show = (cats: ReadonlyArray<string>) => category === null || cats.includes(category);
   return (
     <div className={styles.colourShowcase}>
@@ -533,6 +541,196 @@ function ColourShowcase({ peekToken, brand, category }: { peekToken: string | nu
         </Spot>
       </GlassPanel>
       ) : null}
+    </div>
+  );
+}
+
+// ── Per-category Colour showcases ────────────────────────────────────
+// Each showcase is one small, focused page of ONLY the components that
+// read the selected category's tokens. Replaces the previous "render
+// the whole dashboard with sections visually hidden" approach.
+
+function ColourBrandShowcase({ peek, brand }: { peek: string | null; brand: BrandNames }) {
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Brand</p>
+        <h3 className={styles.catTitle}>Primary gestures</h3>
+        <p className={styles.catLede}>Every component that reads the brand palette directly: buttons, chips, avatars, the progress bar.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.catBrandCard}>
+        <Spot as="div" className={styles.catRow} tokens="--brand --brand-action --brand-strong" peek={peek}>
+          <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+          <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export CSV</Button>
+          <Button variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>Skip for now</Button>
+        </Spot>
+        <Spot as="div" className={styles.catRow} tokens="--brand --brand-soft --ink-brand" peek={peek}>
+          <Badge tone="brand">Draft</Badge>
+          <Avatar name="Jane Cooper" size="md" tone="brand" />
+          <span className={styles.catLink}>Open brand kit</span>
+        </Spot>
+        <Spot as="div" tokens="--brand-soft --brand-deep" peek={peek}>
+          <ProgressBar value={64} max={100} label="Collected this quarter" valueText="64%" />
+        </Spot>
+      </GlassPanel>
+      <p className={styles.catFootnote}>{brand.full} · Brand colours power the main confirm button, active nav pills, the brand chip and every brand-tinted gradient.</p>
+    </div>
+  );
+}
+
+function ColourTextShowcase({ peek, brand }: { peek: string | null; brand: BrandNames }) {
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Text</p>
+        <h3 className={styles.catTitle}>Ink ladder</h3>
+        <p className={styles.catLede}>The six text roles, each reading the token it&apos;s named after.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.catTextCard}>
+        <Spot as="h2" tokens="--ink-heading" peek={peek} className={styles.catInkHeading}>Welcome to {brand.full}</Spot>
+        <Spot as="p" tokens="--ink-body" peek={peek} className={styles.catInkBody}>
+          Body ink runs through every paragraph, table cell, label and input value. It&apos;s the colour you&apos;re reading right now.
+        </Spot>
+        <Spot as="p" tokens="--ink-secondary" peek={peek} className={styles.catInkSecondary}>
+          Secondary ink: field helper copy, muted descriptions, quieter rows that still carry meaning.
+        </Spot>
+        <Spot as="p" tokens="--ink-muted" peek={peek} className={styles.catInkMuted}>
+          Muted ink: captions, metadata and column headers. Lowest-weight copy that still has to clear 4.5:1 on glass.
+        </Spot>
+        <Spot as="p" tokens="--ink-brand" peek={peek} className={styles.catInkBrand}>
+          Brand ink paints links, active nav labels and the eyebrows above headings.
+        </Spot>
+        <Spot as="div" tokens="--ink-placeholder --line-input --focus-color" peek={peek}>
+          <TextInput size="sm" placeholder="Placeholder ink shows up here" />
+        </Spot>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function ColourSignalsShowcase({ peek }: { peek: string | null }) {
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Signals</p>
+        <h3 className={styles.catTitle}>Status and focus</h3>
+        <p className={styles.catLede}>Danger, warning, success and info — plus the focus ring you see when tabbing.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.catSignalsCard}>
+        <Spot as="div" className={styles.catRow} tokens="--danger-base --danger-base-solid --danger-ink" peek={peek}>
+          <Badge tone="danger" variant="solid">Overdue</Badge>
+          <Button size="sm" variant="danger">Delete project</Button>
+        </Spot>
+        <Spot as="div" className={styles.catRow} tokens="--warning-fill --warning-ink" peek={peek}>
+          <Badge tone="warning">Pending</Badge>
+        </Spot>
+        <Spot as="div" className={styles.catRow} tokens="--success-fill --success-ink" peek={peek}>
+          <Badge tone="success" variant="solid">Paid</Badge>
+        </Spot>
+        <Spot as="div" className={styles.catRow} tokens="--info-ink --info-fill" peek={peek}>
+          <Badge tone="info">In review</Badge>
+        </Spot>
+        <Spot as="div" tokens="--danger-base-solid --danger-ink" peek={peek}>
+          <Alert tone="danger" title="Three invoices are overdue">
+            Clear the overdue batch before Friday to keep accounts in good standing.
+          </Alert>
+        </Spot>
+        <Spot as="div" tokens="--focus-color" peek={peek}>
+          <div className={styles.catFocusDemo}>
+            <TextInput size="sm" placeholder="Tab here to see the focus ring" />
+          </div>
+        </Spot>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function ColourFieldShowcase({ peek, brand }: { peek: string | null; brand: BrandNames }) {
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Page field</p>
+        <h3 className={styles.catTitle}>Field and blooms</h3>
+        <p className={styles.catLede}>The coloured ground glass floats on. Change these and the entire page behind every card shifts.</p>
+      </div>
+      <Spot as="div" className={styles.catFieldStage} tokens="--page-base --rgb-bloom-a --rgb-bloom-b" peek={peek}>
+        <GlassPanel padding="lg" className={styles.catFieldCard}>
+          <h3 className={styles.catFieldTitle}>Welcome back</h3>
+          <p className={styles.catFieldLede}>Glass sitting on your page field — change the field and the whole page shifts under this card.</p>
+          <p className={styles.catFieldSmall}>Signed in to {brand.full}.</p>
+        </GlassPanel>
+      </Spot>
+      <Spot as="div" tokens="--night --rgb-contact" peek={peek}>
+        <div className={styles.catAdminStrip}>ADMIN SESSION · dev.{brand.domain}</div>
+      </Spot>
+    </div>
+  );
+}
+
+function ColourChartsShowcase({ peek }: { peek: string | null }) {
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Charts</p>
+        <h3 className={styles.catTitle}>Categorical palette</h3>
+        <p className={styles.catLede}>Six series. Each needs 3:1 against the surface it sits on; keep them far apart in hue for colour-blind readers.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.catChartCard}>
+        <Spot as="div" tokens="--chart-1 --chart-2 --chart-3 --chart-4 --chart-5 --chart-6" peek={peek}>
+          <BarChart
+            title="Revenue by product"
+            summary="Six-month totals across six product lines."
+            hideTitle
+            data={CHART_DATA}
+            category="month"
+            series={[
+              { key: "a", label: "Hardware" },
+              { key: "b", label: "Software" },
+              { key: "c", label: "Services" },
+              { key: "d", label: "Support" },
+              { key: "e", label: "Training" },
+              { key: "f", label: "Licensing" },
+            ]}
+            height={240}
+          />
+        </Spot>
+      </GlassPanel>
+    </div>
+  );
+}
+
+function ColourRampShowcase({ peek }: { peek: string | null }) {
+  const steps = ["--chart-seq-1", "--chart-seq-2", "--chart-seq-3", "--chart-seq-4", "--chart-seq-5"];
+  return (
+    <div className={styles.catShowcase}>
+      <div className={styles.catIntro}>
+        <p className={styles.catEyebrow}>Chart ramp</p>
+        <h3 className={styles.catTitle}>Ordered scale</h3>
+        <p className={styles.catLede}>One hue, light to dark, for stepwise categories: age cohorts, quartiles, severity tiers.</p>
+      </div>
+      <GlassPanel padding="lg" className={styles.catRampCard}>
+        <Spot as="div" tokens={steps.join(" ")} peek={peek}>
+          <div className={styles.catRampStrip} aria-label="Chart ramp">
+            {steps.map((t, i) => (
+              <div key={t} className={styles.catRampStep} style={{ background: `var(${t})` }}>
+                <span>{i + 1}</span>
+              </div>
+            ))}
+          </div>
+        </Spot>
+        <p className={styles.catRampLabel}>Lightest · Darkest</p>
+        <Spot as="div" className={styles.catRampStackedRow} tokens={steps.join(" ")} peek={peek}>
+          {steps.map((t, i) => (
+            <div
+              key={t}
+              className={styles.catRampStackedBar}
+              style={{ height: `${20 + i * 18}px`, background: `var(${t})` }}
+              aria-label={`Ramp step ${i + 1}`}
+            />
+          ))}
+        </Spot>
+        <p className={styles.catRampLabel}>Stacked example (bars)</p>
+      </GlassPanel>
     </div>
   );
 }

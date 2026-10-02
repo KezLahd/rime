@@ -32,6 +32,13 @@ export type StudioTheme = {
    *  live preview (workspace names, logo words, invoice rows, email domains)
    *  so the Studio stops reading as a generic demo once the user types it. */
   brand?: string;
+  /** A per-token snapshot taken when the user applied a logo-derived
+   *  palette (step 1 → Apply). Reset buttons later in the walkthrough
+   *  revert each token to this value if present, so "reset" means
+   *  "back to the colours we picked for your brand" rather than "back
+   *  to Rime Default greys". A reset of a token not in the baseline
+   *  still falls back to clearing the override (preset value). */
+  baseline?: Record<string, string>;
   /** Control positions that are not tokens themselves (slider states, font ids). */
   controls: Record<string, number | string | boolean>;
 };
@@ -236,7 +243,7 @@ const cleanMap = (raw: unknown): Record<string, string> => {
  */
 export function parseThemeJson(text: string): StudioTheme | null {
   try {
-    const raw = JSON.parse(text) as Record<string, unknown> & { logo?: { src?: unknown; alt?: unknown } | null; brand?: unknown };
+    const raw = JSON.parse(text) as Record<string, unknown> & { logo?: { src?: unknown; alt?: unknown } | null; brand?: unknown; baseline?: unknown };
     if (raw.version !== 1 && raw.version !== 2) return null;
     const legacyDark = raw.version === 1 && raw.base === "dark";
     const base = legacyDark ? "default" : (raw.base as string);
@@ -255,6 +262,7 @@ export function parseThemeJson(text: string): StudioTheme | null {
       overridesDark: legacyDark ? cleanMap(raw.overrides) : cleanMap(raw.overridesDark),
       logo,
       brand: typeof raw.brand === "string" && raw.brand.trim() ? raw.brand.trim().slice(0, 60) : undefined,
+      baseline: typeof raw.baseline === "object" && raw.baseline ? cleanMap(raw.baseline) : undefined,
       controls: typeof raw.controls === "object" && raw.controls ? (raw.controls as StudioTheme["controls"]) : {},
     };
   } catch {

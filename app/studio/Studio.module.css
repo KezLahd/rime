@@ -827,54 +827,71 @@
   display: none;
 }
 
+/* Flat underlined-tab chips: no pill container, no border. Just the
+   label, with a 2 px brand underline on the active one and a subtle
+   green dot before completed items. Reads as a navigator, not a bag
+   of buttons. */
 .stripChip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
-  min-height: 26px;
+  padding: 6px 2px;
   border: 0;
-  border-radius: var(--r-full);
-  background: var(--recess-fill);
-  color: var(--ink-secondary);
+  background: transparent;
+  color: var(--ink-muted);
   font-size: var(--text-small);
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px var(--line-input);
   scroll-snap-align: center;
-  transition:
-    background var(--dur) var(--ease),
-    color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 
 .stripChip:hover {
-  background: var(--recess-fill-hover);
   color: var(--ink-body);
 }
 
+/* Green tick for completed items — brand-independent, so a user who
+   just rebased the brand doesn't suddenly see the "done" markers
+   change colour. */
 .stripChipDone {
-  color: var(--brand);
+  color: var(--success-solid, #2d8a56);
 }
 
 .stripChipCheck {
+  color: var(--success-solid, #2d8a56);
+}
+
+/* Active chip: brand text + 2 px brand underline. Underline sits on
+   the row's baseline edge rather than coating the whole chip, so the
+   strip reads as linear tabs. */
+.stripChipActive {
   color: var(--brand);
 }
 
-.stripChipActive {
+.stripChipActive::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
   background: var(--brand);
-  color: var(--ink-inverse);
-  box-shadow: inset 0 0 0 1px var(--brand), 0 1px 4px rgba(var(--rgb-brand-deep), 0.3);
 }
 
 .stripChipActive:hover {
-  background: var(--brand-strong);
-  color: var(--ink-inverse);
+  color: var(--brand);
 }
 
 .stripChipActive .stripChipCheck {
-  color: var(--ink-inverse);
+  color: var(--brand);
+}
+
+/* Pull chips tighter together for the flat variant. */
+.stripTrack {
+  gap: 16px;
 }
 
 /* ── Logo drop zone (step 1): a big, obvious target with the logo

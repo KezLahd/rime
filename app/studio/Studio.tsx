@@ -382,7 +382,17 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
       base,
       value: (name) => active[name] ?? base.get(name),
       resolved: (name) => resolvedMap[name] ?? "",
-      changed: (name) => name in active,
+      // "Changed" means "different from the user's intended baseline".
+      // If a logo-palette baseline has been snapshotted for this token,
+      // the baseline wins; otherwise the preset's own value is the
+      // baseline. So a token sitting at exactly the applied-palette
+      // colour reads as "not changed" and the reset chip hides.
+      changed: (name) => {
+        if (!(name in active)) return false;
+        const baseline = view.baseline?.[name];
+        const expected = baseline ?? base.get(name);
+        return active[name] !== expected;
+      },
       set: (patch: Overrides, controls) =>
         commit((t) => {
           const overrides = { ...t.overrides };
@@ -400,9 +410,24 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         commit((t) => {
           const overrides = { ...t.overrides };
           const overridesDark = { ...t.overridesDark };
+          // When the user applied a logo-derived palette on step 1, we
+          // snapshot the resulting token values into theme.baseline.
+          // "Reset" then means "back to the baseline the palette set"
+          // for anything the palette touched, and falls back to the
+          // Rime Default preset for everything else — matching the
+          // user's mental model that reset should undo their tweak,
+          // not their palette.
+          const baseline = t.baseline;
           for (const n of names) {
-            if (t.mode === "dark" && perMode(n, overrides[n] ?? base.get(n))) delete overridesDark[n];
-            else delete overrides[n];
+            const isDarkTarget = t.mode === "dark" && perMode(n, overrides[n] ?? base.get(n));
+            if (baseline && n in baseline) {
+              const v = baseline[n];
+              if (isDarkTarget) overridesDark[n] = v;
+              else overrides[n] = v;
+            } else {
+              if (isDarkTarget) delete overridesDark[n];
+              else delete overrides[n];
+            }
           }
           const c = { ...t.controls };
           for (const k of controls ?? []) delete c[k];
@@ -426,6 +451,11 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
           // hadn't renamed it from the preset's default — same rule as
           // the opening sync did before the preview isolation.
           name: t.name === presetName(t.base) ? presetName(next) : t.name,
+        })),
+      setBaseline: (overrides) =>
+        commit((t) => ({
+          ...t,
+          baseline: { ...(t.baseline ?? {}), ...overrides },
         })),
       fonts,
     }),
