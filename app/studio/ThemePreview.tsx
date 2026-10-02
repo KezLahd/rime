@@ -930,15 +930,19 @@ function GlassShowcase({ brand }: { brand: BrandNames }) {
  * contrast; the specimen is the thing the user is reshaping.
  */
 function ShadowShowcase({ selection, brand, logoSrc, logoAlt }: { selection: string | null; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
-  const token = selection ?? "--shadow-panel";
+  // Decode the broadcast — it's either "--shadow-panel" (plain) or
+  // "--sidebar-shadow:drawer" (token:variant). Variant routes to a
+  // different specimen even when the underlying token is shared.
+  const raw = selection ?? "--shadow-panel";
+  const [token, variant] = raw.includes(":") ? raw.split(":") : [raw, undefined];
   return (
     <div className={styles.shadowStage}>
-      <ShadowSpecimen token={token} brand={brand} logoSrc={logoSrc} logoAlt={logoAlt} />
+      <ShadowSpecimen token={token} variant={variant} brand={brand} logoSrc={logoSrc} logoAlt={logoAlt} />
     </div>
   );
 }
 
-function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
+function ShadowSpecimen({ token, variant, brand, logoSrc, logoAlt }: { token: string; variant?: string; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
   const shadow = `var(${token})`;
   switch (token) {
     case "--shadow-hairline-row":
@@ -1104,26 +1108,45 @@ function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; bra
         </>
       );
     case "--sidebar-shadow":
-      // The shadow powers both the sidebar's right edge AND the
-      // narrow-mode drawer that slides out over a scrim. Specimen
-      // shows the drawer in its slide-out state so the scrim slider
-      // on the left feeds in live.
+      if (variant === "drawer") {
+        // Drawer: slides OVER the page from the left with a scrim
+        // darkening everything underneath. The scrim slider on the
+        // left feeds into the live --scrim token.
+        return (
+          <>
+            <div className={styles.shadowDrawerStage}>
+              <div className={styles.shadowDrawerPage} aria-hidden="true">
+                <div className={styles.shadowEdgeStubCard}>Live content behind the drawer</div>
+              </div>
+              <div className={styles.shadowDrawerScrim} aria-hidden="true" />
+              <div className={styles.shadowDrawerPanel} style={{ boxShadow: shadow }}>
+                <div className={styles.shadowEdgeChip}>{brand.full}</div>
+                <div className={styles.shadowEdgeStubRow} />
+                <div className={styles.shadowEdgeStubRow} />
+                <div className={styles.shadowEdgeStubRow} />
+                <div className={styles.shadowEdgeStubRow} />
+              </div>
+            </div>
+            <SpecimenCaption token={token} note="A slide-over drawer: appears on top of the page with a scrim darkening the content behind. Scrim darkness is editable on the left." />
+          </>
+        );
+      }
+      // Fixed sidebar: sits beside the page, no scrim. The right-edge
+      // shadow is the only visual separator between chrome and content.
       return (
         <>
-          <div className={styles.shadowDrawerStage}>
-            <div className={styles.shadowDrawerPage} aria-hidden="true">
-              <div className={styles.shadowEdgeStubCard}>Live content behind the drawer</div>
-            </div>
-            <div className={styles.shadowDrawerScrim} aria-hidden="true" />
-            <div className={styles.shadowDrawerPanel} style={{ boxShadow: shadow }}>
+          <div className={styles.shadowEdgeDemo}>
+            <div className={styles.shadowEdgeSidebar} style={{ boxShadow: shadow }}>
               <div className={styles.shadowEdgeChip}>{brand.full}</div>
               <div className={styles.shadowEdgeStubRow} />
               <div className={styles.shadowEdgeStubRow} />
               <div className={styles.shadowEdgeStubRow} />
-              <div className={styles.shadowEdgeStubRow} />
+            </div>
+            <div className={styles.shadowEdgePage}>
+              <div className={styles.shadowEdgeStubCard}>Page content</div>
             </div>
           </div>
-          <SpecimenCaption token={token} note="Shared by the sidebar's right edge AND the narrow-viewport drawer that slides over a scrim. Edit the scrim darkness in the left column to see the backdrop dim." />
+          <SpecimenCaption token={token} note="A fixed, always-visible sidebar: sits beside the page content and casts a soft right-edge drop. No scrim. For the slide-over version, pick Drawer in the surface list above." />
         </>
       );
     case "--topbar-shadow":

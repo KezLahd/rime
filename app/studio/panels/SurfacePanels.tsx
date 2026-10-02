@@ -242,7 +242,9 @@ export function SurfaceEditor({ api, surfaceId }: { api: StudioApi; surfaceId: s
 
 // ── Shadows ───────────────────────────────────────────────────────────────
 
-const ELEVATIONS: ReadonlyArray<{ token: string; label: string }> = [
+type Elevation = { token: string; label: string; variant?: "drawer" };
+
+const ELEVATIONS: ReadonlyArray<Elevation> = [
   { token: "--shadow-hairline-card", label: "Card" },
   { token: "--shadow-panel-light", label: "Light panel" },
   { token: "--shadow-panel", label: "Panel" },
@@ -250,11 +252,15 @@ const ELEVATIONS: ReadonlyArray<{ token: string; label: string }> = [
   { token: "--shadow-lift", label: "Highlight card" },
   { token: "--popover-shadow", label: "Popover" },
   { token: "--modal-shadow", label: "Modal" },
-  // Drawer uses --sidebar-shadow (the SidebarShell's drawer mode on
-  // narrow viewports reuses the sidebar's shadow token). Scrim comes
-  // from --scrim. Listed separately from "Sidebar edge" so the user
-  // sees a clearly labelled "slide-in drawer" surface in the list.
-  { token: "--sidebar-shadow", label: "Drawer / sidebar" },
+  { token: "--sidebar-shadow", label: "Sidebar edge" },
+  // Drawer is a separate ENTRY from Sidebar edge, even though both read
+  // --sidebar-shadow for their fall. A fixed sidebar sits next to the
+  // page and casts a soft right-edge drop; a drawer slides OVER the page
+  // with a scrim darkening the content behind. Two different UX
+  // patterns, two different specimens — the drawer entry adds the scrim
+  // control and the slide-in demo while the Sidebar edge entry stays
+  // the plain fixed-chrome demo.
+  { token: "--sidebar-shadow", label: "Drawer", variant: "drawer" },
   { token: "--shadow-auth-card", label: "Sign-in card" },
   { token: "--topbar-shadow", label: "Top bar edge" },
   { token: "--shadow-chrome", label: "Search dropdown" },
@@ -395,7 +401,15 @@ function ShadowColourRow({
 }
 
 export function ShadowPanel({ api }: { api: StudioApi }) {
-  const [token, setToken] = useState(ELEVATIONS[2].token);
+  // State is the elevation entry's label (unique within ELEVATIONS)
+  // rather than the raw token, because two entries can point at the
+  // same token (Sidebar edge + Drawer both read --sidebar-shadow)
+  // and we need to tell them apart to render the right specimen /
+  // scrim control.
+  const [activeLabel, setActiveLabel] = useState(ELEVATIONS[2].label);
+  const activeEntry = ELEVATIONS.find((e) => e.label === activeLabel) ?? ELEVATIONS[0];
+  const token = activeEntry.token;
+  const variant = activeEntry.variant;
   const current = api.value(token) ?? api.resolved(token);
   // `p` is the LIVE params. Instead of keeping it in local state (which
   // drifts out of sync with the token when a reset chip or the brush
@@ -416,14 +430,16 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
 
   const depthNames = ELEVATIONS.map((e) => e.token);
 
-  // Broadcast which shadow is being edited; the preview on the right
-  // renders only the specimen that uses it, so the user sees exactly
-  // the surface they're reshaping instead of a grid of every elevation.
+  // Broadcast which shadow entry is being edited. Variant is appended
+  // after a colon so Sidebar edge (`--sidebar-shadow`) and Drawer
+  // (`--sidebar-shadow:drawer`) can share the token but render
+  // different specimens on the preview.
   const selectShadow = useShadowSelection();
+  const broadcast = variant ? `${token}:${variant}` : token;
   useEffect(() => {
-    selectShadow(token);
+    selectShadow(broadcast);
     return () => selectShadow(null);
-  }, [token, selectShadow]);
+  }, [broadcast, selectShadow]);
   return (
     <>
       {/* Surface strip sits as a full-bleed sticky header above the
@@ -434,10 +450,13 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
       <SurfaceStrip
         variant="header"
         label="Surface"
-        value={token}
-        options={ELEVATIONS.map((e) => ({ value: e.token, label: e.label }))}
-        onChange={setToken}
-        isComplete={(t) => api.changed(t)}
+        value={activeLabel}
+        options={ELEVATIONS.map((e) => ({ value: e.label, label: e.label }))}
+        onChange={setActiveLabel}
+        isComplete={(label) => {
+          const entry = ELEVATIONS.find((e) => e.label === label);
+          return entry ? api.changed(entry.token) : false;
+        }}
       />
       <Group title="One elevation" help="Direction, distance, softness, spread, a tinted colour and one to three layers: a shade above, the fall, and a tight contact shadow.">
         <AngleRow
@@ -553,9 +572,10 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
           <ScrimDarknessRow api={api} token="--modal-scrim" fallback="rgba(10, 14, 20, 0.5)" />
         ) : null}
 
-        {/* Drawer (and the SidebarShell's narrow-mode drawer) uses
-            --scrim for its dim backdrop. Edited the same way. */}
-        {token === "--sidebar-shadow" ? (
+        {/* Drawer-only: adds the scrim darkness slider (--scrim). The
+            fixed Sidebar edge doesn't paint a scrim, so its entry omits
+            this control even though both edit the same --sidebar-shadow. */}
+        {variant === "drawer" ? (
           <ScrimDarknessRow api={api} token="--scrim" fallback="rgba(14, 16, 24, 0.5)" />
         ) : null}
       </Group>
