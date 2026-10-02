@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, ToggleGroup } from "@/components/ui";
+import { Button, Select, Toggletip, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useShadowSelection } from "../controls";
+import { AngleRow, CheckRow, ColourRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useShadowSelection } from "../controls";
+import { parseColour, toCss, toHex, type Rgb } from "../engine/colour";
 import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass, shadowDepth } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
 import styles from "../Studio.module.css";
@@ -264,6 +265,73 @@ const CHANNELS = [
   { value: "0, 0, 0", label: "Black" },
 ];
 
+/** Which shadow tokens sit under a frosted-glass surface. Only these
+ *  show the "Top light line" (specular) toggle, since that highlight
+ *  reads as light catching the glass edge and makes no sense for a
+ *  hairline / float / button glow / sidebar-edge drop. */
+const GLASS_SHADOW_TOKENS = new Set<string>([
+  "--shadow-panel",
+  "--shadow-lift",
+  "--popover-shadow",
+  "--modal-shadow",
+  "--shadow-chrome",
+  "--shadow-auth-card",
+]);
+
+/**
+ * Shadow colour editor: a proper swatch (opens ColorPicker with the
+ * brand palette strip + opacity) + a "Follow palette" dropdown that
+ * maps to the shadow-engine's palette channels (--rgb-brand-deep,
+ * --rgb-brand, --rgb-contact, --rgb-shade, Black). Picking a hex in
+ * the swatch writes "r, g, b" so buildShadow turns it into a literal
+ * rgba; picking a palette ref writes the channel name as before.
+ */
+function ShadowColourRow({ channel, onChange }: { channel: string; onChange: (channel: string) => void }) {
+  // Current colour for the swatch preview. Palette refs resolve via
+  // the CSS probe at render time; "r, g, b" literals parse directly.
+  const isRef = channel.startsWith("--");
+  let rgb: Rgb = { r: 0, g: 0, b: 0, a: 1 };
+  if (isRef) {
+    // Probe the CSS variable on an off-screen element.
+    if (typeof window !== "undefined") {
+      const probe = document.createElement("div");
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      probe.style.backgroundColor = `rgb(var(${channel}))`;
+      document.body.appendChild(probe);
+      const resolved = parseColour(getComputedStyle(probe).backgroundColor);
+      document.body.removeChild(probe);
+      if (resolved) rgb = resolved;
+    }
+  } else {
+    const match = channel.match(/^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (match) rgb = { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]), a: 1 };
+  }
+
+  const setFromRgb = (next: Rgb) => {
+    onChange(`${Math.round(next.r)}, ${Math.round(next.g)}, ${Math.round(next.b)}`);
+  };
+
+  const selectValue = CHANNELS.some((c) => c.value === channel) ? channel : "custom";
+
+  return (
+    <Row label="Shadow colour" help="Pick a specific hex in the swatch, or follow a palette token (brand / deep / contact / press). Hex pins a literal colour; the palette dropdown keeps the shadow following your theme.">
+      <ColourSwatch label="Shadow colour" colour={rgb} onChange={setFromRgb} />
+      <Select
+        size="sm"
+        aria-label="Follow a palette channel"
+        className={styles.grow}
+        value={selectValue}
+        onChange={(v) => v !== "custom" && onChange(v)}
+        options={[
+          ...CHANNELS,
+          ...(selectValue === "custom" ? [{ value: "custom", label: "Fixed colour" }] : []),
+        ]}
+      />
+    </Row>
+  );
+}
+
 export function ShadowPanel({ api }: { api: StudioApi }) {
   const depth = ctl(api, "depth", 1);
   const [token, setToken] = useState(ELEVATIONS[2].token);
@@ -310,19 +378,52 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
         <SliderRow label="Distance" value={p.distance} min={0} max={48} step={1} unit="px" onChange={(v) => update({ distance: v })} />
         <SliderRow label="Softness" value={p.blur} min={0} max={96} step={1} unit="px" onChange={(v) => update({ blur: v })} />
         <SliderRow label="Spread" value={p.spread} min={-32} max={16} step={1} unit="px" onChange={(v) => update({ spread: v })} />
-        <SliderRow label="Strength" format={(v) => `${Math.round(v * 100)}%`} value={p.opacity} min={0} max={0.6} step={0.01} onChange={(v) => update({ opacity: v })} />
-        <SelectRow label="Shadow colour" value={CHANNELS.some((c) => c.value === p.channel) ? p.channel : "--rgb-brand-deep"} options={CHANNELS} onChange={(v) => update({ channel: v })} />
-        <SelectRow
+        <SliderRow label="Strength" displayScale={100} unit="%" value={p.opacity} min={0} max={0.6} step={0.01} onChange={(v) => update({ opacity: v })} />
+
+        {/* Shadow colour: a proper swatch + Follow-palette dropdown.
+            The channel value stays as "--rgb-xxx" (palette ref) OR
+            "r, g, b" (literal) so buildShadow still works unchanged. */}
+        <ShadowColourRow channel={p.channel} onChange={(c) => update({ channel: c })} />
+
+        {/* Layers: segmented 1 / 2 / 3 with an info toggletip that
+            explains what each option adds, so the user isn't guessing
+            which stack to pick. */}
+        <Row
           label="Layers"
-          value={String(p.layers) as "1" | "2" | "3"}
-          options={[
-            { value: "1", label: "1 · the fall" },
-            { value: "2", label: "2 · fall and contact" },
-            { value: "3", label: "3 · shade above too" },
-          ]}
-          onChange={(v) => update({ layers: Number(v) as 1 | 2 | 3 })}
-        />
-        <CheckRow label="Top light line" note="A thin light edge, for glass surfaces." checked={p.specular} onChange={(v) => update({ specular: v })} />
+          help={
+            <div>
+              <p style={{ marginTop: 0 }}><b>1 — The fall.</b> One soft drop under the surface. Lightest, cheapest; good for Row and Hairline tokens.</p>
+              <p><b>2 — Fall + contact.</b> Adds a tight contact shadow directly under the surface. Reads as "sitting on" rather than floating.</p>
+              <p style={{ marginBottom: 0 }}><b>3 — Shade above too.</b> Adds a subtle shade ABOVE the surface opposite the fall. Reads as "lit from one side"; useful on Modal and Highlight cards.</p>
+            </div>
+          }
+        >
+          <ToggleGroup
+            type="single"
+            size="sm"
+            aria-label="Shadow layers"
+            value={String(p.layers)}
+            onValueChange={(v: string | null) => v && update({ layers: Number(v) as 1 | 2 | 3 })}
+            items={[
+              { value: "1", label: "1" },
+              { value: "2", label: "2" },
+              { value: "3", label: "3" },
+            ]}
+          />
+        </Row>
+
+        {/* Top light line is a glass-surface detail (the specular
+            highlight along the top edge of a frosted card). Hidden
+            for shadow tokens that don't sit under glass — hairlines,
+            float, chrome edges, button glows don't carry it. */}
+        {GLASS_SHADOW_TOKENS.has(token) ? (
+          <CheckRow
+            label="Top light line"
+            note="A thin light edge along the top of the surface. Only shown for glass elevations."
+            checked={p.specular}
+            onChange={(v) => update({ specular: v })}
+          />
+        ) : null}
       </Group>
       {depthNames.some(api.changed) && depth !== 1 ? <Notice tone="warn">Depth and a hand-edited elevation both write shadows; the last one you touch wins.</Notice> : null}
       <Advanced api={api} tokens={depthNames.concat(["--glow-sm", "--glow-md-hover", "--glow-lg", "--glow-danger"])} />

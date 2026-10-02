@@ -345,6 +345,7 @@ export function SliderRow({
   step,
   unit,
   format,
+  displayScale,
   changed,
   onChange,
   onReset,
@@ -358,8 +359,15 @@ export function SliderRow({
   max: number;
   step: number;
   unit?: string;
-  /** Shown value: defaults to the number and its unit. */
+  /** DEPRECATED display formatter — the field now derives its own
+   *  display from value * displayScale + unit. Kept so existing call
+   *  sites still compile; auto-detects the common `v*100 + %` pattern
+   *  if a format is supplied without a displayScale. */
   format?: (v: number) => string;
+  /** Multiplier applied to the raw value for display and reversed on
+   *  commit: strength (0-1) uses displayScale={100} and unit="%" so
+   *  the field reads "72" and the user types "72" to mean 0.72. */
+  displayScale?: number;
   changed?: boolean;
   onChange: (v: number) => void;
   onReset?: () => void;
@@ -395,6 +403,7 @@ export function SliderRow({
             step={step}
             unit={unit}
             format={format}
+            displayScale={displayScale}
             disabled={disabled}
             onChange={onChange}
           />
@@ -428,6 +437,7 @@ function NumberField({
   step,
   unit,
   format,
+  displayScale,
   disabled,
   onChange,
 }: {
@@ -438,57 +448,80 @@ function NumberField({
   step: number;
   unit?: string;
   format?: (v: number) => string;
+  displayScale?: number;
   disabled?: boolean;
   onChange: (v: number) => void;
 }) {
-  const decimals = step < 1 ? Math.min(3, String(step).split(".")[1]?.length ?? 2) : 0;
-  const defaultFmt = (v: number) => `${Number(v.toFixed(decimals))}${unit ? (unit === "%" || unit === "°" ? unit : ` ${unit}`) : ""}`;
-  const display = format ? format(value) : defaultFmt(value);
+  // Work out the display scale + suffix. The caller can set them
+  // directly (displayScale + unit). If a legacy `format` is given, we
+  // auto-detect by comparing format(1) against raw 1: a format of
+  // `${v*100}%` produces "100%" at value 1, so scale = 100 and
+  // suffix = "%".
+  let scale = displayScale ?? 1;
+  let suffix = unit ?? "";
+  if (!displayScale && format) {
+    const sample = format(1);
+    const parts = sample.match(/^(-?\d+(?:\.\d+)?)\s*(.*)$/);
+    if (parts) {
+      const n = Number(parts[1]);
+      if (Number.isFinite(n) && n !== 0) scale = n;
+      if (!unit) suffix = parts[2].trim();
+    }
+  }
+
+  // Display decimals follow the smaller of step * scale (so a step of
+  // 0.01 at scale 100 displays whole numbers; step 0.05 at scale 1
+  // displays two decimals). Capped at 3 to keep the field tight.
+  const effectiveStep = step * scale;
+  const decimals = effectiveStep < 1 ? Math.min(3, String(effectiveStep).replace(/^0*/, "").split(".")[1]?.length ?? 2) : 0;
+  const displayValue = Number((value * scale).toFixed(decimals));
   const [draft, setDraft] = useState<string | null>(null);
-  const live = draft ?? display;
+  const live = draft ?? String(displayValue);
+  const displayMin = min * scale;
+  const displayMax = max * scale;
 
   const commit = () => {
     if (draft === null) return;
-    // Pull the first number (int or decimal, optionally negative) out of
-    // whatever the user typed, so "36", "36px", "36 px" and "36 pixels"
-    // all parse. If nothing parses, revert to the current display.
-    const match = draft.match(/-?\d+(\.\d+)?/);
-    if (!match) {
-      setDraft(null);
-      return;
-    }
-    const raw = Number(match[0]);
+    const raw = Number(draft);
     if (!Number.isFinite(raw)) {
       setDraft(null);
       return;
     }
-    const clamped = Math.min(max, Math.max(min, raw));
-    // Snap to step. For step 0.05, we want 0.65 rather than 0.6499999…
-    const snapped = Math.round(clamped / step) * step;
-    const rounded = Number(snapped.toFixed(decimals));
+    const clampedDisplay = Math.min(displayMax, Math.max(displayMin, raw));
+    // Translate back to the slider's native scale, then snap to the
+    // step in that native scale. Avoids `72.0001` sort of residues.
+    const native = clampedDisplay / scale;
+    const snapped = Math.round(native / step) * step;
+    const rounded = Number(snapped.toFixed(step < 1 ? Math.min(6, String(step).split(".")[1]?.length ?? 2) : 0));
     setDraft(null);
     if (rounded !== value) onChange(rounded);
   };
 
   return (
-    <input
-      type="text"
-      inputMode="decimal"
-      className={styles.numberField}
-      value={live}
-      disabled={disabled}
-      aria-label={`${label} value`}
-      onChange={(e) => setDraft(e.target.value)}
-      onBlur={commit}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-        if (e.key === "Escape") {
-          setDraft(null);
-          (e.target as HTMLInputElement).blur();
-        }
-      }}
-      spellCheck={false}
-    />
+    <span className={cx(styles.numberFieldShell, disabled && styles.numberFieldShellDisabled)}>
+      <input
+        type="number"
+        inputMode="decimal"
+        step={effectiveStep}
+        min={displayMin}
+        max={displayMax}
+        className={styles.numberField}
+        value={live}
+        disabled={disabled}
+        aria-label={`${label} value`}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+          if (e.key === "Escape") {
+            setDraft(null);
+            (e.target as HTMLInputElement).blur();
+          }
+        }}
+        spellCheck={false}
+      />
+      {suffix ? <span className={styles.numberFieldSuffix}>{suffix}</span> : null}
+    </span>
   );
 }
 
