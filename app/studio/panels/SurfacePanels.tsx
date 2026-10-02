@@ -188,7 +188,14 @@ export function GlassTab({ api }: { api: StudioApi }) {
           />
         </Row>
       </Group>
-      {GLASS_SURFACES.map((s) => (
+      {/* Glass step controls panels only: cards, overlays and the glass
+          wells on buttons / fields. Sidebar, top bar, modals, popovers
+          and toasts have been pulled out — those surfaces are part of
+          the layout + overlay chrome, which gets its own step later
+          (see Layout + a planned Overlays step). Keeping Glass focused
+          on panels stops the step reading as "re-tint every surface in
+          the app one at a time." */}
+      {GLASS_SURFACES.filter((s) => s.id === "panels").map((s) => (
         <SurfaceEditor key={s.id} api={api} surfaceId={s.id} />
       ))}
       <Group title="Edges" help="The thin light line along the top of glass surfaces, and the lit edge round a glass panel.">

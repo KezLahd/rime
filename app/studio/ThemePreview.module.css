@@ -524,27 +524,29 @@
   overflow: hidden;
 }
 
+/* A quiet diagonal pinstripe — enough to prove blur / opacity are
+   doing something behind the card, without screaming colour. */
 .glassBackdrop {
   position: absolute;
-  inset: -5%;
+  inset: 0;
   background:
-    radial-gradient(circle at 15% 20%, #f87171 0%, transparent 32%),
-    radial-gradient(circle at 85% 10%, #fbbf24 0%, transparent 30%),
-    radial-gradient(circle at 20% 85%, #34d399 0%, transparent 34%),
-    radial-gradient(circle at 80% 80%, #60a5fa 0%, transparent 32%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0) 0 24px, rgba(0, 0, 0, 0.06) 24px 25px);
-  background-color: #fdfdfd;
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 18px,
+      rgba(15, 23, 42, 0.07) 18px 19px
+    );
+  background-color: #f3f4f6;
   pointer-events: none;
 }
 
 :global(.dark) .glassBackdrop {
   background:
-    radial-gradient(circle at 15% 20%, #be185d 0%, transparent 32%),
-    radial-gradient(circle at 85% 10%, #a16207 0%, transparent 30%),
-    radial-gradient(circle at 20% 85%, #047857 0%, transparent 34%),
-    radial-gradient(circle at 80% 80%, #1d4ed8 0%, transparent 32%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0) 0 24px, rgba(255, 255, 255, 0.05) 24px 25px);
-  background-color: #141822;
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 18px,
+      rgba(255, 255, 255, 0.07) 18px 19px
+    );
+  background-color: #1f232c;
 }
 
 .glassCard {
