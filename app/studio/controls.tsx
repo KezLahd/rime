@@ -366,28 +366,150 @@ export function SliderRow({
   /** Greys the track, label and value but keeps the (i) tooltip interactive. */
   disabled?: boolean;
 }) {
-  const decimals = step < 1 ? Math.min(3, String(step).split(".")[1]?.length ?? 2) : 0;
-  const fmt = format ?? ((v: number) => `${Number(v.toFixed(decimals))}${unit ? (unit === "%" || unit === "°" ? unit : ` ${unit}`) : ""}`);
-  // The Slider renders its own head (label | value). We let it render the
-  // value on the right, hide its internal label text, and overlay our own
-  // label + help toggletip on the left so the (i) sits next to the words
-  // instead of floating in the right-hand reset/value zone (where it
-  // overlapped longer values like "100%").
+  // SliderRow lays out its own head (label + help + editable value field +
+  // reset chip) above the track so every section — Shadow distance,
+  // Softness, Density, Height, … — has one consistent pattern:
+  //   LABEL (i)                   36 px  ↺
+  //   ━━━━━●━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // The value is a NumberField: typeable, clamped, step-snapped, with
+  // a suffix built from the slider's own unit. The reset chip is
+  // always visible but disabled until the value differs from the
+  // preset (changed === true), so the user can tell at a glance which
+  // sliders they have moved.
+  const clamped = Math.min(max, Math.max(min, value));
   return (
     <div className={cx(styles.sliderRow, changed && styles.rowChanged, disabled && styles.sliderRowDisabled)}>
-      <div className={styles.sliderBody}>
-        <Slider aria-label={label} showValue disabled={disabled} min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} formatValue={fmt} onValueChange={onChange} />
-        <span className={styles.sliderLabel}>
-          <span className={styles.rowName}>{label}</span>
-          {help ? (
-            <Toggletip label={`About ${label}`} side="right">
-              {help}
-            </Toggletip>
-          ) : null}
-        </span>
+      <div className={styles.sliderHead}>
+        <span className={styles.rowName}>{label}</span>
+        {help ? (
+          <Toggletip label={`About ${label}`} side="right">
+            {help}
+          </Toggletip>
+        ) : null}
+        <div className={styles.sliderHeadRight}>
+          <NumberField
+            label={label}
+            value={clamped}
+            min={min}
+            max={max}
+            step={step}
+            unit={unit}
+            format={format}
+            disabled={disabled}
+            onChange={onChange}
+          />
+          <ResetChip
+            label={label}
+            disabled={!changed || !onReset || !!disabled}
+            onReset={onReset}
+          />
+        </div>
       </div>
-      <ResetButton label={label} changed={changed} onReset={onReset} />
+      <div className={styles.sliderBody}>
+        <Slider aria-label={label} disabled={disabled} min={min} max={max} step={step} value={clamped} onValueChange={onChange} />
+      </div>
     </div>
+  );
+}
+
+/**
+ * NumberField: the editable value readout on every slider. Shows the
+ * current value with its unit as a suffix (36 px, 100 %, 135 °); typing
+ * a new number commits on blur or Enter. Clamps to [min, max] and
+ * snaps to the slider's step. Reads from `format` first if the caller
+ * supplied one (so a slider formatting as "72%" from 0.72 keeps that
+ * display), with its own unit-based formatter as the default.
+ */
+function NumberField({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit,
+  format,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+  format?: (v: number) => string;
+  disabled?: boolean;
+  onChange: (v: number) => void;
+}) {
+  const decimals = step < 1 ? Math.min(3, String(step).split(".")[1]?.length ?? 2) : 0;
+  const defaultFmt = (v: number) => `${Number(v.toFixed(decimals))}${unit ? (unit === "%" || unit === "°" ? unit : ` ${unit}`) : ""}`;
+  const display = format ? format(value) : defaultFmt(value);
+  const [draft, setDraft] = useState<string | null>(null);
+  const live = draft ?? display;
+
+  const commit = () => {
+    if (draft === null) return;
+    // Pull the first number (int or decimal, optionally negative) out of
+    // whatever the user typed, so "36", "36px", "36 px" and "36 pixels"
+    // all parse. If nothing parses, revert to the current display.
+    const match = draft.match(/-?\d+(\.\d+)?/);
+    if (!match) {
+      setDraft(null);
+      return;
+    }
+    const raw = Number(match[0]);
+    if (!Number.isFinite(raw)) {
+      setDraft(null);
+      return;
+    }
+    const clamped = Math.min(max, Math.max(min, raw));
+    // Snap to step. For step 0.05, we want 0.65 rather than 0.6499999…
+    const snapped = Math.round(clamped / step) * step;
+    const rounded = Number(snapped.toFixed(decimals));
+    setDraft(null);
+    if (rounded !== value) onChange(rounded);
+  };
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      className={styles.numberField}
+      value={live}
+      disabled={disabled}
+      aria-label={`${label} value`}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+        if (e.key === "Escape") {
+          setDraft(null);
+          (e.target as HTMLInputElement).blur();
+        }
+      }}
+      spellCheck={false}
+    />
+  );
+}
+
+/**
+ * Reset chip rendered inside the slider head. Unlike ResetButton, this
+ * ships in the "disabled" state when no changes exist, so every slider
+ * shows a chip — the user can see at a glance which sliders are
+ * resetable (dim chip) vs edited (brand chip, clickable).
+ */
+function ResetChip({ label, disabled, onReset }: { label: string; disabled: boolean; onReset?: () => void }) {
+  return (
+    <button
+      type="button"
+      className={cx(styles.resetChip, disabled && styles.resetChipDisabled)}
+      disabled={disabled}
+      onClick={onReset}
+      aria-label={`Reset ${label}`}
+      title={disabled ? "At the preset" : `Reset ${label}`}
+    >
+      <RotateCcw size={12} aria-hidden="true" />
+    </button>
   );
 }
 

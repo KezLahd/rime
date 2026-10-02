@@ -94,11 +94,6 @@ export function BackgroundPanel({ api, resolveColour }: { api: StudioApi; resolv
       <Group
         title="Background"
         help="The whole-page backdrop. Two soft brand blooms over a base colour by default — one in a corner, one in the opposite. Flatten below to drop the blooms entirely."
-        action={
-          api.changed(PAGE_BG_TOKEN) ? (
-            <Button size="sm" variant="ghost" onClick={restore}>Reset to the preset</Button>
-          ) : null
-        }
       >
         <Row
           label={isFlat ? "Flat" : "Blooms"}

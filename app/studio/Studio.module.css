@@ -672,12 +672,28 @@
   visibility: hidden;
 }
 
-/* Slider rows: body spans the group's full content width, the reset
-   button overlays its top-right so the track and the value number can
-   both reach the card's right padding. Right padding on the slider head
-   keeps the value number clear of the reset chip when it's showing. */
+/* Slider rows now render their own head: label (+ optional help)
+   on the left, editable value field + reset chip on the right.
+   The track sits below the head, free of the value readout, so it
+   can span the full width of the group's content box without any
+   overlap games. */
 .sliderRow {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sliderHead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sliderHeadRight {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .sliderBody {
@@ -685,12 +701,70 @@
   min-width: 0;
 }
 
-/* The Slider's head (first child of its root — label on the left, value
-   on the right). Reserve 28 px on its right so the reset chip can overlay
-   that end without clipping the number, and the number doesn't jump when
-   the chip appears or disappears. */
-.sliderBody > [data-slot="slider"] > div:first-child {
-  padding-right: 28px;
+/* Editable value field: typeable, step-snapped, with a built-in unit
+   suffix. Reads as a chip so the editability is discoverable; the brand
+   ring on focus matches the Studio's other field styling. */
+.numberField {
+  width: 72px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--recess-fill);
+  color: var(--ink-heading);
+  font-size: var(--text-small);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  outline: none;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.numberField:hover:not(:disabled) {
+  background: var(--recess-fill-hover);
+}
+
+.numberField:focus {
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.numberField:disabled {
+  color: var(--ink-disabled);
+  cursor: not-allowed;
+}
+
+/* Reset chip: always rendered, grey when the slider is at its preset,
+   brand-tinted when it has moved. Lets the user glance at a step and
+   see which sliders they've edited. */
+.resetChip {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--recess-fill);
+  color: var(--brand);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--brand);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.resetChip:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--brand) 16%, var(--surface-solid));
+}
+
+.resetChipDisabled {
+  background: transparent;
+  color: var(--ink-disabled);
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  cursor: default;
 }
 
 .sliderRow > .reset {
@@ -699,29 +773,12 @@
   right: 0;
 }
 
-/* Label + help (i) sits on the top-left of the slider body, overlaying
-   the slider head's empty-label span. Keeps the help icon next to the
-   words it describes instead of floating in the value / reset zone,
-   where it collided with longer values like "100%". */
-.sliderLabel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  pointer-events: none;
-}
-
-.sliderLabel > :not(.rowName) {
-  pointer-events: auto;
-}
-
-/* Disabled slider rows: the overlaid label greys out to match the
-   track and value colour (Slider's own .disabled rule handles those),
-   but the (i) toggletip stays interactive so the user can read why
-   the slider is unavailable. */
-.sliderRowDisabled .sliderLabel .rowName {
+/* Disabled slider rows: head text + value readout grey out; the (i)
+   toggletip stays interactive so the user can read why the slider
+   is unavailable. (The track and thumb are handled by the Slider
+   component's own .disabled rule.) */
+.sliderRowDisabled .sliderHead .rowName,
+.sliderRowDisabled .numberField {
   color: var(--ink-disabled);
 }
 

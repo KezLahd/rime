@@ -92,13 +92,10 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
         onChange={setToken}
         isComplete={(t) => api.changed(t)}
       />
-      {api.changed(token) ? (
-        <div className={styles.actions}>
-          <Button size="sm" variant="ghost" onClick={() => api.reset([token], [`soft${token}`])}>
-            Reset to the preset
-          </Button>
-        </div>
-      ) : null}
+      {/* Per-section "Reset to the preset" button removed: each slider
+          (Direction, Softness) and the StopsBar have their own reset
+          chips now, so a step-level dump is redundant and crowds the
+          header strip. */}
 
       {!layers ? (
         <Group title="As CSS">
