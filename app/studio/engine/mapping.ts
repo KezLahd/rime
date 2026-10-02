@@ -185,5 +185,18 @@ export function mapToTheme(swatches: Swatch[], roles: Assignment): Mapped {
     if (rgb) out[token] = toHex(rgb);
   }
 
+  // Chart ramp: a single-hue light-to-dark scale for ordered categories.
+  // Derive from the brand hue so the ramp follows the logo instead of
+  // staying on the default Rime blue scale. Chroma is clamped by the
+  // brand's own chroma so pastel brands get pastel ramps, saturated
+  // brands get saturated ramps. Lightnesses match the Rime default
+  // step: 0.82 (lightest) -> 0.34 (darkest).
+  const rampC = Math.min(0.14, Math.max(0.03, bo.c));
+  const rampH = bo.h;
+  const RAMP_LS = [0.82, 0.68, 0.55, 0.44, 0.34] as const;
+  RAMP_LS.forEach((l, i) => {
+    out[`--chart-seq-${i + 1}`] = toHex(fromOklch({ l, c: rampC, h: rampH }));
+  });
+
   return { overrides: out, notes };
 }

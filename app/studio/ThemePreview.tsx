@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/Badge/Badge";
 import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Field } from "@/components/ui/Field/Field";
-import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers } from "@/components/ui";
+import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers, Toggletip } from "@/components/ui";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
 import { Modal } from "@/components/ui/Modal/Modal";
@@ -787,63 +787,106 @@ function ShapeDialogButtons() {
 function TypeShowcase() {
   return (
     <div className={styles.typeShowcase}>
-      <GlassPanel padding="lg" className={styles.typeCard}>
-        <p className={styles.typeMeta}>Display</p>
-        <p className={styles.typeDisplay}>Carry the weight of your brand.</p>
-      </GlassPanel>
+      <TypeSample
+        className={styles.typeDisplay}
+        info="Display · var(--text-display). Hero slogans, the biggest page-opening type. One per view."
+      >
+        Carry the weight of your brand.
+      </TypeSample>
+      <TypeSample
+        className={styles.typeSection}
+        info="Section heading · var(--text-section). The h2 under a page title; the start of each major block."
+        tag="h2"
+      >
+        Good morning, Jane
+      </TypeSample>
+      <TypeSample
+        className={styles.typeCardTitle}
+        info="Card title · var(--text-card-title). The h3 that labels an individual card or panel."
+        tag="h3"
+      >
+        Revenue by product
+      </TypeSample>
+      <TypeSample
+        className={styles.typeHero}
+        info="Hero number · 48px, display font, weight 900. Dashboard KPIs and stat strips."
+      >
+        $48,210
+      </TypeSample>
+      <TypeSample
+        className={styles.typeBody}
+        info="Body · 16px, --font-body. Paragraphs, labels, controls, table cells. 1.6 line-height."
+      >
+        Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
+        The pangram goes: the quick brown fox jumps over the lazy dog.
+      </TypeSample>
+      <TypeSample
+        className={styles.typeSmall}
+        info="Small · var(--text-small). Secondary rows, filter chips, assistive copy under inputs."
+      >
+        Last synced 2 minutes ago. 24 invoices across 8 clients, 3 overdue, 7 pending, 14 paid.
+      </TypeSample>
+      <TypeSample
+        className={styles.typeCaption}
+        info="Caption · var(--text-caption). The quietest body copy — footnotes, legal, metadata."
+      >
+        Figures include GST. Rounded to the nearest dollar.
+      </TypeSample>
+      <TypeSample
+        className={styles.typeButtons}
+        info="Button labels — show how the body font reads on primary / secondary / ghost actions."
+      >
+        <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+        <Button variant="secondary">Export CSV</Button>
+        <Button variant="ghost">Skip for now</Button>
+      </TypeSample>
+      <TypeSample
+        className={styles.typeMono}
+        info="Mono · var(--font-mono). Code blocks, hex values, API samples. Separate token from body/display."
+        tag="pre"
+      >
+        <code>{`npx shadcn@latest add KezLahd/rime/kit\nconst theme = loadWorking() ?? presetTheme();\nreturn <Button onClick={save}>Save</Button>;`}</code>
+      </TypeSample>
+      <TypeSample
+        className={styles.typeAlphabet}
+        info="Alphabet specimen — every letter, every numeral in the display font so you can scan the full character set."
+      >
+        ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        <br />
+        abcdefghijklmnopqrstuvwxyz
+        <br />
+        0123456789 &amp; ! ? @ # $ % &lt; = &gt;
+      </TypeSample>
+    </div>
+  );
+}
 
-      <GlassPanel padding="lg" className={styles.typeCard}>
-        <p className={styles.typeMeta}>Section heading</p>
-        <h2 className={styles.typeSection}>Good morning, Jane</h2>
-        <p className={styles.typeMeta}>Card title</p>
-        <h3 className={styles.typeCardTitle}>Revenue by product</h3>
-        <p className={styles.typeMeta}>Hero number</p>
-        <p className={styles.typeHero}>$48,210</p>
-      </GlassPanel>
-
-      <GlassPanel padding="lg" className={styles.typeCard}>
-        <p className={styles.typeMeta}>Body paragraph</p>
-        <p className={styles.typeBody}>
-          Three invoices are overdue, two awaiting approval. Review and send to clear your inbox for the week.
-          The pangram goes: the quick brown fox jumps over the lazy dog.
-        </p>
-        <p className={styles.typeMeta}>Small text</p>
-        <p className={styles.typeSmall}>
-          Last synced 2 minutes ago. 24 invoices across 8 clients, 3 overdue, 7 pending, 14 paid.
-        </p>
-        <p className={styles.typeMeta}>Caption</p>
-        <p className={styles.typeCaption}>
-          Figures include GST. Rounded to the nearest dollar.
-        </p>
-      </GlassPanel>
-
-      <div className={styles.typeGrid}>
-        <GlassPanel padding="lg" className={styles.typeCard}>
-          <p className={styles.typeMeta}>Button labels</p>
-          <div className={styles.typeButtons}>
-            <Button iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
-            <Button variant="secondary">Export CSV</Button>
-            <Button variant="ghost">Skip for now</Button>
-          </div>
-        </GlassPanel>
-        <GlassPanel padding="lg" className={styles.typeCard}>
-          <p className={styles.typeMeta}>Mono · code block</p>
-          <pre className={styles.typeMono}>
-            <code>{`npx shadcn@latest add KezLahd/rime/kit\nconst theme = loadWorking() ?? presetTheme();\nreturn <Button onClick={save}>Save</Button>;`}</code>
-          </pre>
-        </GlassPanel>
-      </div>
-
-      <GlassPanel padding="lg" className={styles.typeCard}>
-        <p className={styles.typeMeta}>Specimen</p>
-        <p className={styles.typeAlphabet}>
-          ABCDEFGHIJKLMNOPQRSTUVWXYZ
-          <br />
-          abcdefghijklmnopqrstuvwxyz
-          <br />
-          0123456789 &amp; ! ? @ # $ % &lt; = &gt;
-        </p>
-      </GlassPanel>
+/**
+ * One text row in the Fonts showcase: no "section heading" micro-label
+ * cluttering the preview, just the text set in the right scale with a
+ * discreet (i) toggletip on hover for anyone who wants to know what the
+ * line is called and which token it uses.
+ */
+function TypeSample({
+  children,
+  className,
+  info,
+  tag = "div",
+}: {
+  children: ReactNode;
+  className?: string;
+  info: string;
+  tag?: "div" | "h2" | "h3" | "pre";
+}) {
+  const Tag = tag;
+  return (
+    <div className={styles.typeRow}>
+      <Tag className={cx(styles.typeSample, className)}>{children}</Tag>
+      <span className={styles.typeInfo}>
+        <Toggletip label="About this text" side="left">
+          {info}
+        </Toggletip>
+      </span>
     </div>
   );
 }
