@@ -1,14 +1,14 @@
 "use client";
 
-import { Check, ImagePlus, Sparkles, Upload } from "lucide-react";
+import { Check, ImagePlus, Sparkles, Upload, X } from "lucide-react";
 import { useRef, useState, type DragEvent } from "react";
-import { Button } from "@/components/ui";
+import { Button, Popover } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import type { StudioApi } from "../api";
 import { Group, Notice } from "../controls";
 import { toHex } from "../engine/colour";
 import { extractPalette, samplePixels, type Swatch } from "../engine/extract";
-import { autoAssign, mapToTheme, type Assignment } from "../engine/mapping";
+import { autoAssign, mapToTheme, ROLES, type Assignment, type Role } from "../engine/mapping";
 import styles from "../Studio.module.css";
 
 const MAX_LOGO = 1.5 * 1024 * 1024;
@@ -30,7 +30,18 @@ export function LogoPanel({ api }: { api: StudioApi }) {
   const [busy, setBusy] = useState(false);
   const [over, setOver] = useState(false);
   const [swatches, setSwatches] = useState<Swatch[]>([]);
-  const [roles, setRoles] = useState<Assignment>({ brand: null, deep: null, accent: null, neutral: null });
+  const [roles, setRoles] = useState<Assignment>({
+    brand: null,
+    deep: null,
+    accent: null,
+    neutral: null,
+    chart1: null,
+    chart2: null,
+    chart3: null,
+    chart4: null,
+    chart5: null,
+    chart6: null,
+  });
   const [applied, setApplied] = useState(false);
   const logo = api.theme.logo;
 
@@ -100,7 +111,7 @@ export function LogoPanel({ api }: { api: StudioApi }) {
   const removeLogo = () => {
     api.setLogo(null);
     setSwatches([]);
-    setRoles({ brand: null, deep: null, accent: null, neutral: null });
+    setRoles({ brand: null, deep: null, accent: null, neutral: null, chart1: null, chart2: null, chart3: null, chart4: null, chart5: null, chart6: null });
     setApplied(false);
   };
 
@@ -170,7 +181,7 @@ export function LogoPanel({ api }: { api: StudioApi }) {
       {swatches.length > 0 ? (
         <Group
           title="Suggested palette"
-          note="The most prominent colours in your logo, light paper and dark ink deprioritised. Click Apply to write them into the theme."
+          note="The most prominent colours in your logo, light paper and dark ink deprioritised. Each swatch is assigned a role in the theme; click a swatch to change its role, then Apply."
           action={
             applied ? (
               <span className={styles.appliedPill}>
@@ -184,13 +195,72 @@ export function LogoPanel({ api }: { api: StudioApi }) {
           }
         >
           <div className={styles.logoPaletteGrid}>
-            {swatches.slice(0, 8).map((s) => (
-              <div key={s.id} className={styles.logoPaletteTile}>
-                <span className={styles.logoPaletteSwatch} style={{ background: toHex(s.rgb) }} aria-hidden="true" />
-                <span className={styles.logoPaletteHex}>{toHex(s.rgb)}</span>
-                <span className={styles.logoPaletteShare}>{Math.round(s.share * 100)}%</span>
-              </div>
-            ))}
+            {swatches.slice(0, 10).map((s) => {
+              const assignedRole = (Object.entries(roles) as [Role, string | null][])
+                .find(([, id]) => id === s.id)?.[0] ?? null;
+              const roleLabel = assignedRole ? ROLES.find((r) => r.id === assignedRole)?.label : null;
+              const setRole = (next: Role | null) => {
+                setRoles((prev) => {
+                  const out: Assignment = { ...prev };
+                  // Clear any previous owner of the target role.
+                  if (next) {
+                    for (const r of Object.keys(out) as Role[]) if (out[r] === s.id) out[r] = null;
+                    out[next] = s.id;
+                  } else if (assignedRole) {
+                    out[assignedRole] = null;
+                  }
+                  return out;
+                });
+                setApplied(false);
+              };
+              return (
+                <Popover
+                  key={s.id}
+                  label={`Role for ${toHex(s.rgb)}`}
+                  width={240}
+                  trigger={
+                    <button type="button" className={cx(styles.logoPaletteTile, styles.logoPaletteTileButton, assignedRole && styles.logoPaletteTileAssigned)}>
+                      <span className={styles.logoPaletteSwatch} style={{ background: toHex(s.rgb) }} aria-hidden="true" />
+                      <span className={styles.logoPaletteHex}>{toHex(s.rgb)}</span>
+                      <span className={styles.logoPaletteShare}>{Math.round(s.share * 100)}%</span>
+                      {roleLabel ? <span className={styles.logoPaletteRoleTag}>{roleLabel}</span> : null}
+                    </button>
+                  }
+                >
+                  <div className={styles.logoRoleMenu} role="listbox" aria-label="Pick a role">
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={assignedRole === null}
+                      className={cx(styles.logoRoleOption, assignedRole === null && styles.logoRoleOptionActive)}
+                      onClick={() => setRole(null)}
+                    >
+                      <X size={13} aria-hidden="true" />
+                      <span>Unused</span>
+                    </button>
+                    {ROLES.map((r) => {
+                      const takenBy = roles[r.id];
+                      const otherSwatch = takenBy && takenBy !== s.id ? swatches.find((sw) => sw.id === takenBy) : null;
+                      return (
+                        <button
+                          key={r.id}
+                          type="button"
+                          role="option"
+                          aria-selected={assignedRole === r.id}
+                          className={cx(styles.logoRoleOption, assignedRole === r.id && styles.logoRoleOptionActive)}
+                          onClick={() => setRole(r.id)}
+                        >
+                          <span className={styles.logoRoleLabel}>{r.label}</span>
+                          {otherSwatch ? (
+                            <span className={styles.logoRoleTakenBy} style={{ background: toHex(otherSwatch.rgb) }} aria-label={`Currently ${toHex(otherSwatch.rgb)}`} />
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Popover>
+              );
+            })}
           </div>
         </Group>
       ) : null}

@@ -88,7 +88,7 @@ export function ImagePanel({ api }: { api: StudioApi }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [swatches, setSwatches] = useState<Swatch[]>([]);
-  const [roles, setRoles] = useState<Assignment>({ brand: null, deep: null, accent: null, neutral: null });
+  const [roles, setRoles] = useState<Assignment>({ brand: null, deep: null, accent: null, neutral: null, chart1: null, chart2: null, chart3: null, chart4: null, chart5: null, chart6: null });
   const [notes, setNotes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);

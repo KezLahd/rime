@@ -8,12 +8,18 @@ import type { Overrides } from "./macros";
 // ladder in the new hue. Then the contrast guard runs and nudges any
 // failing ink to the nearest passing shade, saying so.
 
-export type Role = "brand" | "deep" | "accent" | "neutral";
+export type Role = "brand" | "deep" | "accent" | "neutral" | "chart1" | "chart2" | "chart3" | "chart4" | "chart5" | "chart6";
 export const ROLES: ReadonlyArray<{ id: Role; label: string; note: string }> = [
   { id: "brand", label: "Brand", note: "Primary buttons, focus, the gradient's light stop." },
   { id: "deep", label: "Deep", note: "Headings, the gradient's dark stop." },
   { id: "accent", label: "Accent", note: "Info tints, the second bloom, the logo corner's end." },
   { id: "neutral", label: "Neutral", note: "The warm or cool neutral: table header sweep." },
+  { id: "chart1", label: "Chart series 1", note: "Primary chart series." },
+  { id: "chart2", label: "Chart series 2", note: "Second chart series." },
+  { id: "chart3", label: "Chart series 3", note: "Third chart series." },
+  { id: "chart4", label: "Chart series 4", note: "Fourth chart series." },
+  { id: "chart5", label: "Chart series 5", note: "Fifth chart series." },
+  { id: "chart6", label: "Chart series 6", note: "Sixth chart series." },
 ];
 
 export type Assignment = Record<Role, string | null>;
@@ -36,7 +42,48 @@ export function autoAssign(swatches: Swatch[]): Assignment {
     ? chromatic.filter((s) => s !== brand && s !== deep && hueGap(s.oklch.h, brand.oklch.h) >= 30).sort((a, b) => score(b) - score(a))[0] ?? null
     : null;
   const neutral = swatches.filter((s) => s.oklch.c <= 0.05 && s.oklch.l > 0.7).sort((a, b) => b.share - a.share)[0] ?? null;
-  return { brand: brand?.id ?? null, deep: deep?.id ?? null, accent: accent?.id ?? null, neutral: neutral?.id ?? null };
+
+  // Chart series 1-6: fill the categorical palette from the extracted
+  // swatches, picking distinct chromatic colours by score so a logo with
+  // 3-4 prominent colours actually gets them into the chart tokens too.
+  // Series 1 defaults to the brand hue, then we grab the next five most
+  // interesting swatches with the biggest hue separation from what's
+  // already assigned so series read as a palette, not neighbours.
+  const chartAssign: (string | null)[] = [brand?.id ?? null, null, null, null, null, null];
+  const assigned = new Set<string>();
+  if (brand) assigned.add(brand.id);
+  const pool = [...chromatic].sort((a, b) => score(b) - score(a));
+  for (let slot = 1; slot < 6; slot++) {
+    // Prefer swatches with the largest minimum hue gap to already-used
+    // chart series, falling back to raw score if no chromatic room is left.
+    const choices = pool
+      .filter((s) => !assigned.has(s.id))
+      .map((s) => {
+        const used = chartAssign
+          .map((id) => (id ? chromatic.find((c) => c.id === id) : null))
+          .filter((x): x is Swatch => Boolean(x));
+        const minGap = used.length ? Math.min(...used.map((u) => hueGap(s.oklch.h, u.oklch.h))) : 180;
+        return { s, rank: minGap * 1.2 + score(s) * 10 };
+      })
+      .sort((a, b) => b.rank - a.rank);
+    const pick = choices[0]?.s;
+    if (!pick) break;
+    chartAssign[slot] = pick.id;
+    assigned.add(pick.id);
+  }
+
+  return {
+    brand: brand?.id ?? null,
+    deep: deep?.id ?? null,
+    accent: accent?.id ?? null,
+    neutral: neutral?.id ?? null,
+    chart1: chartAssign[0],
+    chart2: chartAssign[1],
+    chart3: chartAssign[2],
+    chart4: chartAssign[3],
+    chart5: chartAssign[4],
+    chart6: chartAssign[5],
+  };
 }
 
 const WHITE: Rgb = { r: 255, g: 255, b: 255, a: 1 };
@@ -121,5 +168,22 @@ export function mapToTheme(swatches: Swatch[], roles: Assignment): Mapped {
     "--logo-corner-bg": `linear-gradient(135deg, var(--brand) 0%, ${toHex(fromOklch({ l: 0.68, c: Math.min(0.13, accentO.c), h: accentO.h }))} 100%)`,
     "--ink-heading": "var(--brand-deep)",
   });
+
+  // Chart series: write each assigned slot so a logo with 3+ prominent
+  // colours actually seeds the whole chart palette rather than leaving
+  // five of six slots on the default Rime set.
+  const chartSlots: Array<[Role, string]> = [
+    ["chart1", "--chart-1"],
+    ["chart2", "--chart-2"],
+    ["chart3", "--chart-3"],
+    ["chart4", "--chart-4"],
+    ["chart5", "--chart-5"],
+    ["chart6", "--chart-6"],
+  ];
+  for (const [role, token] of chartSlots) {
+    const rgb = pick(role);
+    if (rgb) out[token] = toHex(rgb);
+  }
+
   return { overrides: out, notes };
 }
