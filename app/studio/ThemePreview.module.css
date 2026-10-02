@@ -524,23 +524,35 @@
   overflow: hidden;
 }
 
-/* A quiet diagonal pinstripe — enough to prove blur / opacity are
-   doing something behind the card, without screaming colour. */
+/* A quiet pinstripe over four muted colour washes. The stripes prove
+   blur / opacity are doing something behind the card; the washes are
+   desaturated on purpose so Colour boost has something to lift —
+   crank saturate() through the glass and the pastels become vivid.
+   Chroma stays low enough that at boost 100% the backdrop still
+   reads as calm. */
 .glassBackdrop {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(circle at 18% 22%, rgba(248, 113, 113, 0.42) 0%, transparent 36%),
+    radial-gradient(circle at 82% 18%, rgba(251, 191, 36, 0.38) 0%, transparent 36%),
+    radial-gradient(circle at 22% 82%, rgba(52, 211, 153, 0.42) 0%, transparent 36%),
+    radial-gradient(circle at 80% 82%, rgba(96, 165, 250, 0.42) 0%, transparent 36%),
     repeating-linear-gradient(
       135deg,
       transparent 0 18px,
       rgba(15, 23, 42, 0.07) 18px 19px
     );
-  background-color: #f3f4f6;
+  background-color: #f5f6fa;
   pointer-events: none;
 }
 
 :global(.dark) .glassBackdrop {
   background:
+    radial-gradient(circle at 18% 22%, rgba(190, 24, 93, 0.5) 0%, transparent 36%),
+    radial-gradient(circle at 82% 18%, rgba(161, 98, 7, 0.48) 0%, transparent 36%),
+    radial-gradient(circle at 22% 82%, rgba(4, 120, 87, 0.5) 0%, transparent 36%),
+    radial-gradient(circle at 80% 82%, rgba(29, 78, 216, 0.5) 0%, transparent 36%),
     repeating-linear-gradient(
       135deg,
       transparent 0 18px,
