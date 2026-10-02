@@ -286,6 +286,49 @@ const GLASS_SHADOW_TOKENS = new Set<string>([
  * the swatch writes "r, g, b" so buildShadow turns it into a literal
  * rgba; picking a palette ref writes the channel name as before.
  */
+/**
+ * Modal-only extra: the scrim darkness over the page behind the dialog.
+ * The scrim token --modal-scrim is `rgba(r, g, b, a)`; the slider edits
+ * only the alpha so the user tunes "how dark" without picking the hue
+ * themselves. 0% leaves the page visible, 60% is the kit's default
+ * darken. Baseline-aware reset like every other control on this step.
+ */
+function ModalScrimRow({ api }: { api: StudioApi }) {
+  const token = "--modal-scrim";
+  const current = api.value(token) ?? api.resolved(token) ?? "rgba(10, 14, 20, 0.5)";
+  // Extract RGB base and alpha. Fall back to the default dark if the
+  // token has been overwritten with a solid colour or a token ref.
+  const match = current.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
+  const r = match ? Number(match[1]) : 10;
+  const g = match ? Number(match[2]) : 14;
+  const b = match ? Number(match[3]) : 20;
+  const alpha = match ? (match[4] !== undefined ? Number(match[4]) : 1) : 0.5;
+  // Baseline alpha: user-applied palette value if present, else preset.
+  const baselineRaw = api.theme.baseline?.[token] ?? api.base.get(token) ?? "rgba(10, 14, 20, 0.5)";
+  const baselineMatch = baselineRaw.match(/,\s*([\d.]+)\s*\)\s*$/);
+  const baselineAlpha = baselineMatch ? Number(baselineMatch[1]) : 0.5;
+
+  const setAlpha = (a: number) => {
+    api.set({ [token]: `rgba(${r}, ${g}, ${b}, ${Number(a.toFixed(3))})` });
+  };
+
+  return (
+    <SliderRow
+      label="Scrim darkness"
+      help="How dark the backdrop behind the modal gets. 0% leaves the page fully visible under the dialog; 60% is Rime Default's dim."
+      displayScale={100}
+      unit="%"
+      value={alpha}
+      min={0}
+      max={0.9}
+      step={0.01}
+      onChange={setAlpha}
+      changed={Math.abs(alpha - baselineAlpha) > 0.001}
+      onReset={() => setAlpha(baselineAlpha)}
+    />
+  );
+}
+
 function ShadowColourRow({
   channel,
   onChange,
@@ -496,6 +539,14 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
             checked={p.specular}
             onChange={(v) => update({ specular: v })}
           />
+        ) : null}
+
+        {/* Modal-specific: the scrim darkness over the page behind the
+            dialog. --modal-scrim is an rgba() with the user-tunable
+            alpha; we read / write the alpha and keep the base colour
+            intact. */}
+        {token === "--modal-shadow" ? (
+          <ModalScrimRow api={api} />
         ) : null}
       </Group>
       <Advanced api={api} tokens={depthNames.concat(["--glow-sm", "--glow-md-hover", "--glow-lg", "--glow-danger"])} />

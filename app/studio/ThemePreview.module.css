@@ -885,11 +885,26 @@
 
 .shadowSpecimenCard,
 .shadowLiftCard {
+  position: relative;
   width: min(100%, 420px);
   padding: 24px;
   border-radius: var(--r-lg);
   background: var(--surface-solid);
   text-align: left;
+  overflow: hidden;
+}
+
+/* Highlight card's --highlight-edge accent: a thin brand-tinted strip
+   along the top. Reads as "light catching the top edge" and is what
+   distinguishes a Highlight card from a plain Panel. */
+.shadowLiftEdge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--highlight-edge, linear-gradient(90deg, transparent, var(--brand), transparent));
+  pointer-events: none;
 }
 
 .shadowGlassCard {

@@ -995,14 +995,19 @@ function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; bra
         </>
       );
     case "--shadow-lift":
+      // Highlight card carries the --highlight-edge gradient along its
+      // top edge — the thin brand-tinted light-catch that distinguishes
+      // it from a plain Panel. Without the edge, the specimen reads as
+      // "just another card with a slightly deeper shadow".
       return (
         <>
           <div className={styles.shadowLiftCard} style={{ boxShadow: shadow }}>
+            <span className={styles.shadowLiftEdge} aria-hidden="true" />
             <p className={styles.shadowCardEyebrow}>Highlighted</p>
             <p className={styles.shadowCardTitle}>Highlight card</p>
             <p className={styles.shadowCardLede}>One rank above a Panel — used when a surface needs to call attention to itself.</p>
           </div>
-          <SpecimenCaption token={token} note="A card that outranks the baseline Panel: pricing highlight, featured row." />
+          <SpecimenCaption token={token} note="A card that outranks the baseline Panel: pricing highlight, featured row. The top accent is --highlight-edge." />
         </>
       );
     case "--popover-shadow":

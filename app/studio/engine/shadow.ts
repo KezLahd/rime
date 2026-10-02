@@ -41,7 +41,6 @@ export function buildShadow(p: ShadowParams): string {
 /** Best-effort parameters from an existing two-layer token, for the editor's starting point. */
 export function guessParams(value: string): ShadowParams {
   const layers = splitTop(value).filter((l) => !l.startsWith("inset"));
-  // The fall: the layer with the biggest blur.
   const lengthsOf = (layer: string) =>
     layer
       .replace(/(rgba?|hsla?|var)\((?:[^()]|\([^()]*\))*\)|#[0-9a-f]{3,8}\b|transparent/gi, " ")
@@ -49,7 +48,20 @@ export function guessParams(value: string): ShadowParams {
       .split(/\s+/)
       .map((t) => parseFloat(t))
       .filter((n) => Number.isFinite(n));
-  const main = [...layers].sort((a, b) => (lengthsOf(b)[2] ?? 0) - (lengthsOf(a)[2] ?? 0))[0] ?? "";
+  const alphaOfLayer = (layer: string) => Number(layer.match(/,\s*([\d.]+)\)\s*$/)?.[1] ?? 0);
+
+  // Identify the FALL layer. The old implementation picked the layer
+  // with the biggest blur, which broke the moment the user dropped
+  // Softness to 0 — the contact layer's `Math.max(2, blur * 0.18)`
+  // kept a blur of 2, so the contact got picked as "main" and the
+  // Strength readout snapped to the contact's alpha (0.135). Instead,
+  // exclude the contact layer by its channel (--rgb-contact) and
+  // then pick the layer with the HIGHEST alpha: that's the fall,
+  // because buildShadow writes alpha * 0.55 for the shade and the
+  // raw alpha for the fall.
+  const nonContact = layers.filter((l) => !/--rgb-contact/.test(l));
+  const main =
+    nonContact.sort((a, b) => alphaOfLayer(b) - alphaOfLayer(a))[0] ?? layers[0] ?? "";
   const [x = 0, y = 8, blur = 24, spread = 0] = lengthsOf(main);
   const alpha = Number(main.match(/,\s*([\d.]+)\)\s*$/)?.[1] ?? 0.16);
   const channel = main.match(/var\((--rgb-[\w-]+)\)/)?.[1] ?? "--rgb-brand-deep";
