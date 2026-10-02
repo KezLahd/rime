@@ -388,7 +388,14 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         }),
       setControls: (controls) => commit((t) => ({ ...t, controls: { ...t.controls, ...controls } })),
       setLogo: (logo) => commit((t) => ({ ...t, logo })),
-      setBrand: (name) => commit((t) => ({ ...t, brand: name.trim().slice(0, 60) || undefined })),
+      setBrand: (name) =>
+        commit((t) => ({
+          // Keep whatever the user is typing — including a trailing space
+          // before the second word. Only strip to undefined when the field
+          // is wholly empty so brandNames() falls back to Acme.
+          ...t,
+          brand: name.length === 0 ? undefined : name.slice(0, 60),
+        })),
       fonts,
     }),
     [view, theme, active, perMode, base, resolvedMap, commit, fonts],
@@ -612,79 +619,89 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         </nav>
 
         <aside className={styles.panel} aria-label="Theme controls" data-studio-panel="">
-          <div className={styles.panelHead}>
-            <div className={styles.headRow}>
-              <TextInput
-                size="sm"
-                aria-label="Theme name"
-                boxClassName={styles.grow}
-                value={theme.name}
-                maxLength={60}
-                onChange={(e) => setTheme({ ...theme, name: e.target.value })}
-                placeholder="Theme name"
-              />
-              <Button size="sm" iconStart={<Save size={14} aria-hidden="true" />} onClick={save} disabled={!theme.name.trim()}>
-                Save
-              </Button>
-            </div>
-            {/* The preset dropdown (Rime Default / Rime Flat) and the
-                Light / Dark toggle used to live here. Both are already in
-                the kit's own top bar (Default | Flat and the sun / moon
-                icon), so showing them again just made the inspector feel
-                like two popups stacked. Opening a saved theme stays, since
-                there's no other place to do that. */}
-            {saved.length ? (
+          {/* Save / open-saved / change-count + undo-redo toolbar used to
+              sit above every step. The walkthrough works like one long
+              setup form, so showing a Save button on step 1 made the
+              inspector feel like a settings page before the user had
+              typed a single thing. The chrome now renders only on the
+              Export step; the hidden file input stays mounted so Import
+              from Export can still trigger it. */}
+          {section === "export" ? (
+            <div className={styles.panelHead}>
               <div className={styles.headRow}>
-                <Select
+                <TextInput
                   size="sm"
-                  aria-label="Open a saved theme"
-                  className={styles.grow}
-                  value={null}
-                  placeholder={`Open a saved theme (${saved.length})`}
-                  onChange={(name) => {
-                    const t = saved.find((s) => s.name === name);
-                    if (t) {
-                      open(t);
-                      say(`Opened "${t.name}"`);
-                    }
-                  }}
-                  options={saved.map((t) => ({ value: t.name, label: t.name, description: lookName(t.base, t.mode) }))}
+                  aria-label="Theme name"
+                  boxClassName={styles.grow}
+                  value={theme.name}
+                  maxLength={60}
+                  onChange={(e) => setTheme({ ...theme, name: e.target.value })}
+                  placeholder="Theme name"
                 />
+                <Button size="sm" iconStart={<Save size={14} aria-hidden="true" />} onClick={save} disabled={!theme.name.trim()}>
+                  Save
+                </Button>
               </div>
-            ) : null}
-            <div className={styles.headRow}>
-              <span className={styles.changeCount}>{changes ? `${changes} change${changes === 1 ? "" : "s"} on ${lookName(theme.base, theme.mode)}` : `${lookName(theme.base, theme.mode)}, unchanged`}</span>
-              <span className={styles.toolbarGroup}>
-                <IconButton size="sm" label="Undo" icon={<Undo2 size={15} aria-hidden="true" />} onClick={undo} disabled={!past.length} />
-                <IconButton size="sm" label="Redo" icon={<Redo2 size={15} aria-hidden="true" />} onClick={redo} disabled={!future.length} />
-                <IconButton size="sm" label="Reset to the preset" icon={<RotateCcw size={15} aria-hidden="true" />} onClick={() => startFrom(theme.base)} disabled={!changes} />
-                <IconButton size="sm" label="Import theme.json" icon={<Upload size={15} aria-hidden="true" />} onClick={() => importRef.current?.click()} />
-                {saved.some((t) => t.name === theme.name) ? (
-                  <IconButton size="sm" variant="danger" label={`Delete saved theme ${theme.name}`} icon={<Trash2 size={15} aria-hidden="true" />} onClick={() => remove(theme.name)} />
-                ) : null}
-              </span>
-              <input
-                ref={importRef}
-                type="file"
-                accept="application/json,.json"
-                className={styles.srOnly}
-                tabIndex={-1}
-                aria-hidden="true"
-                onChange={(e) => {
-                  void importFile(e.target.files?.[0]);
-                  e.target.value = "";
-                }}
-              />
+              {saved.length ? (
+                <div className={styles.headRow}>
+                  <Select
+                    size="sm"
+                    aria-label="Open a saved theme"
+                    className={styles.grow}
+                    value={null}
+                    placeholder={`Open a saved theme (${saved.length})`}
+                    onChange={(name) => {
+                      const t = saved.find((s) => s.name === name);
+                      if (t) {
+                        open(t);
+                        say(`Opened "${t.name}"`);
+                      }
+                    }}
+                    options={saved.map((t) => ({ value: t.name, label: t.name, description: lookName(t.base, t.mode) }))}
+                  />
+                </div>
+              ) : null}
+              <div className={styles.headRow}>
+                <span className={styles.changeCount}>{changes ? `${changes} change${changes === 1 ? "" : "s"} on ${lookName(theme.base, theme.mode)}` : `${lookName(theme.base, theme.mode)}, unchanged`}</span>
+                <span className={styles.toolbarGroup}>
+                  <IconButton size="sm" label="Undo" icon={<Undo2 size={15} aria-hidden="true" />} onClick={undo} disabled={!past.length} />
+                  <IconButton size="sm" label="Redo" icon={<Redo2 size={15} aria-hidden="true" />} onClick={redo} disabled={!future.length} />
+                  <IconButton size="sm" label="Reset to the preset" icon={<RotateCcw size={15} aria-hidden="true" />} onClick={() => startFrom(theme.base)} disabled={!changes} />
+                  <IconButton size="sm" label="Import theme.json" icon={<Upload size={15} aria-hidden="true" />} onClick={() => importRef.current?.click()} />
+                  {saved.some((t) => t.name === theme.name) ? (
+                    <IconButton size="sm" variant="danger" label={`Delete saved theme ${theme.name}`} icon={<Trash2 size={15} aria-hidden="true" />} onClick={() => remove(theme.name)} />
+                  ) : null}
+                </span>
+              </div>
             </div>
-          </div>
+          ) : null}
+          <input
+            ref={importRef}
+            type="file"
+            accept="application/json,.json"
+            className={styles.srOnly}
+            tabIndex={-1}
+            aria-hidden="true"
+            onChange={(e) => {
+              void importFile(e.target.files?.[0]);
+              e.target.value = "";
+            }}
+          />
 
           <div ref={bodyRef} className={styles.panelBody} role="region" aria-labelledby="studio-section-title" tabIndex={-1}>
-            <header className={styles.sectionHead}>
-              <h2 id="studio-section-title" className={styles.sectionTitle}>
-                {current.label}
-              </h2>
-              <p className={styles.sectionLede}>{current.lede}</p>
-            </header>
+            {/* The Logo step's own groups already carry titles ("Business
+                name", "Drop your logo", "Suggested palette"), so a second
+                header right above them just doubled the vertical space
+                before the first interactive control. Hidden there; every
+                other step keeps the title + one-line lede. */}
+            {section !== "brand" ? (
+              <header className={styles.sectionHead}>
+                <h2 id="studio-section-title" className={styles.sectionTitle}>
+                  {current.label}
+                </h2>
+                <p className={styles.sectionLede}>{current.lede}</p>
+              </header>
+            ) : null}
             {storageWarning ? <Notice tone="warn">{storageWarning}</Notice> : null}
             <PeekProvider onPeek={setPeekToken}>
             <FontHoverProvider onHover={setFontHover}>

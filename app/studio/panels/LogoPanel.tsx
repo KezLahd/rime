@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ImagePlus, Sparkles, Upload, X } from "lucide-react";
-import { useRef, useState, type DragEvent } from "react";
+import { useEffect, useRef, useState, type DragEvent } from "react";
 import { Button, Popover, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import type { StudioApi } from "../api";
@@ -44,6 +44,27 @@ export function LogoPanel({ api }: { api: StudioApi }) {
   });
   const [applied, setApplied] = useState(false);
   const logo = api.theme.logo;
+
+  // Re-extract the palette whenever the logo src changes (or the panel is
+  // remounted with a logo already set). Without this, the swatches +
+  // Apply button vanished the moment the user navigated to Colours and
+  // back, so re-applying meant re-dropping the file. Only runs when the
+  // local swatches state is empty for the current src — subsequent
+  // in-panel edits (role changes, Apply) keep the existing swatches.
+  const srcForSwatches = useRef<string | null>(null);
+  useEffect(() => {
+    if (!logo?.src) {
+      srcForSwatches.current = null;
+      return;
+    }
+    if (srcForSwatches.current === logo.src) return;
+    srcForSwatches.current = logo.src;
+    extract(logo.src);
+    // extract is a stable function closure in this component scope; disabling
+    // the lint rule because adding it as a dep would force a recreation each
+    // render and never settle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logo?.src]);
 
   const extract = (src: string) => {
     const img = new Image();
@@ -117,8 +138,24 @@ export function LogoPanel({ api }: { api: StudioApi }) {
 
   return (
     <>
+      {/* Business name goes first so the user names the brand before
+          seeing palettes derived from the logo — matches the mental
+          flow "what is this project, then what does it look like." */}
       <Group
-        title="Drop your logo"
+        title="Business name"
+        note="Replaces every &lsquo;Acme Inc&rsquo; placeholder in the previews ahead (workspace titles, invoice rows, logo corners, email domains). Leave blank to keep the Acme stand-in."
+      >
+        <TextInput
+          aria-label="Business name"
+          placeholder="Acme Inc"
+          value={api.theme.brand ?? ""}
+          onChange={(e) => api.setBrand(e.target.value)}
+          maxLength={60}
+        />
+      </Group>
+
+      <Group
+        title="Logo"
         note="SVG, PNG, JPG or WebP, up to 1.5 MB. The Studio pulls the palette out of it and suggests brand colours."
         action={logo ? <Button size="sm" variant="ghost" onClick={removeLogo}>Remove</Button> : null}
       >
@@ -176,19 +213,6 @@ export function LogoPanel({ api }: { api: StudioApi }) {
           />
         </div>
         {error ? <Notice tone="bad">{error}</Notice> : null}
-      </Group>
-
-      <Group
-        title="Business name"
-        note="Replaces every &lsquo;Acme Inc&rsquo; placeholder in the previews ahead (workspace titles, invoice rows, logo corners, email domains). Leave blank to keep the Acme stand-in."
-      >
-        <TextInput
-          aria-label="Business name"
-          placeholder="Acme Inc"
-          value={api.theme.brand ?? ""}
-          onChange={(e) => api.setBrand(e.target.value)}
-          maxLength={60}
-        />
       </Group>
 
       {swatches.length > 0 ? (
