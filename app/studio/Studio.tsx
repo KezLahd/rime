@@ -34,7 +34,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { BrandPaletteProvider, ColourCategoryProvider, FontHoverProvider, GradientSelectionProvider, HoverCategoryProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type ColourCategory, type FontHoverState, type HoverCategory } from "./controls";
+import { BrandPaletteProvider, ColourCategoryProvider, ExportBundleProvider, ExportBundleSetterProvider, FontHoverProvider, GradientSelectionProvider, HoverCategoryProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type ColourCategory, type ExportBundle, type FontHoverState, type HoverCategory } from "./controls";
 import { toHex } from "./engine/colour";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
@@ -45,6 +45,7 @@ import {
   activeOverrides,
   lookName,
   loadSaved,
+  defaultThemeName,
   loadWorking,
   parseThemeJson,
   pinCss,
@@ -292,6 +293,10 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
    *  the components whose hover behaviour reads those tokens. */
   const [hoverCategory, setHoverCategory] = useState<HoverCategory | null>(null);
 
+  /** Current Export bundle: computed by ExportPanel from its scope +
+   *  contents options, consumed by ExportShowcase on the right side. */
+  const [exportBundle, setExportBundle] = useState<ExportBundle | null>(null);
+
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
   useEffect(() => {
@@ -454,22 +459,31 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
       setControls: (controls) => commit((t) => ({ ...t, controls: { ...t.controls, ...controls } })),
       setLogo: (logo) => commit((t) => ({ ...t, logo })),
       setBrand: (name) =>
-        commit((t) => ({
+        commit((t) => {
           // Keep whatever the user is typing — including a trailing space
           // before the second word. Only strip to undefined when the field
           // is wholly empty so brandNames() falls back to Acme.
-          ...t,
-          brand: name.length === 0 ? undefined : name.slice(0, 60),
-        })),
+          const nextBrand = name.length === 0 ? undefined : name.slice(0, 60);
+          // When the theme name is still the default we were showing (the
+          // preset's name, or an older "<prev brand> Rime"), slide the
+          // default forward to track the new brand. A theme name the user
+          // typed themselves is left alone.
+          const wasDefault = t.name === defaultThemeName(t.base, t.brand);
+          return {
+            ...t,
+            brand: nextBrand,
+            name: wasDefault ? defaultThemeName(t.base, nextBrand) : t.name,
+          };
+        }),
       setBase: (next) =>
         commit((t) => ({
           ...t,
           base: next,
-          // Rename the theme to the new preset's name only when the user
-          // hadn't renamed it from the preset's default — same rule as
-          // the opening sync did before the preview isolation.
-          name: t.name === presetName(t.base) ? presetName(next) : t.name,
+          // Rename the theme to the new preset's default only when the
+          // user hadn't typed one themselves.
+          name: t.name === defaultThemeName(t.base, t.brand) ? defaultThemeName(next, t.brand) : t.name,
         })),
+      setName: (name) => commit((t) => ({ ...t, name: name.slice(0, 60) })),
       setBaseline: (overrides) =>
         commit((t) => ({
           ...t,
@@ -840,6 +854,8 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <ShadowSelectionProvider onSelect={setShadowSelection}>
             <ColourCategoryProvider onSelect={setColourCategory}>
             <HoverCategoryProvider onSelect={setHoverCategory}>
+            <ExportBundleProvider bundle={exportBundle}>
+            <ExportBundleSetterProvider onSet={setExportBundle}>
             <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
@@ -875,6 +891,8 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
             </BrandPaletteProvider>
+            </ExportBundleSetterProvider>
+            </ExportBundleProvider>
             </HoverCategoryProvider>
             </ColourCategoryProvider>
             </ShadowSelectionProvider>

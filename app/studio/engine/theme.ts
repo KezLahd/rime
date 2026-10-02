@@ -58,8 +58,19 @@ export const modeName = (mode: Mode) => (mode === "dark" ? "Dark" : "Light");
 /** "Rime Default, Dark". */
 export const lookName = (base: Preset, mode: Mode) => `${presetName(base)}, ${modeName(mode)}`;
 
+/**
+ * The suggested theme name shown as the Export step's placeholder and the
+ * default name until the user types their own. When a business name is
+ * set on the logo step we lean on it (e.g. "<brand> Rime"); otherwise we
+ * fall back to a plain "Rime" so the field never reads as a preset label.
+ */
+export function defaultThemeName(_base: Preset, brand?: string): string {
+  const trimmed = (brand ?? "").trim();
+  return trimmed ? `${trimmed} Rime` : "Rime";
+}
+
 export function presetTheme(base: Preset, mode: Mode = "light"): StudioTheme {
-  return { version: 2, name: presetName(base), base, mode, overrides: {}, overridesDark: {}, logo: null, controls: {} };
+  return { version: 2, name: defaultThemeName(base), base, mode, overrides: {}, overridesDark: {}, logo: null, controls: {} };
 }
 
 const PRESET_IDS: ReadonlyArray<string> = ["default", "flat"];

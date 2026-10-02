@@ -157,6 +157,46 @@ export function HoverCategoryProvider({
 export function useHoverCategory() {
   return useContext(HoverCategoryContext);
 }
+
+/**
+ * Export bundle: the ExportPanel on the left computes the current
+ * theme.css + theme.json strings (keyed to the user's chosen Scope +
+ * Contents options), and broadcasts them here so the ExportShowcase on
+ * the right can render Download / Copy / Terminal actions against the
+ * same values without recomputing. Null when the user isn't on the
+ * Export step or when sources haven't loaded yet.
+ */
+export type ExportBundle = {
+  name: string;
+  slug: string;
+  hasName: boolean;
+  css: string;
+  cssFilename: string;
+  jsonText: string;
+  jsonFilename: string;
+  changedCount: number;
+};
+const ExportBundleContext = createContext<ExportBundle | null>(null);
+
+export function ExportBundleProvider({ bundle, children }: { bundle: ExportBundle | null; children: ReactNode }) {
+  return <ExportBundleContext.Provider value={bundle}>{children}</ExportBundleContext.Provider>;
+}
+
+/** Lets a child component (ExportPanel) push the bundle up each render. */
+const ExportBundleSetterContext = createContext<(bundle: ExportBundle | null) => void>(() => {});
+
+export function ExportBundleSetterProvider({ onSet, children }: { onSet: (bundle: ExportBundle | null) => void; children: ReactNode }) {
+  const stable = useCallback(onSet, [onSet]);
+  return <ExportBundleSetterContext.Provider value={stable}>{children}</ExportBundleSetterContext.Provider>;
+}
+
+export function useExportBundle() {
+  return useContext(ExportBundleContext);
+}
+
+export function useSetExportBundle() {
+  return useContext(ExportBundleSetterContext);
+}
 import {
   Alert,
   IconButton,

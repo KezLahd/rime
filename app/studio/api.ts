@@ -26,6 +26,8 @@ export type StudioApi = {
   setBrand: (name: string) => void;
   /** Switch the preview between the Default and Flat preset base. */
   setBase: (base: StudioTheme["base"]) => void;
+  /** Rename the theme (used by the Export step's name input). */
+  setName: (name: string) => void;
   /** Snapshot the current token values as the "applied palette" baseline.
    *  Called when the user presses Apply on step 1; later reset buttons
    *  revert to this baseline instead of Rime Default. */

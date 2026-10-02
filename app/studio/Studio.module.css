@@ -2177,6 +2177,25 @@
   white-space: pre;
 }
 
+/* Hint under the Name field. Grey while the name is still the preset's
+   default (nudging the user to type one), and switches to the brand
+   accent with a tiny arrow once the field is custom. The arrow points
+   right because the matching export actions live on the right pane. */
+.exportNameHint {
+  margin: 6px 0 0;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.exportNameOk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-weight: 600;
+}
+
 /* ── Preview ─────────────────────────────────────────────────────────── */
 
 .preview {
