@@ -618,8 +618,7 @@
   color: var(--ink-secondary);
 }
 
-.rowChanged .rowName::after,
-.rowChanged .sliderBody > div > div:first-child > span:first-child::after {
+.rowChanged .rowName::after {
   content: "";
   display: inline-block;
   width: 6px;
@@ -641,15 +640,21 @@
   justify-self: end;
 }
 
+/* Row grid reserves a 28 px reset column; hiding it with visibility
+   keeps the control aligned when the value flips between changed and
+   unchanged. Slider rows (below) use display:none instead so the slider
+   body expands to fill the group's full content width when the reset
+   isn't needed. */
 .resetHidden[class] {
   visibility: hidden;
 }
 
+/* Slider rows: body spans the group's full content width, the reset
+   button overlays its top-right so the track and the value number can
+   both reach the card's right padding. Right padding on the slider head
+   keeps the value number clear of the reset chip when it's showing. */
 .sliderRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 28px;
-  align-items: center;
-  gap: 10px;
+  position: relative;
 }
 
 .sliderBody {
@@ -657,10 +662,36 @@
   min-width: 0;
 }
 
-.sliderHelp {
+/* The Slider's head (first child of its root — label on the left, value
+   on the right). Reserve 28 px on its right so the reset chip can overlay
+   that end without clipping the number, and the number doesn't jump when
+   the chip appears or disappears. */
+.sliderBody > [data-slot="slider"] > div:first-child {
+  padding-right: 28px;
+}
+
+.sliderRow > .reset {
   position: absolute;
-  top: -3px;
-  right: 54px;
+  top: -2px;
+  right: 0;
+}
+
+/* Label + help (i) sits on the top-left of the slider body, overlaying
+   the slider head's empty-label span. Keeps the help icon next to the
+   words it describes instead of floating in the value / reset zone,
+   where it collided with longer values like "100%". */
+.sliderLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.sliderLabel > :not(.rowName) {
+  pointer-events: auto;
 }
 
 .switchRow {
@@ -1307,21 +1338,20 @@
 
 /* ── Adobe-style gradient stops bar ──────────────────────────────────── */
 
-/* Wrap has the same horizontal padding as the end-stop radius so the
-   square anchors line up with the inner edges of the panel's rows
-   instead of overshooting into the Group's padding. */
-/* Wrap pads 12 px on each side — the exact half-width of a 24 px marker
-   — so the end-stop squares sit symmetrically inside the Group's content
-   edge on BOTH sides. */
+/* The wrap pads 12 px on each side — the exact half-width of a 24 px
+   marker — so the end-stop squares, which centre on the bar's left and
+   right edges and overhang by half their width, land flush with the
+   group card's content edge instead of poking out past it. */
 .stopsBarWrap {
   position: relative;
   padding: 10px 12px 26px;
   margin-top: 4px;
 }
 
-/* The gradient bar fills the wrap's content box. End markers at 0% and
-   100% then centre on the two bar edges and overhang by exactly 12 px,
-   which matches the wrap's padding so the entire specimen is symmetric. */
+/* The gradient bar fills the wrap's content box. Markers are now direct
+   children of the bar, so `left: X%` positions them relative to the
+   bar's own width — the end stops centre on the bar's two edges and the
+   12 px overhang falls into the wrap's padding on each side. */
 .stopsBar {
   position: relative;
   width: 100%;
@@ -1335,9 +1365,9 @@
 
 .stopsBarHint {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(100% + 4px);
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
   font-size: 10px;
   letter-spacing: 0.02em;
   color: var(--ink-muted);
@@ -1375,20 +1405,22 @@
     0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* End stops are square chips, the two anchors of the bar. */
+/* End stops are square chips, the two anchors of the bar. Height matches
+   the bar; top:0 (inside the bar) aligns them with it exactly. */
 .stopMarkerEnd {
   width: 24px;
   height: 28px;
   border-radius: var(--r-xs);
-  top: 10px;
+  top: 0;
 }
 
-/* Intermediate stops are circles so you can tell them apart from the ends. */
+/* Intermediate stops are circles so you can tell them apart from the ends.
+   Centred vertically on the bar: (bar 28 − marker 24) / 2 = 2 px. */
 .stopMarkerMid {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  top: 12px;
+  top: 2px;
 }
 
 /* Tiny delete chip on middle stops only (not the two anchors). Hidden

@@ -282,17 +282,23 @@ export function SliderRow({
 }) {
   const decimals = step < 1 ? Math.min(3, String(step).split(".")[1]?.length ?? 2) : 0;
   const fmt = format ?? ((v: number) => `${Number(v.toFixed(decimals))}${unit ? (unit === "%" || unit === "°" ? unit : ` ${unit}`) : ""}`);
+  // The Slider renders its own head (label | value). We let it render the
+  // value on the right, hide its internal label text, and overlay our own
+  // label + help toggletip on the left so the (i) sits next to the words
+  // instead of floating in the right-hand reset/value zone (where it
+  // overlapped longer values like "100%").
   return (
     <div className={cx(styles.sliderRow, changed && styles.rowChanged)}>
       <div className={styles.sliderBody}>
-        <Slider label={label} showValue min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} formatValue={fmt} onValueChange={onChange} />
-        {help ? (
-          <span className={styles.sliderHelp}>
+        <Slider aria-label={label} showValue min={min} max={max} step={step} value={Math.min(max, Math.max(min, value))} formatValue={fmt} onValueChange={onChange} />
+        <span className={styles.sliderLabel}>
+          <span className={styles.rowName}>{label}</span>
+          {help ? (
             <Toggletip label={`About ${label}`} side="right">
               {help}
             </Toggletip>
-          </span>
-        ) : null}
+          ) : null}
+        </span>
       </div>
       <ResetButton label={label} changed={changed} onReset={onReset} />
     </div>

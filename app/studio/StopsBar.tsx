@@ -126,45 +126,45 @@ export function StopsBar({
           addStop(e.clientX);
         }}
       >
-        <span className={styles.stopsBarHint}>Click to add a stop · drag to move · click a stop to pick its colour</span>
+        {p.map((s, i) => {
+          const isEnd = i === 0 || i === p.length - 1;
+          const rgb = resolve(s.color) ?? parseColour(s.color) ?? { r: 0, g: 0, b: 0, a: 1 };
+          return (
+            <Popover
+              key={`${i}-${s.pos}`}
+              label={`Stop ${i + 1} colour`}
+              width={320}
+              trigger={
+                <button
+                  type="button"
+                  className={cx(styles.stopMarker, isEnd ? styles.stopMarkerEnd : styles.stopMarkerMid)}
+                  style={{ left: `${s.pos ?? 0}%`, background: toCssString(s.color) }}
+                  aria-label={`Stop ${i + 1} at ${Math.round(s.pos ?? 0)}%`}
+                  onPointerDown={(e) => beginDrag(i, e)}
+                >
+                  {!isEnd && p.length > 2 ? (
+                    <span
+                      role="button"
+                      aria-label={`Remove stop ${i + 1}`}
+                      className={styles.stopMarkerRemove}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeStop(i);
+                      }}
+                    >
+                      <X size={9} aria-hidden="true" />
+                    </span>
+                  ) : null}
+                </button>
+              }
+            >
+              <ColorPicker colour={rgb} onChange={(c) => updateStopColour(i, c)} />
+            </Popover>
+          );
+        })}
       </div>
-      {p.map((s, i) => {
-        const isEnd = i === 0 || i === p.length - 1;
-        const rgb = resolve(s.color) ?? parseColour(s.color) ?? { r: 0, g: 0, b: 0, a: 1 };
-        return (
-          <Popover
-            key={`${i}-${s.pos}`}
-            label={`Stop ${i + 1} colour`}
-            width={320}
-            trigger={
-              <button
-                type="button"
-                className={cx(styles.stopMarker, isEnd ? styles.stopMarkerEnd : styles.stopMarkerMid)}
-                style={{ left: `${s.pos ?? 0}%`, background: toCssString(s.color) }}
-                aria-label={`Stop ${i + 1} at ${Math.round(s.pos ?? 0)}%`}
-                onPointerDown={(e) => beginDrag(i, e)}
-              >
-                {!isEnd && p.length > 2 ? (
-                  <span
-                    role="button"
-                    aria-label={`Remove stop ${i + 1}`}
-                    className={styles.stopMarkerRemove}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeStop(i);
-                    }}
-                  >
-                    <X size={9} aria-hidden="true" />
-                  </span>
-                ) : null}
-              </button>
-            }
-          >
-            <ColorPicker colour={rgb} onChange={(c) => updateStopColour(i, c)} />
-          </Popover>
-        );
-      })}
+      <span className={styles.stopsBarHint}>Click to add a stop · drag to move · click a stop to pick its colour</span>
     </div>
   );
 }
