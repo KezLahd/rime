@@ -261,8 +261,8 @@ const ELEVATIONS: ReadonlyArray<Elevation> = [
   // control and the slide-in demo while the Sidebar edge entry stays
   // the plain fixed-chrome demo.
   { token: "--sidebar-shadow", label: "Drawer", variant: "drawer" },
-  { token: "--shadow-auth-card", label: "Sign-in card" },
   { token: "--topbar-shadow", label: "Top bar edge" },
+  { token: "--shadow-auth-card", label: "Sign-in card" },
   { token: "--shadow-chrome", label: "Search dropdown" },
   { token: "--glow-md", label: "Button glow" },
 ];

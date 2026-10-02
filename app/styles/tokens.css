@@ -240,6 +240,14 @@
   --glow-md-hover: 0 5px 16px rgba(var(--rgb-brand), 0.36);
   --glow-lg: 0 4px 16px rgba(var(--rgb-brand), 0.32);
   --glow-danger: 0 3px 10px rgba(var(--rgb-danger), 0.28);
+  /* Shell chrome shadows. Previously these only existed as inline
+     fallbacks on `--sidebar-shadow`, `--topbar-shadow` in the shell
+     CSS, so the Theme Studio had nothing to parse and the "reset to
+     preset" buttons on those surfaces fell back to a random brand
+     drop. Declared here so they round-trip through guessParams and
+     api.base cleanly. */
+  --sidebar-shadow: 8px 0 28px rgba(var(--rgb-brand-deep), 0.12), 1px 0 3px rgba(var(--rgb-contact), 0.06);
+  --topbar-shadow: 0 8px 24px rgba(var(--rgb-brand-deep), 0.08), 0 1px 3px rgba(var(--rgb-contact), 0.05);
   --glow-danger-hover: 0 5px 16px rgba(var(--rgb-danger), 0.38);
 
   /* Focus: the accent ring with a gap so it separates from fills. */
