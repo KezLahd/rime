@@ -3,12 +3,11 @@
 import { SegmentedControl, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Row, SliderRow, TextRow } from "../controls";
+import { AngleRow, CheckRow, ColourRow, Group, Row, SliderRow, SurfaceStrip, TextRow } from "../controls";
 import type { Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer } from "../engine/gradient";
 import { colourOf, setColour } from "../engine/macros";
 import { StopsBar } from "../StopsBar";
-import styles from "../Studio.module.css";
 import { SurfaceEditor } from "./SurfacePanels";
 
 export type StudioLayout = "sidebar" | "rail" | "header";
@@ -38,27 +37,30 @@ export function LayoutPanel({ api, resolveColour }: { api: StudioApi; resolveCol
   const collapsible = collapsibleOf(api);
   return (
     <>
+      {/* Layout picker as the sticky header strip. Three options
+          determine which shell shape ships; the controls below adapt
+          to whichever is picked. Mirrors the pattern on Gradients and
+          Shadows — one top-level pick, then focused controls under. */}
+      <SurfaceStrip
+        variant="header"
+        label="Layout"
+        value={layout}
+        options={[
+          { value: "sidebar", label: "Sidebar" },
+          { value: "rail", label: "Collapsed rail" },
+          { value: "header", label: "Header only" },
+        ]}
+        onChange={(v) => api.setControls({ layout: v })}
+      />
+
       <Group
-        title="Layout"
+        title="Sizing"
         help={
           <>
             In code: <code>{`<SidebarShell layout="${layout}" />`}</code>. Sidebar keeps the full nav; the collapsed rail trades labels for icons; Header only moves the navigation into the top bar and drops the sidebar entirely.
           </>
         }
       >
-        <Row label="Navigation" stacked>
-          <SegmentedControl
-            aria-label="Layout"
-            size="sm"
-            value={layout}
-            onChange={(v) => api.setControls({ layout: v })}
-            options={[
-              { value: "sidebar", label: "Sidebar" },
-              { value: "rail", label: "Collapsed rail" },
-              { value: "header", label: "Header only" },
-            ]}
-          />
-        </Row>
         {layout === "sidebar" ? (
           <CheckRow
             label="User can collapse it"

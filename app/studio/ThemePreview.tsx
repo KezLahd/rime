@@ -31,7 +31,7 @@ import styles from "./ThemePreview.module.css";
  *  The shell is only shown when the step is actually about the shell
  *  (layout, final export) or inherently needs the chrome (components,
  *  contrast, tokens, image). */
-const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "background", "glass", "shadows", "hover"];
+const UNSHELLED: ReadonlyArray<PreviewFocus> = ["logo", "colour", "type", "shape", "gradients", "background", "glass", "shadows", "hover", "layout"];
 
 /**
  * Derives three stand-in strings from the business name typed on step 1:
@@ -190,6 +190,14 @@ export const ThemePreview = memo(function ThemePreview({
   // table, sidebar and menu to hover; Motion shows timing demos.
   if (focus === "hover") {
     return <HoverShowcase category={hoverCategory ?? "buttons"} brand={brandText} />;
+  }
+
+  // Layout step: the actual SidebarShell wrapping a mock dashboard
+  // page. The user sees exactly how their chosen layout (full
+  // sidebar / collapsed rail / header-only) looks with a real page
+  // behind it, instead of a kit-wide component grid.
+  if (focus === "layout") {
+    return <LayoutShowcase brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} logoCorner={logoCorner} layout={layout} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -902,6 +910,98 @@ function HoverShowcase({ category, brand }: { category: "buttons" | "washes" | "
         <p className={styles.catFootnote}>Hover a track and the ball slides to the far end at that row&apos;s duration; move the pointer off to run it back. Trigger them in sequence to feel the gap between Fast, Standard and Slow.</p>
       </GlassPanel>
     </div>
+  );
+}
+
+/**
+ * Layout step preview: the real SidebarShell with a focused mock
+ * dashboard page inside — not the kit's full component grid. Shows
+ * exactly how the user's chosen layout (full sidebar / collapsed rail
+ * / header-only) looks when running against actual page content.
+ */
+function LayoutShowcase({ brand, logoSrc, logoAlt, logoCorner, layout }: { brand: BrandNames; logoSrc?: string; logoAlt?: string; logoCorner: "glass" | "fill"; layout: "sidebar" | "rail" | "header" }) {
+  return (
+    <SidebarShell
+      contained
+      navLabel="Preview nav"
+      nav={NAV}
+      activeHref="#preview-top"
+      title="Projects"
+      logoSrc={logoSrc}
+      logoAlt={logoAlt}
+      logoCorner={logoCorner}
+      layout={layout}
+    >
+      <div id="preview-top" className={styles.layoutPage}>
+        <section className={styles.layoutHero}>
+          <div>
+            <p className={styles.layoutEyebrow}>{brand.full}</p>
+            <h2 className={styles.layoutTitle}>Projects</h2>
+            <p className={styles.layoutLede}>Everything the team is shipping — invoices, briefs and the whole brand kit. Three items are waiting on you this week.</p>
+          </div>
+          <div className={styles.layoutHeroActions}>
+            <Button variant="secondary" iconStart={<Filter size={14} aria-hidden="true" />}>Filter</Button>
+            <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
+          </div>
+        </section>
+
+        <section className={styles.layoutStats}>
+          <GlassPanel padding="md" className={styles.layoutStatCard}>
+            <p className={styles.layoutStatLabel}>Active</p>
+            <p className={styles.layoutStatValue}>12</p>
+            <p className={styles.layoutStatDelta}>+3 this week</p>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.layoutStatCard}>
+            <p className={styles.layoutStatLabel}>In review</p>
+            <p className={styles.layoutStatValue}>5</p>
+            <p className={styles.layoutStatDelta}>2 need you</p>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.layoutStatCard}>
+            <p className={styles.layoutStatLabel}>Shipped</p>
+            <p className={styles.layoutStatValue}>48</p>
+            <p className={styles.layoutStatDelta}>Last 30 days</p>
+          </GlassPanel>
+          <GlassPanel padding="md" className={styles.layoutStatCard}>
+            <p className={styles.layoutStatLabel}>Members</p>
+            <p className={styles.layoutStatValue}>8</p>
+            <p className={styles.layoutStatDelta}>Across 4 teams</p>
+          </GlassPanel>
+        </section>
+
+        <GlassPanel padding="lg" className={styles.layoutTableCard}>
+          <header className={styles.layoutTableHead}>
+            <div>
+              <h3 className={styles.layoutCardTitle}>Recent projects</h3>
+              <p className={styles.layoutCardLede}>Last fifteen items updated across {brand.full}.</p>
+            </div>
+            <Button size="sm" variant="ghost" iconEnd={<ArrowRight size={13} aria-hidden="true" />}>View all</Button>
+          </header>
+          <div className={styles.layoutTable}>
+            <div className={styles.layoutTableRow + " " + styles.layoutTableRowHead}>
+              <span>Name</span>
+              <span>Owner</span>
+              <span>Status</span>
+              <span>Updated</span>
+            </div>
+            {[
+              ["Atlas redesign", "Jane Cooper", "Active", "4 h ago"],
+              ["Spring collection launch", "Marco Silva", "In review", "yesterday"],
+              ["Brand kit refresh", "Priya Shah", "Draft", "3 d ago"],
+              ["Checkout rebuild", "Noah Kim", "Shipped", "5 d ago"],
+            ].map(([name, owner, status, when]) => (
+              <div key={name} className={styles.layoutTableRow}>
+                <span className={styles.layoutProjectName}>{name}</span>
+                <span className={styles.layoutMuted}>{owner}</span>
+                <span>
+                  <Badge tone={status === "Active" ? "brand" : status === "Shipped" ? "success" : status === "In review" ? "warning" : "neutral"} variant={status === "Shipped" ? "solid" : "soft"}>{status}</Badge>
+                </span>
+                <span className={styles.layoutMuted}>{when}</span>
+              </div>
+            ))}
+          </div>
+        </GlassPanel>
+      </div>
+    </SidebarShell>
   );
 }
 
