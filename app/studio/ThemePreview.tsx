@@ -90,6 +90,7 @@ export const ThemePreview = memo(function ThemePreview({
   focus,
   peekToken,
   gradientSelection,
+  shadowSelection,
 }: {
   /** The business name typed on step 1. Fills every "Acme Inc" placeholder
    *  across the showcases; falls back to "Acme Inc" when empty. */
@@ -106,6 +107,9 @@ export const ThemePreview = memo(function ThemePreview({
   /** The gradient token currently open in the Gradients panel dropdown.
    *  When set, the preview renders only that gradient's specimen. */
   gradientSelection?: string | null;
+  /** The shadow token currently selected in the Shadows panel. When set,
+   *  the preview renders only the surface specimen that uses it. */
+  shadowSelection?: string | null;
 }) {
   const brandText = brandNames(brand);
 
@@ -161,6 +165,15 @@ export const ThemePreview = memo(function ThemePreview({
   // solid card — the whole point of the step is lost.
   if (focus === "glass") {
     return <GlassShowcase brand={brandText} />;
+  }
+
+  // Shadows step: a single specimen on a quiet backdrop so the user
+  // sees exactly what the sliders are reshaping — a card for the panel
+  // elevation, a tooltip for the float layer, a modal frame for the
+  // modal shadow, and so on. Picks a surface based on the selected
+  // token in the Shadows panel.
+  if (focus === "shadows") {
+    return <ShadowShowcase selection={shadowSelection ?? null} brand={brandText} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -690,6 +703,169 @@ function GlassShowcase({ brand }: { brand: BrandNames }) {
       </GlassPanel>
     </div>
   );
+}
+
+/**
+ * Shadows step preview: one specimen on a soft field, chosen by the
+ * token selected in the Shadows panel. Each specimen uses the actual
+ * shadow token (box-shadow: var(--…)) so slider edits are visible
+ * live. Backdrop is a very subtle gradient so a dark shadow still has
+ * contrast; the specimen is the thing the user is reshaping.
+ */
+function ShadowShowcase({ selection, brand }: { selection: string | null; brand: BrandNames }) {
+  const token = selection ?? "--shadow-panel";
+  return (
+    <div className={styles.shadowStage}>
+      <ShadowSpecimen token={token} brand={brand} />
+    </div>
+  );
+}
+
+function ShadowSpecimen({ token, brand }: { token: string; brand: BrandNames }) {
+  const shadow = `var(${token})`;
+  switch (token) {
+    case "--shadow-hairline-row":
+      return (
+        <div className={styles.shadowRows}>
+          {[1, 2, 3].map((i) => (
+            <div key={i} className={styles.shadowRow} style={{ boxShadow: shadow }}>
+              <span>Row {i}</span>
+              <span className={styles.shadowRowValue}>$2,{i * 300}.00</span>
+            </div>
+          ))}
+          <SpecimenCaption token={token} note="The hairline above each row inside a card. Reads as a tinted divider on glass, not a solid line." />
+        </div>
+      );
+    case "--shadow-hairline-card":
+      return (
+        <>
+          <div className={styles.shadowSpecimenCard} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowCardTitle}>Card hairline</p>
+            <p className={styles.shadowCardLede}>A single light ring around a flat card — the baseline elevation under glass.</p>
+          </div>
+          <SpecimenCaption token={token} note="Rings every card and small surface. One px, tinted, just enough to prove the edge." />
+        </>
+      );
+    case "--shadow-panel":
+      return (
+        <>
+          <GlassPanel padding="lg" className={styles.shadowGlassCard} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowCardEyebrow}>{brand.full}</p>
+            <p className={styles.shadowCardTitle}>Panel elevation</p>
+            <p className={styles.shadowCardLede}>The main lift on every GlassPanel: cards, dialogs, filters.</p>
+            <div className={styles.shadowCardActions}>
+              <Button size="sm">Continue</Button>
+              <Button size="sm" variant="secondary">Cancel</Button>
+            </div>
+          </GlassPanel>
+          <SpecimenCaption token={token} note="The main card elevation. Governs every GlassPanel's drop." />
+        </>
+      );
+    case "--shadow-float":
+      return (
+        <>
+          <div className={styles.shadowFloatRow}>
+            <Button size="sm" variant="secondary">Hover me</Button>
+            <div className={styles.shadowFloat} style={{ boxShadow: shadow }}>
+              Tooltip · var({token})
+            </div>
+          </div>
+          <SpecimenCaption token={token} note="The floating layer: tooltips, hover cards, inline suggestions." />
+        </>
+      );
+    case "--shadow-lift":
+      return (
+        <>
+          <div className={styles.shadowLiftCard} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowCardEyebrow}>Highlighted</p>
+            <p className={styles.shadowCardTitle}>Highlight card</p>
+            <p className={styles.shadowCardLede}>One rank above a Panel — used when a surface needs to call attention to itself.</p>
+          </div>
+          <SpecimenCaption token={token} note="A card that outranks the baseline Panel: pricing highlight, featured row." />
+        </>
+      );
+    case "--popover-shadow":
+      return (
+        <>
+          <div className={styles.shadowPopover} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowPopoverTitle}>Open menu</p>
+            <ul className={styles.shadowPopoverList}>
+              <li>Rename</li>
+              <li>Duplicate</li>
+              <li>Archive</li>
+            </ul>
+          </div>
+          <SpecimenCaption token={token} note="Popovers, dropdowns, context menus. Needs more lift than a card to read as floating." />
+        </>
+      );
+    case "--modal-shadow":
+      return (
+        <>
+          <div className={styles.shadowModal} style={{ boxShadow: shadow }}>
+            <div className={styles.shadowModalHead}>
+              <p className={styles.shadowCardTitle}>Modal elevation</p>
+              <Badge tone="warning">Draft</Badge>
+            </div>
+            <p className={styles.shadowCardLede}>The highest card-shaped surface — Modal, AlertDialog, Sheet. Lives above a scrim.</p>
+            <div className={styles.shadowCardActions}>
+              <Button size="sm" variant="secondary">Cancel</Button>
+              <Button size="sm">Save changes</Button>
+            </div>
+          </div>
+          <SpecimenCaption token={token} note="The highest card-shaped elevation. Reads over a dim scrim." />
+        </>
+      );
+    case "--shadow-chrome":
+      return (
+        <>
+          <div className={styles.shadowChromeBar} style={{ boxShadow: shadow }}>
+            <span className={styles.shadowCardTitle}>Top bar</span>
+            <span className={styles.shadowCardLede}>Chrome drop</span>
+          </div>
+          <SpecimenCaption token={token} note="Falls off the top bar and the sidebar's outside edges." />
+        </>
+      );
+    case "--shadow-auth-card":
+      return (
+        <>
+          <div className={styles.shadowAuthCard} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowCardEyebrow}>Sign in to {brand.full}</p>
+            <p className={styles.shadowCardTitle}>Welcome back</p>
+            <div className={styles.shadowAuthField} />
+            <div className={styles.shadowAuthField} />
+            <Button size="sm" fullWidth>Continue</Button>
+          </div>
+          <SpecimenCaption token={token} note="The sign-in and templates/starter card: a solo surface centred on the auth-background gradient." />
+        </>
+      );
+    case "--sidebar-shadow":
+    case "--topbar-shadow":
+      return (
+        <>
+          <div className={styles.shadowEdge} style={{ boxShadow: shadow }}>
+            <span>{token === "--sidebar-shadow" ? "Sidebar edge" : "Top bar edge"}</span>
+          </div>
+          <SpecimenCaption token={token} note="The soft fall off the shell's outer edge where the chrome meets the page." />
+        </>
+      );
+    case "--glow-md":
+      return (
+        <>
+          <Button size="lg" iconStart={<Plus size={14} aria-hidden="true" />}>Create invoice</Button>
+          <SpecimenCaption token={token} note="The halo on primary buttons: brand-tinted glow at mid-density." />
+        </>
+      );
+    default:
+      return (
+        <>
+          <div className={styles.shadowSpecimenCard} style={{ boxShadow: shadow }}>
+            <p className={styles.shadowCardTitle}>Shadow preview</p>
+            <p className={styles.shadowCardLede}>{token}</p>
+          </div>
+          <SpecimenCaption token={token} note="A generic card showing the shadow." />
+        </>
+      );
+  }
 }
 
 function GradientSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {

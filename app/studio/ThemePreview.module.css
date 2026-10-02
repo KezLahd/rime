@@ -603,6 +603,186 @@
   gap: 8px;
 }
 
+/* ── Shadows showcase ───────────────────────────────────────────────── */
+
+.shadowStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 100%;
+  padding: 56px 40px;
+}
+
+.shadowSpecimenCard,
+.shadowLiftCard {
+  width: min(100%, 420px);
+  padding: 24px;
+  border-radius: var(--r-lg);
+  background: var(--surface-solid);
+  text-align: left;
+}
+
+.shadowGlassCard {
+  width: min(100%, 420px);
+  text-align: left;
+}
+
+.shadowCardEyebrow {
+  margin: 0 0 4px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-brand);
+}
+
+.shadowCardTitle {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
+.shadowCardLede {
+  margin: 0 0 14px;
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+.shadowCardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.shadowRows {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shadowRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+}
+
+.shadowRowValue {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-heading);
+}
+
+/* Tooltip + its anchor */
+.shadowFloatRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.shadowFloat {
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-solid);
+  color: var(--ink-body);
+  font-size: var(--text-small);
+}
+
+.shadowPopover {
+  width: 220px;
+  padding: 10px 0;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+}
+
+.shadowPopoverTitle {
+  margin: 0 16px 6px;
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.shadowPopoverList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shadowPopoverList li {
+  padding: 10px 16px;
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  cursor: default;
+}
+
+.shadowPopoverList li:hover {
+  background: var(--wash-hover);
+}
+
+.shadowModal {
+  width: min(100%, 480px);
+  padding: 24px;
+  border-radius: var(--r-lg);
+  background: var(--surface-solid);
+}
+
+.shadowModalHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.shadowChromeBar {
+  width: min(100%, 560px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+}
+
+.shadowAuthCard {
+  width: min(100%, 320px);
+  padding: 28px;
+  border-radius: var(--r-lg);
+  background: var(--surface-solid);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shadowAuthField {
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--recess-fill);
+  box-shadow: inset 0 0 0 1px var(--line-input);
+}
+
+.shadowEdge {
+  width: min(100%, 440px);
+  padding: 20px 24px;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+  font-size: var(--text-small);
+  color: var(--ink-secondary);
+  text-align: center;
+}
+
 .gradientSpecimenCaption {
   display: flex;
   flex-direction: column;

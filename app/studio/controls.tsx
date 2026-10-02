@@ -84,6 +84,30 @@ export function GradientSelectionProvider({
 export function useGradientSelection() {
   return useContext(GradientSelectionContext);
 }
+
+/**
+ * Shadow-selection context: ShadowPanel broadcasts the shadow token
+ * currently being edited; the preview renders only the specimen that
+ * uses it (one card for --shadow-panel, a popover for --popover-shadow,
+ * a modal frame for --modal-shadow, etc.) so the user sees exactly
+ * what their sliders are reshaping.
+ */
+const ShadowSelectionContext = createContext<(token: string | null) => void>(() => {});
+
+export function ShadowSelectionProvider({
+  onSelect,
+  children,
+}: {
+  onSelect: (token: string | null) => void;
+  children: ReactNode;
+}) {
+  const stable = useCallback(onSelect, [onSelect]);
+  return <ShadowSelectionContext.Provider value={stable}>{children}</ShadowSelectionContext.Provider>;
+}
+
+export function useShadowSelection() {
+  return useContext(ShadowSelectionContext);
+}
 import {
   Alert,
   IconButton,

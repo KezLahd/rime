@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow } from "../controls";
+import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow, useShadowSelection } from "../controls";
 import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass, shadowDepth } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
 import styles from "../Studio.module.css";
@@ -299,6 +299,15 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
     api.set({ [token]: buildShadow(next) });
   };
   const depthNames = ELEVATIONS.map((e) => e.token);
+
+  // Broadcast which shadow is being edited; the preview on the right
+  // renders only the specimen that uses it, so the user sees exactly
+  // the surface they're reshaping instead of a grid of every elevation.
+  const selectShadow = useShadowSelection();
+  useEffect(() => {
+    selectShadow(token);
+    return () => selectShadow(null);
+  }, [token, selectShadow]);
   return (
     <>
       <Group title="Depth" help="Every shadow and glow at once: 0 is flat, 1 the preset, 2 twice as deep. Hairline rings keep their weight.">

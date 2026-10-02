@@ -34,7 +34,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { BrandPaletteProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, type BrandPalette, type FontHoverState } from "./controls";
+import { BrandPaletteProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type FontHoverState } from "./controls";
 import { toHex } from "./engine/colour";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
@@ -265,6 +265,10 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   /** Which gradient token is being edited in the Gradients panel — the
    *  preview renders only that gradient's specimen on the right. */
   const [gradientSelection, setGradientSelection] = useState<string | null>(null);
+
+  /** Which shadow token is being edited in the Shadows panel — the preview
+   *  renders only the specimen that uses it (one card, one modal, etc.). */
+  const [shadowSelection, setShadowSelection] = useState<string | null>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -758,6 +762,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <PeekProvider onPeek={setPeekToken}>
             <FontHoverProvider onHover={setFontHover}>
             <GradientSelectionProvider onSelect={setGradientSelection}>
+            <ShadowSelectionProvider onSelect={setShadowSelection}>
             <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
@@ -796,6 +801,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
             </BrandPaletteProvider>
+            </ShadowSelectionProvider>
             </GradientSelectionProvider>
             </FontHoverProvider>
             </PeekProvider>
@@ -885,7 +891,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             }
           >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} />
+            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} shadowSelection={shadowSelection} />
           </div>
         </section>
       </div>
