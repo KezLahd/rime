@@ -226,10 +226,12 @@ export function ColourSwatch({
   colour,
   onChange,
   fill,
+  alpha,
 }: {
   label: string;
   colour: Rgb | null;
   onChange: (c: Rgb) => void;
+  /** Expose an opacity slider in the picker and let onChange receive the alpha. */
   alpha?: boolean;
   /** Paint the swatch with this CSS instead (a gradient, a palette reference). */
   fill?: string;
@@ -249,7 +251,11 @@ export function ColourSwatch({
         </button>
       }
     >
-      <ColorPicker colour={c} onChange={(next) => onChange({ ...next, a: c.a })} />
+      <ColorPicker
+        colour={c}
+        alpha={alpha}
+        onChange={(next) => onChange(alpha ? next : { ...next, a: c.a })}
+      />
     </Popover>
   );
 }

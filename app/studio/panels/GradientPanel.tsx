@@ -110,15 +110,25 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
           <TextRow label="CSS value" token={token} value={value} changed={api.changed(token)} onCommit={(v) => api.set({ [token]: v })} onReset={() => api.reset([token])} />
         </Group>
       ) : (() => {
-        // When the token has multiple radial (bloom) layers (e.g. the
-        // page background), collapse them into one BloomsEditor group
-        // with a Bloom 1 / Bloom 2 toggle, instead of two separate
+        // When the token has multiple bloom-like layers (radials + the
+        // optional "middle" linear sheen that sits between them, e.g.
+        // the page background), collapse them into one Group with a
+        // single toggle (Bloom 1 / Middle / Bloom 2) and swap the
+        // editor to match the layer's kind. Keeps everything related
+        // to the page backdrop in one place instead of three stacked
         // groups full of duplicated sliders.
+        const baseLayers = parseGradient(api.base.get(token) ?? value);
         const radialIdx = layers.map((l, i) => (l.kind === "radial" ? i : -1)).filter((i) => i >= 0);
+        const linearSheenIdx = radialIdx.length >= 2
+          ? layers.findIndex((l, i) => l.kind === "linear" && i > radialIdx[0] && i < layers.length - 0)
+          : -1;
         const useBloomsGroup = radialIdx.length >= 2;
+        const bloomLayerIdx = useBloomsGroup
+          ? [...radialIdx, ...(linearSheenIdx >= 0 ? [linearSheenIdx] : [])].sort((a, b) => a - b)
+          : [];
         const nodes: ReactNode[] = [];
         layers.forEach((layer, i) => {
-          if (useBloomsGroup && layer.kind === "radial") return; // deferred
+          if (useBloomsGroup && bloomLayerIdx.includes(i)) return; // deferred
           nodes.push(
             <Group key={i} title={layer.kind === "linear" ? `Linear layer ${i + 1}` : layer.kind === "radial" ? `Bloom ${i + 1}` : "Base colour"}>
               {layer.kind === "linear" ? (
@@ -163,13 +173,13 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
           );
         });
         if (useBloomsGroup) {
-          const bloomLayers = radialIdx.map((i) => layers[i] as Extract<Layer, { kind: "radial" }>);
+          const editable = bloomLayerIdx.map((i) => ({ layer: layers[i], index: i, baseLayer: baseLayers?.[i] ?? null }));
           nodes.push(
-            <Group key="blooms" title="Blooms" help="Each bloom is a soft, blurred glow painted on the page background. Drag its position on the grid, pull its size, pick a colour, dial strength and fade.">
+            <Group key="blooms" title="Page blooms" help="The two soft blooms + the middle sheen that paint the page background. Pick a layer at the top, then drag its position on the stage, resize, dial strength and fade. Each slider has its own reset.">
               <BloomsEditor
-                blooms={bloomLayers}
+                items={editable}
                 resolve={resolveColour}
-                onBloomChange={(bi, patch) => editLayer(radialIdx[bi], patch)}
+                onItemChange={(bi, patch) => editLayer(bloomLayerIdx[bi], patch)}
               />
             </Group>,
           );
@@ -300,63 +310,167 @@ function BloomEditor({ layer, resolve, onChange }: { layer: Extract<Layer, { kin
 }
 
 type Radial = Extract<Layer, { kind: "radial" }>;
+type Linear = Extract<Layer, { kind: "linear" }>;
+
+type BloomItem = {
+  layer: Layer;
+  /** Position in the full layer list (for keys / resets against the base). */
+  index: number;
+  baseLayer: Layer | null;
+};
+
+function layerFirstStopAlpha(layer: Layer | null): number {
+  if (!layer || layer.kind === "colour") return 1;
+  const s = layer.stops[0];
+  const ch = s.color.match(/^rgba\(var\((--rgb-[\w-]+)\),\s*([\d.]+)\)$/);
+  if (ch) return Number(ch[2]);
+  const literal = parseColour(s.color);
+  return literal?.a ?? 1;
+}
+
+function layerLastStopPos(layer: Layer | null): number {
+  if (!layer || layer.kind === "colour") return 100;
+  const p = positioned(layer.stops);
+  return p[p.length - 1]?.pos ?? 100;
+}
 
 /**
- * Multi-bloom editor: one component with a toggle at the top for which
- * bloom to edit (Bloom 1 / Bloom 2), an interactive 2D stage that drags
- * the bloom's centre on a mock page grid, width/height sliders with an
- * aspect-ratio lock, strength + fade sliders, and the colour swatch
- * (which pops the ColorPicker with the live brand palette strip). All
- * live-wired to the gradient layers.
+ * The page-background editor: one Group that owns both soft blooms AND
+ * the middle linear sheen. A toggle at the top switches which layer the
+ * controls apply to; the editor swaps to match the layer's kind.
+ *
+ * Design notes:
+ *   - Stage renders on a flat white (or dark in dark mode) background
+ *     so a bloom tinted the same hue as the themed page bg is still
+ *     visible — the whole point of the stage is to show WHERE the bloom
+ *     sits, not what the user's page looks like.
+ *   - Each slider carries its own reset chip, driven by the preset
+ *     gradient parsed from the token's base value.
+ *   - The aspect-ratio lock sits between Width and Height, centred, so
+ *     it reads as "these two are linked" instead of hovering off to the
+ *     side of just one.
+ *   - The colour row's swatch shows the hue at FULL opacity so the user
+ *     sees the hue clearly; the alpha channel lives on the Strength
+ *     slider, which is where that control actually belongs.
  */
 function BloomsEditor({
-  blooms,
+  items,
   resolve,
-  onBloomChange,
+  onItemChange,
 }: {
-  blooms: Radial[];
+  items: BloomItem[];
   resolve: (expr: string) => Rgb | null;
-  onBloomChange: (index: number, patch: Partial<Layer>) => void;
+  onItemChange: (index: number, patch: Partial<Layer>) => void;
 }) {
   const [active, setActive] = useState(0);
   const [aspectLocked, setAspectLocked] = useState(false);
   const padRef = useRef<HTMLDivElement>(null);
-  const bloom = blooms[active];
-  if (!bloom) return null;
+  const current = items[active];
+  if (!current) return null;
 
-  const first = bloom.stops[0];
-  const lastPos = positioned(bloom.stops)[bloom.stops.length - 1]?.pos ?? 65;
-  const ch = first.color.match(/^rgba\(var\((--rgb-[\w-]+)\),\s*([\d.]+)\)$/);
-  const literal = parseColour(first.color);
-  const strength = ch ? Number(ch[2]) : literal ? literal.a : 1;
-  const resolvedRgb = resolve(first.color) ?? literal ?? { r: 0, g: 0, b: 0, a: 1 };
-  const bloomHex = toHex(resolvedRgb);
-
-  const setFirst = (color: string) =>
-    onBloomChange(active, { stops: [{ ...first, color }, ...bloom.stops.slice(1)] });
-
-  const setColour = (next: Rgb) => {
-    // Picking a specific hex drops the palette ref and writes the literal
-    // rgba. Users who want "follow the brand" use the dropdown below the
-    // swatch instead. Alpha stays at the current strength so the picker
-    // changes hue/sat only.
-    setFirst(alphaText(next, strength));
+  const labelFor = (it: BloomItem, i: number): string => {
+    if (it.layer.kind === "linear") return "Middle";
+    // Two radials: first is Bloom 1, second is Bloom 2. If the layer list
+    // has the linear sandwiched between them (page-background), the
+    // ordering by index already gives Bloom 1 / Middle / Bloom 2.
+    const radialOrdinal = items.slice(0, i + 1).filter((x) => x.layer.kind === "radial").length;
+    return `Bloom ${radialOrdinal}`;
   };
 
+  return (
+    <div className={styles.bloomEditor}>
+      <ToggleGroup
+        type="single"
+        size="sm"
+        aria-label="Which layer"
+        value={String(active)}
+        onValueChange={(v: string | null) => v !== null && setActive(Number(v))}
+        items={items.map((it, i) => ({ value: String(i), label: labelFor(it, i) }))}
+      />
+
+      {current.layer.kind === "radial" ? (
+        <RadialBloomControls
+          radial={current.layer}
+          base={(current.baseLayer?.kind === "radial" ? current.baseLayer : null) as Radial | null}
+          allRadials={items.filter((x) => x.layer.kind === "radial") as Array<BloomItem & { layer: Radial }>}
+          activeRadialKey={current.index}
+          padRef={padRef}
+          aspectLocked={aspectLocked}
+          onAspectLockToggle={() => setAspectLocked((v) => !v)}
+          resolve={resolve}
+          onChange={(patch) => onItemChange(active, patch)}
+        />
+      ) : current.layer.kind === "linear" ? (
+        <LinearSheenControls
+          linear={current.layer}
+          base={(current.baseLayer?.kind === "linear" ? current.baseLayer : null) as Linear | null}
+          resolve={resolve}
+          onChange={(patch) => onItemChange(active, patch)}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function RadialBloomControls({
+  radial,
+  base,
+  allRadials,
+  activeRadialKey,
+  padRef,
+  aspectLocked,
+  onAspectLockToggle,
+  resolve,
+  onChange,
+}: {
+  radial: Radial;
+  base: Radial | null;
+  allRadials: Array<BloomItem & { layer: Radial }>;
+  activeRadialKey: number;
+  padRef: React.RefObject<HTMLDivElement | null>;
+  aspectLocked: boolean;
+  onAspectLockToggle: () => void;
+  resolve: (expr: string) => Rgb | null;
+  onChange: (patch: Partial<Layer>) => void;
+}) {
+  const first = radial.stops[0];
+  const lastPos = layerLastStopPos(radial);
+  const baseLast = layerLastStopPos(base);
+  const strength = layerFirstStopAlpha(radial);
+  const baseStrength = layerFirstStopAlpha(base);
+  const ch = first.color.match(/^rgba\(var\((--rgb-[\w-]+)\),\s*([\d.]+)\)$/);
+  const literal = parseColour(first.color);
+  const resolvedRgb = resolve(first.color) ?? literal ?? { r: 0, g: 0, b: 0, a: 1 };
+  const bloomHex = toHex(resolvedRgb);
+  // Swatch shows the OPAQUE hex so the user sees the hue; strength
+  // (alpha) is edited on its own slider below.
+  const swatchRgb: Rgb = { ...resolvedRgb, a: 1 };
+
+  const setFirst = (color: string) =>
+    onChange({ stops: [{ ...first, color }, ...radial.stops.slice(1)] });
+  const setColour = (next: Rgb) => {
+    // Opacity slider in the picker IS the strength: both edit the same
+    // alpha channel. Preserve whichever came from the picker so dragging
+    // the alpha strip updates the Strength slider on the next render.
+    const a = typeof next.a === "number" ? next.a : strength;
+    setFirst(alphaText(next, a));
+  };
+
+  const applySize = (w: number, h: number) => onChange({ w, h });
   const setW = (w: number) => {
     if (aspectLocked) {
-      const ratio = bloom.h / Math.max(1, bloom.w);
-      onBloomChange(active, { w, h: Math.max(10, Math.min(200, Math.round(w * ratio))) });
+      const ratio = radial.h / Math.max(1, radial.w);
+      applySize(w, Math.max(10, Math.min(200, Math.round(w * ratio))));
     } else {
-      onBloomChange(active, { w });
+      onChange({ w });
     }
   };
   const setH = (h: number) => {
     if (aspectLocked) {
-      const ratio = bloom.w / Math.max(1, bloom.h);
-      onBloomChange(active, { h, w: Math.max(10, Math.min(200, Math.round(h * ratio))) });
+      const ratio = radial.w / Math.max(1, radial.h);
+      applySize(Math.max(10, Math.min(200, Math.round(h * ratio))), h);
     } else {
-      onBloomChange(active, { h });
+      onChange({ h });
     }
   };
 
@@ -367,12 +481,9 @@ function BloomsEditor({
     el.setPointerCapture(e.pointerId);
     const apply = (clientX: number, clientY: number) => {
       const rect = el.getBoundingClientRect();
-      // The stage represents the page (0 - 100 in both axes). Clamp to a
-      // small margin outside so the user can push a bloom slightly off
-      // the edge, matching the slider's -30 to 130 range.
       const xPct = ((clientX - rect.left) / rect.width) * 100;
       const yPct = ((clientY - rect.top) / rect.height) * 100;
-      onBloomChange(active, {
+      onChange({
         x: Math.max(-30, Math.min(130, Math.round(xPct))),
         y: Math.max(-30, Math.min(130, Math.round(yPct))),
       });
@@ -387,25 +498,10 @@ function BloomsEditor({
     window.addEventListener("pointerup", onUp);
   };
 
-  const colourFill = `rgba(${resolvedRgb.r}, ${resolvedRgb.g}, ${resolvedRgb.b}, ${strength})`;
-
   return (
-    <div className={styles.bloomEditor}>
-      {blooms.length > 1 ? (
-        <ToggleGroup
-          type="single"
-          size="sm"
-          aria-label="Which bloom"
-          value={String(active)}
-          onValueChange={(v: string | null) => v !== null && setActive(Number(v))}
-          items={blooms.map((_, i) => ({ value: String(i), label: `Bloom ${i + 1}` }))}
-        />
-      ) : null}
-
-      {/* Interactive stage: a mock page where the user drags the bloom.
-          The dot's screen size scales with the bloom's --w / --h; its
-          colour matches the live resolved colour at the current strength
-          so dragging shows the actual bloom visually. */}
+    <>
+      {/* Flat stage so bloom hues always read against a neutral field,
+          not against a background painted the same colour. */}
       <div
         ref={padRef}
         className={styles.bloomStage}
@@ -414,44 +510,76 @@ function BloomsEditor({
         aria-label="Bloom position"
       >
         <div className={styles.bloomStageGrid} aria-hidden="true" />
-        {blooms.map((b, i) => {
+        {allRadials.map((it) => {
+          const b = it.layer;
           const rgb = resolve(b.stops[0].color) ?? parseColour(b.stops[0].color) ?? { r: 0, g: 0, b: 0, a: 1 };
           const chm = b.stops[0].color.match(/^rgba\(var\((--rgb-[\w-]+)\),\s*([\d.]+)\)$/);
           const alpha = chm ? Number(chm[2]) : (parseColour(b.stops[0].color)?.a ?? 1);
-          const isActive = i === active;
+          const isActive = it.index === activeRadialKey;
+          // Boost minimum alpha on the stage so a very weak bloom is
+          // still visible as a shape — the goal is to show the position,
+          // not to replicate the exact opacity (which the Strength slider
+          // already communicates numerically).
+          const stageAlpha = Math.max(0.35, alpha);
           return (
             <div
-              key={i}
+              key={it.index}
               className={cx(styles.bloomDot, isActive && styles.bloomDotActive)}
               style={{
                 left: `${b.x}%`,
                 top: `${b.y}%`,
                 width: `${b.w * 0.6}%`,
                 height: `${b.h * 0.6}%`,
-                background: `radial-gradient(ellipse at center, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha}) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0) 70%)`,
+                background: `radial-gradient(ellipse at center, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${stageAlpha}) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0) 70%)`,
               }}
               aria-hidden="true"
             />
           );
         })}
-        <p className={styles.bloomStageHint}>Drag anywhere to move Bloom {active + 1} · {bloom.x}%, {bloom.y}%</p>
+        <p className={styles.bloomStageHint}>Drag · {radial.x}%, {radial.y}%</p>
       </div>
 
-      <div className={styles.bloomSize}>
-        <SliderRow label="Width" value={bloom.w} min={10} max={200} step={1} unit="%" onChange={setW} />
-        <SliderRow label="Height" value={bloom.h} min={10} max={200} step={1} unit="%" onChange={setH} />
+      <SliderRow
+        label="Width"
+        value={radial.w}
+        min={10}
+        max={200}
+        step={1}
+        unit="%"
+        onChange={setW}
+        changed={base ? radial.w !== base.w : false}
+        onReset={base && radial.w !== base.w ? () => applySize(base.w, radial.h) : undefined}
+      />
+
+      {/* Aspect-ratio lock chip sits BETWEEN Width and Height, centred,
+          with hairlines so it reads as "these two are linked". */}
+      <div className={styles.bloomLockRow}>
+        <span className={styles.bloomLockRule} />
         <button
           type="button"
           className={cx(styles.bloomLock, aspectLocked && styles.bloomLockOn)}
           aria-pressed={aspectLocked}
           aria-label={aspectLocked ? "Unlock aspect ratio" : "Lock aspect ratio"}
           title={aspectLocked ? "Unlock aspect ratio" : "Lock aspect ratio"}
-          onClick={() => setAspectLocked((v) => !v)}
+          onClick={onAspectLockToggle}
         >
-          {aspectLocked ? <Link2 size={14} aria-hidden="true" /> : <Link2Off size={14} aria-hidden="true" />}
+          {aspectLocked ? <Link2 size={13} aria-hidden="true" /> : <Link2Off size={13} aria-hidden="true" />}
           <span>{aspectLocked ? "Linked" : "Independent"}</span>
         </button>
+        <span className={styles.bloomLockRule} />
       </div>
+
+      <SliderRow
+        label="Height"
+        value={radial.h}
+        min={10}
+        max={200}
+        step={1}
+        unit="%"
+        onChange={setH}
+        changed={base ? radial.h !== base.h : false}
+        onReset={base && radial.h !== base.h ? () => applySize(radial.w, base.h) : undefined}
+      />
 
       <SliderRow
         label="Strength"
@@ -461,6 +589,12 @@ function BloomsEditor({
         max={1}
         step={0.01}
         onChange={(a) => setFirst(ch ? `rgba(var(${ch[1]}), ${a})` : alphaText(literal ?? { r: 0, g: 0, b: 0, a: 1 }, a))}
+        changed={base ? Math.abs(strength - baseStrength) > 0.001 : false}
+        onReset={base ? () => {
+          const bch = base.stops[0].color.match(/^rgba\(var\((--rgb-[\w-]+)\),\s*([\d.]+)\)$/);
+          if (bch) setFirst(`rgba(var(${bch[1]}), ${bch[2]})`);
+          else setFirst(base.stops[0].color);
+        } : undefined}
       />
       <SliderRow
         label="Fade"
@@ -469,11 +603,13 @@ function BloomsEditor({
         max={100}
         step={1}
         unit="%"
-        onChange={(pos) => onBloomChange(active, { stops: positioned(bloom.stops).map((s, k, all) => (k === all.length - 1 ? { ...s, pos } : s)) })}
+        onChange={(pos) => onChange({ stops: positioned(radial.stops).map((s, k, all) => (k === all.length - 1 ? { ...s, pos } : s)) })}
+        changed={base ? Math.abs(lastPos - baseLast) > 0.5 : false}
+        onReset={base ? () => onChange({ stops: positioned(radial.stops).map((s, k, all) => (k === all.length - 1 ? { ...s, pos: baseLast } : s)) }) : undefined}
       />
 
-      <Row label="Bloom colour" help="Click the swatch to open the picker. The brand palette strip at the bottom of the picker is a shortcut: Brand, Deep, Accent, Neutral all one click away.">
-        <ColourSwatch label="Bloom colour" colour={resolvedRgb} fill={colourFill} onChange={setColour} />
+      <Row label="Bloom colour" help="Click the swatch to open the picker. The brand palette strip at the bottom of the picker is one-click shortcuts for Brand / Deep / Accent / Neutral; the opacity slider there sits beside the hue strip and edits the same value as Strength above. The dropdown next to it switches to following a palette colour by name instead of pinning a hex.">
+        <ColourSwatch label="Bloom colour" alpha colour={{ ...swatchRgb, a: strength }} onChange={setColour} />
         <Select
           size="sm"
           aria-label="Follow a palette colour"
@@ -494,6 +630,42 @@ function BloomsEditor({
       <p className={styles.mutedNote}>
         Now {bloomHex} at {Math.round(strength * 100)}%.
       </p>
-    </div>
+    </>
+  );
+}
+
+/**
+ * The "middle" layer of the page background is a thin linear sheen
+ * from one bloom hue to the other. Keep its editor compact: angle +
+ * stops bar, same shape as the Linear editor above but living inside
+ * the unified Blooms toggle so the page background is one place.
+ */
+function LinearSheenControls({
+  linear,
+  base,
+  resolve,
+  onChange,
+}: {
+  linear: Linear;
+  base: Linear | null;
+  resolve: (expr: string) => Rgb | null;
+  onChange: (patch: Partial<Layer>) => void;
+}) {
+  return (
+    <>
+      <p className={styles.mutedNote}>
+        A subtle linear sheen between the two blooms — a diagonal wash in
+        the brand hues. Drag the stops on the bar; use the direction dial
+        to spin the wash.
+      </p>
+      <AngleRow
+        label="Direction"
+        value={((Math.round(linear.angle) % 360) + 360) % 360}
+        onChange={(a) => onChange({ angle: a })}
+        changed={base ? Math.round(linear.angle) !== Math.round(base.angle) : false}
+        onReset={base ? () => onChange({ angle: base.angle }) : undefined}
+      />
+      <StopsBar stops={linear.stops} resolve={resolve} onChange={(stops) => onChange({ stops })} />
+    </>
   );
 }

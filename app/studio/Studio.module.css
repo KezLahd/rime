@@ -1356,21 +1356,26 @@
   gap: 10px;
 }
 
-/* Interactive stage: a scaled-down mock of the page. Shows a subtle
-   grid, a soft blurred ellipse for each bloom at its (x, y) position
-   and (w, h) size — the active bloom gets a brand-coloured ring so
-   the user knows which one is responding to the sliders. */
+/* Interactive stage: a scaled-down mock of the page. Flat white in
+   light mode / flat dark in dark mode so bloom hues always read
+   against a neutral field — not against a background painted the same
+   colour as the blooms (which happens if we use the themed page bg,
+   and makes the whole stage look like a monochrome wash). */
 .bloomStage {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: var(--r-md);
-  background: var(--recess-fill);
+  background: #ffffff;
   box-shadow: inset 0 0 0 1px var(--line-input);
   overflow: hidden;
   cursor: crosshair;
   touch-action: none;
   user-select: none;
+}
+
+:global(.dark) .bloomStage {
+  background: #0f1218;
 }
 
 .bloomStageGrid {
@@ -1388,7 +1393,6 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   pointer-events: none;
-  mix-blend-mode: multiply;
   transition: box-shadow var(--dur) var(--ease);
 }
 
@@ -1410,41 +1414,39 @@
   pointer-events: none;
 }
 
-/* Width + height sliders with the lock chip tucked into their row.
-   The two SliderRows stack as usual; the chip is a floating button
-   anchored to the right side so it sits beside the pair. */
-.bloomSize {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+/* Aspect-lock chip sits ON ITS OWN ROW between Width and Height,
+   centred, with hairlines running out either side so it visibly
+   joins the two sliders ("these two are linked") instead of
+   hovering awkwardly beside just one. */
+.bloomLockRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   gap: 10px;
-  padding-right: 36px;
+  margin: -2px 0;
+}
+
+.bloomLockRule {
+  height: 1px;
+  background: var(--line-soft);
 }
 
 .bloomLock {
-  position: absolute;
-  top: 16px;
-  right: 0;
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 6px 4px;
-  width: 32px;
+  gap: 6px;
+  padding: 4px 10px;
   border: 0;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-full);
   background: var(--recess-fill);
   color: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px var(--line-input);
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-
-.bloomLock > span {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 .bloomLock:hover {

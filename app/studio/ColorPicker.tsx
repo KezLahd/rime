@@ -58,7 +58,7 @@ function hsvToRgb(h: number, s: number, v: number): Rgb {
  * hue, hex input is editable and syncs both ways. All sharp corners,
  * matches the kit's chrome.
  */
-export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: Rgb) => void }) {
+export function ColorPicker({ colour, onChange, alpha }: { colour: Rgb; onChange: (c: Rgb) => void; alpha?: boolean }) {
   const palette = useBrandPalette();
   const initial = rgbToHsv(colour);
   const [h, setH] = useState(initial.h);
@@ -67,8 +67,10 @@ export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: R
   const [hexDraft, setHexDraft] = useState(toHex(colour));
   const squareRef = useRef<HTMLDivElement>(null);
   const hueRef = useRef<HTMLDivElement>(null);
+  const alphaRef = useRef<HTMLDivElement>(null);
   const colourRef = useRef(colour);
   colourRef.current = colour;
+  const a = colour.a ?? 1;
 
   const pickSwatch = (hex: string) => {
     const parsed = parseHex(hex);
@@ -79,6 +81,26 @@ export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: R
     setV(hsv.v);
     setHexDraft(hex);
     onChange({ ...parsed, a: colourRef.current.a });
+  };
+
+  const dragAlpha = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = alphaRef.current;
+    if (!el) return;
+    e.preventDefault();
+    el.setPointerCapture(e.pointerId);
+    const apply = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      onChange({ ...colourRef.current, a: Number(x.toFixed(3)) });
+    };
+    apply(e.clientX);
+    const onMove = (ev: PointerEvent) => apply(ev.clientX);
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
   };
 
   // When the external colour changes (hex typed, Reset clicked, step
@@ -174,6 +196,30 @@ export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: R
       >
         <div className={styles.hueCursor} style={{ left: `${(h / 360) * 100}%` }} />
       </div>
+
+      {/* Alpha strip: a checker underlay with the current hue gradient
+          over it so the user sees exactly what transparency looks like
+          over the Studio background. Only rendered when the caller
+          opts in (alpha prop) — most colour tokens in Rime are opaque,
+          and showing it everywhere would confuse the common case. */}
+      {alpha ? (
+        <div
+          ref={alphaRef}
+          className={styles.alpha}
+          onPointerDown={dragAlpha}
+          role="slider"
+          aria-label="Opacity"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(a * 100)}
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(${colour.r}, ${colour.g}, ${colour.b}, 0) 0%, rgb(${colour.r}, ${colour.g}, ${colour.b}) 100%), repeating-conic-gradient(#d6d6d6 0% 25%, #ffffff 0% 50%)`,
+            backgroundSize: `100% 100%, 10px 10px`,
+          }}
+        >
+          <div className={styles.alphaCursor} style={{ left: `${a * 100}%` }} />
+        </div>
+      ) : null}
 
       <input
         type="text"
