@@ -1259,18 +1259,13 @@
   display: contents;
 }
 
-/* Dashboard: chart on the left, focused summary panel on the right.
-   NO stat cards. */
+/* Dashboard stacked: chart card on top, summary panel underneath.
+   NO stat cards. User asked for stacked instead of side-by-side so
+   each component has the full column width to breathe. */
 .layoutDashGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-}
-
-@media (max-width: 960px) {
-  .layoutDashGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 .layoutChartCard {

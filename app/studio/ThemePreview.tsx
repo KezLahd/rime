@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/Badge/Badge";
 import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Field } from "@/components/ui/Field/Field";
-import { GlassPanel, IconBook, IconClipboard, IconHome, IconUsers, Toggletip } from "@/components/ui";
+import { GlassPanel, IconClipboard, IconHome, IconUsers, Toggletip } from "@/components/ui";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
 import { Modal } from "@/components/ui/Modal/Modal";
@@ -54,7 +54,6 @@ const NAV = [
   { href: "#preview-top", label: "Dashboard", icon: <IconHome size={16} />, exact: true },
   { href: "#preview-forms", label: "Projects", icon: <IconClipboard size={16} />, count: 2 },
   { href: "#preview-data", label: "Team", icon: <IconUsers size={16} /> },
-  { href: "#preview-docs", label: "Docs", icon: <IconBook size={16} /> },
 ];
 
 /**
@@ -913,18 +912,16 @@ function HoverShowcase({ category, brand }: { category: "buttons" | "washes" | "
   );
 }
 
-type LayoutPage = "dashboard" | "projects" | "team" | "docs";
+type LayoutPage = "dashboard" | "projects" | "team";
 const HREF_TO_PAGE: Record<string, LayoutPage> = {
   "#preview-top": "dashboard",
   "#preview-forms": "projects",
   "#preview-data": "team",
-  "#preview-docs": "docs",
 };
 const PAGE_TO_HREF: Record<LayoutPage, string> = {
   dashboard: "#preview-top",
   projects: "#preview-forms",
   team: "#preview-data",
-  docs: "#preview-docs",
 };
 
 /**
@@ -950,7 +947,7 @@ function LayoutShowcase({ brand, logoSrc, logoAlt, logoCorner, layout }: { brand
     setPage(next);
   };
 
-  const title = page === "dashboard" ? "Dashboard" : page === "projects" ? "Projects" : page === "team" ? "Team" : "Docs";
+  const title = page === "dashboard" ? "Dashboard" : page === "projects" ? "Projects" : "Team";
 
   return (
     <div onClick={handleNavClick} className={styles.layoutShowcaseWrap}>
@@ -968,7 +965,6 @@ function LayoutShowcase({ brand, logoSrc, logoAlt, logoCorner, layout }: { brand
         {page === "dashboard" ? <LayoutDashboardPage brand={brand} /> : null}
         {page === "projects" ? <LayoutProjectsPage brand={brand} /> : null}
         {page === "team" ? <LayoutTeamPage brand={brand} /> : null}
-        {page === "docs" ? <LayoutDocsPage brand={brand} /> : null}
       </SidebarShell>
     </div>
   );
@@ -1136,44 +1132,6 @@ function LayoutTeamPage({ brand }: { brand: BrandNames }) {
           ))}
         </ul>
       </GlassPanel>
-    </div>
-  );
-}
-
-function LayoutDocsPage({ brand }: { brand: BrandNames }) {
-  return (
-    <div className={styles.layoutPage}>
-      <section className={styles.layoutHero}>
-        <div>
-          <p className={styles.layoutEyebrow}>{brand.full} · Docs</p>
-          <h2 className={styles.layoutTitle}>Getting started</h2>
-          <p className={styles.layoutLede}>Four short pages. Fifteen minutes end-to-end. By the end you&apos;ll have your first project live.</p>
-        </div>
-      </section>
-      <div className={styles.layoutDocsLayout}>
-        <aside className={styles.layoutDocsToc}>
-          <p className={styles.layoutEyebrow}>Contents</p>
-          <ul>
-            <li><span className={styles.layoutDocsLinkActive}>1 · Install</span></li>
-            <li>2 · First project</li>
-            <li>3 · Deploy</li>
-            <li>4 · Invite your team</li>
-          </ul>
-        </aside>
-        <GlassPanel padding="lg" className={styles.layoutDocsBody}>
-          <h3 className={styles.layoutDocsHeading}>Install the CLI</h3>
-          <p className={styles.layoutDocsPara}>Run the one-line installer. It drops the binary into <code className={styles.layoutDocsCode}>~/.local/bin</code> and adds it to your PATH.</p>
-          <pre className={styles.layoutDocsPre}>
-            <code>{`curl -fsSL https://${brand.domain}/install.sh | sh`}</code>
-          </pre>
-          <h3 className={styles.layoutDocsHeading}>Verify</h3>
-          <p className={styles.layoutDocsPara}>Open a new shell and check the version:</p>
-          <pre className={styles.layoutDocsPre}>
-            <code>{`${brand.word.toLowerCase()} --version\n→ 1.4.0`}</code>
-          </pre>
-          <p className={styles.layoutDocsPara}>You&apos;re done. On to the next page: your first project.</p>
-        </GlassPanel>
-      </div>
     </div>
   );
 }
