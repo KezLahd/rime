@@ -114,10 +114,10 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
             {layer.kind === "linear" ? (
               <>
                 <AngleRow label="Gradient direction" value={((Math.round(layer.angle) % 360) + 360) % 360} onChange={(a) => editLayer(i, { angle: a })} />
-                {layers.length === 1 ? (
+                {layers.length === 1 && layer.stops.length === 2 ? (
                   <SliderRow
                     label="Softness"
-                    help="How much of the length the colours spend blending. 1 keeps the end stops at the preset's spread; 0 pulls them to the midpoint so the colours meet hard-edged. Dragging the end markers on the bar below moves this slider in step."
+                    help="How much of the length the colours spend blending. 1 keeps the end stops at the preset's spread; 0 pulls them to the midpoint so the colours meet hard-edged. Dragging the end markers on the bar below moves this slider in step. The slider hides as soon as you add a stop on the bar — with intermediate stops a single softness number can't describe the shape, so drag the stops themselves instead."
                     value={softness}
                     min={0}
                     max={1}
