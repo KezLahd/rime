@@ -190,16 +190,18 @@ export function Group({
 }
 
 function ResetButton({ label, changed, onReset }: { label: string; changed?: boolean; onReset?: () => void }) {
+  const disabled = !changed || !onReset;
   return (
-    <IconButton
-      size="sm"
-      label={`Reset ${label}`}
-      icon={<RotateCcw size={13} aria-hidden="true" />}
-      className={cx(styles.reset, !(changed && onReset) && styles.resetHidden)}
+    <button
+      type="button"
+      className={cx(styles.resetChip, disabled && styles.resetChipDisabled, styles.reset)}
+      disabled={disabled}
       onClick={onReset}
-      disabled={!changed || !onReset}
-      title="Back to the preset"
-    />
+      aria-label={`Reset ${label}`}
+      title={disabled ? "At the preset" : `Reset ${label}`}
+    >
+      <RotateCcw size={12} aria-hidden="true" />
+    </button>
   );
 }
 

@@ -6,7 +6,7 @@ import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
 import { AngleRow, CheckRow, ColourRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, SurfaceStrip, useShadowSelection } from "../controls";
 import { parseColour, toCss, toHex, type Rgb } from "../engine/colour";
-import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass, shadowDepth } from "../engine/macros";
+import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
 import styles from "../Studio.module.css";
 
@@ -286,7 +286,17 @@ const GLASS_SHADOW_TOKENS = new Set<string>([
  * the swatch writes "r, g, b" so buildShadow turns it into a literal
  * rgba; picking a palette ref writes the channel name as before.
  */
-function ShadowColourRow({ channel, onChange }: { channel: string; onChange: (channel: string) => void }) {
+function ShadowColourRow({
+  channel,
+  onChange,
+  changed,
+  onReset,
+}: {
+  channel: string;
+  onChange: (channel: string) => void;
+  changed?: boolean;
+  onReset?: () => void;
+}) {
   // Current colour for the swatch preview. Palette refs resolve via
   // the CSS probe at render time; "r, g, b" literals parse directly.
   const isRef = channel.startsWith("--");
@@ -315,7 +325,12 @@ function ShadowColourRow({ channel, onChange }: { channel: string; onChange: (ch
   const selectValue = CHANNELS.some((c) => c.value === channel) ? channel : "custom";
 
   return (
-    <Row label="Shadow colour" help="Pick a specific hex in the swatch, or follow a palette token (brand / deep / contact / press). Hex pins a literal colour; the palette dropdown keeps the shadow following your theme.">
+    <Row
+      label="Shadow colour"
+      help="Pick a specific hex in the swatch, or follow a palette token (brand / deep / contact / press). Hex pins a literal colour; the palette dropdown keeps the shadow following your theme."
+      changed={changed}
+      onReset={onReset}
+    >
       <ColourSwatch label="Shadow colour" colour={rgb} onChange={setFromRgb} />
       <Select
         size="sm"
@@ -333,21 +348,25 @@ function ShadowColourRow({ channel, onChange }: { channel: string; onChange: (ch
 }
 
 export function ShadowPanel({ api }: { api: StudioApi }) {
-  const depth = ctl(api, "depth", 1);
   const [token, setToken] = useState(ELEVATIONS[2].token);
   const current = api.value(token) ?? api.resolved(token);
-  const params = guessParams(current || "0 12px 48px rgba(var(--rgb-brand-deep), 0.16)");
-  const [p, setP] = useState<ShadowParams>(params);
-  const [forToken, setForToken] = useState(token);
-  if (forToken !== token) {
-    setForToken(token);
-    setP(params);
-  }
+  // `p` is the LIVE params. Instead of keeping it in local state (which
+  // drifts out of sync with the token when a reset chip or the brush
+  // elsewhere rewrites the token), derive it from the current CSS value
+  // every render. Edits flow value → setParams → buildShadow → api.set.
+  const p: ShadowParams = guessParams(current || "0 12px 48px rgba(var(--rgb-brand-deep), 0.16)");
   const update = (patch: Partial<ShadowParams>) => {
-    const next = { ...p, ...patch };
-    setP(next);
-    api.set({ [token]: buildShadow(next) });
+    api.set({ [token]: buildShadow({ ...p, ...patch }) });
   };
+
+  // Baseline params for per-slider resets. Prefers the applied-palette
+  // baseline when the user applied one on step 1; falls back to the
+  // preset's own value otherwise. So "reset Distance" means "back to
+  // the Distance from your applied theme", not "back to Rime Default".
+  const baselineRaw =
+    api.theme.baseline?.[token] ?? api.base.get(token) ?? current ?? "0 12px 48px rgba(var(--rgb-brand-deep), 0.16)";
+  const basePrms: ShadowParams = guessParams(baselineRaw);
+
   const depthNames = ELEVATIONS.map((e) => e.token);
 
   // Broadcast which shadow is being edited; the preview on the right
@@ -374,16 +393,68 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
         isComplete={(t) => api.changed(t)}
       />
       <Group title="One elevation" help="Direction, distance, softness, spread, a tinted colour and one to three layers: a shade above, the fall, and a tight contact shadow.">
-        <AngleRow label="Shadow direction" value={p.angle} onChange={(v) => update({ angle: v })} changed={api.changed(token)} onReset={() => api.reset([token])} />
-        <SliderRow label="Distance" value={p.distance} min={0} max={48} step={1} unit="px" onChange={(v) => update({ distance: v })} />
-        <SliderRow label="Softness" value={p.blur} min={0} max={96} step={1} unit="px" onChange={(v) => update({ blur: v })} />
-        <SliderRow label="Spread" value={p.spread} min={-32} max={16} step={1} unit="px" onChange={(v) => update({ spread: v })} />
-        <SliderRow label="Strength" displayScale={100} unit="%" value={p.opacity} min={0} max={0.6} step={0.01} onChange={(v) => update({ opacity: v })} />
+        <AngleRow
+          label="Shadow direction"
+          value={p.angle}
+          onChange={(v) => update({ angle: v })}
+          changed={p.angle !== basePrms.angle}
+          onReset={p.angle !== basePrms.angle ? () => update({ angle: basePrms.angle }) : undefined}
+        />
+        <SliderRow
+          label="Distance"
+          value={p.distance}
+          min={0}
+          max={48}
+          step={1}
+          unit="px"
+          onChange={(v) => update({ distance: v })}
+          changed={p.distance !== basePrms.distance}
+          onReset={() => update({ distance: basePrms.distance })}
+        />
+        <SliderRow
+          label="Softness"
+          value={p.blur}
+          min={0}
+          max={96}
+          step={1}
+          unit="px"
+          onChange={(v) => update({ blur: v })}
+          changed={p.blur !== basePrms.blur}
+          onReset={() => update({ blur: basePrms.blur })}
+        />
+        <SliderRow
+          label="Spread"
+          value={p.spread}
+          min={-32}
+          max={16}
+          step={1}
+          unit="px"
+          onChange={(v) => update({ spread: v })}
+          changed={p.spread !== basePrms.spread}
+          onReset={() => update({ spread: basePrms.spread })}
+        />
+        <SliderRow
+          label="Strength"
+          displayScale={100}
+          unit="%"
+          value={p.opacity}
+          min={0}
+          max={0.6}
+          step={0.01}
+          onChange={(v) => update({ opacity: v })}
+          changed={Math.abs(p.opacity - basePrms.opacity) > 0.001}
+          onReset={() => update({ opacity: basePrms.opacity })}
+        />
 
         {/* Shadow colour: a proper swatch + Follow-palette dropdown.
             The channel value stays as "--rgb-xxx" (palette ref) OR
             "r, g, b" (literal) so buildShadow still works unchanged. */}
-        <ShadowColourRow channel={p.channel} onChange={(c) => update({ channel: c })} />
+        <ShadowColourRow
+          channel={p.channel}
+          onChange={(c) => update({ channel: c })}
+          changed={p.channel !== basePrms.channel}
+          onReset={() => update({ channel: basePrms.channel })}
+        />
 
         {/* Layers: segmented 1 / 2 / 3 with an info toggletip that
             explains what each option adds, so the user isn't guessing
@@ -393,10 +464,12 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
           help={
             <div>
               <p style={{ marginTop: 0 }}><b>1 — The fall.</b> One soft drop under the surface. Lightest, cheapest; good for Row and Hairline tokens.</p>
-              <p><b>2 — Fall + contact.</b> Adds a tight contact shadow directly under the surface. Reads as "sitting on" rather than floating.</p>
-              <p style={{ marginBottom: 0 }}><b>3 — Shade above too.</b> Adds a subtle shade ABOVE the surface opposite the fall. Reads as "lit from one side"; useful on Modal and Highlight cards.</p>
+              <p><b>2 — Fall + contact.</b> Adds a tight contact shadow directly under the surface. Reads as &quot;sitting on&quot; rather than floating.</p>
+              <p style={{ marginBottom: 0 }}><b>3 — Shade above too.</b> Adds a subtle shade ABOVE the surface opposite the fall. Reads as &quot;lit from one side&quot;; useful on Modal and Highlight cards.</p>
             </div>
           }
+          changed={p.layers !== basePrms.layers}
+          onReset={p.layers !== basePrms.layers ? () => update({ layers: basePrms.layers }) : undefined}
         >
           <ToggleGroup
             type="single"
@@ -425,7 +498,6 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
           />
         ) : null}
       </Group>
-      {depthNames.some(api.changed) && depth !== 1 ? <Notice tone="warn">Depth and a hand-edited elevation both write shadows; the last one you touch wins.</Notice> : null}
       <Advanced api={api} tokens={depthNames.concat(["--glow-sm", "--glow-md-hover", "--glow-lg", "--glow-danger"])} />
     </>
   );

@@ -806,11 +806,10 @@
   cursor: default;
 }
 
-.sliderRow > .reset {
-  position: absolute;
-  top: -2px;
-  right: 0;
-}
+/* .sliderRow > .reset legacy rule no longer in use — the slider's
+   reset chip now lives inside the sliderHead right cluster, laid out
+   with the number field. Kept the selector as a no-op in case any
+   theme reaches for it. */
 
 /* Disabled slider rows: head text + value readout grey out; the (i)
    toggletip stays interactive so the user can read why the slider
