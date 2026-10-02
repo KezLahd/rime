@@ -804,11 +804,11 @@ export function HoverPanel({ api }: { api: StudioApi }) {
         <Group title="Motion" help="How long non-button transitions take and the curve they follow. These feed every surface that doesn't have its own duration (hover washes, popover opens, modal fades, caret moves). Reduced-motion users still see 0 regardless.">
           <SliderRow
             label="Fast"
-            help="Micro transitions: hover highlights, focus rings, caret moves. Default 120 ms. Range tops out at 300 ms so a reasonable value stays mid-slider. Shorter feels snappy, longer feels luxurious."
+            help="Micro transitions: hover highlights, focus rings, caret moves. Default 120 ms. Shorter feels snappy; longer feels luxurious."
             token="--dur-fast"
             value={num(api.value("--dur-fast"), 120)}
             min={50}
-            max={300}
+            max={600}
             step={10}
             unit="ms"
             changed={api.changed("--dur-fast")}
@@ -821,7 +821,7 @@ export function HoverPanel({ api }: { api: StudioApi }) {
             token="--dur"
             value={num(api.value("--dur"), 150)}
             min={50}
-            max={400}
+            max={800}
             step={10}
             unit="ms"
             changed={api.changed("--dur")}
@@ -830,11 +830,11 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Slow"
-            help="Longer transitions: modal fades, page-level shifts. 200 ms by default. Pushing this above ~400 ms starts to feel sluggish."
+            help="Longer transitions: modal fades, page-level shifts. 200 ms by default. Anything over ~500 ms starts to feel sluggish, but the slider goes further for cinematic use."
             token="--dur-slow"
             value={num(api.value("--dur-slow"), 200)}
             min={100}
-            max={500}
+            max={1200}
             step={10}
             unit="ms"
             changed={api.changed("--dur-slow")}

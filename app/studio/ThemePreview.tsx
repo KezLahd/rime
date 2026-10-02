@@ -893,13 +893,13 @@ function HoverShowcase({ category, brand }: { category: "buttons" | "washes" | "
             <div className={styles.hoverMotionTrack}>
               <span
                 className={styles.hoverMotionBall}
-                style={{ animationDuration: `var(${row.varName})` }}
+                style={{ transitionDuration: `var(${row.varName})` }}
                 aria-label={`${row.label} transition demo`}
               />
             </div>
           </div>
         ))}
-        <p className={styles.catFootnote}>Each ball ping-pongs between the ends at the matching duration — the three speeds run side-by-side so you can feel the gap between them. Drag the sliders and the pace updates live.</p>
+        <p className={styles.catFootnote}>Hover a track and the ball slides to the far end at that row&apos;s duration; move the pointer off to run it back. Trigger them in sequence to feel the gap between Fast, Standard and Slow.</p>
       </GlassPanel>
     </div>
   );

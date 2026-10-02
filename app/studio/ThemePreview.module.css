@@ -1058,22 +1058,18 @@
   color: var(--ink-muted);
 }
 
-/* Each row runs an infinite ping-pong CSS animation at its duration
-   token, multiplied by a factor that keeps the loop visible but not
-   dizzying. The user sees the three speeds running next to each other
-   without having to hover anything — the Motion step is about
-   comparing durations, so autoplay is the right call. */
-@keyframes hoverMotionPingPong {
-  from { left: 4px; }
-  to { left: calc(100% - 28px); }
-}
-
+/* Hover a track and the ball slides to the far end at the matching
+   duration token's speed; pointer leaves and it runs back at the same
+   speed. Three tracks sitting next to each other so the user can
+   trigger them in sequence and feel the delta between Fast, Standard
+   and Slow. */
 .hoverMotionTrack {
   position: relative;
   height: 32px;
   border-radius: var(--r-full);
   background: var(--recess-fill);
   box-shadow: inset 0 0 0 1px var(--line-input);
+  cursor: pointer;
 }
 
 .hoverMotionBall {
@@ -1086,19 +1082,13 @@
   border-radius: 50%;
   background: var(--brand);
   box-shadow: var(--glow-md);
-  animation-name: hoverMotionPingPong;
-  animation-duration: inherit; /* overridden inline per row */
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-timing-function: var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+  transition-property: left;
+  transition-duration: inherit; /* overridden inline per row */
+  transition-timing-function: var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hoverMotionBall {
-    animation: none;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+.hoverMotionTrack:hover .hoverMotionBall {
+  left: calc(100% - 28px);
 }
 
 /* ── Shadows showcase ───────────────────────────────────────────────── */
