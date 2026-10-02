@@ -105,12 +105,20 @@ export function previewCss(theme: StudioTheme, active: Record<string, string>): 
  * there), and any token the theme sets that the base does not declare (a
  * component hook such as --button-radius) is un-declared with "initial", so
  * the components fall back to their defaults inside the panel.
+ *
+ * The theme is passed in so we can also un-declare --shell-logo on the
+ * studio chrome — the uploaded logo is not part of `active` (it's injected
+ * directly by previewCss) but it would otherwise cascade onto the kit's
+ * own top-bar logo via the `:root:root:has(...)` arm of PREVIEW_SELECTOR.
  */
-export function pinCss(active: Record<string, string>, base: ReadonlyMap<string, string>): string {
+export function pinCss(active: Record<string, string>, base: ReadonlyMap<string, string>, theme?: StudioTheme): string {
   const keys = Object.keys(active);
-  if (!keys.length || !base.size) return "";
+  const hasLogo = Boolean(theme?.logo?.src);
+  if (!keys.length && !hasLogo) return "";
+  if (!base.size) return "";
   const entries: Array<[string, string]> = [...base];
   for (const k of keys) if (!base.has(k)) entries.push([k, "initial"]);
+  if (hasLogo && !base.has("--shell-logo")) entries.push(["--shell-logo", "initial"]);
   return `[data-studio-panel][data-studio-panel] {
 ${decls(entries)}
 }`;

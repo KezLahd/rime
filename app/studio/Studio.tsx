@@ -424,7 +424,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   );
 
   const css = previewCss(theme, active);
-  const pin = pinCss(active, base);
+  const pin = pinCss(active, base, theme);
 
   // After each change has painted: re-read every token and re-run the guard.
   useEffect(() => {
