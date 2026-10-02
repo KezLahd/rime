@@ -1,13 +1,28 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { Popover } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { ColorPicker } from "./ColorPicker";
 import { parseColour, toCss, toHex, type Rgb } from "./engine/colour";
 import { positioned, type Stop } from "./engine/gradient";
 import styles from "./Studio.module.css";
+
+/** Palette refs available for every gradient stop. Picking one makes the
+ *  stop follow that palette token (so later edits to the palette ripple
+ *  through); the ColorPicker below the strip is the "fixed hex" fall-back. */
+const STOP_PALETTE_REFS: ReadonlyArray<{ label: string; value: string }> = [
+  { label: "Brand", value: "var(--brand)" },
+  { label: "Deep", value: "var(--brand-deep)" },
+  { label: "Accent", value: "var(--brand-soft)" },
+  { label: "Strong", value: "var(--brand-strong)" },
+  { label: "Action", value: "var(--brand-action)" },
+  { label: "Neutral", value: "var(--support)" },
+  { label: "Night", value: "var(--night)" },
+  { label: "Danger", value: "var(--danger-base-solid)" },
+  { label: "Success", value: "var(--success-solid)" },
+];
 
 /**
  * Adobe-style gradient stops editor:
@@ -113,6 +128,12 @@ export function StopsBar({
     onChange(p.map((s, i) => (i === index ? { ...s, color: next } : s)));
   };
 
+  const setStopPaletteRef = (index: number, value: string) => {
+    const original = p[index].color;
+    if (value === original) return;
+    onChange(p.map((s, i) => (i === index ? { ...s, color: value } : s)));
+  };
+
   return (
     <div className={styles.stopsBarWrap}>
       <div
@@ -159,12 +180,43 @@ export function StopsBar({
                 </button>
               }
             >
-              <ColorPicker colour={rgb} onChange={(c) => updateStopColour(i, c)} />
+              <div className={styles.stopPickerShell}>
+                {/* Palette ref chips first: picking one makes the stop
+                    follow the token, so palette edits elsewhere ripple
+                    into this gradient. The ColorPicker below pins a
+                    fixed hex instead. */}
+                <div className={styles.stopPaletteRefs}>
+                  <span className={styles.stopPaletteRefsLabel}>Follow palette</span>
+                  <div className={styles.stopPaletteRefsRow}>
+                    {STOP_PALETTE_REFS.map((ref) => {
+                      const active = s.color === ref.value;
+                      return (
+                        <button
+                          key={ref.value}
+                          type="button"
+                          className={cx(styles.stopPaletteRef, active && styles.stopPaletteRefActive)}
+                          onClick={() => setStopPaletteRef(i, ref.value)}
+                          title={ref.label}
+                        >
+                          <span className={styles.stopPaletteRefSwatch} style={{ background: ref.value }} aria-hidden="true" />
+                          <span>{ref.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <ColorPicker colour={rgb} onChange={(c) => updateStopColour(i, c)} />
+              </div>
             </Popover>
           );
         })}
       </div>
-      <span className={styles.stopsBarHint}>Click to add a stop · drag to move · click a stop to pick its colour</span>
+      {/* Instruction hint ("Click to add a stop · drag to move…")
+          removed. It overlapped the bar when the panel was dragged
+          narrow, and wrapped into the colour row below at even wider
+          widths. The interactions are discoverable from the markers
+          and the cursor change on the bar; the Softness help toggletip
+          above spells them out when needed. */}
     </div>
   );
 }
