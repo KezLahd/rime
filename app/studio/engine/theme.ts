@@ -96,9 +96,17 @@ export function overrideEntries(theme: StudioTheme): Array<[string, string]> {
   return [...Object.entries(theme.overrides), ...logoEntry(theme)];
 }
 
-/** The preview: only what is in force for the current mode, so light edits never leak into dark. */
-export function previewCss(theme: StudioTheme, active: Record<string, string>): string {
-  const entries = [...Object.entries(active), ...logoEntry(theme)];
+/**
+ * The preview: EVERY base token for the Studio's chosen preset + mode,
+ * then the user's overrides on top. Writing the full base makes the
+ * preview self-contained, so clicking the kit's top-bar Default / Flat
+ * (which sets `data-theme` on `<html>`) can't leak the opposite preset
+ * into the preview via inherited tokens. Light edits never leak into
+ * dark because `active` already filters by the current mode.
+ */
+export function previewCss(theme: StudioTheme, active: Record<string, string>, baseTokens: ReadonlyMap<string, string>): string {
+  // Order matters: base first, then overrides win within the same selector.
+  const entries: Array<[string, string]> = [...baseTokens, ...Object.entries(active), ...logoEntry(theme)];
   return entries.length ? `${PREVIEW_SELECTOR} {\n${decls(entries)}\n}` : "";
 }
 

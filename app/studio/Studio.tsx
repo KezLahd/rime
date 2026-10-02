@@ -315,26 +315,33 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  // The top bar's preset switch moves the base; overrides are kept.
+  // The top bar's Default / Flat and Light / Dark buttons set `data-theme`
+  // and `.dark` on <html>. The Studio preview is independent of those
+  // now (previewCss writes the full base tokens into [data-theme-studio]
+  // itself), so changes to <html> no longer have to propagate into the
+  // Studio's theme state. We leave the kit's top bar working for the
+  // rest of the site; the Studio's preview tracks its own theme.base /
+  // theme.mode which the user controls via the Studio's own panels
+  // (Default / Flat on the Glass step).
+  //
+  // We DO still watch for mode changes so a user flipping the top bar
+  // to Dark mid-session gets a dark preview on next render — otherwise
+  // the Light tokens injected by previewCss would stay stale.
   useEffect(() => {
     const html = document.documentElement;
     const mo = new MutationObserver(() => {
-      const b = baseOfDocument();
       const m = modeOfDocument();
       const t0 = themeRef.current;
-      if (b !== t0.base || m !== t0.mode) {
-        // A mode switch is a view change, not an edit: no undo step.
-        if (b === t0.base) {
-          const n = { ...t0, mode: m };
-          themeRef.current = n;
-          setTheme(n);
-        } else commit((t) => ({ ...t, base: b, mode: m, name: t.name === presetName(t.base) ? presetName(b) : t.name }));
-        setStatus(`Editing ${lookName(b, m)}`);
+      if (m !== t0.mode) {
+        const n = { ...t0, mode: m };
+        themeRef.current = n;
+        setTheme(n);
+        setStatus(`Editing ${lookName(t0.base, m)}`);
       }
     });
-    mo.observe(html, { attributes: true, attributeFilter: ["data-theme", "data-mode", "class"] });
+    mo.observe(html, { attributes: true, attributeFilter: ["data-mode", "class"] });
     return () => mo.disconnect();
-  }, [commit]);
+  }, []);
 
   // Keep the working theme across reloads (debounced: a logo's data URL makes
   // every write large), and tell the docs' logo slot when the logo changes.
@@ -402,6 +409,15 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
           ...t,
           brand: name.length === 0 ? undefined : name.slice(0, 60),
         })),
+      setBase: (next) =>
+        commit((t) => ({
+          ...t,
+          base: next,
+          // Rename the theme to the new preset's name only when the user
+          // hadn't renamed it from the preset's default — same rule as
+          // the opening sync did before the preview isolation.
+          name: t.name === presetName(t.base) ? presetName(next) : t.name,
+        })),
       fonts,
     }),
     [view, theme, active, perMode, base, resolvedMap, commit, fonts],
@@ -437,7 +453,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     [resolveExpr, resolveColour],
   );
 
-  const css = previewCss(theme, active);
+  const css = previewCss(theme, active, base);
   const pin = pinCss(active, base, theme);
 
   // After each change has painted: re-read every token and re-run the guard.

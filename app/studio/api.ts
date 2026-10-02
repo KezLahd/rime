@@ -24,6 +24,8 @@ export type StudioApi = {
   setLogo: (logo: StudioTheme["logo"]) => void;
   /** Set the business name shown in every preview placeholder (empty clears it). */
   setBrand: (name: string) => void;
+  /** Switch the preview between the Default and Flat preset base. */
+  setBase: (base: StudioTheme["base"]) => void;
   /** Fonts the studio can load (self-hosted by next/font). */
   fonts: ReadonlyArray<StudioFont>;
 };

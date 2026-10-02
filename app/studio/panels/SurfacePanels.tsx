@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui";
+import { Button, ToggleGroup } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, CheckRow, ColourRow, Group, Notice, SelectRow, SliderRow } from "../controls";
+import { AngleRow, CheckRow, ColourRow, Group, Notice, Row, SelectRow, SliderRow } from "../controls";
 import { colourOf, controlHeights, glassOff, glassSurface, GLASS_SURFACES, radiusScale, RADIUS_STEPS, readBlur, readGlass, shadowDepth } from "../engine/macros";
 import { buildShadow, guessParams, scaleAlphas, type ShadowParams } from "../engine/shadow";
 import styles from "../Studio.module.css";
@@ -166,8 +166,29 @@ const ALL_GLASS = [
 
 export function GlassTab({ api }: { api: StudioApi }) {
   const off = api.theme.controls.glassOff === true;
+  const base = api.theme.base;
   return (
     <>
+      {/* Preset first: the choice between Rime Default (frosted glass +
+          brand accents) and Rime Flat (opaque surfaces, small radii, no
+          blur). Flipping this swaps the base tokens the preview reads,
+          independently of the kit's top-bar Default / Flat (which now
+          only affects the rest of the site, not the Studio preview). */}
+      <Group title="Preset" help="Default is Rime's frosted preset — translucent panels, rounder radii, soft glows. Flat drops the blur, flattens the corners and loses the glow for a crisper, document-y look. All your edits so far stay; only the untouched tokens follow the new base.">
+        <Row label="Base">
+          <ToggleGroup
+            type="single"
+            size="sm"
+            aria-label="Preset"
+            value={base}
+            onValueChange={(v: string | null) => v && (v === "default" || v === "flat") && api.setBase(v)}
+            items={[
+              { value: "default", label: "Default" },
+              { value: "flat", label: "Flat" },
+            ]}
+          />
+        </Row>
+      </Group>
       <Group title="On or off">
         <CheckRow
           label="Frosted glass"
