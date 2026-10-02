@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Field, TextInput } from "@/components/ui";
 import { cx } from "@/components/ui/_internal/cx";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { ColourRow, Group, Notice, useFontHover } from "../controls";
+import { ColourRow, Group, Notice, SurfaceStrip, useColourCategory, useFontHover, type ColourCategory } from "../controls";
 import { FontDropdown } from "../FontDropdown";
 import { colourOf, setColour } from "../engine/macros";
 import styles from "../Studio.module.css";
@@ -90,40 +90,68 @@ function useColourRow(api: StudioApi) {
 const withChannels = (rows: ReadonlyArray<readonly [string, string, string]>) =>
   rows.flatMap(([n]) => (CHANNELS[n] ? [n, CHANNELS[n]] : [n]));
 
-export function BrandPanel({ api }: { api: StudioApi }) {
-  const row = useColourRow(api);
-  return (
-    <>
-      <Group title="Brand colours" note="Pick the brand. Every tint, wash, glow and gradient built from it follows.">
-        {PALETTE.map(row)}
-      </Group>
-      <Advanced api={api} tokens={[...withChannels(PALETTE), "--brand-gradient", "--brand-gradient-soft", "--brand-gradient-wash"]} />
-    </>
-  );
-}
+type ColourSection = {
+  id: ColourCategory;
+  label: string;
+  note: string;
+  rows: ReadonlyArray<[string, string, string]>;
+};
 
-export function ColourPanel({ api }: { api: StudioApi }) {
+const COLOUR_SECTIONS: ReadonlyArray<ColourSection> = [
+  { id: "brand", label: "Brand", note: "Pick the brand. Every tint, wash, glow and gradient built from it follows.", rows: PALETTE },
+  { id: "text", label: "Text", note: "Keep muted text at 4.5:1 on the worst glass; the Contrast step shows where each stands.", rows: INKS },
+  { id: "signals", label: "Signals", note: "Danger and focus.", rows: SIGNALS },
+  { id: "field", label: "Page field", note: "The coloured ground the glass floats on.", rows: FIELD },
+  { id: "charts", label: "Charts", note: "The chart palette. Each series needs 3:1 against the surface it sits on.", rows: CHARTS },
+  { id: "ramp", label: "Chart ramp", note: "One hue, light to dark, for ordered categories.", rows: CHART_RAMP },
+];
+
+/**
+ * Colours step: one unified panel with a strip header for picking the
+ * category (Brand / Text / Signals / Page field / Charts / Chart ramp)
+ * and the matching colour rows below. The preview on the right syncs
+ * via useColourCategory, so it spotlights only the components that
+ * actually read the selected category's tokens.
+ */
+export function ColoursPanel({ api }: { api: StudioApi }) {
   const row = useColourRow(api);
+  const [active, setActive] = useState<ColourCategory>("brand");
+  const current = COLOUR_SECTIONS.find((s) => s.id === active) ?? COLOUR_SECTIONS[0];
+  const sectionDone = (s: ColourSection) =>
+    s.rows.some(([n]) => api.changed(n) || (CHANNELS[n] ? api.changed(CHANNELS[n]) : false));
+
+  // Broadcast the current category so ColourShowcase renders only the
+  // components that read it. Cleared on unmount so the preview falls
+  // back to the full showcase on other steps.
+  const broadcast = useColourCategory();
+  useEffect(() => {
+    broadcast(active);
+    return () => broadcast(null);
+  }, [active, broadcast]);
+
   return (
     <>
-      <Group title="Text" note="Keep muted text at 4.5:1 on the worst glass; the Contrast section shows where each stands.">
-        {INKS.map(row)}
-      </Group>
-      <Group title="Signals" note="Danger and focus.">
-        {SIGNALS.map(row)}
-      </Group>
-      <Group title="Page field" note="The coloured ground the glass floats on.">
-        {FIELD.map(row)}
-      </Group>
-      <Group title="Charts" note="The chart palette: every line, bar and donut reads these. Each series needs 3:1 against the surface it sits on.">
-        {CHARTS.map(row)}
-      </Group>
-      <Group title="Chart ramp" note="One hue, light to dark, for ordered categories.">
-        {CHART_RAMP.map(row)}
+      <SurfaceStrip
+        variant="header"
+        label="Colours"
+        value={active}
+        options={COLOUR_SECTIONS.map((s) => ({ value: s.id, label: s.label }))}
+        onChange={setActive}
+        isComplete={(cat) => {
+          const s = COLOUR_SECTIONS.find((x) => x.id === cat);
+          return !!s && sectionDone(s);
+        }}
+      />
+      <Group title={current.label} note={current.note}>
+        {current.rows.map(row)}
       </Group>
       <Advanced
         api={api}
         tokens={[
+          ...withChannels(PALETTE),
+          "--brand-gradient",
+          "--brand-gradient-soft",
+          "--brand-gradient-wash",
           ...withChannels(INKS),
           ...withChannels(SIGNALS),
           ...FIELD.map(([n]) => n),

@@ -34,7 +34,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { BrandPaletteProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type FontHoverState } from "./controls";
+import { BrandPaletteProvider, ColourCategoryProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, ShadowSelectionProvider, type BrandPalette, type ColourCategory, type FontHoverState } from "./controls";
 import { toHex } from "./engine/colour";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
@@ -57,7 +57,7 @@ import {
   type Preset,
   type StudioTheme,
 } from "./engine/theme";
-import { BrandPanel, ColourPanel, TypePanel } from "./panels/BrandPanel";
+import { ColoursPanel, TypePanel } from "./panels/BrandPanel";
 import { LogoPanel } from "./panels/LogoPanel";
 import { ComponentsPanel, ExportPanel, TokensPanel } from "./panels/DataPanels";
 import { BackgroundPanel } from "./panels/BackgroundPanel";
@@ -269,6 +269,10 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
   /** Which shadow token is being edited in the Shadows panel — the preview
    *  renders only the specimen that uses it (one card, one modal, etc.). */
   const [shadowSelection, setShadowSelection] = useState<string | null>(null);
+
+  /** Which category is open on the Colours step; the preview spotlights
+   *  only the components that read that category's tokens. */
+  const [colourCategory, setColourCategory] = useState<ColourCategory | null>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -786,16 +790,14 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <FontHoverProvider onHover={setFontHover}>
             <GradientSelectionProvider onSelect={setGradientSelection}>
             <ShadowSelectionProvider onSelect={setShadowSelection}>
+            <ColourCategoryProvider onSelect={setColourCategory}>
             <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
               <LogoPanel api={api} />
             ) : section === "colour" ? (
-              <>
-                <BrandPanel api={api} />
-                <ColourPanel api={api} />
-              </>
+              <ColoursPanel api={api} />
             ) : section === "type" ? (
               <TypePanel api={api} />
             ) : section === "image" ? (
@@ -824,6 +826,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
             </BrandPaletteProvider>
+            </ColourCategoryProvider>
             </ShadowSelectionProvider>
             </GradientSelectionProvider>
             </FontHoverProvider>
@@ -914,7 +917,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             }
           >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} shadowSelection={shadowSelection} />
+            <ThemePreview brand={theme.brand} logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} shadowSelection={shadowSelection} colourCategory={colourCategory} />
           </div>
         </section>
       </div>

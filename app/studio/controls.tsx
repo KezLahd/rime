@@ -108,6 +108,31 @@ export function ShadowSelectionProvider({
 export function useShadowSelection() {
   return useContext(ShadowSelectionContext);
 }
+
+/**
+ * Colour-category context: the Colours step broadcasts which category
+ * is currently being edited (brand, text, signals, field, charts,
+ * ramp); the ColourShowcase on the right reads it and renders ONLY the
+ * components that use that category's tokens, so the preview spotlights
+ * exactly what the user is reshaping.
+ */
+export type ColourCategory = "brand" | "text" | "signals" | "field" | "charts" | "ramp";
+const ColourCategoryContext = createContext<(cat: ColourCategory | null) => void>(() => {});
+
+export function ColourCategoryProvider({
+  onSelect,
+  children,
+}: {
+  onSelect: (cat: ColourCategory | null) => void;
+  children: ReactNode;
+}) {
+  const stable = useCallback(onSelect, [onSelect]);
+  return <ColourCategoryContext.Provider value={stable}>{children}</ColourCategoryContext.Provider>;
+}
+
+export function useColourCategory() {
+  return useContext(ColourCategoryContext);
+}
 import {
   Alert,
   IconButton,

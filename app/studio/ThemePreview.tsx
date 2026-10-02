@@ -91,6 +91,7 @@ export const ThemePreview = memo(function ThemePreview({
   peekToken,
   gradientSelection,
   shadowSelection,
+  colourCategory,
 }: {
   /** The business name typed on step 1. Fills every "Acme Inc" placeholder
    *  across the showcases; falls back to "Acme Inc" when empty. */
@@ -110,6 +111,9 @@ export const ThemePreview = memo(function ThemePreview({
   /** The shadow token currently selected in the Shadows panel. When set,
    *  the preview renders only the surface specimen that uses it. */
   shadowSelection?: string | null;
+  /** The colour category currently open on the Colours step. When set,
+   *  the showcase renders only components that read that category. */
+  colourCategory?: "brand" | "text" | "signals" | "field" | "charts" | "ramp" | null;
 }) {
   const brandText = brandNames(brand);
 
@@ -125,7 +129,7 @@ export const ThemePreview = memo(function ThemePreview({
   // status) grouped as a single demo page, like shadcn's landing. No
   // sidebar, no dashboard, no uncomposed grid of category cards.
   if (focus === "colour") {
-    return <ColourShowcase peekToken={peekToken ?? null} brand={brandText} />;
+    return <ColourShowcase peekToken={peekToken ?? null} brand={brandText} category={colourCategory ?? null} />;
   }
 
   // Fonts step: a type specimen with every scale (display, section, card,
@@ -266,8 +270,13 @@ function Spot({
   );
 }
 
-function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand: BrandNames }) {
+function ColourShowcase({ peekToken, brand, category }: { peekToken: string | null; brand: BrandNames; category: "brand" | "text" | "signals" | "field" | "charts" | "ramp" | null }) {
   const peek = peekToken;
+  // When a category is set, each section decides for itself whether to
+  // render. The map below documents which category each section exists
+  // to spotlight; a section is shown when category is null (fallback)
+  // OR included in its list.
+  const show = (cats: ReadonlyArray<string>) => category === null || cats.includes(category);
   return (
     <div className={styles.colourShowcase}>
       {/* Hero: brand ink + action + secondary + ghost. Every string that
@@ -275,6 +284,7 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           Good morning Jane, invoices awaiting approval…) is now coded
           to the business name typed on step 1 so the preview reads as
           the user's own dashboard, not a generic SaaS stand-in. */}
+      {show(["brand", "text"]) ? (
       <GlassPanel padding="lg" className={styles.colourHero}>
         <div className={styles.colourHeroText}>
           <Spot as="div" tokens="--ink-brand" peek={peek}>
@@ -314,8 +324,10 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           <Avatar name="Priya Shah" size="md" />
         </Spot>
       </GlassPanel>
+      ) : null}
 
       {/* Status badges + progress */}
+      {show(["brand", "signals"]) ? (
       <section className={styles.colourStatusRow}>
         <GlassPanel padding="md" className={styles.colourBadges}>
           <Spot as="span" tokens="--brand --brand-soft" peek={peek}>
@@ -361,11 +373,13 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           </Spot>
         </GlassPanel>
       </section>
+      ) : null}
 
       {/* Alerts: info (--brand-soft) + neutral (--support) + a table-head
           strip (--support via --table-head-fill). Previously the preview
           had nothing that used Accent (--brand-soft) or Neutral (--support)
           so dragging those rows did nothing visible. */}
+      {show(["signals", "text", "field"]) ? (
       <section className={styles.colourAlertsRow}>
         <Spot as="div" tokens="--brand --brand-deep --info-ink --line-brand" peek={peek}>
           <Alert tone="info" title="Three invoices awaiting review">
@@ -378,10 +392,12 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           </Alert>
         </Spot>
       </section>
+      ) : null}
 
       {/* Mini table head: --support drives the sweep gradient (see
           --table-head-fill in tokens.css), so changing Neutral tints the
           strip here. */}
+      {show(["field", "text", "signals"]) ? (
       <GlassPanel padding="md" className={styles.colourTableCard}>
         <header className={styles.colourCardHead}>
           <h3 className={styles.colourCardTitle}>Recent invoices</h3>
@@ -416,8 +432,10 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           </div>
         </Spot>
       </GlassPanel>
+      ) : null}
 
       {/* Chart + form */}
+      {show(["charts", "ramp", "brand", "text", "signals"]) ? (
       <section className={styles.colourGrid}>
         <GlassPanel padding="lg" className={styles.colourChartCard}>
           <header className={styles.colourCardHead}>
@@ -484,8 +502,10 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           </div>
         </GlassPanel>
       </section>
+      ) : null}
 
       {/* Filter chips + search */}
+      {show(["brand", "text"]) ? (
       <GlassPanel padding="md" className={styles.colourFilterBar}>
         <div className={styles.colourChips}>
           <Spot as="span" tokens="--brand --ink-brand --wash-active" peek={peek}>
@@ -512,6 +532,7 @@ function ColourShowcase({ peekToken, brand }: { peekToken: string | null; brand:
           />
         </Spot>
       </GlassPanel>
+      ) : null}
     </div>
   );
 }
