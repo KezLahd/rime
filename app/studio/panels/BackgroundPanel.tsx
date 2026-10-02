@@ -56,6 +56,21 @@ export function BackgroundPanel({ api, resolveColour }: { api: StudioApi; resolv
     api.reset([PAGE_BG_TOKEN]);
   };
 
+  // Flat colour: when the user has flattened the page bg, we read the
+  // single colour value the token is holding (either the var() ref to
+  // --page-base or a literal hex they picked). The swatch opens a
+  // picker; changing it writes a literal rgba, dropping the ref.
+  const flatValue = isFlat ? value.trim() : null;
+  const flatIsRef = flatValue === "var(--page-base)";
+  const flatRgb = resolveColour(flatValue ?? "") ?? { r: 255, g: 255, b: 255, a: 1 };
+  const setFlat = (next: Rgb) => {
+    const a = typeof next.a === "number" ? next.a : 1;
+    const literal = a < 1
+      ? `rgba(${next.r}, ${next.g}, ${next.b}, ${a.toFixed(3)})`
+      : toHex(next);
+    api.set({ [PAGE_BG_TOKEN]: literal });
+  };
+
   const editLayer = (i: number, patch: Partial<Layer>) => {
     if (!layers) return;
     const next = layers.map((l, j) => (j === i ? ({ ...l, ...patch } as Layer) : l));
@@ -105,9 +120,16 @@ export function BackgroundPanel({ api, resolveColour }: { api: StudioApi; resolv
       ) : null}
 
       {isFlat ? (
-        <Notice tone="info">
-          Flattened. The page shows the plain base colour, no blooms. Switch to Blooms above to bring them back.
-        </Notice>
+        <Group title="Flat colour" help="The single colour the page uses when flattened. Starts at the base colour from the Colours step so edits there follow through; pick a hex here to pin a different one.">
+          <Row label="Fill" help={flatIsRef ? "Currently following the base colour from the Colours step." : "A pinned colour; the Colours step won't move it."}>
+            <ColourSwatch label="Flat colour" alpha colour={flatRgb} onChange={setFlat} />
+            {flatIsRef ? null : (
+              <Button size="sm" variant="ghost" onClick={() => api.set({ [PAGE_BG_TOKEN]: "var(--page-base)" })}>
+                Follow base
+              </Button>
+            )}
+          </Row>
+        </Group>
       ) : null}
 
       {!layers ? (
@@ -255,6 +277,30 @@ function RadialControls({
 
   return (
     <>
+      {/* Colour first, since you usually know the hue before you dial
+          size or position. The swatch opens the picker (brand palette
+          strip + opacity slider inside); the dropdown next to it is for
+          "follow this palette token by name". */}
+      <Row label="Bloom colour" help="Click the swatch to open the picker. The brand palette strip at the bottom is one-click Brand / Deep / Accent / Neutral; the opacity slider edits the same value as Strength below. The dropdown switches to following a palette token by name.">
+        <ColourSwatch label="Bloom colour" alpha colour={{ ...swatchRgb, a: strength }} onChange={setColour} />
+        <Select
+          size="sm"
+          aria-label="Follow a palette colour"
+          className={styles.grow}
+          value={ch?.[1] ?? "custom"}
+          onChange={(v) => v !== "custom" && setFirst(`rgba(var(${v}), ${strength})`)}
+          options={[
+            { value: "--rgb-brand", label: "Brand" },
+            { value: "--rgb-brand-soft", label: "Accent" },
+            { value: "--rgb-brand-deep", label: "Deep" },
+            { value: "--rgb-support", label: "Neutral" },
+            { value: "--rgb-bloom-a", label: "Bloom one preset" },
+            { value: "--rgb-bloom-b", label: "Bloom two preset" },
+            ...(ch ? [] : [{ value: "custom", label: "Fixed colour" }]),
+          ]}
+        />
+      </Row>
+
       <div
         ref={padRef}
         className={styles.bloomStage}
@@ -355,25 +401,6 @@ function RadialControls({
         onReset={base ? () => onChange({ stops: positioned(radial.stops).map((s, k, all) => (k === all.length - 1 ? { ...s, pos: baseLast } : s)) }) : undefined}
       />
 
-      <Row label="Bloom colour" help="Click the swatch to open the picker. The brand palette strip at the bottom is one-click Brand / Deep / Accent / Neutral; the opacity slider edits the same value as Strength above. The dropdown switches to following a palette token by name.">
-        <ColourSwatch label="Bloom colour" alpha colour={{ ...swatchRgb, a: strength }} onChange={setColour} />
-        <Select
-          size="sm"
-          aria-label="Follow a palette colour"
-          className={styles.grow}
-          value={ch?.[1] ?? "custom"}
-          onChange={(v) => v !== "custom" && setFirst(`rgba(var(${v}), ${strength})`)}
-          options={[
-            { value: "--rgb-brand", label: "Brand" },
-            { value: "--rgb-brand-soft", label: "Accent" },
-            { value: "--rgb-brand-deep", label: "Deep" },
-            { value: "--rgb-support", label: "Neutral" },
-            { value: "--rgb-bloom-a", label: "Bloom one preset" },
-            { value: "--rgb-bloom-b", label: "Bloom two preset" },
-            ...(ch ? [] : [{ value: "custom", label: "Fixed colour" }]),
-          ]}
-        />
-      </Row>
       <p className={styles.mutedNote}>
         Now {bloomHex} at {Math.round(strength * 100)}%.
       </p>
