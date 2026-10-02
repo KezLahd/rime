@@ -1057,13 +1057,27 @@ function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; bra
         </>
       );
     case "--shadow-chrome":
+      // Chrome shadow is the subtle drop under floating navigation
+      // surfaces anchored to the top bar — the NavSearch dropdown is
+      // the canonical consumer. Specimen shows a search box with
+      // results floating under it so the "where does this show up?"
+      // question has a clear answer.
       return (
         <>
-          <div className={styles.shadowChromeBar} style={{ boxShadow: shadow }}>
-            <span className={styles.shadowCardTitle}>Top bar</span>
-            <span className={styles.shadowCardLede}>Chrome drop</span>
+          <div className={styles.shadowChromeStage}>
+            <div className={styles.shadowChromeSearch}>
+              <span className={styles.shadowChromeField}>Search invoices · Ctrl K</span>
+            </div>
+            <div className={styles.shadowChromeDropdown} style={{ boxShadow: shadow }}>
+              <p className={styles.shadowPopoverTitle}>Recent</p>
+              <ul className={styles.shadowPopoverList}>
+                <li>INV-1042 · {brand.full}</li>
+                <li>INV-1041 · Globex</li>
+                <li>INV-1040 · Initech</li>
+              </ul>
+            </div>
           </div>
-          <SpecimenCaption token={token} note="The drop under the whole shell chrome — top bar and sidebar together. Separates the chrome from the page field." />
+          <SpecimenCaption token={token} note="The drop under the search dropdown (NavSearch results panel). Smaller lift than Popover because it anchors against the top bar's own chrome, not against free page space." />
         </>
       );
     case "--shadow-auth-card":
@@ -1090,20 +1104,26 @@ function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; bra
         </>
       );
     case "--sidebar-shadow":
+      // The shadow powers both the sidebar's right edge AND the
+      // narrow-mode drawer that slides out over a scrim. Specimen
+      // shows the drawer in its slide-out state so the scrim slider
+      // on the left feeds in live.
       return (
         <>
-          <div className={styles.shadowEdgeDemo}>
-            <div className={styles.shadowEdgeSidebar} style={{ boxShadow: shadow }}>
-              <div className={styles.shadowEdgeChip}>Sidebar</div>
-              <div className={styles.shadowEdgeStubRow} />
-              <div className={styles.shadowEdgeStubRow} />
-              <div className={styles.shadowEdgeStubRow} />
+          <div className={styles.shadowDrawerStage}>
+            <div className={styles.shadowDrawerPage} aria-hidden="true">
+              <div className={styles.shadowEdgeStubCard}>Live content behind the drawer</div>
             </div>
-            <div className={styles.shadowEdgePage}>
-              <div className={styles.shadowEdgeStubCard}>Page content</div>
+            <div className={styles.shadowDrawerScrim} aria-hidden="true" />
+            <div className={styles.shadowDrawerPanel} style={{ boxShadow: shadow }}>
+              <div className={styles.shadowEdgeChip}>{brand.full}</div>
+              <div className={styles.shadowEdgeStubRow} />
+              <div className={styles.shadowEdgeStubRow} />
+              <div className={styles.shadowEdgeStubRow} />
+              <div className={styles.shadowEdgeStubRow} />
             </div>
           </div>
-          <SpecimenCaption token={token} note="The soft fall off the sidebar's right edge where the chrome meets the page. Separates the fixed nav from the scrolling content next to it." />
+          <SpecimenCaption token={token} note="Shared by the sidebar's right edge AND the narrow-viewport drawer that slides over a scrim. Edit the scrim darkness in the left column to see the backdrop dim." />
         </>
       );
     case "--topbar-shadow":

@@ -64,7 +64,18 @@ export function guessParams(value: string): ShadowParams {
     nonContact.sort((a, b) => alphaOfLayer(b) - alphaOfLayer(a))[0] ?? layers[0] ?? "";
   const [x = 0, y = 8, blur = 24, spread = 0] = lengthsOf(main);
   const alpha = Number(main.match(/,\s*([\d.]+)\)\s*$/)?.[1] ?? 0.16);
-  const channel = main.match(/var\((--rgb-[\w-]+)\)/)?.[1] ?? "--rgb-brand-deep";
+  // Channel: a palette ref (var(--rgb-xxx)) wins; otherwise take the
+  // literal "r, g, b" from the rgba() so a reset against a preset like
+  // `rgba(0, 0, 0, 0.14)` round-trips as "0, 0, 0" instead of silently
+  // snapping to the --rgb-brand-deep default (which was making reset
+  // write a different colour than the preset had).
+  const varMatch = main.match(/var\((--rgb-[\w-]+)\)/);
+  const literalMatch = main.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*[,)]/);
+  const channel = varMatch
+    ? varMatch[1]
+    : literalMatch
+      ? `${literalMatch[1]}, ${literalMatch[2]}, ${literalMatch[3]}`
+      : "--rgb-brand-deep";
   const angle = Math.round((Math.atan2(y, x) * 180) / Math.PI + 90);
   return {
     angle: Number.isFinite(angle) ? angle : 180,

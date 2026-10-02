@@ -1148,7 +1148,39 @@
   margin-bottom: 10px;
 }
 
-/* ── Chrome drop (single bar) ─────────────────────────────────────── */
+/* ── Chrome drop: a search dropdown anchored to a top-bar search ── */
+
+.shadowChromeStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 420px);
+}
+
+.shadowChromeSearch {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+  box-shadow: inset 0 0 0 1px var(--line-input);
+}
+
+.shadowChromeField {
+  display: block;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.shadowChromeDropdown {
+  position: relative;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: var(--r-md);
+  background: var(--surface-solid);
+}
+
+/* ── Chrome drop (legacy single bar — kept as a fallback) ──────── */
 
 .shadowChromeBar {
   width: min(100%, 560px);
@@ -1158,6 +1190,49 @@
   padding: 18px 24px;
   border-radius: var(--r-md);
   background: var(--surface-solid);
+}
+
+/* ── Drawer stage: page behind + scrim + drawer sliding in from left ── */
+
+.shadowDrawerStage {
+  position: relative;
+  width: min(100%, 640px);
+  min-height: 360px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.shadowDrawerPage {
+  position: absolute;
+  inset: 0;
+  background: var(--page-background);
+  padding: 24px;
+  padding-left: 280px; /* clear the drawer */
+}
+
+.shadowDrawerScrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim, rgba(14, 16, 24, 0.5));
+  backdrop-filter: var(--blur-scrim, blur(3px));
+  -webkit-backdrop-filter: var(--blur-scrim, blur(3px));
+  z-index: 1;
+}
+
+.shadowDrawerPanel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  padding: 20px 16px;
+  background: var(--sidebar-drawer-bg, var(--surface-solid));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
 }
 
 /* ── Sign-in card on the auth gradient ────────────────────────────── */

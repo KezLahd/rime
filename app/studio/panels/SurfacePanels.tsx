@@ -250,10 +250,14 @@ const ELEVATIONS: ReadonlyArray<{ token: string; label: string }> = [
   { token: "--shadow-lift", label: "Highlight card" },
   { token: "--popover-shadow", label: "Popover" },
   { token: "--modal-shadow", label: "Modal" },
-  { token: "--shadow-chrome", label: "Chrome" },
+  // Drawer uses --sidebar-shadow (the SidebarShell's drawer mode on
+  // narrow viewports reuses the sidebar's shadow token). Scrim comes
+  // from --scrim. Listed separately from "Sidebar edge" so the user
+  // sees a clearly labelled "slide-in drawer" surface in the list.
+  { token: "--sidebar-shadow", label: "Drawer / sidebar" },
   { token: "--shadow-auth-card", label: "Sign-in card" },
-  { token: "--sidebar-shadow", label: "Sidebar edge" },
   { token: "--topbar-shadow", label: "Top bar edge" },
+  { token: "--shadow-chrome", label: "Search dropdown" },
   { token: "--glow-md", label: "Button glow" },
 ];
 
@@ -268,14 +272,18 @@ const CHANNELS = [
 /** Which shadow tokens sit under a frosted-glass surface. Only these
  *  show the "Top light line" (specular) toggle, since that highlight
  *  reads as light catching the glass edge and makes no sense for a
- *  hairline / float / button glow / sidebar-edge drop. */
+ *  hairline / float / button glow / sidebar-edge / solid-surface drop.
+ *
+ *  Not included:
+ *    --shadow-lift carries its own --highlight-edge accent across the
+ *      top; the specular would compete with it.
+ *    --shadow-auth-card is a solid card on the auth gradient, not glass.
+ */
 const GLASS_SHADOW_TOKENS = new Set<string>([
   "--shadow-panel",
-  "--shadow-lift",
   "--popover-shadow",
   "--modal-shadow",
   "--shadow-chrome",
-  "--shadow-auth-card",
 ]);
 
 /**
@@ -287,24 +295,20 @@ const GLASS_SHADOW_TOKENS = new Set<string>([
  * rgba; picking a palette ref writes the channel name as before.
  */
 /**
- * Modal-only extra: the scrim darkness over the page behind the dialog.
- * The scrim token --modal-scrim is `rgba(r, g, b, a)`; the slider edits
- * only the alpha so the user tunes "how dark" without picking the hue
- * themselves. 0% leaves the page visible, 60% is the kit's default
- * darken. Baseline-aware reset like every other control on this step.
+ * Scrim darkness slider: the alpha of a scrim rgba() token.
+ * Reused for Modal (--modal-scrim) and Drawer (--scrim). Reads only
+ * the alpha and keeps the base colour; the baseline-aware reset
+ * returns to whatever darkness the applied palette or preset had.
  */
-function ModalScrimRow({ api }: { api: StudioApi }) {
-  const token = "--modal-scrim";
-  const current = api.value(token) ?? api.resolved(token) ?? "rgba(10, 14, 20, 0.5)";
-  // Extract RGB base and alpha. Fall back to the default dark if the
-  // token has been overwritten with a solid colour or a token ref.
+function ScrimDarknessRow({ api, token, fallback }: { api: StudioApi; token: string; fallback: string }) {
+  const current = api.value(token) ?? api.resolved(token) ?? fallback;
   const match = current.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
-  const r = match ? Number(match[1]) : 10;
-  const g = match ? Number(match[2]) : 14;
-  const b = match ? Number(match[3]) : 20;
+  const fallbackMatch = fallback.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
+  const r = match ? Number(match[1]) : (fallbackMatch ? Number(fallbackMatch[1]) : 10);
+  const g = match ? Number(match[2]) : (fallbackMatch ? Number(fallbackMatch[2]) : 14);
+  const b = match ? Number(match[3]) : (fallbackMatch ? Number(fallbackMatch[3]) : 20);
   const alpha = match ? (match[4] !== undefined ? Number(match[4]) : 1) : 0.5;
-  // Baseline alpha: user-applied palette value if present, else preset.
-  const baselineRaw = api.theme.baseline?.[token] ?? api.base.get(token) ?? "rgba(10, 14, 20, 0.5)";
+  const baselineRaw = api.theme.baseline?.[token] ?? api.base.get(token) ?? fallback;
   const baselineMatch = baselineRaw.match(/,\s*([\d.]+)\s*\)\s*$/);
   const baselineAlpha = baselineMatch ? Number(baselineMatch[1]) : 0.5;
 
@@ -315,7 +319,7 @@ function ModalScrimRow({ api }: { api: StudioApi }) {
   return (
     <SliderRow
       label="Scrim darkness"
-      help="How dark the backdrop behind the modal gets. 0% leaves the page fully visible under the dialog; 60% is Rime Default's dim."
+      help="How dark the backdrop behind the surface gets. 0% leaves the page fully visible under the drawer / modal; 60% is Rime Default's dim."
       displayScale={100}
       unit="%"
       value={alpha}
@@ -546,7 +550,13 @@ export function ShadowPanel({ api }: { api: StudioApi }) {
             alpha; we read / write the alpha and keep the base colour
             intact. */}
         {token === "--modal-shadow" ? (
-          <ModalScrimRow api={api} />
+          <ScrimDarknessRow api={api} token="--modal-scrim" fallback="rgba(10, 14, 20, 0.5)" />
+        ) : null}
+
+        {/* Drawer (and the SidebarShell's narrow-mode drawer) uses
+            --scrim for its dim backdrop. Edited the same way. */}
+        {token === "--sidebar-shadow" ? (
+          <ScrimDarknessRow api={api} token="--scrim" fallback="rgba(14, 16, 24, 0.5)" />
         ) : null}
       </Group>
       <Advanced api={api} tokens={depthNames.concat(["--glow-sm", "--glow-md-hover", "--glow-lg", "--glow-danger"])} />
