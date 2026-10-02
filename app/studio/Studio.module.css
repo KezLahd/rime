@@ -1196,9 +1196,12 @@
 
 /* ── Adobe-style gradient stops bar ──────────────────────────────────── */
 
+/* Wrap has the same horizontal padding as the end-stop radius so the
+   square anchors line up with the inner edges of the panel's rows
+   instead of overshooting into the Group's padding. */
 .stopsBarWrap {
   position: relative;
-  padding: 10px 0 24px;
+  padding: 10px 14px 26px;
   margin-top: 4px;
 }
 
@@ -1224,9 +1227,12 @@
   text-align: center;
 }
 
+/* Markers are positioned by their `left:X%` + a translateX(-50%) so the
+   centre of the marker lines up with the stop's position (independent of
+   the marker's width). This stays stable at hover and focus so nothing
+   shifts horizontally when the user mouses over or tabs onto a stop. */
 .stopMarker {
   position: absolute;
-  top: 10px;
   padding: 0;
   margin: 0;
   border: 0;
@@ -1235,12 +1241,8 @@
     0 0 0 2px #ffffff,
     0 0 0 3px rgba(0, 0, 0, 0.45),
     0 2px 6px rgba(0, 0, 0, 0.25);
-  transition: transform 100ms ease;
+  transform: translateX(-50%);
   z-index: 2;
-}
-
-.stopMarker:hover {
-  transform: translate(-50%, 0) scale(1.08);
 }
 
 .stopMarker:active {
@@ -1259,7 +1261,6 @@
 .stopMarkerEnd {
   width: 24px;
   height: 28px;
-  margin-left: -12px;
   border-radius: var(--r-xs);
   top: 10px;
 }
@@ -1268,7 +1269,6 @@
 .stopMarkerMid {
   width: 24px;
   height: 24px;
-  margin-left: -12px;
   border-radius: 50%;
   top: 12px;
 }
