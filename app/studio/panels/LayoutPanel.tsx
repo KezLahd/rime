@@ -3,9 +3,10 @@
 import { SegmentedControl } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { ColourRow, Group, Row, SliderRow, TextRow } from "../controls";
+import { CheckRow, ColourRow, Group, Row, SliderRow, TextRow } from "../controls";
 import { colourOf, setColour } from "../engine/macros";
 import styles from "../Studio.module.css";
+import { SurfaceEditor } from "./SurfacePanels";
 
 export type StudioLayout = "sidebar" | "rail" | "header";
 export type StudioLogoCorner = "glass" | "fill";
@@ -15,6 +16,7 @@ export const layoutOf = (api: Pick<StudioApi, "theme">): StudioLayout => {
   return v === "rail" || v === "header" ? v : "sidebar";
 };
 export const logoCornerOf = (api: Pick<StudioApi, "theme">): StudioLogoCorner => (api.theme.controls.logoCorner === "fill" ? "fill" : "glass");
+export const collapsibleOf = (api: Pick<StudioApi, "theme">): boolean => api.theme.controls.sidebarCollapsible !== false;
 
 const num = (v: string | undefined, fallback: number) => {
   const n = parseFloat(v ?? "");
@@ -30,6 +32,7 @@ const num = (v: string | undefined, fallback: number) => {
 export function LayoutPanel({ api }: { api: StudioApi }) {
   const layout = layoutOf(api);
   const corner = logoCornerOf(api);
+  const collapsible = collapsibleOf(api);
   const bg = api.value("--logo-corner-bg") ?? "";
   return (
     <>
@@ -37,8 +40,7 @@ export function LayoutPanel({ api }: { api: StudioApi }) {
         title="Layout"
         help={
           <>
-            In code: <code>{`<SidebarShell layout="${layout}" />`}</code>. A collapsed rail keeps the icons and remembers its state; header only
-            moves the navigation into the top bar.
+            In code: <code>{`<SidebarShell layout="${layout}" />`}</code>. Sidebar keeps the full nav; the collapsed rail trades labels for icons; Header only moves the navigation into the top bar and drops the sidebar entirely.
           </>
         }
       >
@@ -55,6 +57,14 @@ export function LayoutPanel({ api }: { api: StudioApi }) {
             ]}
           />
         </Row>
+        {layout === "sidebar" ? (
+          <CheckRow
+            label="User can collapse it"
+            note="Shows a chevron on the sidebar that collapses it down to the icon rail. Off: sidebar is always full-width."
+            checked={collapsible}
+            onChange={(v) => api.setControls({ sidebarCollapsible: v })}
+          />
+        ) : null}
         <SliderRow
           label="Top bar height"
           value={num(api.value("--topbar-height"), 64)}
@@ -66,18 +76,26 @@ export function LayoutPanel({ api }: { api: StudioApi }) {
           onChange={(v) => api.set({ "--topbar-height": `${v}px` })}
           onReset={() => api.reset(["--topbar-height"])}
         />
-        <SliderRow
-          label="Sidebar width"
-          value={num(api.value("--shell-sidebar-width"), 212)}
-          min={168}
-          max={300}
-          step={2}
-          unit="px"
-          changed={api.changed("--shell-sidebar-width")}
-          onChange={(v) => api.set({ "--shell-sidebar-width": `${v}px` })}
-          onReset={() => api.reset(["--shell-sidebar-width"])}
-        />
+        {layout !== "header" ? (
+          <SliderRow
+            label="Sidebar width"
+            value={num(api.value("--shell-sidebar-width"), 212)}
+            min={168}
+            max={300}
+            step={2}
+            unit="px"
+            changed={api.changed("--shell-sidebar-width")}
+            onChange={(v) => api.set({ "--shell-sidebar-width": `${v}px` })}
+            onReset={() => api.reset(["--shell-sidebar-width"])}
+          />
+        ) : null}
       </Group>
+
+      {/* Sidebar + top-bar glass editors live here now, not on the Glass
+          step. They're part of the shell: tint, opacity, blur and the
+          backdrop filter all shape the sidebar's and top bar's chrome. */}
+      {layout !== "header" ? <SurfaceEditor api={api} surfaceId="sidebar" /> : null}
+      <SurfaceEditor api={api} surfaceId="topbar" />
 
       <Group
         title="Logo corner"

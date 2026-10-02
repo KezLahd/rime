@@ -222,7 +222,7 @@ const SURFACE_DEFAULTS: Record<string, { fill: string; blur: string }> = {
   toasts: { fill: "rgba(255, 255, 255, 0.82)", blur: "blur(28px) saturate(180%)" },
 };
 
-function SurfaceEditor({ api, surfaceId }: { api: StudioApi; surfaceId: string }) {
+export function SurfaceEditor({ api, surfaceId }: { api: StudioApi; surfaceId: string }) {
   const s = GLASS_SURFACES.find((x) => x.id === surfaceId)!;
   const fill = api.resolved(s.fills[0]) || SURFACE_DEFAULTS[s.id]?.fill;
   const blurValue = s.blur ? api.resolved(s.blur) || SURFACE_DEFAULTS[s.id]?.blur : undefined;
