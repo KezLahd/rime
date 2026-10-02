@@ -1280,6 +1280,24 @@
   gap: 8px;
 }
 
+/* Big-number row with the primary CTA on the right. */
+.layoutSummaryHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Chart card's header actions: the +12% badge sits inline with the
+   Export button so the whole "what's being summarised + what I can
+   do with it" cluster lives in one spot. */
+.layoutChartHeadActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .layoutBigNumber {
   margin: 2px 0 6px;
   font-family: var(--font-display);

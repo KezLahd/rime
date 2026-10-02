@@ -970,55 +970,25 @@ function LayoutShowcase({ brand, logoSrc, logoAlt, logoCorner, layout }: { brand
   );
 }
 
-/** Dashboard page: a focused summary panel + a bar chart with built-in
- *  tooltips + a recent-activity feed. No stat-card row — those get
- *  stripped on sight. */
+/** Dashboard page: focused summary panel on top, bar chart with
+ *  built-in tooltips below. No hero header and no stat cards — the
+ *  summary panel carries the numbers, the chart carries the breakdown.
+ *  Primary actions live inside the card they relate to: New project
+ *  on the summary panel (quarterly target), Export on the chart card
+ *  (the data being exported). */
 function LayoutDashboardPage({ brand }: { brand: BrandNames }) {
   return (
     <div className={styles.layoutPage}>
-      <section className={styles.layoutHero}>
-        <div>
-          <p className={styles.layoutEyebrow}>This week</p>
-          <h2 className={styles.layoutTitle}>Good morning, Jane</h2>
-          <p className={styles.layoutLede}>Three projects need you before Friday. Revenue trending 12% ahead of last month across every product line.</p>
-        </div>
-        <div className={styles.layoutHeroActions}>
-          <Button variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export</Button>
-          <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
-        </div>
-      </section>
-
       <section className={styles.layoutDashGrid}>
-        <GlassPanel padding="lg" className={styles.layoutChartCard}>
-          <header className={styles.layoutTableHead}>
-            <div>
-              <h3 className={styles.layoutCardTitle}>Revenue by product</h3>
-              <p className={styles.layoutCardLede}>Six-month totals across six product lines. Hover a bar for the breakdown.</p>
-            </div>
-            <Badge tone="brand">+12%</Badge>
-          </header>
-          <BarChart
-            title="Revenue by product"
-            summary="Six-month totals across six product lines."
-            hideTitle
-            data={CHART_DATA}
-            category="month"
-            series={[
-              { key: "a", label: "Hardware" },
-              { key: "b", label: "Software" },
-              { key: "c", label: "Services" },
-              { key: "d", label: "Support" },
-              { key: "e", label: "Training" },
-              { key: "f", label: "Licensing" },
-            ]}
-            height={260}
-          />
-        </GlassPanel>
-
         <GlassPanel padding="lg" className={styles.layoutSummaryPanel}>
-          <p className={styles.layoutEyebrow}>Collected this quarter</p>
-          <h3 className={styles.layoutBigNumber}>$482K</h3>
-          <p className={styles.layoutLede}>Up {brand.word.length > 0 ? "19%" : "19%"} on last quarter. {brand.full} invoices clear in 11 days on average — four faster than the industry median.</p>
+          <div className={styles.layoutSummaryHead}>
+            <div>
+              <p className={styles.layoutEyebrow}>Collected this quarter</p>
+              <h3 className={styles.layoutBigNumber}>$482K</h3>
+            </div>
+            <Button iconStart={<Plus size={14} aria-hidden="true" />}>New project</Button>
+          </div>
+          <p className={styles.layoutLede}>Up 19% on last quarter. {brand.full} invoices clear in 11 days on average — four faster than the industry median.</p>
           <div style={{ marginTop: 16 }}>
             <ProgressBar value={72} max={100} label="Quarter target" valueText="72% of goal" />
           </div>
@@ -1036,6 +1006,35 @@ function LayoutDashboardPage({ brand }: { brand: BrandNames }) {
               <span><strong>Brand kit refresh</strong> waiting on you · yesterday</span>
             </li>
           </ul>
+        </GlassPanel>
+
+        <GlassPanel padding="lg" className={styles.layoutChartCard}>
+          <header className={styles.layoutTableHead}>
+            <div>
+              <h3 className={styles.layoutCardTitle}>Revenue by product</h3>
+              <p className={styles.layoutCardLede}>Six-month totals across six product lines. Hover a bar for the breakdown.</p>
+            </div>
+            <div className={styles.layoutChartHeadActions}>
+              <Badge tone="brand">+12%</Badge>
+              <Button size="sm" variant="secondary" iconStart={<Download size={14} aria-hidden="true" />}>Export</Button>
+            </div>
+          </header>
+          <BarChart
+            title="Revenue by product"
+            summary="Six-month totals across six product lines."
+            hideTitle
+            data={CHART_DATA}
+            category="month"
+            series={[
+              { key: "a", label: "Hardware" },
+              { key: "b", label: "Software" },
+              { key: "c", label: "Services" },
+              { key: "d", label: "Support" },
+              { key: "e", label: "Training" },
+              { key: "f", label: "Licensing" },
+            ]}
+            height={260}
+          />
         </GlassPanel>
       </section>
     </div>
