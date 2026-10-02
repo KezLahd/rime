@@ -139,8 +139,8 @@
   /* App chrome (sidebar and top bar): white frosted glass over the field,
      dense enough (0.76 to 0.82 with a 32px blur) to read as a solid frosted
      bar while content scrolls under it. The docs chrome uses the same. */
-  --chrome-sidebar: rgba(var(--rgb-white), 0.76);
-  --chrome-topbar: rgba(var(--rgb-white), 0.82);
+  --chrome-sidebar: rgba(var(--rgb-white), 0.8);
+  --chrome-topbar: rgba(var(--rgb-white), 0.8);
   --chrome-shadow: 0 8px 28px rgba(var(--rgb-brand-deep), 0.12), 0 1px 3px rgba(var(--rgb-contact), 0.06);
 
   /* AuthCard backdrop: a deep field under a solid card. */

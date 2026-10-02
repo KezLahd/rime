@@ -864,7 +864,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             ) : section === "hover" ? (
               <HoverPanel api={api} />
             ) : section === "layout" ? (
-              <LayoutPanel api={api} />
+              <LayoutPanel api={api} resolveColour={resolveColour} />
             ) : section === "components" ? (
               <ComponentsPanel api={api} resolveExpr={resolveExpr} />
             ) : section === "tokens" ? (
