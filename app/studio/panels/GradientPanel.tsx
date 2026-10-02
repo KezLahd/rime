@@ -8,6 +8,7 @@ import type { StudioApi } from "../api";
 import { AngleRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, TextRow, useGradientSelection } from "../controls";
 import { parseColour, toHex, type Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer, type Stop } from "../engine/gradient";
+import { StopsBar } from "../StopsBar";
 import styles from "../Studio.module.css";
 
 const GRADIENTS: ReadonlyArray<{ token: string; label: string; help: string }> = [
@@ -67,7 +68,7 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
 
   return (
     <>
-      <Group title="Gradient" help="Rime has one gradient per gesture: brand for primary, danger for destructive, success for confirms, plus a few scene-setters (page bloom, auth background, admin strip). Pick one here to edit it, then adjust its direction, stops and softness below.">
+      <Group title="Which gradient" help="Rime has one gradient per gesture: brand for primary, danger for destructive, success for confirms, plus a few scene-setters (page bloom, auth background, admin strip). Pick one here to edit it, then adjust its direction, stops and softness below.">
         <SelectRow
           stacked
           label="Gradient"
@@ -76,7 +77,6 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
           options={GRADIENTS.map((g) => ({ value: g.token, label: g.label }))}
           onChange={setToken}
         />
-        <div className={styles.swatchBar} style={{ background: api.resolved(token) || value }} aria-hidden="true" />
         {api.changed(token) ? (
           <div className={styles.actions}>
             <Button size="sm" variant="ghost" onClick={() => api.reset([token], [`soft${token}`])}>
@@ -112,7 +112,7 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
                     }}
                   />
                 ) : null}
-                <Stops stops={layer.stops} resolve={resolveColour} onChange={(stops) => editLayer(i, { stops })} />
+                <StopsBar stops={layer.stops} resolve={resolveColour} onChange={(stops) => editLayer(i, { stops })} />
               </>
             ) : layer.kind === "radial" ? (
               <BloomEditor layer={layer} resolve={resolveColour} onChange={(l) => editLayer(i, l)} />
