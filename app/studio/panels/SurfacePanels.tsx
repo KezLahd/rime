@@ -243,18 +243,18 @@ export function SurfaceEditor({ api, surfaceId }: { api: StudioApi; surfaceId: s
 // ── Shadows ───────────────────────────────────────────────────────────────
 
 const ELEVATIONS: ReadonlyArray<{ token: string; label: string }> = [
-  { token: "--shadow-hairline-card", label: "1 · Card" },
-  { token: "--shadow-panel-light", label: "2 · Light panel" },
-  { token: "--shadow-panel", label: "3 · Panel" },
-  { token: "--shadow-float", label: "4 · Float (tooltips)" },
-  { token: "--shadow-lift", label: "4 · Lift (highlight card)" },
-  { token: "--popover-shadow", label: "4 · Popover" },
-  { token: "--modal-shadow", label: "5 · Modal" },
+  { token: "--shadow-hairline-card", label: "Card" },
+  { token: "--shadow-panel-light", label: "Light panel" },
+  { token: "--shadow-panel", label: "Panel" },
+  { token: "--shadow-float", label: "Tooltip" },
+  { token: "--shadow-lift", label: "Highlight card" },
+  { token: "--popover-shadow", label: "Popover" },
+  { token: "--modal-shadow", label: "Modal" },
   { token: "--shadow-chrome", label: "Chrome" },
   { token: "--shadow-auth-card", label: "Sign-in card" },
   { token: "--sidebar-shadow", label: "Sidebar edge" },
   { token: "--topbar-shadow", label: "Top bar edge" },
-  { token: "--glow-md", label: "Primary button glow" },
+  { token: "--glow-md", label: "Button glow" },
 ];
 
 const CHANNELS = [

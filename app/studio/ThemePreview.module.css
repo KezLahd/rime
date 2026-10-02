@@ -950,30 +950,103 @@
   color: var(--ink-heading);
 }
 
-/* Tooltip + its anchor */
-.shadowFloatRow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+/* ── Tooltip demo ─────────────────────────────────────────────────── */
+
+.shadowTooltipDemo {
+  position: relative;
+  display: inline-flex;
+  padding-top: 72px; /* room for the tooltip to appear above the trigger */
 }
 
-.shadowFloat {
-  padding: 8px 12px;
-  border-radius: var(--r-sm);
+.shadowTooltipTrigger {
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  border: 0;
+  background: var(--surface-solid);
+  color: var(--ink-body);
+  font-weight: 700;
+  font-size: var(--text-body);
+  box-shadow: var(--shadow-hairline-card);
+  cursor: pointer;
+}
+
+.shadowTooltipFloat {
+  position: absolute;
+  bottom: calc(100% - 60px);
+  left: 50%;
+  width: max(220px, min(90vw, 320px));
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border-radius: var(--r-md);
   background: var(--surface-solid);
   color: var(--ink-body);
   font-size: var(--text-small);
+  line-height: 1.4;
+  text-align: center;
+  opacity: 0.3;
+  transition: opacity 160ms ease;
+}
+
+.shadowTooltipDemo:hover .shadowTooltipFloat {
+  opacity: 1;
+}
+
+.shadowTooltipArrow {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 10px;
+  height: 10px;
+  background: var(--surface-solid);
+  transform: translateX(-50%) rotate(45deg);
+  border-bottom-right-radius: 2px;
+}
+
+/* ── Popover demo ─────────────────────────────────────────────────── */
+
+.shadowPopoverDemo {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 180px; /* room for the popover to open below */
+}
+
+.shadowPopoverTrigger {
+  padding: 10px 18px;
+  border-radius: var(--r-md);
+  border: 0;
+  background: var(--surface-solid);
+  color: var(--ink-body);
+  font-weight: 700;
+  font-size: var(--text-body);
+  box-shadow: var(--shadow-hairline-card);
+  cursor: pointer;
 }
 
 .shadowPopover {
+  position: absolute;
+  top: 56px;
   width: 220px;
   padding: 10px 0;
   border-radius: var(--r-md);
   background: var(--surface-solid);
 }
 
+.shadowPopoverArrow {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--surface-solid);
+  transform: translateX(-50%) rotate(45deg);
+  border-top-left-radius: 2px;
+}
+
 .shadowPopoverTitle {
+  position: relative;
   margin: 0 16px 6px;
   font-size: var(--text-micro);
   font-weight: 700;
@@ -983,6 +1056,7 @@
 }
 
 .shadowPopoverList {
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -999,11 +1073,56 @@
   background: var(--wash-hover);
 }
 
+/* ── Modal demo with scrim + faux page behind ────────────────────── */
+
+.shadowModalStage {
+  position: relative;
+  width: min(100%, 640px);
+  min-height: 360px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.shadowModalFakePage {
+  position: absolute;
+  inset: 0;
+  background: var(--page-background);
+  padding: 24px;
+  display: grid;
+  place-items: start;
+}
+
+.shadowModalFakeCard {
+  padding: 20px 24px;
+  width: 100%;
+  background: var(--surface-solid);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-panel);
+  color: var(--ink-secondary);
+  font-size: var(--text-small);
+}
+
+.shadowModalScrim {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-scrim, rgba(10, 14, 20, 0.5));
+  backdrop-filter: var(--modal-scrim-blur, blur(2px));
+  -webkit-backdrop-filter: var(--modal-scrim-blur, blur(2px));
+  z-index: 1;
+}
+
 .shadowModal {
-  width: min(100%, 480px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90%, 420px);
   padding: 24px;
   border-radius: var(--r-lg);
   background: var(--surface-solid);
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .shadowModalHead {
@@ -1014,6 +1133,8 @@
   margin-bottom: 10px;
 }
 
+/* ── Chrome drop (single bar) ─────────────────────────────────────── */
+
 .shadowChromeBar {
   width: min(100%, 560px);
   display: flex;
@@ -1022,6 +1143,17 @@
   padding: 18px 24px;
   border-radius: var(--r-md);
   background: var(--surface-solid);
+}
+
+/* ── Sign-in card on the auth gradient ────────────────────────────── */
+
+.shadowAuthStage {
+  display: grid;
+  place-items: center;
+  width: min(100%, 540px);
+  padding: 48px 24px;
+  border-radius: var(--r-xl);
+  background: var(--auth-background);
 }
 
 .shadowAuthCard {
@@ -1034,6 +1166,16 @@
   gap: 10px;
 }
 
+.shadowAuthLogo {
+  display: block;
+  max-height: 40px;
+  max-width: 160px;
+  width: auto;
+  height: auto;
+  margin: -4px auto 4px;
+  object-fit: contain;
+}
+
 .shadowAuthField {
   height: 36px;
   border-radius: var(--r-sm);
@@ -1041,14 +1183,101 @@
   box-shadow: inset 0 0 0 1px var(--line-input);
 }
 
-.shadowEdge {
-  width: min(100%, 440px);
+/* ── Sidebar / Top-bar edge demos ─────────────────────────────────── */
+
+.shadowEdgeDemo {
+  display: flex;
+  width: min(100%, 640px);
+  min-height: 320px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.shadowEdgeDemoCol {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 640px);
+  min-height: 320px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 1px var(--line-glass);
+}
+
+.shadowEdgeSidebar {
+  position: relative;
+  width: 160px;
+  padding: 16px 12px;
+  background: var(--chrome-sidebar, var(--surface-solid));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1;
+}
+
+.shadowEdgeTopbar {
+  position: relative;
+  padding: 14px 20px;
+  background: var(--chrome-topbar, var(--surface-solid));
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1;
+}
+
+.shadowEdgeChip {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--brand);
+  color: var(--ink-inverse);
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  border-radius: var(--r-xs);
+}
+
+.shadowEdgeStubRow {
+  height: 10px;
+  border-radius: var(--r-xs);
+  background: color-mix(in oklab, var(--ink-body) 10%, transparent);
+}
+
+.shadowEdgeStubItems {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.shadowEdgeStubItems span {
+  display: block;
+  width: 48px;
+  height: 10px;
+  border-radius: var(--r-xs);
+  background: color-mix(in oklab, var(--ink-body) 10%, transparent);
+}
+
+.shadowEdgePage {
+  flex: 1;
+  background: var(--page-background);
+  padding: 24px;
+}
+
+.shadowEdgePageWide {
+  flex: 1;
+  background: var(--page-background);
+  padding: 24px;
+}
+
+.shadowEdgeStubCard {
   padding: 20px 24px;
-  border-radius: var(--r-md);
   background: var(--surface-solid);
-  font-size: var(--text-small);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-panel);
   color: var(--ink-secondary);
-  text-align: center;
+  font-size: var(--text-small);
 }
 
 .gradientSpecimenCaption {

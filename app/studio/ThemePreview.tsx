@@ -177,7 +177,7 @@ export const ThemePreview = memo(function ThemePreview({
   // modal shadow, and so on. Picks a surface based on the selected
   // token in the Shadows panel.
   if (focus === "shadows") {
-    return <ShadowShowcase selection={shadowSelection ?? null} brand={brandText} />;
+    return <ShadowShowcase selection={shadowSelection ?? null} brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -929,16 +929,16 @@ function GlassShowcase({ brand }: { brand: BrandNames }) {
  * live. Backdrop is a very subtle gradient so a dark shadow still has
  * contrast; the specimen is the thing the user is reshaping.
  */
-function ShadowShowcase({ selection, brand }: { selection: string | null; brand: BrandNames }) {
+function ShadowShowcase({ selection, brand, logoSrc, logoAlt }: { selection: string | null; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
   const token = selection ?? "--shadow-panel";
   return (
     <div className={styles.shadowStage}>
-      <ShadowSpecimen token={token} brand={brand} />
+      <ShadowSpecimen token={token} brand={brand} logoSrc={logoSrc} logoAlt={logoAlt} />
     </div>
   );
 }
 
-function ShadowSpecimen({ token, brand }: { token: string; brand: BrandNames }) {
+function ShadowSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
   const shadow = `var(${token})`;
   switch (token) {
     case "--shadow-hairline-row":
@@ -979,15 +979,19 @@ function ShadowSpecimen({ token, brand }: { token: string; brand: BrandNames }) 
         </>
       );
     case "--shadow-float":
+      // Tooltip appears on hover of the button. The group:hover reveals
+      // the tooltip so the user sees the actual hover-triggered behaviour
+      // instead of a static mock.
       return (
         <>
-          <div className={styles.shadowFloatRow}>
-            <Button size="sm" variant="secondary">Hover me</Button>
-            <div className={styles.shadowFloat} style={{ boxShadow: shadow }}>
-              Tooltip · var({token})
+          <div className={styles.shadowTooltipDemo}>
+            <button type="button" className={styles.shadowTooltipTrigger}>Hover me</button>
+            <div className={styles.shadowTooltipFloat} style={{ boxShadow: shadow }} role="tooltip">
+              Tooltips use the Float shadow — enough lift to read as hovering, not enough to compete with popovers or modals.
+              <span className={styles.shadowTooltipArrow} style={{ boxShadow: shadow }} />
             </div>
           </div>
-          <SpecimenCaption token={token} note="The floating layer: tooltips, hover cards, inline suggestions." />
+          <SpecimenCaption token={token} note="The floating layer: tooltips, hover cards, inline suggestions. Hover the button to see it." />
         </>
       );
     case "--shadow-lift":
@@ -1002,34 +1006,49 @@ function ShadowSpecimen({ token, brand }: { token: string; brand: BrandNames }) 
         </>
       );
     case "--popover-shadow":
+      // Popover pops OVER a trigger button, with the arrow pointing
+      // at the trigger — mirrors the kit's real Popover component.
       return (
         <>
-          <div className={styles.shadowPopover} style={{ boxShadow: shadow }}>
-            <p className={styles.shadowPopoverTitle}>Open menu</p>
-            <ul className={styles.shadowPopoverList}>
-              <li>Rename</li>
-              <li>Duplicate</li>
-              <li>Archive</li>
-            </ul>
+          <div className={styles.shadowPopoverDemo}>
+            <button type="button" className={styles.shadowPopoverTrigger}>Actions ▾</button>
+            <div className={styles.shadowPopover} style={{ boxShadow: shadow }} role="menu">
+              <span className={styles.shadowPopoverArrow} />
+              <p className={styles.shadowPopoverTitle}>Open menu</p>
+              <ul className={styles.shadowPopoverList}>
+                <li>Rename</li>
+                <li>Duplicate</li>
+                <li>Archive</li>
+              </ul>
+            </div>
           </div>
-          <SpecimenCaption token={token} note="Popovers, dropdowns, context menus. Needs more lift than a card to read as floating." />
+          <SpecimenCaption token={token} note="Popovers, dropdowns, context menus. Needs more lift than a card to read as floating above the surface it anchors to." />
         </>
       );
     case "--modal-shadow":
+      // Full modal mock: the backdrop scrim darkens the page behind,
+      // the modal sits centred with its shadow. Scrim colour is a
+      // CSS variable so edits on the Hover / Overlays steps feed in.
       return (
         <>
-          <div className={styles.shadowModal} style={{ boxShadow: shadow }}>
-            <div className={styles.shadowModalHead}>
-              <p className={styles.shadowCardTitle}>Modal elevation</p>
-              <Badge tone="warning">Draft</Badge>
+          <div className={styles.shadowModalStage}>
+            <div className={styles.shadowModalScrim} aria-hidden="true" />
+            <div className={styles.shadowModalFakePage} aria-hidden="true">
+              <div className={styles.shadowModalFakeCard}>Live content behind the modal</div>
             </div>
-            <p className={styles.shadowCardLede}>The highest card-shaped surface — Modal, AlertDialog, Sheet. Lives above a scrim.</p>
-            <div className={styles.shadowCardActions}>
-              <Button size="sm" variant="secondary">Cancel</Button>
-              <Button size="sm">Save changes</Button>
+            <div className={styles.shadowModal} style={{ boxShadow: shadow }} role="dialog" aria-label="Modal specimen">
+              <div className={styles.shadowModalHead}>
+                <p className={styles.shadowCardTitle}>Confirm change</p>
+                <Badge tone="warning">Draft</Badge>
+              </div>
+              <p className={styles.shadowCardLede}>Modal elevation reads over a dim scrim. Both the drop shadow and the scrim darkness shape the depth.</p>
+              <div className={styles.shadowCardActions}>
+                <Button size="sm" variant="secondary">Cancel</Button>
+                <Button size="sm">Save changes</Button>
+              </div>
             </div>
           </div>
-          <SpecimenCaption token={token} note="The highest card-shaped elevation. Reads over a dim scrim." />
+          <SpecimenCaption token={token} note="The highest card-shaped elevation. Modal + AlertDialog + Sheet all share this shadow and sit over a dim scrim." />
         </>
       );
     case "--shadow-chrome":
@@ -1039,30 +1058,66 @@ function ShadowSpecimen({ token, brand }: { token: string; brand: BrandNames }) 
             <span className={styles.shadowCardTitle}>Top bar</span>
             <span className={styles.shadowCardLede}>Chrome drop</span>
           </div>
-          <SpecimenCaption token={token} note="Falls off the top bar and the sidebar's outside edges." />
+          <SpecimenCaption token={token} note="The drop under the whole shell chrome — top bar and sidebar together. Separates the chrome from the page field." />
         </>
       );
     case "--shadow-auth-card":
+      // Sign-in card lives on the auth-background gradient with the
+      // uploaded logo above it, so the user sees the actual login
+      // screen shape they're reshaping — not a solo card floating in
+      // the void.
       return (
         <>
-          <div className={styles.shadowAuthCard} style={{ boxShadow: shadow }}>
-            <p className={styles.shadowCardEyebrow}>Sign in to {brand.full}</p>
-            <p className={styles.shadowCardTitle}>Welcome back</p>
-            <div className={styles.shadowAuthField} />
-            <div className={styles.shadowAuthField} />
-            <Button size="sm" fullWidth>Continue</Button>
+          <div className={styles.shadowAuthStage}>
+            <div className={styles.shadowAuthCard} style={{ boxShadow: shadow }}>
+              {logoSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- user's data URL, preview only
+                <img src={logoSrc} alt={logoAlt || "Logo"} className={styles.shadowAuthLogo} />
+              ) : null}
+              <p className={styles.shadowCardEyebrow}>Sign in to {brand.full}</p>
+              <p className={styles.shadowCardTitle}>Welcome back</p>
+              <div className={styles.shadowAuthField} />
+              <div className={styles.shadowAuthField} />
+              <Button size="sm" fullWidth>Continue</Button>
+            </div>
           </div>
-          <SpecimenCaption token={token} note="The sign-in and templates/starter card: a solo surface centred on the auth-background gradient." />
+          <SpecimenCaption token={token} note="The sign-in card: a solo surface centred on the auth-background gradient. The drop you set here sells the floating feel." />
         </>
       );
     case "--sidebar-shadow":
+      return (
+        <>
+          <div className={styles.shadowEdgeDemo}>
+            <div className={styles.shadowEdgeSidebar} style={{ boxShadow: shadow }}>
+              <div className={styles.shadowEdgeChip}>Sidebar</div>
+              <div className={styles.shadowEdgeStubRow} />
+              <div className={styles.shadowEdgeStubRow} />
+              <div className={styles.shadowEdgeStubRow} />
+            </div>
+            <div className={styles.shadowEdgePage}>
+              <div className={styles.shadowEdgeStubCard}>Page content</div>
+            </div>
+          </div>
+          <SpecimenCaption token={token} note="The soft fall off the sidebar's right edge where the chrome meets the page. Separates the fixed nav from the scrolling content next to it." />
+        </>
+      );
     case "--topbar-shadow":
       return (
         <>
-          <div className={styles.shadowEdge} style={{ boxShadow: shadow }}>
-            <span>{token === "--sidebar-shadow" ? "Sidebar edge" : "Top bar edge"}</span>
+          <div className={styles.shadowEdgeDemoCol}>
+            <div className={styles.shadowEdgeTopbar} style={{ boxShadow: shadow }}>
+              <div className={styles.shadowEdgeChip}>Top bar</div>
+              <div className={styles.shadowEdgeStubItems}>
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className={styles.shadowEdgePageWide}>
+              <div className={styles.shadowEdgeStubCard}>Page content</div>
+            </div>
           </div>
-          <SpecimenCaption token={token} note="The soft fall off the shell's outer edge where the chrome meets the page." />
+          <SpecimenCaption token={token} note="The soft fall off the top bar's bottom edge where the chrome meets the page below. Separates the fixed header from the scrolling content under it." />
         </>
       );
     case "--glow-md":
