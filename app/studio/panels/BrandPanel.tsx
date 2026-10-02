@@ -101,7 +101,11 @@ const COLOUR_SECTIONS: ReadonlyArray<ColourSection> = [
   { id: "brand", label: "Brand", note: "Pick the brand. Every tint, wash, glow and gradient built from it follows.", rows: PALETTE },
   { id: "text", label: "Text", note: "Keep muted text at 4.5:1 on the worst glass; the Contrast step shows where each stands.", rows: INKS },
   { id: "signals", label: "Signals", note: "Danger and focus.", rows: SIGNALS },
-  { id: "field", label: "Page field", note: "The coloured ground the glass floats on.", rows: FIELD },
+  // Page field (--page-base + the two bloom channels + --night) is
+  // edited in dedicated steps: Background owns --page-base + the
+  // blooms, Layout owns --night via the admin strip. Keeping it off
+  // this strip stops the Colours step reading as "edit every token
+  // in the kit".
   { id: "charts", label: "Charts", note: "The chart palette. Each series needs 3:1 against the surface it sits on.", rows: CHARTS },
   { id: "ramp", label: "Chart ramp", note: "One hue, light to dark, for ordered categories.", rows: CHART_RAMP },
 ];

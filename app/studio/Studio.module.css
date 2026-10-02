@@ -512,6 +512,13 @@
      stepper. 10 / 14 / 24 reads calmer and gives each group more of
      the vertical column it earns. */
   padding: 10px 14px 24px;
+  /* Center the groups vertically when they fit; when they overflow,
+     `safe center` falls back to top-aligned so the user can still
+     scroll from the top. Avoids content pinned to the top on short
+     steps (Logo, Fonts) while keeping tall steps scrollable. */
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
   scrollbar-width: var(--scrollbar-width);
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }

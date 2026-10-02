@@ -600,25 +600,35 @@ function ColourTextShowcase({ peek, brand }: { peek: string | null; brand: Brand
       <div className={styles.catIntro}>
         <p className={styles.catEyebrow}>Text</p>
         <h3 className={styles.catTitle}>Ink ladder</h3>
-        <p className={styles.catLede}>The six text roles, each reading the token it&apos;s named after.</p>
+        <p className={styles.catLede}>One short line per role, each reading the token it&apos;s named after.</p>
       </div>
       <GlassPanel padding="lg" className={styles.catTextCard}>
-        <Spot as="h2" tokens="--ink-heading" peek={peek} className={styles.catInkHeading}>Welcome to {brand.full}</Spot>
-        <Spot as="p" tokens="--ink-body" peek={peek} className={styles.catInkBody}>
-          Body ink runs through every paragraph, table cell, label and input value. It&apos;s the colour you&apos;re reading right now.
-        </Spot>
-        <Spot as="p" tokens="--ink-secondary" peek={peek} className={styles.catInkSecondary}>
-          Secondary ink: field helper copy, muted descriptions, quieter rows that still carry meaning.
-        </Spot>
-        <Spot as="p" tokens="--ink-muted" peek={peek} className={styles.catInkMuted}>
-          Muted ink: captions, metadata and column headers. Lowest-weight copy that still has to clear 4.5:1 on glass.
-        </Spot>
-        <Spot as="p" tokens="--ink-brand" peek={peek} className={styles.catInkBrand}>
-          Brand ink paints links, active nav labels and the eyebrows above headings.
-        </Spot>
-        <Spot as="div" tokens="--ink-placeholder --line-input --focus-color" peek={peek}>
-          <TextInput size="sm" placeholder="Placeholder ink shows up here" />
-        </Spot>
+        <div className={styles.catInkStack}>
+          <Spot as="div" tokens="--ink-heading" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Heading</span>
+            <span className={styles.catInkHeading}>{brand.full}</span>
+          </Spot>
+          <Spot as="div" tokens="--ink-body" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Body</span>
+            <span className={styles.catInkBody}>Paragraphs, table cells, labels and input values.</span>
+          </Spot>
+          <Spot as="div" tokens="--ink-secondary" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Secondary</span>
+            <span className={styles.catInkSecondary}>Field helper copy and quieter rows.</span>
+          </Spot>
+          <Spot as="div" tokens="--ink-muted" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Muted</span>
+            <span className={styles.catInkMuted}>Captions, metadata and column headers.</span>
+          </Spot>
+          <Spot as="div" tokens="--ink-brand" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Brand</span>
+            <span className={styles.catInkBrand}>Links and active nav labels.</span>
+          </Spot>
+          <Spot as="div" tokens="--ink-placeholder --line-input --focus-color" peek={peek} className={styles.catInkLine}>
+            <span className={styles.catInkTag}>Placeholder</span>
+            <TextInput size="sm" placeholder="Shown while a field is empty" />
+          </Spot>
+        </div>
       </GlassPanel>
     </div>
   );
@@ -852,17 +862,9 @@ function ShapeShowcase({ brand }: { brand: BrandNames }) {
         </div>
       </GlassPanel>
 
-      {/* ── Dialogs: the three sizes you can pop open live ─────────── */}
-      <GlassPanel padding="lg" className={styles.shapeCard}>
-        <div className={styles.shapeHeader}>
-          <div>
-            <ShapeEyebrow>Dialogs</ShapeEyebrow>
-            <h3 className={styles.shapeTitle}>Modal widths</h3>
-            <p className={styles.shapeMuted}>Click a button to pop a real dialog. Drag the matching slider on the left while it is open and the dialog resizes live.</p>
-          </div>
-        </div>
-        <ShapeDialogButtons />
-      </GlassPanel>
+      {/* Dialog widths section was removed from the Shape controls, so
+          the live-resizing modal preview on the right went with it —
+          nothing was editing those widths from this step any more. */}
     </div>
   );
 }
@@ -1252,60 +1254,6 @@ function SpecimenCaption({ token, note }: { token: string; note: string }) {
   );
 }
 
-function ShapeDialogButtons() {
-  // Keep `size` separate from `open` so closing a Small or Large dialog
-  // doesn't briefly collapse it to Medium during the dismiss animation.
-  // Previously, `size={size ?? "md"}` snapped to Medium the instant
-  // `setSize(null)` ran, which the Modal's exit transition visibly
-  // picked up for ~150 ms before unmounting.
-  const [size, setSize] = useState<"sm" | "md" | "lg">("md");
-  const [open, setOpen] = useState(false);
-  const openWith = (next: "sm" | "md" | "lg") => {
-    setSize(next);
-    setOpen(true);
-  };
-  const close = () => setOpen(false);
-  const label = size === "sm" ? "Small" : size === "md" ? "Medium" : "Large";
-  return (
-    <>
-      <div className={styles.shapeButtonsLine}>
-        <Button onClick={() => openWith("sm")}>Open small dialog</Button>
-        <Button onClick={() => openWith("md")}>Open medium dialog</Button>
-        <Button onClick={() => openWith("lg")}>Open large dialog</Button>
-      </div>
-      <p className={styles.shapeMuted}>
-        Sized by <code className={styles.shapeToken}>--modal-width-sm</code>,{" "}
-        <code className={styles.shapeToken}>--modal-width-md</code> and{" "}
-        <code className={styles.shapeToken}>--modal-width-lg</code>. Below 640 px every size becomes a bottom sheet.
-      </p>
-      <Modal
-        open={open}
-        onClose={close}
-        title={`${label} dialog preview`}
-        description="Drag the matching slider on the left while this is open — the dialog resizes live."
-        size={size}
-        footer={
-          <>
-            <Button variant="secondary" onClick={close}>Cancel</Button>
-            <Button onClick={close}>Save changes</Button>
-          </>
-        }
-      >
-        <div className={styles.shapeDialogBodyContent}>
-          <Field label="Project name">
-            <TextInput defaultValue="Atlas redesign" />
-          </Field>
-          <Field label="Note">
-            <Textarea rows={3} defaultValue="Clean, calm, carries the brand." />
-          </Field>
-          <p className={styles.shapeMuted}>
-            Max width in use: <code className={styles.shapeToken}>--modal-width-{size}</code>.
-          </p>
-        </div>
-      </Modal>
-    </>
-  );
-}
 
 /**
  * Step 3's preview: a type specimen running every scale (display, section,

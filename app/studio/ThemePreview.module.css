@@ -698,48 +698,63 @@
   cursor: pointer;
 }
 
-/* Text ladder */
+/* Text ladder: a compact two-column stack. Each row = a tiny grey tag
+   on the left + the actual line painted in its ink on the right.
+   Reads as one tight card instead of a stacked set of long paragraphs. */
 .catTextCard {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 640px;
+  width: min(100%, 520px);
+}
+
+.catInkStack {
+  display: grid;
+  gap: 10px;
+}
+
+.catInkLine {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.catInkTag {
+  font-size: var(--text-micro);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-muted);
 }
 
 .catInkHeading {
-  margin: 0;
   font-family: var(--font-display);
-  font-size: var(--text-section);
+  font-size: var(--text-card-title);
   font-weight: 700;
   color: var(--ink-heading);
 }
 
 .catInkBody {
-  margin: 0;
   font-size: var(--text-body);
   color: var(--ink-body);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .catInkSecondary {
-  margin: 0;
   font-size: var(--text-body);
   color: var(--ink-secondary);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .catInkMuted {
-  margin: 0;
   font-size: var(--text-small);
   color: var(--ink-muted);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .catInkBrand {
-  margin: 0;
   font-size: var(--text-body);
   color: var(--ink-brand);
-  line-height: 1.5;
+  line-height: 1.4;
   font-weight: 700;
 }
 

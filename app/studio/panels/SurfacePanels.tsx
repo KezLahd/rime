@@ -120,30 +120,12 @@ export function ShapePanel({ api }: { api: StudioApi }) {
         />
       </Group>
 
-      <Group title="Dialog widths" note="Under 640px every size becomes a bottom sheet.">
-        {(
-          [
-            ["--modal-width-sm", "Small", 480, "Narrow confirmations and short forms. Common sizes: 400 - 520 px."],
-            ["--modal-width-md", "Medium", 640, "The default dialog for forms and settings panes. Common sizes: 600 - 720 px."],
-            ["--modal-width-lg", "Large", 880, "Wide dialogs with tables, side-by-side panels or long content. Common sizes: 800 - 960 px."],
-          ] as const
-        ).map(([n, label, d, help]) => (
-          <SliderRow
-            key={n}
-            label={label}
-            token={n}
-            help={help}
-            value={num(api.value(n), d)}
-            min={360}
-            max={1100}
-            step={10}
-            unit="px"
-            changed={api.changed(n)}
-            onChange={(v) => api.set({ [n]: `${v}px` })}
-            onReset={() => api.reset([n])}
-          />
-        ))}
-      </Group>
+      {/* Dialog widths used to live here as three sliders. Removed:
+          --modal-width-sm / md / lg are shipping defaults that almost
+          nobody tunes mid-walkthrough, and the three live-resizing
+          dialog previews on the right were doing too much work for a
+          control nobody edits. Still editable from Advanced below /
+          the full tokens list if someone genuinely needs it. */}
       <Advanced api={api} tokens={[...RADIUS_STEPS, "--r-full", ...PILL_TOKENS, "--density", ...heightNames, "--border-w", "--border-w-field", "--modal-width-sm", "--modal-width-md", "--modal-width-lg"]} />
     </>
   );
