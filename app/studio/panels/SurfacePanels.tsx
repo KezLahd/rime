@@ -641,11 +641,11 @@ export function HoverPanel({ api }: { api: StudioApi }) {
         <Group title="Buttons" help="Every effect a button has when the pointer sits on it: a tiny lift, a lighten layer, the brand glow deepening, and the colour of the press shadow.">
           <SliderRow
             label="Lift on hover"
-            help="How many pixels a button rises off its resting position when hovered. 0 = flat (Rime default; buttons rely on the glow instead). Negative values push down for a press-y feel."
+            help="Primary + Secondary. How many pixels the button moves vertically on hover. 0 = flat (Rime default; the glow does the lifting instead). Positive values rise off the surface; negative values sink into it."
             token="--button-lift"
             value={num(api.value("--button-lift"), 0)}
             min={-4}
-            max={0}
+            max={4}
             step={0.5}
             unit="px"
             changed={api.changed("--button-lift")}
@@ -654,7 +654,7 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Lighten on hover"
-            help="A white film layered over the button's base colour on hover. 0% means no change (brighter brands look weird under too much white); 7% is the Rime default."
+            help="Primary only. A white film layered over the primary button's gradient on hover. 0% means no change (brighter brands look weird under too much white); 7% is the Rime default. Secondary + Ghost + Danger don't use this."
             displayScale={100}
             unit="%"
             token="--button-hover-overlay"
@@ -668,7 +668,7 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Darken on press"
-            help="A dark film layered over the button while the mouse is held down. Reads as 'pressed in'. 14% is default."
+            help="Primary only. A dark film layered over the primary button while the mouse is held down — reads as 'pressed in'. 14% is default. Secondary buttons darken via their fill slider below instead."
             displayScale={100}
             unit="%"
             token="--button-press-overlay"
@@ -682,7 +682,7 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Hover glow"
-            help="How much deeper the brand-coloured halo under a primary button becomes on hover. 100% = preset; 0% kills the glow entirely; 200% doubles it."
+            help="Primary only. How much deeper the brand-coloured halo under the primary button becomes on hover. 100% = preset; 0% kills the glow entirely; 200% doubles it. Secondary, Ghost and Danger don't carry a glow."
             displayScale={100}
             unit="%"
             token="--button-hover-glow"
@@ -696,7 +696,7 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Secondary fill on hover"
-            help="How solid the secondary (frosted glass) button's background becomes on hover. 100% is fully opaque white; 68% is default — enough to feel pressed but keeps the glass tint."
+            help="Secondary only. How solid the frosted-glass secondary button's background becomes on hover. 100% is fully opaque white; 68% is default — enough to feel pressed but keeps the glass tint. Primary / Ghost / Danger don't use this."
             displayScale={100}
             unit="%"
             token="--button-secondary-hover-bg"
@@ -801,14 +801,14 @@ export function HoverPanel({ api }: { api: StudioApi }) {
       ) : null}
 
       {active === "motion" ? (
-        <Group title="Motion" help="How long non-button transitions take and the curve they follow. Reduced-motion users still see 0 regardless.">
+        <Group title="Motion" help="How long non-button transitions take and the curve they follow. These feed every surface that doesn't have its own duration (hover washes, popover opens, modal fades, caret moves). Reduced-motion users still see 0 regardless.">
           <SliderRow
             label="Fast"
-            help="Micro transitions: hover highlights, focus rings, caret moves. Default 120 ms. Shorter feels snappy, longer feels luxurious."
+            help="Micro transitions: hover highlights, focus rings, caret moves. Default 120 ms. Range tops out at 300 ms so a reasonable value stays mid-slider. Shorter feels snappy, longer feels luxurious."
             token="--dur-fast"
             value={num(api.value("--dur-fast"), 120)}
-            min={0}
-            max={600}
+            min={50}
+            max={300}
             step={10}
             unit="ms"
             changed={api.changed("--dur-fast")}
@@ -820,8 +820,8 @@ export function HoverPanel({ api }: { api: StudioApi }) {
             help="The default transition for most hover washes and open / close states. 150 ms is the Rime default."
             token="--dur"
             value={num(api.value("--dur"), 150)}
-            min={0}
-            max={600}
+            min={50}
+            max={400}
             step={10}
             unit="ms"
             changed={api.changed("--dur")}
@@ -830,11 +830,11 @@ export function HoverPanel({ api }: { api: StudioApi }) {
           />
           <SliderRow
             label="Slow"
-            help="Longer transitions: modal fades, page-level shifts. 200 ms by default."
+            help="Longer transitions: modal fades, page-level shifts. 200 ms by default. Pushing this above ~400 ms starts to feel sluggish."
             token="--dur-slow"
             value={num(api.value("--dur-slow"), 200)}
-            min={0}
-            max={600}
+            min={100}
+            max={500}
             step={10}
             unit="ms"
             changed={api.changed("--dur-slow")}
