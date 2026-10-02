@@ -33,7 +33,7 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { FontHoverProvider, Notice, PeekProvider, type FontHoverState } from "./controls";
+import { FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, type FontHoverState } from "./controls";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
 import { parseGradient } from "./engine/gradient";
@@ -255,6 +255,10 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
    *  temporarily swaps to that font so the user sees it live before
    *  clicking to select. Cleared on mouse-leave or blur. */
   const [fontHover, setFontHover] = useState<FontHoverState>(null);
+
+  /** Which gradient token is being edited in the Gradients panel — the
+   *  preview renders only that gradient's specimen on the right. */
+  const [gradientSelection, setGradientSelection] = useState<string | null>(null);
 
   // The latest theme for event handlers, kept in step after each commit.
   const themeRef = useRef(theme);
@@ -683,6 +687,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             {storageWarning ? <Notice tone="warn">{storageWarning}</Notice> : null}
             <PeekProvider onPeek={setPeekToken}>
             <FontHoverProvider onHover={setFontHover}>
+            <GradientSelectionProvider onSelect={setGradientSelection}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
@@ -717,6 +722,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             ) : (
               <ExportPanel api={api} sources={sources} />
             )}
+            </GradientSelectionProvider>
             </FontHoverProvider>
             </PeekProvider>
           </div>
@@ -805,7 +811,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             }
           >
             <span ref={probeRef} aria-hidden="true" className={styles.srOnly} />
-            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} />
+            <ThemePreview logoSrc={theme.logo?.src} logoAlt={theme.logo?.alt} logoCorner={logoCornerOf(api)} layout={layoutOf(api)} focus={current.previewFocus} peekToken={peekToken} gradientSelection={gradientSelection} />
           </div>
         </section>
       </div>

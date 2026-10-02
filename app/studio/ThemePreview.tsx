@@ -71,6 +71,7 @@ export const ThemePreview = memo(function ThemePreview({
   layout,
   focus,
   peekToken,
+  gradientSelection,
 }: {
   logoSrc?: string;
   logoAlt?: string;
@@ -81,6 +82,9 @@ export const ThemePreview = memo(function ThemePreview({
    *  its name. The Colours showcase rings matching elements so the user
    *  sees where the token is used. */
   peekToken?: string | null;
+  /** The gradient token currently open in the Gradients panel dropdown.
+   *  When set, the preview renders only that gradient's specimen. */
+  gradientSelection?: string | null;
 }) {
   // Logo step: just the logo on a backdrop with the five brand chips
   // underneath, so the user watches it come to life as they drop a file.
@@ -118,7 +122,7 @@ export const ThemePreview = memo(function ThemePreview({
   // a glass card, and a labelled swatch for each of the raw gradient
   // tokens so every one is visible at once.
   if (focus === "gradients") {
-    return <GradientShowcase />;
+    return <GradientShowcase selection={gradientSelection ?? null} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -578,166 +582,154 @@ function ShapeEyebrow({ children }: { children: ReactNode }) {
 }
 
 /**
- * Step 5's preview: every gradient Rime ships, each used in the real
- * component that reads it. Primary / danger buttons for the gesture
- * gradients, a mini "ADMIN" strip for --admin-strip-bg, an auth-field
- * sample for --auth-background, a mini table for --table-head-fill,
- * a labelled swatch for the raw token variants, and the page bloom
- * reads through the preview's own backdrop.
+ * Step 5's preview: ONE specimen at a time, matching the gradient open
+ * in the panel on the left. The specimen is the actual component that
+ * reads that gradient, rendered bare on a plain field so it looks like
+ * it would in a real app — no containers, no bento cards, no "every
+ * gradient at once" catalogue. Picking a different gradient in the
+ * dropdown swaps this view to that one's component.
  */
-function GradientShowcase() {
+function GradientShowcase({ selection }: { selection: string | null }) {
+  const token = selection ?? "--brand-gradient";
   return (
-    <div className={styles.gradientShowcase}>
-      {/* Gestures — the three primary gradients drive their own buttons. */}
-      <GlassPanel padding="lg" className={styles.gradientCard}>
-        <div className={styles.gradientHeader}>
-          <div>
-            <p className={styles.gradientEyebrow}>Gestures</p>
-            <h3 className={styles.gradientTitle}>Primary, danger, success</h3>
-            <p className={styles.gradientMuted}>Three gradient tokens drive the kit's confirm / destructive / success buttons.</p>
-          </div>
-        </div>
-        <div className={styles.gradientButtonsRow}>
-          <div className={styles.gradientButtonTile}>
-            <Button iconStart={<CheckCircle2 size={14} aria-hidden="true" />}>Create invoice</Button>
-            <code className={styles.gradientToken}>--brand-gradient</code>
-          </div>
-          <div className={styles.gradientButtonTile}>
-            <Button variant="danger">Delete project</Button>
-            <code className={styles.gradientToken}>--danger-gradient</code>
-          </div>
-          <div className={styles.gradientButtonTile}>
-            {/* --success-gradient drives the success Toast and the success
-                Modal tone bar — not a button variant. Mimic the toast look
-                here so the gradient is on screen. */}
-            <div className={styles.gradientSuccessToast}>
-              <CheckCircle2 size={16} aria-hidden="true" />
-              <span>Invoice sent</span>
-            </div>
-            <code className={styles.gradientToken}>--success-gradient</code>
-          </div>
-        </div>
-      </GlassPanel>
+    <div className={styles.gradientStage}>
+      <GradientSpecimen token={token} />
+    </div>
+  );
+}
 
-      {/* Chrome gradients — logo corner + admin strip, shown as a mini
-          sidebar/strip reproduction so they're visible without the full shell. */}
-      <section className={styles.gradientRow}>
-        <GlassPanel padding="lg" className={styles.gradientCard}>
-          <div className={styles.gradientHeader}>
-            <div>
-              <p className={styles.gradientEyebrow}>Shell chrome</p>
-              <h3 className={styles.gradientTitle}>Logo corner + context strip</h3>
-              <p className={styles.gradientMuted}>Shown here in a mini SidebarShell corner.</p>
-            </div>
+function GradientSpecimen({ token }: { token: string }) {
+  switch (token) {
+    case "--brand-gradient":
+      // Primary button is the main carrier. Big + centred.
+      return (
+        <>
+          <Button size="lg" iconStart={<CheckCircle2 size={16} aria-hidden="true" />}>Create invoice</Button>
+          <SpecimenCaption token={token} note="The primary gesture: this gradient paints the main confirm button, active nav pills and the brand chip in the sidebar corner." />
+        </>
+      );
+    case "--danger-gradient":
+      return (
+        <>
+          <Button size="lg" variant="danger">Delete project</Button>
+          <SpecimenCaption token={token} note="The destructive gesture: confirm-filled danger buttons and the destructive AlertDialog's primary button." />
+        </>
+      );
+    case "--success-gradient":
+      // Toast specimen — the real component this gradient drives.
+      return (
+        <>
+          <div className={styles.gradientSuccessToast}>
+            <CheckCircle2 size={18} aria-hidden="true" />
+            <span>Invoice sent to jane@acme.co</span>
           </div>
-          <div className={styles.gradientChromeMock}>
-            <div className={styles.gradientChromeStrip}>
-              Admin session · dev.acme.co
-            </div>
-            <div className={styles.gradientChromeBody}>
-              <div className={styles.gradientLogoCorner}>
-                <span className={styles.gradientLogoGlyph}>A</span>
-                <span className={styles.gradientLogoWord}>Acme</span>
-              </div>
-              <div className={styles.gradientChromeMain}>
-                <code className={styles.gradientToken}>--admin-strip-bg</code>
-                <code className={styles.gradientToken}>--logo-corner-bg</code>
-              </div>
-            </div>
+          <SpecimenCaption token={token} note="Confirm toasts and the success-tone bar on Modal. No Button variant reads this directly." />
+        </>
+      );
+    case "--logo-corner-bg":
+      return (
+        <>
+          <div className={styles.gradientLogoCornerBig}>
+            <span className={styles.gradientLogoGlyph}>A</span>
+            <span className={styles.gradientLogoWord}>Acme</span>
           </div>
-        </GlassPanel>
-
-        <GlassPanel padding="lg" className={styles.gradientCard}>
-          <div className={styles.gradientHeader}>
-            <div>
-              <p className={styles.gradientEyebrow}>Sign-in field</p>
-              <h3 className={styles.gradientTitle}>Auth backdrop</h3>
-              <p className={styles.gradientMuted}>The gradient behind the auth cards in templates/starter.</p>
-            </div>
-          </div>
-          <div className={styles.gradientAuthMock}>
+          <SpecimenCaption token={token} note="Fills the SidebarShell's logo corner when logoCorner=&quot;fill&quot;. Shown here at the actual corner size." />
+        </>
+      );
+    case "--admin-strip-bg":
+      return (
+        <>
+          <div className={styles.gradientStripBig}>Admin session · dev.acme.co</div>
+          <SpecimenCaption token={token} note="Full-width context strip at the top of a SidebarShell when strip={} is set — an admin session, a staging flag." />
+        </>
+      );
+    case "--auth-background":
+      // Realistic auth card centred on the gradient field.
+      return (
+        <>
+          <div className={styles.gradientAuthStage}>
             <div className={styles.gradientAuthCard}>
               <p className={styles.gradientAuthEyebrow}>Sign in</p>
               <h4 className={styles.gradientAuthTitle}>Welcome back</h4>
               <Field label="Work email">
                 <TextInput defaultValue="jane@acme.co" />
               </Field>
-              <Button>Continue</Button>
+              <Field label="Password">
+                <TextInput type="password" defaultValue="••••••••" />
+              </Field>
+              <Button fullWidth>Continue</Button>
             </div>
           </div>
-          <code className={styles.gradientToken}>--auth-background</code>
-        </GlassPanel>
-      </section>
+          <SpecimenCaption token={token} note="The gradient behind the auth cards in templates/starter. Reads as atmosphere, not a card." />
+        </>
+      );
+    case "--table-head-fill":
+      return (
+        <>
+          <div className={styles.gradientTableBig}>
+            <div className={styles.gradientTableHead}>
+              <span>Client</span>
+              <span>Amount</span>
+              <span>Due</span>
+              <span>Status</span>
+            </div>
+            {[
+              ["Acme Inc", "$2,400.00", "12 Oct", "Paid"],
+              ["Globex", "$880.00", "18 Oct", "Pending"],
+              ["Initech", "$1,120.00", "22 Sep", "Overdue"],
+            ].map(([a, b, c, d]) => (
+              <div key={a} className={styles.gradientTableRowBig}>
+                <span>{a}</span>
+                <span>{b}</span>
+                <span>{c}</span>
+                <span>{d}</span>
+              </div>
+            ))}
+          </div>
+          <SpecimenCaption token={token} note="The horizontal sweep in Table and DataTable header cells." />
+        </>
+      );
+    case "--highlight-edge":
+      return (
+        <>
+          <div className={styles.gradientEdgeBig}>
+            <span className={styles.gradientEdgeTop} aria-hidden="true" />
+            <h4 className={styles.gradientEdgeTitle}>Glass card</h4>
+            <p className={styles.gradientEdgeBody}>The 2px highlight at the top edge catches light like real glass. Zoom in on the top rule.</p>
+          </div>
+          <SpecimenCaption token={token} note="The lit edge at the top of glass panels — reads as light catching the surface." />
+        </>
+      );
+    case "--page-background":
+      return (
+        <>
+          <div className={styles.gradientPageBig} />
+          <SpecimenCaption token={token} note="The whole-page backdrop plus the two soft brand blooms (top-left and bottom-right). Also seen behind this preview." />
+        </>
+      );
+    case "--gradient-brand-deep":
+      return (
+        <>
+          <div className={styles.gradientTileBig} style={{ background: `var(${token})` }} />
+          <SpecimenCaption token={token} note="A darker variant used for selected rows and some chart tooltips. Not a primary gesture." />
+        </>
+      );
+    default:
+      // Unknown token — just render it as a tile.
+      return (
+        <>
+          <div className={styles.gradientTileBig} style={{ background: `var(${token})` }} />
+          <SpecimenCaption token={token} note="This token is editable in the panel on the left." />
+        </>
+      );
+  }
+}
 
-      {/* Table + highlight edge + deep brand — three subtle gradients
-          living on their actual surfaces. */}
-      <GlassPanel padding="lg" className={styles.gradientCard}>
-        <div className={styles.gradientHeader}>
-          <div>
-            <p className={styles.gradientEyebrow}>Surface sweeps</p>
-            <h3 className={styles.gradientTitle}>Table header + highlight edge</h3>
-            <p className={styles.gradientMuted}>Subtle gradients that live on the chrome of other components.</p>
-          </div>
-        </div>
-        <div className={styles.gradientSurfaces}>
-          <div className={styles.gradientSurfaceCol}>
-            <code className={styles.gradientToken}>--table-head-fill</code>
-            <div className={styles.gradientTableMock}>
-              <div className={styles.gradientTableHead}>
-                <span>Client</span>
-                <span>Amount</span>
-                <span>Status</span>
-              </div>
-              <div className={styles.gradientTableRow}>
-                <span>Acme Inc</span>
-                <span>$2,400</span>
-                <span>Paid</span>
-              </div>
-              <div className={styles.gradientTableRow}>
-                <span>Globex</span>
-                <span>$880</span>
-                <span>Pending</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.gradientSurfaceCol}>
-            <code className={styles.gradientToken}>--highlight-edge</code>
-            <div className={styles.gradientEdgeCard}>
-              <span className={styles.gradientEdgeTop} aria-hidden="true" />
-              <h4 className={styles.gradientEdgeTitle}>Glass card</h4>
-              <p className={styles.gradientMuted}>The thin highlight at the top edge catches light like real glass.</p>
-            </div>
-          </div>
-        </div>
-      </GlassPanel>
-
-      {/* Raw gradient tiles — a reference row showing every token in the
-          same place at the same size, so a user can scan them together. */}
-      <GlassPanel padding="lg" className={styles.gradientCard}>
-        <div className={styles.gradientHeader}>
-          <div>
-            <p className={styles.gradientEyebrow}>Every gradient</p>
-            <h3 className={styles.gradientTitle}>At a glance</h3>
-            <p className={styles.gradientMuted}>One tile per --*-gradient token so you can compare them side-by-side.</p>
-          </div>
-        </div>
-        <div className={styles.gradientTileGrid}>
-          {([
-            ["--brand-gradient", "Brand"],
-            ["--danger-gradient", "Danger"],
-            ["--success-gradient", "Success"],
-            ["--gradient-brand-deep", "Deep brand"],
-            ["--brand-gradient-soft", "Brand soft"],
-            ["--brand-gradient-wash", "Brand wash"],
-          ] as const).map(([token, label]) => (
-            <div key={token} className={styles.gradientTile}>
-              <div className={styles.gradientTileSwatch} style={{ background: `var(${token})` }} />
-              <span className={styles.gradientTileLabel}>{label}</span>
-              <code className={styles.gradientToken}>{token}</code>
-            </div>
-          ))}
-        </div>
-      </GlassPanel>
+function SpecimenCaption({ token, note }: { token: string; note: string }) {
+  return (
+    <div className={styles.gradientSpecimenCaption}>
+      <code className={styles.gradientToken}>{token}</code>
+      <p className={styles.gradientMuted}>{note}</p>
     </div>
   );
 }

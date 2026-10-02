@@ -32,6 +32,30 @@ export function FontHoverProvider({ onHover, children }: { onHover: (state: Font
 export function useFontHover() {
   return useContext(FontHoverContext);
 }
+
+/**
+ * Gradient-selection context: GradientPanel broadcasts its currently-
+ * selected gradient token here; the preview on the right renders only
+ * the specimen that uses that gradient (a bare primary button for
+ * --brand-gradient, a bare SidebarShell corner for --logo-corner-bg, and
+ * so on) instead of a grid of every gradient at once.
+ */
+const GradientSelectionContext = createContext<(token: string | null) => void>(() => {});
+
+export function GradientSelectionProvider({
+  onSelect,
+  children,
+}: {
+  onSelect: (token: string | null) => void;
+  children: ReactNode;
+}) {
+  const stable = useCallback(onSelect, [onSelect]);
+  return <GradientSelectionContext.Provider value={stable}>{children}</GradientSelectionContext.Provider>;
+}
+
+export function useGradientSelection() {
+  return useContext(GradientSelectionContext);
+}
 import {
   Alert,
   IconButton,

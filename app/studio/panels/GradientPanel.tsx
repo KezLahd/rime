@@ -1,11 +1,11 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, IconButton, Select, Slider } from "@/components/ui";
 import { Advanced } from "../advanced";
 import type { StudioApi } from "../api";
-import { AngleRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, TextRow } from "../controls";
+import { AngleRow, ColourSwatch, Group, Notice, Row, SelectRow, SliderRow, TextRow, useGradientSelection } from "../controls";
 import { parseColour, toHex, type Rgb } from "../engine/colour";
 import { applySoftness, parseGradient, positioned, serializeGradient, type Layer, type Stop } from "../engine/gradient";
 import styles from "../Studio.module.css";
@@ -51,6 +51,16 @@ export function GradientPanel({ api, resolveColour }: { api: StudioApi; resolveC
   const layers = parseGradient(value);
   const softness = typeof api.theme.controls[`soft${token}`] === "number" ? (api.theme.controls[`soft${token}`] as number) : 1;
   const currentHelp = GRADIENTS.find((g) => g.token === token)?.help ?? "";
+
+  // Broadcast which gradient is being edited; the preview on the right
+  // renders only the specimen that uses it. Cleared on unmount so the
+  // preview falls back to the all-gradients overview when the user leaves
+  // the step.
+  const selectGradient = useGradientSelection();
+  useEffect(() => {
+    selectGradient(token);
+    return () => selectGradient(null);
+  }, [token, selectGradient]);
 
   const write = (next: Layer[], controls?: Record<string, number>) => api.set({ [token]: serializeGradient(next) }, controls);
   const editLayer = (i: number, patch: Partial<Layer>) => layers && write(layers.map((l, j) => (j === i ? ({ ...l, ...patch } as Layer) : l)));
