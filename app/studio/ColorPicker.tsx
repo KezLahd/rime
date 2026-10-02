@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useBrandPalette } from "./controls";
 import { parseHex, toHex, type Rgb } from "./engine/colour";
 import styles from "./ColorPicker.module.css";
 
@@ -58,6 +59,7 @@ function hsvToRgb(h: number, s: number, v: number): Rgb {
  * matches the kit's chrome.
  */
 export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: Rgb) => void }) {
+  const palette = useBrandPalette();
   const initial = rgbToHsv(colour);
   const [h, setH] = useState(initial.h);
   const [s, setS] = useState(initial.s);
@@ -67,6 +69,17 @@ export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: R
   const hueRef = useRef<HTMLDivElement>(null);
   const colourRef = useRef(colour);
   colourRef.current = colour;
+
+  const pickSwatch = (hex: string) => {
+    const parsed = parseHex(hex);
+    if (!parsed) return;
+    const hsv = rgbToHsv(parsed);
+    setH(hsv.h);
+    setS(hsv.s);
+    setV(hsv.v);
+    setHexDraft(hex);
+    onChange({ ...parsed, a: colourRef.current.a });
+  };
 
   // When the external colour changes (hex typed, Reset clicked, step
   // switched), sync the HSV sliders back. Preserve hue when saturation
@@ -177,6 +190,34 @@ export function ColorPicker({ colour, onChange }: { colour: Rgb; onChange: (c: R
         maxLength={7}
         aria-label="Hex colour"
       />
+
+      {/* Brand palette swatches: click to snap the picker to a brand
+          colour without re-typing the hex. Pulls live values from the
+          palette context (Studio.tsx derives it from --brand,
+          --brand-deep, --brand-soft and --support), so edits to the
+          brand on step 2 are reflected here immediately. */}
+      {palette ? (
+        <div className={styles.swatches} role="group" aria-label="Brand palette">
+          {([
+            ["Brand", palette.brand],
+            ["Deep", palette.deep],
+            ["Accent", palette.accent],
+            ["Neutral", palette.neutral],
+          ] as const).map(([label, hex]) => (
+            <button
+              key={label}
+              type="button"
+              className={styles.swatch}
+              style={{ background: hex }}
+              aria-label={`${label} · ${hex}`}
+              title={`${label} · ${hex}`}
+              onClick={() => pickSwatch(hex)}
+            >
+              <span className={styles.swatchLabel}>{label}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

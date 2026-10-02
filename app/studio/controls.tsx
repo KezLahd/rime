@@ -42,6 +42,34 @@ export function useFontHover() {
  */
 const GradientSelectionContext = createContext<(token: string | null) => void>(() => {});
 
+/**
+ * Current brand palette, resolved to hex. ColorPicker reads this to show
+ * a strip of quick-pick swatches at the top (Brand / Deep / Accent /
+ * Neutral) so a user editing another token can snap it to one of the
+ * brand colours without re-typing the hex.
+ */
+export type BrandPalette = {
+  brand: string;
+  deep: string;
+  accent: string;
+  neutral: string;
+};
+export const BrandPaletteContext = createContext<BrandPalette | null>(null);
+
+export function BrandPaletteProvider({
+  palette,
+  children,
+}: {
+  palette: BrandPalette | null;
+  children: ReactNode;
+}) {
+  return <BrandPaletteContext.Provider value={palette}>{children}</BrandPaletteContext.Provider>;
+}
+
+export function useBrandPalette() {
+  return useContext(BrandPaletteContext);
+}
+
 export function GradientSelectionProvider({
   onSelect,
   children,

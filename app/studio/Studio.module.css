@@ -1346,6 +1346,122 @@
 
 /* ── Adobe-style gradient stops bar ──────────────────────────────────── */
 
+/* ── Bloom editor ─────────────────────────────────────────────────────
+   The multi-bloom editor: toggle + interactive 2D stage + size pair
+   with aspect-lock + strength + fade + colour. */
+
+.bloomEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Interactive stage: a scaled-down mock of the page. Shows a subtle
+   grid, a soft blurred ellipse for each bloom at its (x, y) position
+   and (w, h) size — the active bloom gets a brand-coloured ring so
+   the user knows which one is responding to the sliders. */
+.bloomStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-md);
+  background: var(--recess-fill);
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  overflow: hidden;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.bloomStageGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 10% 10%;
+  pointer-events: none;
+}
+
+.bloomDot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  transition: box-shadow var(--dur) var(--ease);
+}
+
+.bloomDotActive {
+  box-shadow: 0 0 0 2px var(--brand), 0 0 16px rgba(var(--rgb-brand), 0.35);
+}
+
+.bloomStageHint {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  margin: 0;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: rgba(var(--rgb-white), 0.75);
+  color: var(--ink-muted);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+/* Width + height sliders with the lock chip tucked into their row.
+   The two SliderRows stack as usual; the chip is a floating button
+   anchored to the right side so it sits beside the pair. */
+.bloomSize {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 36px;
+}
+
+.bloomLock {
+  position: absolute;
+  top: 16px;
+  right: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  width: 32px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--recess-fill);
+  color: var(--ink-muted);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line-input);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.bloomLock > span {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bloomLock:hover {
+  background: var(--recess-fill-hover);
+  color: var(--ink-body);
+}
+
+.bloomLockOn {
+  background: color-mix(in oklab, var(--brand) 14%, transparent);
+  color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+
+.bloomLockOn:hover {
+  background: color-mix(in oklab, var(--brand) 22%, transparent);
+}
+
 /* The wrap pads 12 px on each side — the exact half-width of a 24 px
    marker — so the end-stop squares, which centre on the bar's left and
    right edges and overhang by half their width, land flush with the

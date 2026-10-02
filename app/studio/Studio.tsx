@@ -33,7 +33,8 @@ import { LOGO_EVENT } from "../_docs/DocsLogo";
 import { DocsTopBar } from "../_docs/DocsShell";
 import { applyMode, applyPreset } from "../_docs/PresetSwitch";
 import type { StudioApi, StudioFont } from "./api";
-import { FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, type FontHoverState } from "./controls";
+import { BrandPaletteProvider, FontHoverProvider, GradientSelectionProvider, Notice, PeekProvider, type BrandPalette, type FontHoverState } from "./controls";
+import { toHex } from "./engine/colour";
 import { parseColour, type Rgb } from "./engine/colour";
 import { measure, type PairResult } from "./engine/contrast";
 import { parseGradient } from "./engine/gradient";
@@ -447,6 +448,26 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
     return () => cancelAnimationFrame(frame);
   }, [css, sources, base, active, resolveColour, stops]);
 
+  // Brand palette for the ColorPicker's quick-pick swatches. Derived from
+  // the resolved stylesheet so it tracks any override the user applies on
+  // the Brand/Colour panels. Four slots: Brand, Deep, Accent, Neutral.
+  // Converted through parseColour → toHex to normalise rgb(a,b,c) strings
+  // into #rrggbb hex, so clicking a swatch writes a hex the ColorPicker
+  // can round-trip without the parser rejecting a non-literal form.
+  const brandPalette: BrandPalette | null = useMemo(() => {
+    const toHexSafe = (expr: string | undefined) => {
+      if (!expr) return null;
+      const c = parseColour(expr);
+      return c ? toHex(c) : null;
+    };
+    const brand = toHexSafe(resolvedMap["--brand"]);
+    const deep = toHexSafe(resolvedMap["--brand-deep"]);
+    const accent = toHexSafe(resolvedMap["--brand-soft"]);
+    const neutral = toHexSafe(resolvedMap["--support"]);
+    if (!brand || !deep || !accent || !neutral) return null;
+    return { brand, deep, accent, neutral };
+  }, [resolvedMap]);
+
   const failing = results?.filter((r) => !r.pass).length ?? 0;
   const changes =
     Object.keys(theme.overrides).length + Object.keys(theme.overridesDark).length + (theme.logo ? 1 : 0) + (layoutOf({ theme }) !== "sidebar" ? 1 : 0) + (logoCornerOf({ theme }) === "fill" ? 1 : 0);
@@ -706,6 +727,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <PeekProvider onPeek={setPeekToken}>
             <FontHoverProvider onHover={setFontHover}>
             <GradientSelectionProvider onSelect={setGradientSelection}>
+            <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
             ) : section === "brand" ? (
@@ -740,6 +762,7 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             ) : (
               <ExportPanel api={api} sources={sources} />
             )}
+            </BrandPaletteProvider>
             </GradientSelectionProvider>
             </FontHoverProvider>
             </PeekProvider>
