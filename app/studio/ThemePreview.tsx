@@ -145,7 +145,7 @@ export const ThemePreview = memo(function ThemePreview({
   // a glass card, and a labelled swatch for each of the raw gradient
   // tokens so every one is visible at once.
   if (focus === "gradients") {
-    return <GradientShowcase selection={gradientSelection ?? null} brand={brandText} />;
+    return <GradientShowcase selection={gradientSelection ?? null} brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -616,16 +616,16 @@ function ShapeEyebrow({ children }: { children: ReactNode }) {
  * gradient at once" catalogue. Picking a different gradient in the
  * dropdown swaps this view to that one's component.
  */
-function GradientShowcase({ selection, brand }: { selection: string | null; brand: BrandNames }) {
+function GradientShowcase({ selection, brand, logoSrc, logoAlt }: { selection: string | null; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
   const token = selection ?? "--brand-gradient";
   return (
     <div className={styles.gradientStage}>
-      <GradientSpecimen token={token} brand={brand} />
+      <GradientSpecimen token={token} brand={brand} logoSrc={logoSrc} logoAlt={logoAlt} />
     </div>
   );
 }
 
-function GradientSpecimen({ token, brand }: { token: string; brand: BrandNames }) {
+function GradientSpecimen({ token, brand, logoSrc, logoAlt }: { token: string; brand: BrandNames; logoSrc?: string; logoAlt?: string }) {
   switch (token) {
     case "--brand-gradient":
       // Primary button is the main carrier. Big + centred.
@@ -657,10 +657,17 @@ function GradientSpecimen({ token, brand }: { token: string; brand: BrandNames }
       return (
         <>
           <div className={styles.gradientLogoCornerBig}>
-            <span className={styles.gradientLogoGlyph}>{brand.word.charAt(0).toUpperCase() || "A"}</span>
-            <span className={styles.gradientLogoWord}>{brand.word}</span>
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element -- user's data URL, preview only
+              <img src={logoSrc} alt={logoAlt || "Logo"} className={styles.gradientLogoCornerImage} />
+            ) : (
+              <>
+                <span className={styles.gradientLogoGlyph}>{brand.word.charAt(0).toUpperCase() || "A"}</span>
+                <span className={styles.gradientLogoWord}>{brand.word}</span>
+              </>
+            )}
           </div>
-          <SpecimenCaption token={token} note="Fills the SidebarShell's logo corner when logoCorner=&quot;fill&quot;. Shown here at the actual corner size." />
+          <SpecimenCaption token={token} note="Fills the SidebarShell's logo corner when logoCorner=&quot;fill&quot;. Shown here at the actual corner size — the logo you dropped on step 1 sits on top of the gradient." />
         </>
       );
     case "--admin-strip-bg":
@@ -671,12 +678,18 @@ function GradientSpecimen({ token, brand }: { token: string; brand: BrandNames }
         </>
       );
     case "--auth-background":
-      // Realistic auth card centred on the gradient field.
+      // Realistic auth card centred on the gradient field. The logo from
+      // step 1 anchors the card so this reads as the user's own sign-in
+      // screen, not an abstract gradient demo.
       return (
         <>
           <div className={styles.gradientAuthStage}>
             <div className={styles.gradientAuthCard}>
-              <p className={styles.gradientAuthEyebrow}>Sign in</p>
+              {logoSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- user's data URL, preview only
+                <img src={logoSrc} alt={logoAlt || "Logo"} className={styles.gradientAuthLogo} />
+              ) : null}
+              <p className={styles.gradientAuthEyebrow}>Sign in to {brand.full}</p>
               <h4 className={styles.gradientAuthTitle}>Welcome back</h4>
               <Field label="Work email">
                 <TextInput key={brand.domain} defaultValue={`jane@${brand.domain}`} />

@@ -551,6 +551,19 @@
   letter-spacing: var(--tracking-display);
 }
 
+/* Dropped-logo image inside the logo corner. Height caps at the corner's
+   inner height; width fits the chip so a landscape wordmark reads as the
+   wordmark it is, and a square mark stays square. Light drop shadow lifts
+   it off the gradient on busy backgrounds. */
+.gradientLogoCornerImage {
+  max-height: 44px;
+  max-width: 220px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
 /* Admin strip, full stage width. */
 .gradientStripBig {
   width: min(100%, 680px);
@@ -585,6 +598,18 @@
   background: var(--surface-solid);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.14);
   text-align: left;
+}
+
+/* Dropped logo above the sign-in card's eyebrow. Reads as the brand mark
+   on a login screen — small, centred, with air underneath. */
+.gradientAuthLogo {
+  display: block;
+  max-height: 40px;
+  max-width: 160px;
+  width: auto;
+  height: auto;
+  margin: -4px auto 4px;
+  object-fit: contain;
 }
 
 .gradientAuthEyebrow {
