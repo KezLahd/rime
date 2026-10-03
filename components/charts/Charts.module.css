@@ -39,6 +39,24 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Narrow cards (<=520px, so cards inside the dashboard's 375px-mobile
+   layout): title stacks above the action row so the 7/30/90-day
+   SegmentedControl and the Chart/Table toggle don't collide with the
+   title or overflow the card. */
+@media (max-width: 520px) {
+  .head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .headActions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 }
 
 .caption {

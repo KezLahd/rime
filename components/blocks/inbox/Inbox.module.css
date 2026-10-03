@@ -293,3 +293,74 @@
   place-items: center;
   padding: 20px;
 }
+
+/* ── Mobile layout: single-pane with folders drawer ─────────────────────
+   The 3-pane ResizablePanelGroup is unusable at 375px, so on narrow
+   screens we render one pane at a time (list or detail) with a Back
+   button, and tuck the folder list behind an off-canvas drawer that
+   slides in from the hamburger icon on the list header. */
+.mobileRoot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mobileRoot > .listPane,
+.mobileRoot > .detail,
+.mobileRoot > .detailEmpty {
+  height: 100%;
+  min-width: 0;
+  border-right: 0;
+}
+
+.mobileListHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 10px;
+}
+
+.mobileListHead .h2 {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-section);
+}
+
+.toolbarSpacer {
+  flex: 1;
+}
+
+.foldersDrawer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  width: min(260px, 80%);
+  box-shadow: var(--shadow-modal);
+  animation: inbox-drawer-in 180ms var(--ease-out);
+}
+
+.foldersDrawerScrim {
+  position: absolute;
+  inset: 0;
+  z-index: 19;
+  background: var(--scrim);
+  -webkit-backdrop-filter: var(--blur-scrim);
+  backdrop-filter: var(--blur-scrim);
+  animation: inbox-scrim-in 180ms var(--ease);
+}
+
+@keyframes inbox-drawer-in {
+  from { transform: translateX(-105%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes inbox-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
