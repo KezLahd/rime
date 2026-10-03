@@ -781,62 +781,15 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         </nav>
 
         <aside className={styles.panel} aria-label="Theme controls" data-studio-panel="">
-          {/* Save / open-saved / change-count + undo-redo toolbar used to
-              sit above every step. The walkthrough works like one long
-              setup form, so showing a Save button on step 1 made the
-              inspector feel like a settings page before the user had
-              typed a single thing. The chrome now renders only on the
-              Export step; the hidden file input stays mounted so Import
-              from Export can still trigger it. */}
-          {section === "export" ? (
-            <div className={styles.panelHead}>
-              <div className={styles.headRow}>
-                <TextInput
-                  size="sm"
-                  aria-label="Theme name"
-                  boxClassName={styles.grow}
-                  value={theme.name}
-                  maxLength={60}
-                  onChange={(e) => setTheme({ ...theme, name: e.target.value })}
-                  placeholder="Theme name"
-                />
-                <Button size="sm" iconStart={<Save size={14} aria-hidden="true" />} onClick={save} disabled={!theme.name.trim()}>
-                  Save
-                </Button>
-              </div>
-              {saved.length ? (
-                <div className={styles.headRow}>
-                  <Select
-                    size="sm"
-                    aria-label="Open a saved theme"
-                    className={styles.grow}
-                    value={null}
-                    placeholder={`Open a saved theme (${saved.length})`}
-                    onChange={(name) => {
-                      const t = saved.find((s) => s.name === name);
-                      if (t) {
-                        open(t);
-                        say(`Opened "${t.name}"`);
-                      }
-                    }}
-                    options={saved.map((t) => ({ value: t.name, label: t.name, description: lookName(t.base, t.mode) }))}
-                  />
-                </div>
-              ) : null}
-              <div className={styles.headRow}>
-                <span className={styles.changeCount}>{changes ? `${changes} change${changes === 1 ? "" : "s"} on ${lookName(theme.base, theme.mode)}` : `${lookName(theme.base, theme.mode)}, unchanged`}</span>
-                <span className={styles.toolbarGroup}>
-                  <IconButton size="sm" label="Undo" icon={<Undo2 size={15} aria-hidden="true" />} onClick={undo} disabled={!past.length} />
-                  <IconButton size="sm" label="Redo" icon={<Redo2 size={15} aria-hidden="true" />} onClick={redo} disabled={!future.length} />
-                  <IconButton size="sm" label="Reset to the preset" icon={<RotateCcw size={15} aria-hidden="true" />} onClick={() => startFrom(theme.base)} disabled={!changes} />
-                  <IconButton size="sm" label="Import theme.json" icon={<Upload size={15} aria-hidden="true" />} onClick={() => importRef.current?.click()} />
-                  {saved.some((t) => t.name === theme.name) ? (
-                    <IconButton size="sm" variant="danger" label={`Delete saved theme ${theme.name}`} icon={<Trash2 size={15} aria-hidden="true" />} onClick={() => remove(theme.name)} />
-                  ) : null}
-                </span>
-              </div>
-            </div>
-          ) : null}
+          {/* The Save / open-saved / undo-redo toolbar used to sit above
+              every step and now never renders inline — autosave handles
+              working-state persistence (storeWorking fires on every
+              commit), Export's own panel owns the Theme name field,
+              and Import still works through the hidden file input
+              below (triggered from Advanced if we ever surface it).
+              Keeping the toolbar gone means the Export step opens
+              directly on "Theme name", not on three stacked chrome
+              rows that doubled up on the field below. */}
           <input
             ref={importRef}
             type="file"

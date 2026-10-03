@@ -233,51 +233,61 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
         </p>
       </div>
 
-      <Group title="Options" help="Defaults suit most projects. Scope the CSS to a subtree, or dump every token instead of just the ones you changed, if you need to.">
-        <SelectRow
-          stacked
-          label="Scope"
-          value={opts.scope}
-          options={[
-            { value: "root", label: ":root (the whole site)" },
-            { value: "data-theme", label: `[data-theme="${slug}"] (a subtree)` },
-          ]}
-          onChange={(scope) => setOpts({ ...opts, scope })}
-        />
-        <SelectRow
-          stacked
-          label="Contents"
-          value={opts.content}
-          options={[
-            { value: "overrides", label: "Only what changed (load after tokens.css)" },
-            { value: "full", label: "Every token (stands alone)" },
-          ]}
-          onChange={(content) => setOpts({ ...opts, content })}
-        />
-        {opts.scope === "data-theme" && opts.content === "overrides" ? (
-          <Notice tone="warn">
-            Scoped and partial: composites like --wash-hover were computed on :root and will not follow a scoped --rgb-brand. Export every token for a scoped theme.
-          </Notice>
-        ) : null}
-      </Group>
+      {/* The scope / contents toggles plus theme.json export live under
+          Advanced because they default to the right answer for anyone
+          who doesn't already know the difference between ":root" and
+          "[data-theme=…]". Keeping them collapsed means the step reads
+          as "name it, grab it" by default. */}
+      <details className={styles.exportAdvanced}>
+        <summary className={styles.exportAdvancedSummary}>Advanced export options</summary>
+        <div className={styles.exportAdvancedBody}>
+          <Group title="CSS output" help="Defaults suit most projects. Scope the CSS to a subtree, or dump every token instead of just the ones you changed, if you need to.">
+            <SelectRow
+              stacked
+              label="Scope"
+              value={opts.scope}
+              options={[
+                { value: "root", label: ":root (the whole site)" },
+                { value: "data-theme", label: `[data-theme="${slug}"] (a subtree)` },
+              ]}
+              onChange={(scope) => setOpts({ ...opts, scope })}
+            />
+            <SelectRow
+              stacked
+              label="Contents"
+              value={opts.content}
+              options={[
+                { value: "overrides", label: "Only what changed (load after tokens.css)" },
+                { value: "full", label: "Every token (stands alone)" },
+              ]}
+              onChange={(content) => setOpts({ ...opts, content })}
+            />
+            {opts.scope === "data-theme" && opts.content === "overrides" ? (
+              <Notice tone="warn">
+                Scoped and partial: composites like --wash-hover were computed on :root and will not follow a scoped --rgb-brand. Export every token for a scoped theme.
+              </Notice>
+            ) : null}
+          </Group>
 
-      <Group title="theme.json" help="A data export of the entire theme. Download it to keep a backup, or import it later from the theme-switcher at the top of the Studio to pick up where you left off.">
-        <Button
-          variant="secondary"
-          iconStart={<Download size={14} aria-hidden="true" />}
-          disabled={!hasName}
-          onClick={() => {
-            const url = URL.createObjectURL(new Blob([jsonText], { type: "application/json" }));
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = jsonFilename;
-            a.click();
-            window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-          }}
-        >
-          Download {hasName ? jsonFilename : "after naming"}
-        </Button>
-      </Group>
+          <Group title="theme.json" help="A data export of the entire theme. Download it to keep a backup, or import it later from the theme-switcher at the top of the Studio to pick up where you left off.">
+            <Button
+              variant="secondary"
+              iconStart={<Download size={14} aria-hidden="true" />}
+              disabled={!hasName}
+              onClick={() => {
+                const url = URL.createObjectURL(new Blob([jsonText], { type: "application/json" }));
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = jsonFilename;
+                a.click();
+                window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+              }}
+            >
+              Download {hasName ? jsonFilename : "after naming"}
+            </Button>
+          </Group>
+        </div>
+      </details>
     </>
   );
 }
