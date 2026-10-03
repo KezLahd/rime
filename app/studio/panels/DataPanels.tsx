@@ -165,15 +165,16 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
   const [opts, setOpts] = useState<ExportOptions>({ scope: "root", content: "overrides" });
   const setExportBundle = useSetExportBundle();
   const suggested = defaultThemeName(api.theme.base, api.theme.brand);
-  // A theme counts as "named" when the user has changed the field away
-  // from the suggested default (plain "Rime", or "<brand> Rime" once the
-  // business name is set on the logo step) and left at least one visible
-  // character. Legacy preset names ("Rime Default" / "Rime Flat") still
-  // read as unnamed so a theme carried over from before the Export
-  // rework doesn't trick the UI into thinking it has a real name.
+  // A theme counts as "named" as soon as there's something visible in
+  // the field that isn't the legacy preset placeholder. The brand-aware
+  // auto-fill ("<brand> Rime", or plain "Rime") is a valid name on its
+  // own — if the user's happy with the suggestion we shouldn't force
+  // them to re-type it. Only the pre-rework preset names ("Rime
+  // Default" / "Rime Flat") still read as unnamed so themes carried
+  // over from storage don't trick the UI.
   const trimmed = api.theme.name.trim();
   const isLegacyPreset = PRESETS.some((p) => p.name === trimmed);
-  const hasName = trimmed.length > 0 && trimmed !== suggested && !isLegacyPreset;
+  const hasName = trimmed.length > 0 && !isLegacyPreset;
 
   const css = useMemo(() => (sources ? exportCss(api.source, sources, opts) : ""), [api.source, sources, opts]);
   const jsonText = useMemo(() => exportJson(api.source), [api.source]);
@@ -224,10 +225,10 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
         <p className={styles.exportNameHint}>
           {hasName ? (
             <span className={styles.exportNameOk}>
-              <ArrowRight size={13} aria-hidden="true" /> Looks good. Pick an export option on the right.
+              <ArrowRight size={13} aria-hidden="true" /> Pick an export option on the right.
             </span>
           ) : (
-            <>Give it a name {api.theme.brand ? "" : "(or set a business name on the Logo step)"} before you export.</>
+            <>Type a theme name before you export.</>
           )}
         </p>
       </div>
