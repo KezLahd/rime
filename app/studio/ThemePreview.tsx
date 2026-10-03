@@ -200,12 +200,11 @@ export const ThemePreview = memo(function ThemePreview({
     return <LayoutShowcase brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} logoCorner={logoCorner} layout={layout} />;
   }
 
-  // Export step: three action cards (Download / Copy / Terminal pipe)
-  // that read the current theme's generated CSS from context. Shown as
-  // soon as the user has named the theme on the left; before that we
-  // render a gated prompt pointing back to the name field.
+  // Export step: a live preview of the brand's dashboard with the
+  // three export actions (Download / Copy / Terminal pipe) tucked
+  // beside it, so the user sees exactly what they're exporting.
   if (focus === "export") {
-    return <ExportShowcase />;
+    return <ExportShowcase brand={brandText} />;
   }
 
   const whitelist = focus ? FOCUS_CATEGORIES[focus] : undefined;
@@ -1145,12 +1144,15 @@ function LayoutTeamPage({ brand }: { brand: BrandNames }) {
 }
 
 /**
- * Export step preview: three action cards (Download / Copy / Terminal
- * pipe) that read the generated CSS from context. Gated behind "the
- * theme has a name" so the step reads as a flow: name on the left,
- * then grab from the right.
+ * Export step preview: the user's themed dashboard mock on the left of
+ * the pane, the three export actions (Download / Copy / Terminal pipe)
+ * stacked on the right. Using the Layout step's dashboard page as the
+ * preview means the user is actually looking at their customisation —
+ * business name, colours, shapes, shadows all applied — not an
+ * abstract "name it, then export" blank. Actions gate behind "the
+ * theme has a name".
  */
-function ExportShowcase() {
+function ExportShowcase({ brand }: { brand: BrandNames }) {
   const bundle = useExportBundle();
   const [copied, setCopied] = useState<"css" | "cmd" | null>(null);
 
@@ -1181,80 +1183,78 @@ function ExportShowcase() {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  if (!bundle) {
-    return (
-      <div className={styles.exportStage}>
-        <p className={styles.exportWait}>Reading the stylesheets…</p>
-      </div>
-    );
-  }
-
-  if (!bundle.hasName) {
-    return (
-      <div className={styles.exportStage}>
-        <div className={styles.exportGated}>
-          <p className={styles.exportEyebrow}>Export</p>
-          <h3 className={styles.exportTitle}>Name your theme first</h3>
-          <p className={styles.exportLede}>Head to the left panel and type a name for your theme — it&apos;ll become the exported file&apos;s slug (yourname.theme.css). The three export options show up here once you do.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.exportStage}>
-      <div className={styles.exportIntro}>
-        <p className={styles.exportEyebrow}>Export</p>
-        <h3 className={styles.exportTitle}>{bundle.name}</h3>
-        <p className={styles.exportLede}>{bundle.changedCount} token{bundle.changedCount === 1 ? "" : "s"} changed. Pick a way to grab the file:</p>
+    <div className={styles.exportSplit}>
+      <div className={styles.exportPreviewPane}>
+        <LayoutDashboardPage brand={brand} />
       </div>
 
-      <div className={styles.exportCards}>
-        <GlassPanel padding="lg" className={styles.exportCard}>
-          <p className={styles.exportCardEyebrow}>Download</p>
-          <h4 className={styles.exportCardTitle}>Save the file</h4>
-          <p className={styles.exportCardLede}>Save <code>{bundle.cssFilename}</code> straight to your downloads folder. Drop it into <code>app/styles/</code> and import after your tokens.css.</p>
-          <div className={styles.exportCardActions}>
-            <Button
-              iconStart={<Download size={14} aria-hidden="true" />}
-              onClick={() => download(bundle.css, bundle.cssFilename, "text/css")}
-            >
-              Download {bundle.cssFilename}
-            </Button>
-          </div>
-        </GlassPanel>
+      <aside className={styles.exportActionsPane}>
+        {!bundle || !bundle.hasName ? (
+          <GlassPanel padding="lg" className={styles.exportGatedCard}>
+            <p className={styles.exportCardEyebrow}>Export</p>
+            <h4 className={styles.exportCardTitle}>Name your theme first</h4>
+            <p className={styles.exportCardLede}>
+              Pick a name on the left — it becomes the exported file&apos;s slug (<code>yourname.theme.css</code>). The three export options appear here once you do.
+            </p>
+          </GlassPanel>
+        ) : (
+          <>
+            <div className={styles.exportIntro}>
+              <p className={styles.exportEyebrow}>Export · {bundle.name}</p>
+              <p className={styles.exportLede}>{bundle.changedCount} token{bundle.changedCount === 1 ? "" : "s"} changed. Pick a way to grab the file:</p>
+            </div>
 
-        <GlassPanel padding="lg" className={styles.exportCard}>
-          <p className={styles.exportCardEyebrow}>Copy</p>
-          <h4 className={styles.exportCardTitle}>To your clipboard</h4>
-          <p className={styles.exportCardLede}>Paste the full CSS into any file in your editor. Fastest way to iterate inside an existing project without touching the filesystem.</p>
-          <div className={styles.exportCardActions}>
-            <Button
-              variant="secondary"
-              iconStart={copied === "css" ? <CheckCircle2 size={14} aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
-              onClick={() => copy(bundle.css, "css")}
-            >
-              {copied === "css" ? "Copied" : "Copy CSS to clipboard"}
-            </Button>
-          </div>
-        </GlassPanel>
+            <GlassPanel padding="md" className={styles.exportCard}>
+              <p className={styles.exportCardEyebrow}>Download</p>
+              <h4 className={styles.exportCardTitle}>Save the file</h4>
+              <p className={styles.exportCardLede}>Save <code>{bundle.cssFilename}</code> and drop it into <code>app/styles/</code>, imported after your tokens.css.</p>
+              <div className={styles.exportCardActions}>
+                <Button
+                  size="sm"
+                  iconStart={<Download size={14} aria-hidden="true" />}
+                  onClick={() => download(bundle.css, bundle.cssFilename, "text/css")}
+                >
+                  Download {bundle.cssFilename}
+                </Button>
+              </div>
+            </GlassPanel>
 
-        <GlassPanel padding="lg" className={styles.exportCard}>
-          <p className={styles.exportCardEyebrow}>Terminal</p>
-          <h4 className={styles.exportCardTitle}>Pipe into a project</h4>
-          <p className={styles.exportCardLede}>Paste this one-liner at the root of a Next.js / Vite project. It drops the file into <code>app/styles/theme.css</code> for you — no download step.</p>
-          <pre className={styles.exportCardCommand}><code>{command}</code></pre>
-          <div className={styles.exportCardActions}>
-            <Button
-              variant="secondary"
-              iconStart={copied === "cmd" ? <CheckCircle2 size={14} aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
-              onClick={() => copy(command, "cmd")}
-            >
-              {copied === "cmd" ? "Copied" : "Copy command"}
-            </Button>
-          </div>
-        </GlassPanel>
-      </div>
+            <GlassPanel padding="md" className={styles.exportCard}>
+              <p className={styles.exportCardEyebrow}>Copy</p>
+              <h4 className={styles.exportCardTitle}>To your clipboard</h4>
+              <p className={styles.exportCardLede}>Paste the full CSS into any file in your editor — fastest way to iterate inside an existing project.</p>
+              <div className={styles.exportCardActions}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  iconStart={copied === "css" ? <CheckCircle2 size={14} aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
+                  onClick={() => copy(bundle.css, "css")}
+                >
+                  {copied === "css" ? "Copied" : "Copy CSS"}
+                </Button>
+              </div>
+            </GlassPanel>
+
+            <GlassPanel padding="md" className={styles.exportCard}>
+              <p className={styles.exportCardEyebrow}>Terminal</p>
+              <h4 className={styles.exportCardTitle}>Pipe into a project</h4>
+              <p className={styles.exportCardLede}>Paste this one-liner at the root of a Next.js / Vite project to drop the file in without a download step.</p>
+              <pre className={styles.exportCardCommand}><code>{command}</code></pre>
+              <div className={styles.exportCardActions}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  iconStart={copied === "cmd" ? <CheckCircle2 size={14} aria-hidden="true" /> : <Clipboard size={14} aria-hidden="true" />}
+                  onClick={() => copy(command, "cmd")}
+                >
+                  {copied === "cmd" ? "Copied" : "Copy command"}
+                </Button>
+              </div>
+            </GlassPanel>
+          </>
+        )}
+      </aside>
     </div>
   );
 }

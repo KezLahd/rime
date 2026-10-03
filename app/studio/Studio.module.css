@@ -2177,6 +2177,18 @@
   white-space: pre;
 }
 
+/* Headless name block — the step's title strip already labels this as
+   "Export", so a second "Name your theme" group header would just
+   double-label the field. This wrapper replaces the Group component
+   when leading with the name field so we keep the same vertical
+   rhythm (18px to the next Group) without the heading. */
+.exportNameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
 /* Hint under the Name field. Grey while the name is still the preset's
    default (nudging the user to type one), and switches to the brand
    accent with a tiny arrow once the field is custom. The arrow points

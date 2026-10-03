@@ -2537,26 +2537,59 @@
   }
 }
 
-/* ── Export showcase: three ways to grab the theme ───────────────── */
+/* ── Export showcase: themed-dashboard preview + action rail ─────── */
 
-/* Lives inside .previewScroll so the edited theme's page background
-   paints behind the cards. Padding matches .layoutPage so the step
-   feels like a sibling, not a one-off. */
-.exportStage {
+/* Two-column split: the dashboard preview (so the user is looking at
+   their actual customisation) on the left, a narrow rail of action
+   cards (download / copy / terminal) on the right. Fluid so the
+   action rail shrinks before the preview does on tight widths, and
+   wraps below on genuinely narrow panes. */
+.exportSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  gap: 20px;
+  padding: 24px clamp(16px, 3vw, 32px);
+  min-height: 100%;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .exportSplit {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The LayoutDashboardPage already carries its own padding; strip the
+   wrapper's padding so the two don't double up, but keep the min-
+   width:0 so grid children can actually shrink. */
+.exportPreviewPane {
+  min-width: 0;
+}
+
+.exportPreviewPane > :global(div) {
+  padding: 0;
+  margin: 0;
+}
+
+.exportActionsPane {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 28px clamp(20px, 4vw, 40px);
-  max-width: 1100px;
-  margin-inline: auto;
-  width: 100%;
-  min-height: 100%;
+  gap: 12px;
+  position: sticky;
+  top: 16px;
+}
+
+.exportGatedCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .exportIntro {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  padding: 2px 2px 4px;
 }
 
 .exportEyebrow {
@@ -2568,53 +2601,17 @@
   color: var(--ink-brand);
 }
 
-.exportTitle {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--text-section);
-  font-weight: 700;
-  color: var(--ink-heading);
-}
-
 .exportLede {
   margin: 0;
-  max-width: 60ch;
-  font-size: var(--text-body);
+  font-size: var(--text-small);
   color: var(--ink-secondary);
   line-height: 1.5;
-}
-
-/* Gated state (no name yet): a single centered block that tells the
-   user where to look. Keeps the right pane purposeful before they
-   type and avoids an empty-rectangle feel. */
-.exportGated {
-  margin: auto;
-  max-width: 46ch;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
-}
-
-.exportWait {
-  margin: auto;
-  color: var(--ink-muted);
-  font-size: var(--text-body);
-}
-
-/* The three action cards stack vertically — the preview pane is
-   usually tighter than the viewport, so a single column reads better
-   than a cramped three-up row. */
-.exportCards {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
 }
 
 .exportCard {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .exportCardEyebrow {
@@ -2636,9 +2633,9 @@
 
 .exportCardLede {
   margin: 0;
-  font-size: var(--text-body);
+  font-size: var(--text-small);
   color: var(--ink-secondary);
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .exportCardLede code {
@@ -2661,12 +2658,12 @@
    as the same terminal paint. */
 .exportCardCommand {
   margin: 0;
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: var(--night);
   color: var(--ink-inverse);
   border-radius: var(--r-sm);
   font-family: var(--font-mono);
-  font-size: var(--text-small);
+  font-size: 11px;
   line-height: 1.5;
   overflow-x: auto;
   white-space: pre;

@@ -340,7 +340,17 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
       // controls the chrome, not the preview. Base defaults to Default
       // too — the user picks Frosted / Flat on the Glass step.
       const working = loadWorking();
-      const start = working ? { ...working, base: working.base ?? "default", mode: working.mode ?? "light" } : presetTheme("default", "light");
+      // Themes saved before the Export rework kept the preset's own name
+      // ("Rime Default" / "Rime Flat") as a placeholder. Migrate those to
+      // the new brand-aware default so the Export step reads as unnamed
+      // until the user actually types one.
+      const migrateName = (t: StudioTheme): string => {
+        const legacy = PRESETS.some((p) => p.name === t.name);
+        return legacy ? defaultThemeName(t.base, t.brand) : t.name;
+      };
+      const start: StudioTheme = working
+        ? { ...working, base: working.base ?? "default", mode: working.mode ?? "light", name: migrateName(working) }
+        : presetTheme("default", "light");
       themeRef.current = start;
       setTheme(start);
     });

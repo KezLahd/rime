@@ -9,7 +9,7 @@ import { CodeBlock } from "../../_docs/CodeBlock";
 import type { StudioApi } from "../api";
 import { ColourRow, Group, Notice, Row, SelectRow, TextRow, useSetExportBundle } from "../controls";
 import { parseChannel, parseColour, toChannel, toCss, type Rgb } from "../engine/colour";
-import { defaultThemeName, exportCss, exportJson, slugify, type ExportOptions } from "../engine/theme";
+import { defaultThemeName, exportCss, exportJson, PRESETS, slugify, type ExportOptions } from "../engine/theme";
 import type { Sources } from "../engine/source";
 import styles from "../Studio.module.css";
 
@@ -168,11 +168,12 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
   // A theme counts as "named" when the user has changed the field away
   // from the suggested default (plain "Rime", or "<brand> Rime" once the
   // business name is set on the logo step) and left at least one visible
-  // character. Everything downstream — the right-side export actions,
-  // the enabled state on each action — gates on this flag so the step
-  // reads as "name it, then export".
+  // character. Legacy preset names ("Rime Default" / "Rime Flat") still
+  // read as unnamed so a theme carried over from before the Export
+  // rework doesn't trick the UI into thinking it has a real name.
   const trimmed = api.theme.name.trim();
-  const hasName = trimmed.length > 0 && trimmed !== suggested;
+  const isLegacyPreset = PRESETS.some((p) => p.name === trimmed);
+  const hasName = trimmed.length > 0 && trimmed !== suggested && !isLegacyPreset;
 
   const css = useMemo(() => (sources ? exportCss(api.source, sources, opts) : ""), [api.source, sources, opts]);
   const jsonText = useMemo(() => exportJson(api.source), [api.source]);
@@ -206,7 +207,10 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
 
   return (
     <>
-      <Group title="Name your theme" help="The name shows up as the exported file's slug (my-theme.theme.css) and in the saved-themes list. Pick something distinctive — the preset's name doesn't count.">
+      {/* The name field leads the step — no group header on top of it,
+          because the "STEP 12 OF 12 · Export" strip above already names
+          the step and a second heading just doubles up on the label. */}
+      <div className={styles.exportNameBlock}>
         <Row label="Theme name" stacked>
           <TextInput
             size="sm"
@@ -223,10 +227,10 @@ export function ExportPanel({ api, sources }: { api: StudioApi; sources: Sources
               <ArrowRight size={13} aria-hidden="true" /> Looks good. Pick an export option on the right.
             </span>
           ) : (
-            <>Enter something other than &ldquo;{suggested}&rdquo; before you export.</>
+            <>Give it a name {api.theme.brand ? "" : "(or set a business name on the Logo step)"} before you export.</>
           )}
         </p>
-      </Group>
+      </div>
 
       <Group title="Options" help="Defaults suit most projects. Scope the CSS to a subtree, or dump every token instead of just the ones you changed, if you need to.">
         <SelectRow
