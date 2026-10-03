@@ -9,10 +9,15 @@
   min-height: 100dvh;
 }
 
-/* The columns row grows to fill the frame so the footer sits at the bottom
-   of the viewport on short pages. */
+/* The columns row grows to fill the frame AND carries a min-height just
+   bigger than viewport-minus-topbar, so the footer always lives below
+   the fold on short pages (e.g. /charts with few blocks). Without this
+   buffer, a short page lets the footer sit at the viewport's bottom
+   edge, which trips FooterReveal's IntersectionObserver and auto-hides
+   the sticky top bar on load. */
 .frame > .columns {
   flex: 1 0 auto;
+  min-height: calc(100dvh - 60px + 1px);
 }
 
 /* ── Top bar ─────────────────────────────────────────────────────────── */
