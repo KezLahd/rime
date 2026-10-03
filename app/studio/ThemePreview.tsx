@@ -200,6 +200,17 @@ export const ThemePreview = memo(function ThemePreview({
     return <LayoutShowcase brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} logoCorner={logoCorner} layout={layout} />;
   }
 
+  // Contrast step: the same multi-page mock from Layout so the user
+  // takes one final walk through Dashboard / Projects / Team with
+  // every piece of their theme (colours, type, shape, shadows,
+  // layout) applied before they hit Export. The AA/AAA report lives
+  // on the left panel; the right pane is "does my site actually
+  // look right?" — which is better answered by real pages than by
+  // a scrolling grid of components.
+  if (focus === "contrast") {
+    return <LayoutShowcase brand={brandText} logoSrc={logoSrc} logoAlt={logoAlt} logoCorner={logoCorner} layout={layout} />;
+  }
+
   // Export step: three action cards (Download / Copy / Terminal pipe)
   // centered on the preview pane. We tried pairing them with the Layout
   // dashboard mock on this step and the chart/activity feed was noise
