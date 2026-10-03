@@ -2537,59 +2537,29 @@
   }
 }
 
-/* ── Export showcase: themed-dashboard preview + action rail ─────── */
+/* ── Export showcase: a centered action stage ────────────────────── */
 
-/* Two-column split: the dashboard preview (so the user is looking at
-   their actual customisation) on the left, a narrow rail of action
-   cards (download / copy / terminal) on the right. Fluid so the
-   action rail shrinks before the preview does on tight widths, and
-   wraps below on genuinely narrow panes. */
-.exportSplit {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+/* Centered column of action cards. No dashboard mock on this step —
+   the user has already seen their customisation across the previous
+   11 steps and the Export moment is pure action (download, copy,
+   terminal). Max-width keeps the cards from stretching to kilometer
+   lines on wide monitors; the Layout dashboard mock had its own
+   .layoutPage wrapper so none of its styles are needed here. */
+.exportStage {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  padding: 24px clamp(16px, 3vw, 32px);
+  padding: 32px clamp(20px, 4vw, 40px);
+  max-width: 720px;
+  margin-inline: auto;
+  width: 100%;
   min-height: 100%;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .exportSplit {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* The LayoutDashboardPage already carries its own padding; strip the
-   wrapper's padding so the two don't double up, but keep the min-
-   width:0 so grid children can actually shrink. */
-.exportPreviewPane {
-  min-width: 0;
-}
-
-.exportPreviewPane > :global(div) {
-  padding: 0;
-  margin: 0;
-}
-
-.exportActionsPane {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: sticky;
-  top: 16px;
-}
-
-.exportGatedCard {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
 .exportIntro {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 2px 2px 4px;
 }
 
 .exportEyebrow {
@@ -2601,17 +2571,41 @@
   color: var(--ink-brand);
 }
 
+.exportHeading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: 700;
+  color: var(--ink-heading);
+}
+
 .exportLede {
   margin: 0;
-  font-size: var(--text-small);
+  font-size: var(--text-body);
   color: var(--ink-secondary);
   line-height: 1.5;
+  max-width: 56ch;
+}
+
+.exportGatedCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 48ch;
+  margin: auto;
+  text-align: left;
+}
+
+.exportCards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .exportCard {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .exportCardEyebrow {
@@ -2633,7 +2627,7 @@
 
 .exportCardLede {
   margin: 0;
-  font-size: var(--text-small);
+  font-size: var(--text-body);
   color: var(--ink-secondary);
   line-height: 1.5;
 }
@@ -2658,12 +2652,12 @@
    as the same terminal paint. */
 .exportCardCommand {
   margin: 0;
-  padding: 8px 10px;
+  padding: 10px 12px;
   background: var(--night);
   color: var(--ink-inverse);
   border-radius: var(--r-sm);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-small);
   line-height: 1.5;
   overflow-x: auto;
   white-space: pre;

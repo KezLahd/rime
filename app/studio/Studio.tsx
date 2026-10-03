@@ -720,6 +720,14 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
         <DocsTopBar key={barKey} current="studio" />
       </div>
 
+      {/* ExportBundle context must span BOTH the panel and the preview:
+          the Export left panel pushes the bundle via setExportBundle,
+          and the Export right-side showcase reads it via useExportBundle.
+          Nesting these providers deeper (as the other category contexts
+          are) hid the bundle from the preview and left the right pane
+          stuck on "Name your theme first" even after the user named it. */}
+      <ExportBundleProvider bundle={exportBundle}>
+      <ExportBundleSetterProvider onSet={setExportBundle}>
       <div
         className={cx(styles.workspace, collapsed && styles.workspaceCollapsed)}
         style={{ ["--inspector-w" as string]: `${inspectorWidth}px` }}
@@ -817,8 +825,6 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
             <ShadowSelectionProvider onSelect={setShadowSelection}>
             <ColourCategoryProvider onSelect={setColourCategory}>
             <HoverCategoryProvider onSelect={setHoverCategory}>
-            <ExportBundleProvider bundle={exportBundle}>
-            <ExportBundleSetterProvider onSet={setExportBundle}>
             <BrandPaletteProvider palette={brandPalette}>
             {!sources ? (
               <p className={styles.empty}>Reading the presets from the stylesheets…</p>
@@ -854,8 +860,6 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
               <ExportPanel api={api} sources={sources} />
             )}
             </BrandPaletteProvider>
-            </ExportBundleSetterProvider>
-            </ExportBundleProvider>
             </HoverCategoryProvider>
             </ColourCategoryProvider>
             </ShadowSelectionProvider>
@@ -952,6 +956,8 @@ export function Studio({ fonts, fontClasses }: { fonts: ReadonlyArray<StudioFont
           </div>
         </section>
       </div>
+      </ExportBundleSetterProvider>
+      </ExportBundleProvider>
     </div>
   );
 }
