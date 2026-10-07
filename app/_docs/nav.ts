@@ -39,15 +39,17 @@ export const DOCS_SECTIONS: ReadonlyArray<NavSection> = [
   },
 ];
 
-/** Docs sections plus every component, grouped by category. */
+/** Docs sections at the top, then every component flat, alphabetical by
+ *  name. The category grouping (Actions / Forms / Data …) is useful when
+ *  browsing by topic, but with ~70 components the scroll pattern "scan,
+ *  not scan-group-headings-first-then-scan" is faster; one alphabetical
+ *  list under a single "Components" heading supports it. */
 export function sidebarSections(): NavSection[] {
-  return [
-    ...DOCS_SECTIONS,
-    ...entriesByCategory().map(([category, list]) => ({
-      title: category,
-      items: list.map((e) => ({ href: `/components/${e.slug}`, label: e.name, description: e.summary })),
-    })),
-  ];
+  const components = entriesByCategory()
+    .flatMap(([, list]) => list)
+    .map((e) => ({ href: `/components/${e.slug}`, label: e.name, description: e.summary }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+  return [...DOCS_SECTIONS, { title: "Components", items: components }];
 }
 
 /** The reading order for previous / next: the docs pages, then every component. */
