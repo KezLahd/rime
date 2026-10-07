@@ -13,13 +13,16 @@
 .prefix {
   display: inline-flex;
   align-items: center;
+  align-self: stretch;
   flex-shrink: 0;
+  margin: 0;
   padding: 0 11px 0 13px;
   border-right: 1px solid var(--line);
   background: var(--recess-fill);
   box-shadow: inset -1px 0 0 rgba(var(--rgb-white), 0.6);
   font-family: var(--font-mono);
   font-size: 14px;
+  line-height: 1;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--ink-secondary);
@@ -87,8 +90,18 @@
    user can tell it's live without reading the label. */
 .prefixTrigger {
   gap: 6px;
+  /* Button has its own default border, background, font and padding —
+     explicitly inherit so the trigger reads identically to the <span>
+     variant. Without `font: inherit` buttons pull system fonts (and a
+     different baseline) in some engines; without a zero border, the
+     user agent's 2px outset border nudges the whole slot down a pixel. */
   border: 0;
   border-right: 1px solid var(--line);
+  font: inherit;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: inherit;
   cursor: pointer;
 }
 

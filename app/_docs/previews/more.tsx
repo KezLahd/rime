@@ -373,19 +373,29 @@ export const MORE_PREVIEWS: Record<string, Record<string, () => ReactNode>> = {
     },
     phone: function PhoneDemo() {
       const [p, setP] = useState("");
+      // Area-code map for +61 — after dropping the leading 0 the first
+      // digit identifies whether it's a mobile or a state landline.
+      const AU_AREAS: Record<string, string> = {
+        "2": "NSW / ACT landline",
+        "3": "VIC / TAS landline",
+        "4": "Mobile",
+        "7": "QLD landline",
+        "8": "WA / SA / NT landline",
+      };
       return (
         <div className={styles.formCol}>
-          <Field label="Phone number" hint="Australian mobile, 1300, 13 or 1800.">
+          <Field label="Phone number" hint="Australian mobile, landline, 1300, 13 or 1800.">
             <PrefixedInput
               prefixOptions={[
                 {
                   value: "+61",
-                  label: "Mobile",
+                  label: "Mobile or landline",
                   length: 9,
-                  // AU mobiles are always 4XX XXX XXX after +61.
                   validate: (b) =>
-                    b.startsWith("4") ? null : "Australian mobile numbers start with 4 after +61.",
-                  detail: (b) => (b.startsWith("4") ? "Australian mobile" : b ? null : null),
+                    AU_AREAS[b[0]]
+                      ? null
+                      : "Australian numbers after +61 start with 2 (NSW/ACT), 3 (VIC/TAS), 4 (mobile), 7 (QLD), or 8 (WA/SA/NT).",
+                  detail: (b) => AU_AREAS[b[0]] ?? null,
                 },
                 {
                   value: "1300",
