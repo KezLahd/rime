@@ -426,7 +426,45 @@ export const ADDED_FORMS: RegistryEntry[] = [
       "Pass min and max for opening hours or an event window so the picker only lists times that work.",
     ],
     donts: ["Don't use a free-text input for a time; the picker catches typos and ambiguous formats cheaply."],
-    related: ["date-field", "date-range-filter"],
+    related: ["date-field", "date-range-filter", "date-time-field"],
+    depth: "full",
+  },
+  {
+    slug: "date-time-field",
+    name: "DateTimeField and DateTimeRangeField",
+    category: "Forms",
+    summary: "A date and a time of day on one row, each with its own popup; the range variant pairs a start and end.",
+    description: [
+      "DateTimeField composes DateField and TimeField into one control. The parts join as \"YYYY-MM-DDTHH:MM\" (local, no time zone) — pair with a stored zone when the moment matters across zones; keep it naive when the user types the time in their own time (\"show starts 7 pm on Saturday\" is the same string whether they're in Sydney or Perth).",
+      "min and max are also DateTime strings, so a bound on \"2026-10-14T17:00\" rules out both a later date and a later time on that same date. The TimeField's own bound widens on dates strictly inside the range and only narrows on the bound dates themselves.",
+      "DateTimeRangeField pairs two DateTimeFields with an arrow between them. The start caps the end's min (and vice-versa), so an impossible pick is simply not offered — and if the parent passes an inverted pair, the end sub-group gets a soft danger wash so the row disagrees with itself until it's fixed.",
+    ],
+    importLine: `import { DateTimeField, DateTimeRangeField, type DateTime, type DateTimeRange } from "@/components/ui";`,
+    usage: `<DateTimeField value={at} onChange={setAt} format="12h" step={15} />`,
+    props: ["DateTimeField", "DateTimeRangeField"],
+    defaults: {
+      DateTimeField: { format: `"24h"`, step: "15" },
+      DateTimeRangeField: { format: `"24h"`, step: "15" },
+    },
+    css: ["components/ui/DateTimeField/DateTimeField.module.css"],
+    examples: [
+      {
+        id: "default",
+        title: "Date-time and range",
+        code: `<DateTimeField value={at} onChange={setAt} format="12h" step={15} />
+<DateTimeRangeField value={range} onChange={setRange} format="12h" step={30} />`,
+      },
+    ],
+    accessibility: [
+      "Each piece keeps its own field semantics: the DateField accepts DD/MM/YYYY typing, the TimeField accepts spoken-style times, and both expose their own aria-describedby reason when parsing fails.",
+      "The TimeField is disabled until a date is set — a time without a day is ambiguous — so keyboard users aren't trapped typing a time that can't be stored.",
+    ],
+    dos: [
+      "Use this when both pieces matter and the user types them in their own time (events, bookings, deadlines).",
+      "Pass min and max as full DateTime strings so the TimeField narrows automatically on the boundary dates.",
+    ],
+    donts: ["Don't use it for a cross-zone instant; store the time zone alongside the value, or pass a UTC string your layer above knows to translate."],
+    related: ["date-field", "time-field", "date-range-filter"],
     depth: "full",
   },
 ];

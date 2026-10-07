@@ -1701,6 +1701,118 @@ export const GENERATED_PROPS: Record<string, GeneratedProps> = {
     ],
     "passThrough": []
   },
+  "DateTimeField": {
+    "file": "components/ui/DateTimeField/DateTimeField.tsx",
+    "props": [
+      {
+        "name": "value",
+        "type": "DateTime | null",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "onChange",
+        "type": "(value: DateTime | null) => void",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "format",
+        "type": "\"12h\" | \"24h\"",
+        "required": false,
+        "description": "24h is the default. 12h shows \"9:30 AM\" and parses am/pm.",
+        "default": "\"24h\""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "description": "Minute granularity for the time popup (default 15).",
+        "default": "15"
+      },
+      {
+        "name": "min",
+        "type": "DateTime",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "max",
+        "type": "DateTime",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "aria-label-date",
+        "type": "string",
+        "required": false,
+        "description": "aria-label for the date field (default \"Date\")."
+      },
+      {
+        "name": "aria-label-time",
+        "type": "string",
+        "required": false,
+        "description": "aria-label for the time field (default \"Time\")."
+      }
+    ],
+    "passThrough": []
+  },
+  "DateTimeRangeField": {
+    "file": "components/ui/DateTimeField/DateTimeField.tsx",
+    "props": [
+      {
+        "name": "value",
+        "type": "DateTimeRange",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "onChange",
+        "type": "(value: DateTimeRange) => void",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "format",
+        "type": "\"12h\" | \"24h\"",
+        "required": false,
+        "description": "",
+        "default": "\"24h\""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "description": "",
+        "default": "15"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ],
+    "passThrough": []
+  },
   "Divider": {
     "file": "components/ui/Divider/Divider.tsx",
     "props": [
@@ -7692,6 +7804,22 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
       "--wash-strong",
       "--wash-subtle",
       "--z-popover"
+    ]
+  },
+  "components/ui/DateTimeField/DateTimeField.module.css": {
+    "component": "DateTimeField",
+    "hooks": [
+      {
+        "name": "--wash-danger-subtle",
+        "fallbacks": [
+          "rgba(var(--rgb-danger), 0.06)"
+        ]
+      }
+    ],
+    "reads": [
+      "--ink-muted",
+      "--r-md",
+      "--rgb-danger"
     ]
   },
   "components/ui/Divider/Divider.module.css": {

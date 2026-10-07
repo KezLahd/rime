@@ -103,4 +103,4 @@ System tokens it reads: `--danger-ink`, `--dur`, `--ease`, `--ease-out`, `--focu
 
 - Don't use a free-text input for a time; the picker catches typos and ambiguous formats cheaply.
 
-Related: https://rime.mjsons.net/components/date-field, https://rime.mjsons.net/components/date-range-filter
+Related: https://rime.mjsons.net/components/date-field, https://rime.mjsons.net/components/date-range-filter, https://rime.mjsons.net/components/date-time-field

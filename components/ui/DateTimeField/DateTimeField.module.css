@@ -1,0 +1,49 @@
+/* DateField and TimeField on one row. The DateField owns the larger
+   footprint (DD/MM/YYYY + calendar glyph); the TimeField follows with
+   a tight 180px cap. Both inherit their own popover and focus states —
+   this file only shapes the row and gives the range variant its arrow.
+   Default limits on the inner fields (max-width 240px + 180px) are
+   nudged up so the two sit side-by-side at the Field's typical 420px
+   content width without wrapping to two lines. */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row > :global([data-slot="date-field"]) {
+  flex: 1 1 180px;
+  max-width: 200px;
+}
+
+.row > :global([data-slot="time-field"]) {
+  flex: 1 1 140px;
+  max-width: 160px;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rangeSep {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink-muted);
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* When the end slot is marked invalid at the row level: tint the whole
+   sub-group with a soft danger wash so the problem reads as "this end is
+   wrong", not "the date is wrong" or "the time is wrong" on its own. */
+.endInvalid {
+  padding: 4px;
+  margin: -4px;
+  border-radius: var(--r-md);
+  background: var(--wash-danger-subtle, rgba(var(--rgb-danger), 0.06));
+}

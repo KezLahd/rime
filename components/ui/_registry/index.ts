@@ -38,9 +38,17 @@ export function entryBySlug(slug: string): RegistryEntry | undefined {
 }
 
 export function entriesByCategory(): Array<[Category, RegistryEntry[]]> {
-  return CATEGORIES.map((c) => [c, REGISTRY.filter((e) => e.category === c)] as [Category, RegistryEntry[]]).filter(
-    ([, list]) => list.length > 0,
-  );
+  // Within each category, components list alphabetically by name — scanning
+  // the sidebar for "Checkbox" or "TimeField" should land on the right row
+  // without having to read every label. Categories themselves keep their
+  // narrative order (Actions, Forms, Data, …) from CATEGORIES.
+  return CATEGORIES.map(
+    (c) =>
+      [
+        c,
+        REGISTRY.filter((e) => e.category === c).slice().sort((a, b) => a.name.localeCompare(b.name)),
+      ] as [Category, RegistryEntry[]],
+  ).filter(([, list]) => list.length > 0);
 }
 
 export type PropTable = {

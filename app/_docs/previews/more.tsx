@@ -58,12 +58,16 @@ import {
   Textarea,
   TimeField,
   TimeRangeField,
+  DateTimeField,
+  DateTimeRangeField,
   Toggletip,
   ToastStackPreview,
   Tooltip,
   TypeToConfirmModal,
   useToast,
   type DateRange,
+  type DateTime,
+  type DateTimeRange,
   type ImpactItem,
   type IsoDate,
   type Time,
@@ -291,6 +295,22 @@ export const MORE_PREVIEWS: Record<string, Record<string, () => ReactNode>> = {
           </Field>
           <Field label="Opening hours">
             <TimeRangeField value={r} onChange={setR} format="12h" step={30} />
+          </Field>
+        </div>
+      );
+    },
+  },
+  "date-time-field": {
+    default: function DateTimeDemo() {
+      const [at, setAt] = useState<DateTime | null>("2026-11-08T19:00");
+      const [range, setRange] = useState<DateTimeRange>({ start: "2026-11-08T19:00", end: "2026-11-08T22:00" });
+      return (
+        <div className={styles.formCol}>
+          <Field label="Event starts">
+            <DateTimeField value={at} onChange={setAt} format="12h" step={15} />
+          </Field>
+          <Field label="Show runs">
+            <DateTimeRangeField value={range} onChange={setRange} format="12h" step={30} />
           </Field>
         </div>
       );

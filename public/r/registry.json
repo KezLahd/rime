@@ -692,6 +692,38 @@
       }
     },
     {
+      "name": "date-time-field",
+      "type": "registry:item",
+      "title": "DateTimeField and DateTimeRangeField",
+      "description": "A date and a time of day on one row, each with its own popup; the range variant pairs a start and end.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/DateTimeField/DateTimeField.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/DateTimeField/DateTimeField.module.css"
+        },
+        {
+          "path": "components/ui/DateTimeField/DateTimeField.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/DateTimeField/DateTimeField.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://rime.mjsons.net/r/base.json",
+        "https://rime.mjsons.net/r/date-field.json",
+        "https://rime.mjsons.net/r/time-field.json"
+      ],
+      "meta": {
+        "import": "import { DateTimeField } from \"@/components/ui/DateTimeField/DateTimeField\";",
+        "docs": "https://rime.mjsons.net/md/date-time-field.md",
+        "page": "https://rime.mjsons.net/components/date-time-field"
+      }
+    },
+    {
       "name": "divider",
       "type": "registry:item",
       "title": "Divider",
@@ -3947,6 +3979,22 @@
       ]
     },
     {
+      "name": "date-time-field-demo",
+      "type": "registry:item",
+      "title": "DateTimeField and DateTimeRangeField examples",
+      "description": "Usage examples for DateTimeField and DateTimeRangeField.",
+      "files": [
+        {
+          "path": "registry/examples/date-time-field.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/date-time-field.md"
+        }
+      ],
+      "registryDependencies": [
+        "https://rime.mjsons.net/r/date-time-field.json"
+      ]
+    },
+    {
       "name": "popover-demo",
       "type": "registry:item",
       "title": "Popover examples",
@@ -4236,6 +4284,7 @@
         "https://rime.mjsons.net/r/danger-zone.json",
         "https://rime.mjsons.net/r/date-field.json",
         "https://rime.mjsons.net/r/date-range-filter.json",
+        "https://rime.mjsons.net/r/date-time-field.json",
         "https://rime.mjsons.net/r/divider.json",
         "https://rime.mjsons.net/r/empty-state.json",
         "https://rime.mjsons.net/r/error-summary.json",
