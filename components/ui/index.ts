@@ -40,6 +40,8 @@ export { Calendar, nextRange, type CalendarProps, type DateRange } from "./DateF
 export { DateField, type DateFieldProps } from "./DateField/DateField";
 export * from "./DateField/date-utils";
 export { DateRangeFilter, type DateRangeFilterProps } from "./DateRangeFilter/DateRangeFilter";
+export { TimeField, TimeRangeField, type TimeFieldProps, type TimeRangeFieldProps, type TimeRange } from "./TimeField/TimeField";
+export * from "./TimeField/time-utils";
 export {
   DEFAULT_DATE_RANGE_PRESETS,
   formatDateRange,

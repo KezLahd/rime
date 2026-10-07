@@ -56,6 +56,8 @@ import {
   Switch,
   TextInput,
   Textarea,
+  TimeField,
+  TimeRangeField,
   Toggletip,
   ToastStackPreview,
   Tooltip,
@@ -64,6 +66,8 @@ import {
   type DateRange,
   type ImpactItem,
   type IsoDate,
+  type Time,
+  type TimeRange,
 } from "@/components/ui";
 import styles from "./Previews.module.css";
 
@@ -270,6 +274,26 @@ export const MORE_PREVIEWS: Record<string, Record<string, () => ReactNode>> = {
     default: function RangeDemo() {
       const [r, setR] = useState<DateRange>({ start: null, end: null });
       return <DateRangeFilter aria-label="Issued" value={r} onChange={setR} />;
+    },
+  },
+  "time-field": {
+    open: function TimeOpen() {
+      const [t, setT] = useState<Time | null>("09:30");
+      return <TimeField inline aria-label="Opens at" value={t} onChange={setT} format="12h" step={15} />;
+    },
+    default: function TimeDemo() {
+      const [t, setT] = useState<Time | null>(null);
+      const [r, setR] = useState<TimeRange>({ start: "09:00", end: "17:00" });
+      return (
+        <div className={styles.formCol}>
+          <Field label="Session start">
+            <TimeField value={t} onChange={setT} format="12h" step={15} />
+          </Field>
+          <Field label="Opening hours">
+            <TimeRangeField value={r} onChange={setR} format="12h" step={30} />
+          </Field>
+        </div>
+      );
     },
   },
   "file-drop": {

@@ -140,6 +140,7 @@ Dark mode is the .dark class or data-mode="dark" on <html>; Rime Flat is data-th
 - [Toggle](https://rime.mjsons.net/md/toggle.md): A two-state button, pressed or not, for toolbar formatting and view options. Install: `npx shadcn@latest add KezLahd/rime/toggle`
 - [ToggleGroup](https://rime.mjsons.net/md/toggle-group.md): A set of toggles sharing one value: single (a clearable radio set) or multiple. Install: `npx shadcn@latest add KezLahd/rime/toggle`
 - [Calendar](https://rime.mjsons.net/md/calendar.md): The month grid on its own: a single date or a range, one or two months, with month and year pickers. Install: `npx shadcn@latest add KezLahd/rime/date-field`
+- [TimeField and TimeRangeField](https://rime.mjsons.net/md/time-field.md): A time of day with typed input and a popup picker; the range variant pairs start and end on one row. Install: `npx shadcn@latest add KezLahd/rime/time-field`
 
 ## Data display
 
@@ -456,9 +457,12 @@ Per-component tokens. Undeclared by default: the default below is the fallback t
 
 | Token | Default |
 | --- | --- |
+| `--button-height-lg` | `var(--control-h-lg)` |
+| `--button-height-md` | `var(--control-h-md)` |
+| `--button-height-sm` | `var(--control-h-sm)` |
 | `--icon-button-radius` | `var(--r-xs)` / `var(--r-sm)` / `var(--r-md)` |
 
-System tokens it reads: `--blur-callout`, `--brand-gradient`, `--danger-fill`, `--danger-ink`, `--dur`, `--ease`, `--focus-ring`, `--glass-edge-strong`, `--glow-md`, `--glow-md-hover`, `--glow-sm`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--r-md`, `--r-sm`, `--r-xs`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-danger`, `--rgb-white`, `--shadow-control`, `--shadow-specular`, `--shadow-specular-dark`, `--surface-solid`, `--wash-active`, `--wash-subtle`.
+System tokens it reads: `--blur-callout`, `--brand-gradient`, `--control-h-lg`, `--control-h-md`, `--control-h-sm`, `--danger-fill`, `--danger-ink`, `--dur`, `--ease`, `--focus-ring`, `--glass-edge-strong`, `--glow-md`, `--glow-md-hover`, `--glow-sm`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--r-md`, `--r-sm`, `--r-xs`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-danger`, `--rgb-white`, `--shadow-control`, `--shadow-specular`, `--shadow-specular-dark`, `--surface-solid`, `--wash-active`, `--wash-subtle`.
 
 ## Accessibility
 
@@ -2457,6 +2461,113 @@ System tokens it reads: `--brand`, `--brand-gradient`, `--dur`, `--dur-fast`, `-
 ## Don't
 
 - Don't force a calendar for a date of birth; let people type it.
+
+Related: https://rime.mjsons.net/components/date-field, https://rime.mjsons.net/components/date-range-filter
+
+---
+
+# TimeField and TimeRangeField
+
+> A time of day with typed input and a popup picker; the range variant pairs start and end on one row.
+
+Category: Forms. Docs page: https://rime.mjsons.net/components/time-field
+
+## Installation
+
+```bash
+npx shadcn@latest add KezLahd/rime/time-field
+```
+
+TimeField lets people type a time the way they say it ("3pm", "0930", "14:30") and offers a popup picker as a second path: scrollable hour, minute and AM/PM columns that auto-center on the current value. The value is "HH:MM" 24h regardless of display format, so it sorts, compares and serialises predictably.
+
+format="12h" shows "9:30 AM" and parses am/pm; the default is 24h. step sets the minute granularity for the popup list (default 15; set to 1 for a free picker). min and max bound both the parse and the picker — a chosen time outside the bounds is kept on screen with a reason, not silently wiped. TimeRangeField pairs two TimeFields with an en dash between them and flags end at or before start as invalid so the row disagrees with itself until the parent fixes it.
+
+## Usage
+
+```tsx
+import { TimeField, TimeRangeField, type Time, type TimeRange } from "@/components/ui";
+
+<TimeField value={at} onChange={setAt} />
+```
+
+## Props: TimeField
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` (required) | `Time \| null` |  |  |
+| `onChange` (required) | `(value: Time \| null) => void` |  | null when cleared or when the typed text can't be read as a time. |
+| `format` | `"12h" \| "24h"` | `"24h"` | 24h is the default. 12h shows "9:30 AM" and parses am/pm. |
+| `step` | `number` | `15` | Minute granularity for the popup list (default 15). Set to 1 for a free picker. |
+| `min` | `Time` |  |  |
+| `max` | `Time` |  |  |
+| `invalid` | `boolean` |  |  |
+| `disabled` | `boolean` |  |  |
+| `required` | `boolean` |  |  |
+| `id` | `string` |  |  |
+| `name` | `string` |  |  |
+| `placeholder` | `string` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `inline` | `boolean` | `false` | Keep the popup rendered open under the field (for docs). |
+
+## Props: TimeRangeField
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` (required) | `TimeRange` |  |  |
+| `onChange` (required) | `(value: TimeRange) => void` |  |  |
+| `format` | `"12h" \| "24h"` | `"24h"` |  |
+| `step` | `number` | `15` |  |
+| `requireEndAfterStart` | `boolean` | `true` | When true, flag an end at or before start as invalid. Default true. |
+| `min` | `Time` |  |  |
+| `max` | `Time` |  |  |
+| `disabled` | `boolean` |  |  |
+| `className` | `string` |  |  |
+| `aria-label-start` | `string` |  |  |
+| `aria-label-end` | `string` |  |  |
+
+## Examples
+
+### Open
+
+inline shows the picker open under the field, in place.
+
+```tsx
+<TimeField inline aria-label="Opens at" value={at} onChange={setAt} format="12h" step={15} />
+```
+
+### Single time and range
+
+```tsx
+<TimeField value={at} onChange={setAt} format="12h" step={15} />
+<TimeRangeField value={range} onChange={setRange} format="12h" step={30} />
+```
+
+## Theme tokens
+
+Per-component tokens. Undeclared by default: the default below is the fallback the CSS uses. Set any of them at :root or on a wrapper to restyle every instance.
+
+| Token | Default |
+| --- | --- |
+| `--field-focus-border` | `rgba(var(--rgb-brand), 0.7)` / `var(--focus-color)` |
+| `--field-focus-ring` | `var(--focus-halo)` |
+
+System tokens it reads: `--danger-ink`, `--dur`, `--ease`, `--ease-out`, `--focus-color`, `--focus-halo`, `--ink-body`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-muted`, `--line`, `--r-lg`, `--r-sm`, `--r-xs`, `--rgb-brand`, `--shadow-float`, `--surface-solid`, `--surface-sunken`, `--text-small`, `--wash-active`, `--wash-hover`, `--wash-subtle`, `--z-popover`.
+
+## Accessibility
+
+- The field accepts spoken-style input ("3pm", "9:30 am") and reports a reason when the text can't be read as a time, named by aria-describedby.
+- The popup is a role="dialog" with hour, minute and (12h only) AM/PM listboxes; arrow keys move focus between cells and Enter picks.
+- Alt+Down from the field opens the popup. Escape closes it and returns focus to the toggle, so a Modal containing the field doesn't close with it.
+
+## Do
+
+- Use step={15} or step={30} for scheduling flows; most times a human picks are on the quarter or half hour.
+- Pass min and max for opening hours or an event window so the picker only lists times that work.
+
+## Don't
+
+- Don't use a free-text input for a time; the picker catches typos and ambiguous formats cheaply.
 
 Related: https://rime.mjsons.net/components/date-field, https://rime.mjsons.net/components/date-range-filter
 
@@ -6461,8 +6572,9 @@ import { SidebarShell } from "@/components/shell/SidebarShell";
 | `defaultCollapsed` | `boolean` |  | Start collapsed (as the rail). Defaults to layout === "rail". |
 | `storageKey` | `string` |  | Persists the collapsed state in localStorage under this key. Read after mount. |
 | `onCollapsedChange` | `(collapsed: boolean) => void` |  |  |
-| `mobileDrawer` | `boolean` | `true` | Below 900px (the frame's own width) the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead. |
-| `mobileBelow` | `number` |  | The frame width (px) below which the narrow layout (drawer, or rail with mobileDrawer false) applies. Defaults to 900, or 600 when contained, so a preview in a docs column keeps its desktop layout. |
+| `mobileDrawer` | `boolean` | `true` | Below the mobile breakpoint, the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead. |
+| `mobileBelow` | `number` |  | The frame width (px) below which the drawer (or rail if mobileDrawer is false) applies. Defaults to 600, or 420 when contained. |
+| `tabletBelow` | `number` |  | The frame width (px) below which the sidebar auto-collapses to the icon rail (tablet mode). A chevron at the bottom of the rail toggles back to the full width. Defaults to 1024, or 760 when contained. Set below mobileBelow to disable tablet mode. |
 | `forceMobile` | `boolean` |  | Treat the frame as narrow whatever its width: the docs use it to show the drawer at desktop width. |
 | `defaultDrawerOpen` | `boolean` |  | Open the drawer on first render, without moving focus (a static docs preview). |
 | `logo` | `ReactNode` |  | The logo corner's content: your logo as an element (an <img>, an inline SVG, a wordmark). Defaults to a sample glyph and "Acme", the placeholder brand. |
@@ -6588,7 +6700,7 @@ Per-component tokens. Undeclared by default: the default below is the fallback t
 | `--topbar-bg` | `var(--chrome-topbar)` |
 | `--topbar-shadow` | `var(--chrome-shadow)` |
 
-System tokens it reads: `--admin-strip-bg`, `--blur-chrome`, `--blur-scrim`, `--brand-gradient`, `--chrome-shadow`, `--chrome-sidebar`, `--chrome-topbar`, `--danger-base-solid`, `--density`, `--dur`, `--dur-slow`, `--ease`, `--ease-out`, `--focus-ring`, `--font-display`, `--glow-md`, `--glow-sm`, `--ink-brand`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--logo-corner-bg`, `--modal-blur`, `--modal-surface`, `--page-background`, `--r-full`, `--r-lg`, `--r-md`, `--r-sm`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-white`, `--scrim`, `--shadow-float`, `--shadow-modal`, `--surface-solid`, `--text-micro`, `--text-small`, `--topbar-height`, `--tracking-display`.
+System tokens it reads: `--admin-strip-bg`, `--blur-chrome`, `--blur-scrim`, `--brand-gradient`, `--chrome-shadow`, `--chrome-sidebar`, `--chrome-topbar`, `--danger-base-solid`, `--density`, `--dur`, `--dur-slow`, `--ease`, `--ease-out`, `--focus-ring`, `--font-display`, `--glow-md`, `--glow-sm`, `--ink-brand`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--line`, `--logo-corner-bg`, `--modal-blur`, `--modal-surface`, `--page-background`, `--page-base`, `--r-full`, `--r-lg`, `--r-md`, `--r-sm`, `--r-xl`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-white`, `--scrim`, `--shadow-float`, `--shadow-modal`, `--surface-solid`, `--text-micro`, `--text-small`, `--topbar-height`, `--tracking-display`.
 
 ## Accessibility
 

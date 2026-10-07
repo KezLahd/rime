@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-field-demo",
+  "type": "registry:item",
+  "title": "TimeField and TimeRangeField examples",
+  "description": "Usage examples for TimeField and TimeRangeField.",
+  "files": [
+    {
+      "path": "registry/examples/time-field.md",
+      "type": "registry:file",
+      "target": "~/docs/ui/examples/time-field.md",
+      "content": "# TimeField and TimeRangeField examples\n\nA time of day with typed input and a popup picker; the range variant pairs start and end on one row.\n\n```tsx\nimport { TimeField, TimeRangeField, type Time, type TimeRange } from \"@/components/ui\";\n\n<TimeField value={at} onChange={setAt} />\n```\n\n## Open\n\ninline shows the picker open under the field, in place.\n\n```tsx\n<TimeField inline aria-label=\"Opens at\" value={at} onChange={setAt} format=\"12h\" step={15} />\n```\n\n## Single time and range\n\n```tsx\n<TimeField value={at} onChange={setAt} format=\"12h\" step={15} />\n<TimeRangeField value={range} onChange={setRange} format=\"12h\" step={30} />\n```\n\nDocs: https://rime.mjsons.net/components/time-field\n"
+    }
+  ],
+  "registryDependencies": [
+    "https://rime.mjsons.net/r/time-field.json"
+  ]
+}

@@ -385,4 +385,48 @@ export const ADDED_FORMS: RegistryEntry[] = [
     related: ["date-field", "date-range-filter"],
     depth: "full",
   },
+  {
+    slug: "time-field",
+    name: "TimeField and TimeRangeField",
+    category: "Forms",
+    summary: "A time of day with typed input and a popup picker; the range variant pairs start and end on one row.",
+    description: [
+      "TimeField lets people type a time the way they say it (\"3pm\", \"0930\", \"14:30\") and offers a popup picker as a second path: scrollable hour, minute and AM/PM columns that auto-center on the current value. The value is \"HH:MM\" 24h regardless of display format, so it sorts, compares and serialises predictably.",
+      "format=\"12h\" shows \"9:30 AM\" and parses am/pm; the default is 24h. step sets the minute granularity for the popup list (default 15; set to 1 for a free picker). min and max bound both the parse and the picker — a chosen time outside the bounds is kept on screen with a reason, not silently wiped. TimeRangeField pairs two TimeFields with an en dash between them and flags end at or before start as invalid so the row disagrees with itself until the parent fixes it.",
+    ],
+    importLine: `import { TimeField, TimeRangeField, type Time, type TimeRange } from "@/components/ui";`,
+    usage: `<TimeField value={at} onChange={setAt} />`,
+    props: ["TimeField", "TimeRangeField"],
+    defaults: {
+      TimeField: { format: `"24h"`, step: "15" },
+      TimeRangeField: { format: `"24h"`, step: "15", requireEndAfterStart: "true" },
+    },
+    css: ["components/ui/TimeField/TimeField.module.css"],
+    examples: [
+      {
+        id: "open",
+        title: "Open",
+        description: "inline shows the picker open under the field, in place.",
+        code: `<TimeField inline aria-label="Opens at" value={at} onChange={setAt} format="12h" step={15} />`,
+      },
+      {
+        id: "default",
+        title: "Single time and range",
+        code: `<TimeField value={at} onChange={setAt} format="12h" step={15} />
+<TimeRangeField value={range} onChange={setRange} format="12h" step={30} />`,
+      },
+    ],
+    accessibility: [
+      "The field accepts spoken-style input (\"3pm\", \"9:30 am\") and reports a reason when the text can't be read as a time, named by aria-describedby.",
+      "The popup is a role=\"dialog\" with hour, minute and (12h only) AM/PM listboxes; arrow keys move focus between cells and Enter picks.",
+      "Alt+Down from the field opens the popup. Escape closes it and returns focus to the toggle, so a Modal containing the field doesn't close with it.",
+    ],
+    dos: [
+      "Use step={15} or step={30} for scheduling flows; most times a human picks are on the quarter or half hour.",
+      "Pass min and max for opening hours or an event window so the picker only lists times that work.",
+    ],
+    donts: ["Don't use a free-text input for a time; the picker catches typos and ambiguous formats cheaply."],
+    related: ["date-field", "date-range-filter"],
+    depth: "full",
+  },
 ];

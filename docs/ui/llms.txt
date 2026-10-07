@@ -140,6 +140,7 @@ Dark mode is the .dark class or data-mode="dark" on <html>; Rime Flat is data-th
 - [Toggle](https://rime.mjsons.net/md/toggle.md): A two-state button, pressed or not, for toolbar formatting and view options. Install: `npx shadcn@latest add KezLahd/rime/toggle`
 - [ToggleGroup](https://rime.mjsons.net/md/toggle-group.md): A set of toggles sharing one value: single (a clearable radio set) or multiple. Install: `npx shadcn@latest add KezLahd/rime/toggle`
 - [Calendar](https://rime.mjsons.net/md/calendar.md): The month grid on its own: a single date or a range, one or two months, with month and year pickers. Install: `npx shadcn@latest add KezLahd/rime/date-field`
+- [TimeField and TimeRangeField](https://rime.mjsons.net/md/time-field.md): A time of day with typed input and a popup picker; the range variant pairs start and end on one row. Install: `npx shadcn@latest add KezLahd/rime/time-field`
 
 ## Data display
 

@@ -60,8 +60,9 @@ import { SidebarShell } from "@/components/shell/SidebarShell";
 | `defaultCollapsed` | `boolean` |  | Start collapsed (as the rail). Defaults to layout === "rail". |
 | `storageKey` | `string` |  | Persists the collapsed state in localStorage under this key. Read after mount. |
 | `onCollapsedChange` | `(collapsed: boolean) => void` |  |  |
-| `mobileDrawer` | `boolean` | `true` | Below 900px (the frame's own width) the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead. |
-| `mobileBelow` | `number` |  | The frame width (px) below which the narrow layout (drawer, or rail with mobileDrawer false) applies. Defaults to 900, or 600 when contained, so a preview in a docs column keeps its desktop layout. |
+| `mobileDrawer` | `boolean` | `true` | Below the mobile breakpoint, the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead. |
+| `mobileBelow` | `number` |  | The frame width (px) below which the drawer (or rail if mobileDrawer is false) applies. Defaults to 600, or 420 when contained. |
+| `tabletBelow` | `number` |  | The frame width (px) below which the sidebar auto-collapses to the icon rail (tablet mode). A chevron at the bottom of the rail toggles back to the full width. Defaults to 1024, or 760 when contained. Set below mobileBelow to disable tablet mode. |
 | `forceMobile` | `boolean` |  | Treat the frame as narrow whatever its width: the docs use it to show the drawer at desktop width. |
 | `defaultDrawerOpen` | `boolean` |  | Open the drawer on first render, without moving focus (a static docs preview). |
 | `logo` | `ReactNode` |  | The logo corner's content: your logo as an element (an <img>, an inline SVG, a wordmark). Defaults to a sample glyph and "Acme", the placeholder brand. |
@@ -187,7 +188,7 @@ Per-component tokens. Undeclared by default: the default below is the fallback t
 | `--topbar-bg` | `var(--chrome-topbar)` |
 | `--topbar-shadow` | `var(--chrome-shadow)` |
 
-System tokens it reads: `--admin-strip-bg`, `--blur-chrome`, `--blur-scrim`, `--brand-gradient`, `--chrome-shadow`, `--chrome-sidebar`, `--chrome-topbar`, `--danger-base-solid`, `--density`, `--dur`, `--dur-slow`, `--ease`, `--ease-out`, `--focus-ring`, `--font-display`, `--glow-md`, `--glow-sm`, `--ink-brand`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--logo-corner-bg`, `--modal-blur`, `--modal-surface`, `--page-background`, `--r-full`, `--r-lg`, `--r-md`, `--r-sm`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-white`, `--scrim`, `--shadow-float`, `--shadow-modal`, `--surface-solid`, `--text-micro`, `--text-small`, `--topbar-height`, `--tracking-display`.
+System tokens it reads: `--admin-strip-bg`, `--blur-chrome`, `--blur-scrim`, `--brand-gradient`, `--chrome-shadow`, `--chrome-sidebar`, `--chrome-topbar`, `--danger-base-solid`, `--density`, `--dur`, `--dur-slow`, `--ease`, `--ease-out`, `--focus-ring`, `--font-display`, `--glow-md`, `--glow-sm`, `--ink-brand`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--line`, `--logo-corner-bg`, `--modal-blur`, `--modal-surface`, `--page-background`, `--page-base`, `--r-full`, `--r-lg`, `--r-md`, `--r-sm`, `--r-xl`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-white`, `--scrim`, `--shadow-float`, `--shadow-modal`, `--surface-solid`, `--text-micro`, `--text-small`, `--topbar-height`, `--tracking-display`.
 
 ## Accessibility
 

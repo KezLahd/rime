@@ -2005,6 +2005,44 @@
       }
     },
     {
+      "name": "time-field",
+      "type": "registry:item",
+      "title": "TimeField and TimeRangeField",
+      "description": "A time of day with typed input and a popup picker; the range variant pairs start and end on one row.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/TimeField/time-utils.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/time-utils.ts"
+        },
+        {
+          "path": "components/ui/TimeField/TimeField.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/TimeField.module.css"
+        },
+        {
+          "path": "components/ui/TimeField/TimeField.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/TimeField.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "KezLahd/rime/base",
+        "KezLahd/rime/field",
+        "KezLahd/rime/icon",
+        "KezLahd/rime/text-input"
+      ],
+      "meta": {
+        "import": "import { TimeField } from \"@/components/ui/TimeField/TimeField\";",
+        "docs": "https://rime.mjsons.net/md/time-field.md",
+        "page": "https://rime.mjsons.net/components/time-field"
+      }
+    },
+    {
       "name": "toast",
       "type": "registry:item",
       "title": "Toast",
@@ -3893,6 +3931,22 @@
       ]
     },
     {
+      "name": "time-field-demo",
+      "type": "registry:item",
+      "title": "TimeField and TimeRangeField examples",
+      "description": "Usage examples for TimeField and TimeRangeField.",
+      "files": [
+        {
+          "path": "registry/examples/time-field.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/time-field.md"
+        }
+      ],
+      "registryDependencies": [
+        "KezLahd/rime/time-field"
+      ]
+    },
+    {
       "name": "popover-demo",
       "type": "registry:item",
       "title": "Popover examples",
@@ -4226,6 +4280,7 @@
         "KezLahd/rime/tabs",
         "KezLahd/rime/text-input",
         "KezLahd/rime/textarea",
+        "KezLahd/rime/time-field",
         "KezLahd/rime/toast",
         "KezLahd/rime/toggle",
         "KezLahd/rime/tooltip",

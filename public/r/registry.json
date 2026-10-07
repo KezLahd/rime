@@ -2005,6 +2005,44 @@
       }
     },
     {
+      "name": "time-field",
+      "type": "registry:item",
+      "title": "TimeField and TimeRangeField",
+      "description": "A time of day with typed input and a popup picker; the range variant pairs start and end on one row.",
+      "categories": [
+        "forms"
+      ],
+      "files": [
+        {
+          "path": "components/ui/TimeField/time-utils.ts",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/time-utils.ts"
+        },
+        {
+          "path": "components/ui/TimeField/TimeField.module.css",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/TimeField.module.css"
+        },
+        {
+          "path": "components/ui/TimeField/TimeField.tsx",
+          "type": "registry:file",
+          "target": "~/components/ui/TimeField/TimeField.tsx"
+        }
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "https://rime.mjsons.net/r/base.json",
+        "https://rime.mjsons.net/r/field.json",
+        "https://rime.mjsons.net/r/icon.json",
+        "https://rime.mjsons.net/r/text-input.json"
+      ],
+      "meta": {
+        "import": "import { TimeField } from \"@/components/ui/TimeField/TimeField\";",
+        "docs": "https://rime.mjsons.net/md/time-field.md",
+        "page": "https://rime.mjsons.net/components/time-field"
+      }
+    },
+    {
       "name": "toast",
       "type": "registry:item",
       "title": "Toast",
@@ -3893,6 +3931,22 @@
       ]
     },
     {
+      "name": "time-field-demo",
+      "type": "registry:item",
+      "title": "TimeField and TimeRangeField examples",
+      "description": "Usage examples for TimeField and TimeRangeField.",
+      "files": [
+        {
+          "path": "registry/examples/time-field.md",
+          "type": "registry:file",
+          "target": "~/docs/ui/examples/time-field.md"
+        }
+      ],
+      "registryDependencies": [
+        "https://rime.mjsons.net/r/time-field.json"
+      ]
+    },
+    {
       "name": "popover-demo",
       "type": "registry:item",
       "title": "Popover examples",
@@ -4226,6 +4280,7 @@
         "https://rime.mjsons.net/r/tabs.json",
         "https://rime.mjsons.net/r/text-input.json",
         "https://rime.mjsons.net/r/textarea.json",
+        "https://rime.mjsons.net/r/time-field.json",
         "https://rime.mjsons.net/r/toast.json",
         "https://rime.mjsons.net/r/toggle.json",
         "https://rime.mjsons.net/r/tooltip.json",

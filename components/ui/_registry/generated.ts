@@ -4641,6 +4641,180 @@ export const GENERATED_PROPS: Record<string, GeneratedProps> = {
       "InputHTMLAttributes"
     ]
   },
+  "TimeField": {
+    "file": "components/ui/TimeField/TimeField.tsx",
+    "props": [
+      {
+        "name": "value",
+        "type": "Time | null",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "onChange",
+        "type": "(value: Time | null) => void",
+        "required": true,
+        "description": "null when cleared or when the typed text can't be read as a time."
+      },
+      {
+        "name": "format",
+        "type": "\"12h\" | \"24h\"",
+        "required": false,
+        "description": "24h is the default. 12h shows \"9:30 AM\" and parses am/pm.",
+        "default": "\"24h\""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "description": "Minute granularity for the popup list (default 15). Set to 1 for a free picker.",
+        "default": "15"
+      },
+      {
+        "name": "min",
+        "type": "Time",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "max",
+        "type": "Time",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "invalid",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "inline",
+        "type": "boolean",
+        "required": false,
+        "description": "Keep the popup rendered open under the field (for docs).",
+        "default": "false"
+      }
+    ],
+    "passThrough": []
+  },
+  "TimeRangeField": {
+    "file": "components/ui/TimeField/TimeField.tsx",
+    "props": [
+      {
+        "name": "value",
+        "type": "TimeRange",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "onChange",
+        "type": "(value: TimeRange) => void",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "format",
+        "type": "\"12h\" | \"24h\"",
+        "required": false,
+        "description": "",
+        "default": "\"24h\""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": false,
+        "description": "",
+        "default": "15"
+      },
+      {
+        "name": "requireEndAfterStart",
+        "type": "boolean",
+        "required": false,
+        "description": "When true, flag an end at or before start as invalid. Default true.",
+        "default": "true"
+      },
+      {
+        "name": "min",
+        "type": "Time",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "max",
+        "type": "Time",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "aria-label-start",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "aria-label-end",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ],
+    "passThrough": []
+  },
   "Toggle": {
     "file": "components/ui/Toggle/Toggle.tsx",
     "props": [
@@ -5273,14 +5447,20 @@ export const GENERATED_PROPS: Record<string, GeneratedProps> = {
         "name": "mobileDrawer",
         "type": "boolean",
         "required": false,
-        "description": "Below 900px (the frame's own width) the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead.",
+        "description": "Below the mobile breakpoint, the sidebar becomes an off-canvas drawer opened from a menu button in the top bar. On by default; false keeps the icon rail on narrow screens instead.",
         "default": "true"
       },
       {
         "name": "mobileBelow",
         "type": "number",
         "required": false,
-        "description": "The frame width (px) below which the narrow layout (drawer, or rail with mobileDrawer false) applies. Defaults to 900, or 600 when contained, so a preview in a docs column keeps its desktop layout."
+        "description": "The frame width (px) below which the drawer (or rail if mobileDrawer is false) applies. Defaults to 600, or 420 when contained."
+      },
+      {
+        "name": "tabletBelow",
+        "type": "number",
+        "required": false,
+        "description": "The frame width (px) below which the sidebar auto-collapses to the icon rail (tablet mode). A chevron at the bottom of the rail toggles back to the full width. Defaults to 1024, or 760 when contained. Set below mobileBelow to disable tablet mode."
       },
       {
         "name": "forceMobile",
@@ -7791,6 +7971,24 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
     "component": "IconButton",
     "hooks": [
       {
+        "name": "--button-height-lg",
+        "fallbacks": [
+          "var(--control-h-lg)"
+        ]
+      },
+      {
+        "name": "--button-height-md",
+        "fallbacks": [
+          "var(--control-h-md)"
+        ]
+      },
+      {
+        "name": "--button-height-sm",
+        "fallbacks": [
+          "var(--control-h-sm)"
+        ]
+      },
+      {
         "name": "--icon-button-radius",
         "fallbacks": [
           "var(--r-xs)",
@@ -7802,6 +8000,9 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
     "reads": [
       "--blur-callout",
       "--brand-gradient",
+      "--control-h-lg",
+      "--control-h-md",
+      "--control-h-sm",
       "--danger-fill",
       "--danger-ink",
       "--dur",
@@ -9331,6 +9532,50 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
       "--wash-subtle"
     ]
   },
+  "components/ui/TimeField/TimeField.module.css": {
+    "component": "TimeField",
+    "hooks": [
+      {
+        "name": "--field-focus-border",
+        "fallbacks": [
+          "rgba(var(--rgb-brand), 0.7)",
+          "var(--focus-color)"
+        ]
+      },
+      {
+        "name": "--field-focus-ring",
+        "fallbacks": [
+          "var(--focus-halo)"
+        ]
+      }
+    ],
+    "reads": [
+      "--danger-ink",
+      "--dur",
+      "--ease",
+      "--ease-out",
+      "--focus-color",
+      "--focus-halo",
+      "--ink-body",
+      "--ink-brand",
+      "--ink-disabled",
+      "--ink-heading",
+      "--ink-muted",
+      "--line",
+      "--r-lg",
+      "--r-sm",
+      "--r-xs",
+      "--rgb-brand",
+      "--shadow-float",
+      "--surface-solid",
+      "--surface-sunken",
+      "--text-small",
+      "--wash-active",
+      "--wash-hover",
+      "--wash-subtle",
+      "--z-popover"
+    ]
+  },
   "components/ui/Toast/Toast.module.css": {
     "component": "Toast",
     "hooks": [
@@ -9871,14 +10116,17 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
       "--ink-heading",
       "--ink-inverse",
       "--ink-muted",
+      "--line",
       "--logo-corner-bg",
       "--modal-blur",
       "--modal-surface",
       "--page-background",
+      "--page-base",
       "--r-full",
       "--r-lg",
       "--r-md",
       "--r-sm",
+      "--r-xl",
       "--rgb-brand-deep",
       "--rgb-contact",
       "--rgb-white",

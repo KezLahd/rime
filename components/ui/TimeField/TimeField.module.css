@@ -1,0 +1,197 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 180px;
+}
+
+.input {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.open {
+  border-color: var(--field-focus-border, rgba(var(--rgb-brand), 0.7));
+  box-shadow: var(--field-focus-ring, var(--focus-halo));
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--ink-muted);
+  transition:
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.toggle:hover:not(:disabled),
+.toggle[aria-expanded="true"] {
+  color: var(--ink-brand);
+  background: var(--wash-subtle);
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--field-focus-border, var(--focus-color));
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+  color: var(--ink-disabled);
+}
+
+.problem {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--danger-ink);
+}
+
+.problem svg {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+/* Popup: three scrollable columns (hours : minutes [AM/PM]) on a floating
+   solid surface. Each column shows a fixed window with its selected cell
+   centered on open, which makes the picker feel like a wheel without the
+   accessibility cost of a real pointer-wheel. */
+.popup {
+  position: fixed;
+  z-index: var(--z-popover);
+  padding: 8px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-float);
+  animation: time-pop-in var(--dur) var(--ease-out);
+}
+
+@keyframes time-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.body {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 56px;
+  height: 220px;
+  padding: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  /* A soft inner groove so each column reads as its own track, not three
+     cells floating against the popup surface. */
+  background: var(--surface-sunken);
+  border-radius: var(--r-sm);
+}
+
+.periodCol {
+  width: 52px;
+}
+
+.sep {
+  display: inline-flex;
+  align-items: center;
+  padding-bottom: 2px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.cell {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--ink-body);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--wash-hover);
+  color: var(--ink-heading);
+}
+
+.cell:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}
+
+.cell:disabled {
+  color: var(--ink-disabled);
+  cursor: not-allowed;
+}
+
+.cellActive {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.cellActive:hover:not(:disabled) {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+/* Inline mode: popup rendered under the field for docs and thumbnails. */
+.rootInline {
+  display: inline-flex;
+  max-width: none;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popupInline[class] {
+  position: static;
+  animation: none;
+}
+
+/* Range: start | – | end on one row. The dash absorbs its own baseline
+   so it sits with the inputs instead of hugging the top. */
+.range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.range > .root {
+  max-width: 160px;
+}
+
+.rangeSep {
+  color: var(--ink-muted);
+  font-weight: 700;
+}

@@ -54,9 +54,12 @@ Per-component tokens. Undeclared by default: the default below is the fallback t
 
 | Token | Default |
 | --- | --- |
+| `--button-height-lg` | `var(--control-h-lg)` |
+| `--button-height-md` | `var(--control-h-md)` |
+| `--button-height-sm` | `var(--control-h-sm)` |
 | `--icon-button-radius` | `var(--r-xs)` / `var(--r-sm)` / `var(--r-md)` |
 
-System tokens it reads: `--blur-callout`, `--brand-gradient`, `--danger-fill`, `--danger-ink`, `--dur`, `--ease`, `--focus-ring`, `--glass-edge-strong`, `--glow-md`, `--glow-md-hover`, `--glow-sm`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--r-md`, `--r-sm`, `--r-xs`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-danger`, `--rgb-white`, `--shadow-control`, `--shadow-specular`, `--shadow-specular-dark`, `--surface-solid`, `--wash-active`, `--wash-subtle`.
+System tokens it reads: `--blur-callout`, `--brand-gradient`, `--control-h-lg`, `--control-h-md`, `--control-h-sm`, `--danger-fill`, `--danger-ink`, `--dur`, `--ease`, `--focus-ring`, `--glass-edge-strong`, `--glow-md`, `--glow-md-hover`, `--glow-sm`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-inverse`, `--ink-muted`, `--r-md`, `--r-sm`, `--r-xs`, `--rgb-brand-deep`, `--rgb-contact`, `--rgb-danger`, `--rgb-white`, `--shadow-control`, `--shadow-specular`, `--shadow-specular-dark`, `--surface-solid`, `--wash-active`, `--wash-subtle`.
 
 ## Accessibility
 
