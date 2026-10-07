@@ -10,6 +10,31 @@ export type PrefixedFormat = {
   charset?: "digits" | "alphanumeric";
 };
 
+/**
+ * One choice in a multi-prefix PrefixedInput. Each option carries its own
+ * length so a +61 mobile (9 digits) and a 1300 (6 digits) can live in the
+ * same field. `label` is the display name in the dropdown; the trigger
+ * always shows `value`.
+ */
+export type PrefixedOption = {
+  value: string;
+  label?: string;
+  length: number;
+  charset?: "digits" | "alphanumeric";
+};
+
+/** Match the longest prefix option against raw text; used when pasting a
+ *  full code so pasting "+61400112233" picks +61 over nothing. */
+export function matchPrefixOption(raw: string, options: ReadonlyArray<PrefixedOption>): PrefixedOption | null {
+  const text = raw.trim();
+  // Sort by prefix length descending so "1300" beats "13" when both match.
+  const ranked = options.slice().sort((a, b) => b.value.length - a.value.length);
+  for (const o of ranked) {
+    if (text.toLowerCase().startsWith(o.value.toLowerCase())) return o;
+  }
+  return null;
+}
+
 const escapePrefix = (prefix: string) => prefix.replace(/[^a-z0-9]/gi, "");
 
 /**

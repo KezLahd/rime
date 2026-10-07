@@ -3,6 +3,7 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ClipboardEvent,
@@ -11,22 +12,40 @@ import {
   type KeyboardEvent,
 } from "react";
 import { cx } from "../_internal/cx";
+import { Portal } from "../_internal/portal";
+import { placePopup } from "../_internal/position";
 import { mergeDescribedBy, useField } from "../Field/Field";
-import { IconCheck } from "../Icon/Icon";
+import { IconCheck, IconChevronDown } from "../Icon/Icon";
 import boxStyles from "../TextInput/TextInput.module.css";
-import { codeBodyFrom, toPrefixedCode, type PrefixedFormat } from "./prefixed";
+import { codeBodyFrom, matchPrefixOption, toPrefixedCode, type PrefixedFormat, type PrefixedOption } from "./prefixed";
 import styles from "./PrefixedInput.module.css";
 
 export type PrefixedInputProps = Omit<
   ComponentPropsWithRef<"input">,
   "value" | "defaultValue" | "onChange" | "type" | "inputMode" | "size" | "children" | "maxLength" | "prefix"
 > & {
-  /** The fixed segment set into the box and never typed: "INV", "ACC", "#". */
-  prefix: string;
-  /** How many characters follow the prefix. */
-  length: number;
+  /**
+   * The fixed segment set into the box and never typed: "INV", "ACC", "#".
+   * Omit when passing prefixOptions; the selected option's value takes over.
+   */
+  prefix?: string;
+  /**
+   * How many characters follow the prefix. Omit when passing prefixOptions;
+   * each option carries its own length.
+   */
+  length?: number;
   /** digits = 0-9 only (the default). alphanumeric = A-Z and 0-9, upper-cased as typed. */
   charset?: PrefixedFormat["charset"];
+  /**
+   * A list of switchable prefix choices, each with its own length (and
+   * charset). The prefix slot becomes a dropdown button; pasting a full
+   * code picks the matching option automatically. The first option is the
+   * default. For a single hardcoded prefix, use prefix + length instead.
+   */
+  prefixOptions?: ReadonlyArray<PrefixedOption>;
+  /** Controlled: which option is active. onPrefixChange fires when it changes. */
+  prefixValue?: string;
+  onPrefixChange?: (value: string, option: PrefixedOption) => void;
   /** The full code ("INV004213") or the body alone; either is read. */
   value: string;
   /**
@@ -63,6 +82,9 @@ export function PrefixedInput({
   prefix,
   length,
   charset = "digits",
+  prefixOptions,
+  prefixValue,
+  onPrefixChange,
   value,
   onValueChange,
   invalid: invalidProp,
@@ -81,21 +103,47 @@ export function PrefixedInput({
   "aria-describedby": describedByProp,
   ...rest
 }: PrefixedInputProps) {
-  const format: PrefixedFormat = { prefix, length, charset };
+  // Multi-prefix mode: a selectable list drives the prefix and the length
+  // for the current pick. The active option is controlled via prefixValue
+  // when the caller passes it, or kept internally otherwise.
+  const hasOptions = !!prefixOptions && prefixOptions.length > 0;
+  const [internalPrefix, setInternalPrefix] = useState<string>(
+    () => prefixValue ?? prefixOptions?.[0]?.value ?? prefix ?? "",
+  );
+  const activePrefixValue = hasOptions ? (prefixValue ?? internalPrefix) : prefix ?? "";
+  const activeOption = hasOptions
+    ? prefixOptions!.find((o) => o.value === activePrefixValue) ?? prefixOptions![0]
+    : null;
+  const activePrefix = activeOption?.value ?? prefix ?? "";
+  const activeLength = activeOption?.length ?? length ?? 0;
+  const activeCharset = activeOption?.charset ?? charset;
+  const format: PrefixedFormat = { prefix: activePrefix, length: activeLength, charset: activeCharset };
+
+  const commitPrefix = (next: PrefixedOption) => {
+    if (prefixValue === undefined) setInternalPrefix(next.value);
+    onPrefixChange?.(next.value, next);
+    // Preserve any body typed so far, trimmed to the new option's length.
+    const currentBody = codeBodyFrom(value, format);
+    const trimmed = currentBody.slice(0, next.length);
+    onValueChange(trimmed ? `${next.value}${trimmed}` : "", trimmed);
+  };
   const field = useField();
   const autoId = useId();
   const id = idProp ?? field?.id ?? `prefixed-${autoId}`;
   const formatId = `${id}-format`;
   const body = codeBodyFrom(value, format);
-  const complete = body.length === length;
-  const allowed = charset === "alphanumeric" ? /[a-z0-9]/i : /\d/;
-  const refusal = charset === "alphanumeric" ? "Letters and numbers only" : "Numbers only";
+  const complete = body.length === activeLength;
+  const allowed = activeCharset === "alphanumeric" ? /[a-z0-9]/i : /\d/;
+  const refusal = activeCharset === "alphanumeric" ? "Letters and numbers only" : "Numbers only";
 
   const [blurredPartial, setBlurredPartial] = useState(false);
   const [nudge, setNudge] = useState(false);
   const nudgeTimer = useRef(0);
 
   const invalid = invalidProp ?? (Boolean(field?.invalid) || blurredPartial);
+  const [prefixMenuOpen, setPrefixMenuOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => () => window.clearTimeout(nudgeTimer.current), []);
 
@@ -120,16 +168,30 @@ export function PrefixedInput({
     }
     // Full, with nothing selected to type over: one more character goes nowhere.
     const el = e.currentTarget;
-    if (body.length >= length && el.selectionStart === el.selectionEnd) e.preventDefault();
+    if (body.length >= activeLength && el.selectionStart === el.selectionEnd) e.preventDefault();
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     onPaste?.(e);
     if (e.defaultPrevented) return;
     const text = e.clipboardData.getData("text");
+    // In multi-prefix mode, a pasted code that matches a different option
+    // swaps the dropdown to it; one entry replaces the field in one gesture.
+    if (hasOptions) {
+      const matched = matchPrefixOption(text, prefixOptions!);
+      if (matched && matched.value !== activePrefixValue) {
+        e.preventDefault();
+        if (prefixValue === undefined) setInternalPrefix(matched.value);
+        onPrefixChange?.(matched.value, matched);
+        const nextFormat: PrefixedFormat = { prefix: matched.value, length: matched.length, charset: matched.charset ?? charset };
+        const pastedBody = codeBodyFrom(text, nextFormat);
+        onValueChange(pastedBody ? `${matched.value}${pastedBody}` : "", pastedBody);
+        return;
+      }
+    }
     // A whole code replaces the field rather than landing after what's there.
-    const startsWithPrefix = text.trim().toLowerCase().startsWith(prefix.toLowerCase());
-    if (startsWithPrefix || codeBodyFrom(text, format).length >= length) {
+    const startsWithPrefix = activePrefix ? text.trim().toLowerCase().startsWith(activePrefix.toLowerCase()) : false;
+    if (startsWithPrefix || codeBodyFrom(text, format).length >= activeLength) {
       e.preventDefault();
       emit(codeBodyFrom(text, format));
     }
@@ -138,7 +200,7 @@ export function PrefixedInput({
   const handleChange = (raw: string) => {
     // Mobile keyboards and autofill skip keydown; anything outside the
     // charset is dropped here instead, and still gets the nudge.
-    const p = prefix.replace(/[^a-z0-9]/gi, "");
+    const p = activePrefix.replace(/[^a-z0-9]/gi, "");
     const typed = (p ? raw.trim().replace(new RegExp(`^${p}`, "i"), "") : raw).replace(/[\s-]/g, "");
     if ([...typed].some((c) => !allowed.test(c))) refuse();
     emit(codeBodyFrom(raw, format));
@@ -146,8 +208,47 @@ export function PrefixedInput({
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     onBlur?.(e);
-    setBlurredPartial(body.length > 0 && body.length < length);
+    setBlurredPartial(body.length > 0 && body.length < activeLength);
   };
+
+  // Position the prefix dropdown menu under its trigger when open; close
+  // on outside-click or Escape, same as DateField.
+  useLayoutEffect(() => {
+    if (!prefixMenuOpen) return;
+    const trigger = triggerRef.current;
+    const menu = menuRef.current;
+    if (!trigger || !menu) return;
+    const place = () => placePopup(trigger, menu, { align: "start" });
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [prefixMenuOpen]);
+
+  useEffect(() => {
+    if (!prefixMenuOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target) || menuRef.current?.contains(target)) return;
+      setPrefixMenuOpen(false);
+    };
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setPrefixMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [prefixMenuOpen]);
 
   return (
     <>
@@ -164,18 +265,34 @@ export function PrefixedInput({
         data-invalid={invalid || undefined}
         data-disabled={disabled || undefined}
       >
-        <span className={styles.prefix} aria-hidden="true">
-          {prefix}
-        </span>
+        {hasOptions ? (
+          <button
+            ref={triggerRef}
+            type="button"
+            className={cx(styles.prefix, styles.prefixTrigger)}
+            onClick={() => setPrefixMenuOpen((o) => !o)}
+            disabled={disabled || readOnly}
+            aria-haspopup="listbox"
+            aria-expanded={prefixMenuOpen}
+            aria-label={`Dialing prefix: ${activePrefix}. Change`}
+          >
+            <span>{activePrefix}</span>
+            <IconChevronDown size={13} aria-hidden="true" />
+          </button>
+        ) : (
+          <span className={styles.prefix} aria-hidden="true">
+            {activePrefix}
+          </span>
+        )}
         <input
           {...rest}
           id={id}
           type="text"
-          inputMode={charset === "digits" ? "numeric" : "text"}
-          autoCapitalize={charset === "alphanumeric" ? "characters" : "off"}
+          inputMode={activeCharset === "digits" ? "numeric" : "text"}
+          autoCapitalize={activeCharset === "alphanumeric" ? "characters" : "off"}
           autoCorrect="off"
           spellCheck={false}
-          placeholder={placeholder ?? "0".repeat(length)}
+          placeholder={placeholder ?? "0".repeat(activeLength)}
           value={body}
           disabled={disabled}
           readOnly={readOnly}
@@ -203,21 +320,54 @@ export function PrefixedInput({
             ) : complete ? (
               <>
                 <IconCheck size={13} strokeWidth={2.6} />
-                {length}/{length}
+                {activeLength}/{activeLength}
               </>
             ) : (
-              `${body.length}/${length}`
+              `${body.length}/${activeLength}`
             )}
           </span>
         ) : null}
       </div>
       <span id={formatId} className="sr-only">
-        {`${prefix} is filled in. Type the ${length} ${charset === "digits" ? "digits" : "characters"} that follow it.`}
+        {`${activePrefix} is filled in. Type the ${activeLength} ${activeCharset === "digits" ? "digits" : "characters"} that follow it.`}
       </span>
       <span className="sr-only" aria-live="polite">
         {nudge ? refusal : ""}
       </span>
       {name ? <input type="hidden" name={name} value={toPrefixedCode(body, format)} /> : null}
+
+      {hasOptions && prefixMenuOpen ? (
+        <Portal>
+          <div
+            ref={menuRef}
+            role="listbox"
+            aria-label="Dialing prefix"
+            className={styles.prefixMenu}
+          >
+            {prefixOptions!.map((opt) => {
+              const selected = opt.value === activePrefix;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  className={cx(styles.prefixOption, selected && styles.prefixOptionActive)}
+                  onClick={() => {
+                    commitPrefix(opt);
+                    setPrefixMenuOpen(false);
+                    triggerRef.current?.focus();
+                  }}
+                >
+                  <span className={styles.prefixOptionValue}>{opt.value}</span>
+                  {opt.label ? <span className={styles.prefixOptionLabel}>{opt.label}</span> : null}
+                  {selected ? <IconCheck size={14} aria-hidden="true" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        </Portal>
+      ) : null}
     </>
   );
 }

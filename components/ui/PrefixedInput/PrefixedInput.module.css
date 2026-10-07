@@ -78,3 +78,105 @@
 .box[data-disabled] .counter {
   color: var(--ink-disabled);
 }
+
+/* ── Multi-prefix dropdown ─────────────────────────────────────────────
+   The prefix segment becomes a real <button> so the user can swap it (a
+   phone with +61 / 1300 / 13 / 1800 in the same field). The look stays
+   the recessed strip; a small chevron on the right advertises it is
+   pressable, and the hover state tints toward the brand so a sighted
+   user can tell it's live without reading the label. */
+.prefixTrigger {
+  gap: 6px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.prefixTrigger:hover:not(:disabled) {
+  color: var(--ink-brand);
+  background: var(--wash-active);
+}
+
+.prefixTrigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}
+
+.prefixTrigger:disabled {
+  cursor: not-allowed;
+}
+
+/* The dropdown itself: solid card with the same corner language as other
+   popovers. Each row shows the dialing value and (optionally) a plain-
+   English label — "+61 Mobile", "1300" etc. */
+.prefixMenu {
+  position: fixed;
+  z-index: var(--z-popover);
+  min-width: 180px;
+  max-width: 260px;
+  padding: 6px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-float);
+  animation: prefix-menu-in var(--dur) var(--ease-out);
+}
+
+@keyframes prefix-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.prefixOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.prefixOption:hover {
+  background: var(--wash-hover);
+}
+
+.prefixOption:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-color);
+}
+
+.prefixOptionActive {
+  background: var(--wash-active);
+  color: var(--ink-brand);
+}
+
+.prefixOptionValue {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-heading);
+}
+
+.prefixOptionActive .prefixOptionValue {
+  color: var(--ink-brand);
+}
+
+.prefixOptionLabel {
+  flex: 1;
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.prefixOptionActive .prefixOptionLabel {
+  color: var(--ink-brand);
+}

@@ -1709,9 +1709,12 @@ import { Field, PrefixedInput } from "@/components/ui";
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `prefix` (required) | `string` |  | The fixed segment set into the box and never typed: "INV", "ACC", "#". |
-| `length` (required) | `number` |  | How many characters follow the prefix. |
+| `prefix` | `string` |  | The fixed segment set into the box and never typed: "INV", "ACC", "#". Omit when passing prefixOptions; the selected option's value takes over. |
+| `length` | `number` |  | How many characters follow the prefix. Omit when passing prefixOptions; each option carries its own length. |
 | `charset` | `PrefixedFormat["charset"]` | `"digits"` | digits = 0-9 only (the default). alphanumeric = A-Z and 0-9, upper-cased as typed. |
+| `prefixOptions` | `ReadonlyArray<PrefixedOption>` |  | A list of switchable prefix choices, each with its own length (and charset). The prefix slot becomes a dropdown button; pasting a full code picks the matching option automatically. The first option is the default. For a single hardcoded prefix, use prefix + length instead. |
+| `prefixValue` | `string` |  | Controlled: which option is active. onPrefixChange fires when it changes. |
+| `onPrefixChange` | `(value: string, option: PrefixedOption) => void` |  |  |
 | `value` (required) | `string` |  | The full code ("INV004213") or the body alone; either is read. |
 | `onValueChange` (required) | `(code: string, body: string) => void` |  | Every edit. `code` is the full form ("" while nothing is entered, never a bare prefix); `body` is what follows the prefix. |
 | `invalid` | `boolean` |  | Overrides the Field's invalid state and the built-in check on blur. |
@@ -1734,6 +1737,23 @@ Also accepts the native attributes of: AriaAttributes, DOMAttributes, HTMLAttrib
 <PrefixedInput prefix="ACC-" length={8} charset="alphanumeric" value={v} onValueChange={(code) => setV(code)} />
 ```
 
+### Switchable prefix (phone)
+
+prefixOptions turns the prefix into a dropdown. Each option carries its own length so a +61 mobile and a 1300 fit the same field. Pasting a full number picks the matching option automatically.
+
+```tsx
+<PrefixedInput
+  prefixOptions={[
+    { value: "+61", label: "Mobile", length: 9 },
+    { value: "1300", label: "Business", length: 6 },
+    { value: "13", label: "Short code", length: 4 },
+    { value: "1800", label: "Toll-free", length: 6 },
+  ]}
+  value={p}
+  onValueChange={(code) => setP(code)}
+/>
+```
+
 ## Theme tokens
 
 Per-component tokens. Undeclared by default: the default below is the fallback the CSS uses. Set any of them at :root or on a wrapper to restyle every instance.
@@ -1754,22 +1774,25 @@ Per-component tokens. Undeclared by default: the default below is the fallback t
 | `--input-radius` | `var(--r-md)` / `var(--r-sm)` |
 | `--input-shadow` | `var(--shadow-input)` |
 
-System tokens it reads: `--border-w-field`, `--danger-base`, `--danger-field-fill`, `--danger-ink`, `--danger-line`, `--density`, `--dur`, `--ease`, `--field-h-md`, `--field-h-sm`, `--focus-color`, `--focus-halo`, `--font-body`, `--font-mono`, `--ink-body`, `--ink-brand`, `--ink-disabled`, `--ink-muted`, `--ink-placeholder`, `--ink-secondary`, `--line`, `--line-input`, `--r-md`, `--r-sm`, `--r-xs`, `--recess-fill`, `--rgb-brand`, `--rgb-brand-deep`, `--rgb-danger`, `--rgb-white`, `--shadow-input`, `--success-ink`, `--surface-solid`, `--surface-sunken`, `--text-body`, `--text-caption`, `--text-input`, `--text-small`, `--wash-active`, `--wash-subtle`.
+System tokens it reads: `--border-w-field`, `--danger-base`, `--danger-field-fill`, `--danger-ink`, `--danger-line`, `--density`, `--dur`, `--ease`, `--ease-out`, `--field-h-md`, `--field-h-sm`, `--focus-color`, `--focus-halo`, `--font-body`, `--font-mono`, `--ink-body`, `--ink-brand`, `--ink-disabled`, `--ink-heading`, `--ink-muted`, `--ink-placeholder`, `--ink-secondary`, `--line`, `--line-input`, `--r-md`, `--r-sm`, `--r-xs`, `--recess-fill`, `--rgb-brand`, `--rgb-brand-deep`, `--rgb-danger`, `--rgb-white`, `--shadow-float`, `--shadow-input`, `--success-ink`, `--surface-solid`, `--surface-sunken`, `--text-body`, `--text-caption`, `--text-input`, `--text-small`, `--wash-active`, `--wash-hover`, `--wash-subtle`, `--z-popover`.
 
 ## Accessibility
 
 - Wrap it in <Field label=…>: Field wires the label, hint and error to the control (id, aria-describedby, aria-invalid) through context, so the control needs no ids of its own.
 - The prefix and the expected length are read out through a visually hidden description tied to the input.
 - A refused key shows a short note in the counter and announces it politely, so a refusal is never silent.
+- In switchable-prefix mode the dropdown is a listbox: arrow keys move between options, Enter picks, Escape closes and returns focus to the trigger.
 
 ## Do
 
 - Validate the full code on the server too.
 - Use it only where the format is truly fixed.
+- Reach for prefixOptions when the user must pick from a small set of fixed-length formats (phone type, country code, SKU family).
 
 ## Don't
 
 - Don't use it for free text that merely starts with a word; use TextInput with a leading adornment.
+- Don't put >5 options in the prefix dropdown; use a Combobox or a dedicated phone-country picker instead.
 
 Related: https://rime.mjsons.net/components/text-input
 

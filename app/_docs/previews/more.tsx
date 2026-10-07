@@ -371,6 +371,25 @@ export const MORE_PREVIEWS: Record<string, Record<string, () => ReactNode>> = {
         </div>
       );
     },
+    phone: function PhoneDemo() {
+      const [p, setP] = useState("");
+      return (
+        <div className={styles.formCol}>
+          <Field label="Phone number" hint="Mobile, 1300, 13 or 1800 number.">
+            <PrefixedInput
+              prefixOptions={[
+                { value: "+61", label: "Mobile", length: 9 },
+                { value: "1300", label: "Business", length: 6 },
+                { value: "13", label: "Short code", length: 4 },
+                { value: "1800", label: "Toll-free", length: 6 },
+              ]}
+              value={p}
+              onValueChange={(code) => setP(code)}
+            />
+          </Field>
+        </div>
+      );
+    },
   },
   "status-pill": {
     default: () => (

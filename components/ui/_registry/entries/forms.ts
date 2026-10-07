@@ -330,14 +330,37 @@ export const FORMS: RegistryEntry[] = [
     examples: [
       { id: "default", title: "Digits", code: `<PrefixedInput prefix="INV" length={6} value={v} onValueChange={(code) => setV(code)} />` },
       { id: "alphanumeric", title: "Letters and numbers", code: `<PrefixedInput prefix="ACC-" length={8} charset="alphanumeric" value={v} onValueChange={(code) => setV(code)} />` },
+      {
+        id: "phone",
+        title: "Switchable prefix (phone)",
+        description: "prefixOptions turns the prefix into a dropdown. Each option carries its own length so a +61 mobile and a 1300 fit the same field. Pasting a full number picks the matching option automatically.",
+        code: `<PrefixedInput
+  prefixOptions={[
+    { value: "+61", label: "Mobile", length: 9 },
+    { value: "1300", label: "Business", length: 6 },
+    { value: "13", label: "Short code", length: 4 },
+    { value: "1800", label: "Toll-free", length: 6 },
+  ]}
+  value={p}
+  onValueChange={(code) => setP(code)}
+/>`,
+      },
     ],
     accessibility: [
       FIELD_A11Y,
       "The prefix and the expected length are read out through a visually hidden description tied to the input.",
       "A refused key shows a short note in the counter and announces it politely, so a refusal is never silent.",
+      "In switchable-prefix mode the dropdown is a listbox: arrow keys move between options, Enter picks, Escape closes and returns focus to the trigger.",
     ],
-    dos: ["Validate the full code on the server too.", "Use it only where the format is truly fixed."],
-    donts: ["Don't use it for free text that merely starts with a word; use TextInput with a leading adornment."],
+    dos: [
+      "Validate the full code on the server too.",
+      "Use it only where the format is truly fixed.",
+      "Reach for prefixOptions when the user must pick from a small set of fixed-length formats (phone type, country code, SKU family).",
+    ],
+    donts: [
+      "Don't use it for free text that merely starts with a word; use TextInput with a leading adornment.",
+      "Don't put >5 options in the prefix dropdown; use a Combobox or a dedicated phone-country picker instead.",
+    ],
     related: ["text-input"],
     depth: "summary",
   },

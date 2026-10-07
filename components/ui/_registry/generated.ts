@@ -3385,14 +3385,14 @@ export const GENERATED_PROPS: Record<string, GeneratedProps> = {
       {
         "name": "prefix",
         "type": "string",
-        "required": true,
-        "description": "The fixed segment set into the box and never typed: \"INV\", \"ACC\", \"#\"."
+        "required": false,
+        "description": "The fixed segment set into the box and never typed: \"INV\", \"ACC\", \"#\". Omit when passing prefixOptions; the selected option's value takes over."
       },
       {
         "name": "length",
         "type": "number",
-        "required": true,
-        "description": "How many characters follow the prefix."
+        "required": false,
+        "description": "How many characters follow the prefix. Omit when passing prefixOptions; each option carries its own length."
       },
       {
         "name": "charset",
@@ -3400,6 +3400,24 @@ export const GENERATED_PROPS: Record<string, GeneratedProps> = {
         "required": false,
         "description": "digits = 0-9 only (the default). alphanumeric = A-Z and 0-9, upper-cased as typed.",
         "default": "\"digits\""
+      },
+      {
+        "name": "prefixOptions",
+        "type": "ReadonlyArray<PrefixedOption>",
+        "required": false,
+        "description": "A list of switchable prefix choices, each with its own length (and charset). The prefix slot becomes a dropdown button; pasting a full code picks the matching option automatically. The first option is the default. For a single hardcoded prefix, use prefix + length instead."
+      },
+      {
+        "name": "prefixValue",
+        "type": "string",
+        "required": false,
+        "description": "Controlled: which option is active. onPrefixChange fires when it changes."
+      },
+      {
+        "name": "onPrefixChange",
+        "type": "(value: string, option: PrefixedOption) => void",
+        "required": false,
+        "description": ""
       },
       {
         "name": "value",
@@ -8752,17 +8770,27 @@ export const GENERATED_CSS: Record<string, GeneratedCss> = {
       "--danger-line",
       "--dur",
       "--ease",
+      "--ease-out",
+      "--focus-color",
       "--font-mono",
       "--ink-brand",
       "--ink-disabled",
+      "--ink-heading",
       "--ink-muted",
       "--ink-secondary",
       "--line",
+      "--r-md",
+      "--r-xs",
       "--recess-fill",
       "--rgb-white",
+      "--shadow-float",
       "--success-ink",
+      "--surface-solid",
       "--text-caption",
-      "--wash-active"
+      "--text-small",
+      "--wash-active",
+      "--wash-hover",
+      "--z-popover"
     ]
   },
   "components/ui/ProgressSteps/ProgressSteps.module.css": {

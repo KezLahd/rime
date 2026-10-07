@@ -17,7 +17,14 @@ export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 export { Field, useField, mergeDescribedBy, type FieldProps } from "./Field/Field";
 export { TextInput, type TextInputProps } from "./TextInput/TextInput";
 export { PrefixedInput, type PrefixedInputProps } from "./PrefixedInput/PrefixedInput";
-export { codeBodyFrom, isCompleteCode, toPrefixedCode, type PrefixedFormat } from "./PrefixedInput/prefixed";
+export {
+  codeBodyFrom,
+  isCompleteCode,
+  matchPrefixOption,
+  toPrefixedCode,
+  type PrefixedFormat,
+  type PrefixedOption,
+} from "./PrefixedInput/prefixed";
 export { SearchField, type SearchFieldProps } from "./SearchField/SearchField";
 export { NavSearch, type NavSearchItem, type NavSearchProps } from "./NavSearch/NavSearch";
 export {
