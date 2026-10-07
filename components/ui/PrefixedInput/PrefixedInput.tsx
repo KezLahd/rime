@@ -140,7 +140,14 @@ export function PrefixedInput({
   const [nudge, setNudge] = useState(false);
   const nudgeTimer = useRef(0);
 
-  const invalid = invalidProp ?? (Boolean(field?.invalid) || blurredPartial);
+  // When the active option carries a validate(body), run it only once the
+  // body is complete — a half-typed number is already visibly incomplete
+  // via the counter, so flagging mid-stream would just be noise. The
+  // detail hint (e.g. "Mobile", "Short code") stays live as the user
+  // types so they can see what their number resolves to.
+  const validationError = complete && activeOption?.validate ? activeOption.validate(body) : null;
+  const detailHint = activeOption?.detail?.(body) ?? null;
+  const invalid = invalidProp ?? (Boolean(field?.invalid) || blurredPartial || Boolean(validationError));
   const [prefixMenuOpen, setPrefixMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -335,6 +342,15 @@ export function PrefixedInput({
         {nudge ? refusal : ""}
       </span>
       {name ? <input type="hidden" name={name} value={toPrefixedCode(body, format)} /> : null}
+
+      {validationError || detailHint ? (
+        <p
+          className={cx(styles.detail, validationError && styles.detailError)}
+          aria-live="polite"
+        >
+          {validationError ?? detailHint}
+        </p>
+      ) : null}
 
       {hasOptions && prefixMenuOpen ? (
         <Portal>

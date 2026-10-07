@@ -180,3 +180,20 @@
 .prefixOptionActive .prefixOptionLabel {
   color: var(--ink-brand);
 }
+
+/* Live detail under the field. Default state is a muted neutral tone —
+   "Mobile", "Short code" — so the user confirms what their number
+   resolves to as they type. Error state (returned by the option's own
+   validate rule, e.g. "Mobile numbers start with 4") swaps to the
+   danger ink so it reads as a correction, not a label. */
+.detail {
+  margin: 6px 2px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.detailError {
+  color: var(--danger-ink);
+}

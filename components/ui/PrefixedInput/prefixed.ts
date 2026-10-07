@@ -21,6 +21,20 @@ export type PrefixedOption = {
   label?: string;
   length: number;
   charset?: "digits" | "alphanumeric";
+  /**
+   * A rule the body must satisfy to count as a valid entry (e.g. "mobile
+   * numbers start with 4"). Receives the body (no prefix), returns an
+   * error string when invalid or null when it passes. Only applied once
+   * the body is complete.
+   */
+  validate?: (body: string) => string | null;
+  /**
+   * A plain-English detail for the current body as it's being typed —
+   * "Mobile", "Short code", "NSW service". Shown under the field as the
+   * user types so they know what their number resolves to. Return null to
+   * stay silent.
+   */
+  detail?: (body: string) => string | null;
 };
 
 /** Match the longest prefix option against raw text; used when pasting a
@@ -36,14 +50,23 @@ export function matchPrefixOption(raw: string, options: ReadonlyArray<PrefixedOp
 }
 
 const escapePrefix = (prefix: string) => prefix.replace(/[^a-z0-9]/gi, "");
+const escapeRegex = (s: string) => s.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 
 /**
  * The part after the prefix. Accepts whatever gets typed, pasted or
  * autofilled ("INV-004213", "inv 004 213", "004213") and keeps at most
  * `length` characters.
+ *
+ * Prefix stripping is strict when the prefix carries non-alphanumeric
+ * characters (like "+61"): only the full form ("+61") is treated as a
+ * leading prefix, so a user whose body happens to start with the same
+ * digits ("61…") does not have those digits silently eaten. For purely
+ * alphanumeric prefixes ("INV") the loose match still handles pasted
+ * values with or without a separator ("INV-004213" or "INV004213").
  */
 export function codeBodyFrom(raw: string, f: PrefixedFormat): string {
-  const p = escapePrefix(f.prefix);
+  const strict = /[^a-z0-9]/i.test(f.prefix);
+  const p = strict ? escapeRegex(f.prefix) : escapePrefix(f.prefix);
   const lead = p ? new RegExp(`^\\s*${p}[\\s-]*`, "i") : /^\s*/;
   const body = raw.replace(lead, "").replace(f.charset === "alphanumeric" ? /[^a-z0-9]/gi : /\D/g, "");
   return (f.charset === "alphanumeric" ? body.toUpperCase() : body).slice(0, f.length);
